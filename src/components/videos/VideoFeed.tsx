@@ -183,7 +183,7 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
       ) : (
         <div
           ref={scrollerRef}
-          className="h-[calc(100vh-200px)] overflow-y-auto snap-y snap-mandatory rounded-lg bg-black scroll-smooth"
+          className="h-[100dvh] md:h-[calc(100vh-3.5rem)] overflow-y-auto snap-y snap-mandatory bg-black scroll-smooth"
         >
           {videos.map((v, i) => {
             const distance = activeIdx >= 0 ? Math.abs(i - activeIdx) : i;
