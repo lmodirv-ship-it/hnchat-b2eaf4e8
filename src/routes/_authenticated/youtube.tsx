@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Youtube, Search, Play, Clock, AlertCircle, History } from "lucide-react";
+import { Youtube, Search, Play, Clock, AlertCircle, History, Plus, Check, Loader2, PlusSquare } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ar } from "date-fns/locale";
 import { toast } from "sonner";
 import { importYoutubeChannel, type YtChannel, type YtVideo } from "@/utils/youtube.functions";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/_authenticated/youtube")({
   component: YoutubePage,
