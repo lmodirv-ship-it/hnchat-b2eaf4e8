@@ -141,6 +141,48 @@ function WatchYtPage() {
     }
   };
 
+  const publishToFeed = async () => {
+    if (!user || !meta || publishing) return;
+    setPublishing(true);
+    try {
+      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      let id = postId;
+      if (id) {
+        // Re-publish: bump updated_at so it surfaces in the feed again
+        const { error } = await supabase
+          .from("posts")
+          .update({ updated_at: new Date().toISOString(), content: meta.title })
+          .eq("id", id);
+        if (error) throw error;
+      } else {
+        const { data: created, error } = await supabase
+          .from("posts")
+          .insert({
+            user_id: user.id,
+            type: "video" as any,
+            content: meta.title,
+            media_urls: [ytUrl],
+          })
+          .select("id")
+          .single();
+        if (error) throw error;
+        id = created.id;
+        setPostId(id);
+      }
+      toast.success("تم النشر في الخلاصة 🎉", {
+        description: meta.title,
+        action: {
+          label: "عرض",
+          onClick: () => router.navigate({ to: "/feed" }),
+        },
+      });
+    } catch (e: any) {
+      toast.error(e.message || "تعذّر النشر");
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   const toggleLike = async () => {
     if (!user || !postId || liking) return;
     setLiking(true);
