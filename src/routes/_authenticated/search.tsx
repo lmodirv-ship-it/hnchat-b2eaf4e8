@@ -341,16 +341,23 @@ function PostsResults({ q, limit }: { q: string; limit: number }) {
   return (
     <Section title="منشورات" icon={FileText} count={data?.length} loading={isLoading}>
       <div className="space-y-2">
-        {data?.map((p) => (
-          <Card key={p.id} className="p-3 hover:border-cyan-glow/40 transition">
-            <div className="flex items-center gap-2 mb-2">
-              <Avatar className="h-6 w-6"><AvatarImage src={p.profile?.avatar_url ?? undefined} /><AvatarFallback>U</AvatarFallback></Avatar>
-              <span className="text-xs font-medium">@{p.profile?.username}</span>
-            </div>
-            <p className="text-sm line-clamp-2">{p.content}</p>
-            <div className="text-xs text-muted-foreground mt-2">{p.likes_count} ❤ · {p.comments_count} 💬</div>
-          </Card>
-        ))}
+        {data?.map((p) => {
+          const isVideo = p.type === "video" || p.type === "short";
+          const to = isVideo ? "/watch/$id" : "/feed";
+          const params = isVideo ? { id: p.id } : undefined;
+          return (
+            <Link key={p.id} to={to} params={params as any}>
+              <Card className="p-3 hover:border-cyan-glow/40 transition">
+                <div className="flex items-center gap-2 mb-2">
+                  <Avatar className="h-6 w-6"><AvatarImage src={p.profile?.avatar_url ?? undefined} /><AvatarFallback>U</AvatarFallback></Avatar>
+                  <span className="text-xs font-medium">@{p.profile?.username}</span>
+                </div>
+                <p className="text-sm line-clamp-2">{p.content}</p>
+                <div className="text-xs text-muted-foreground mt-2">{p.likes_count} ❤ · {p.comments_count} 💬</div>
+              </Card>
+            </Link>
+          );
+        })}
       </div>
     </Section>
   );
