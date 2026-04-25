@@ -268,6 +268,8 @@ function VideoCard({
   const [paused, setPaused] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [viewCounted, setViewCounted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [likeBurst, setLikeBurst] = useState(0);
   const lastTapRef = useRef(0);
 
   // IntersectionObserver: detect when this card is the active one
