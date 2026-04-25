@@ -18,6 +18,7 @@ import {
   Eye,
   Bookmark,
   BookmarkCheck,
+  Send,
 } from "lucide-react";
 import { getYoutubeVideoMeta } from "@/utils/youtube.functions";
 import { toast } from "sonner";
@@ -53,6 +54,7 @@ function WatchYtPage() {
   });
   const [liking, setLiking] = useState(false);
   const [bookmarking, setBookmarking] = useState(false);
+  const [publishing, setPublishing] = useState(false);
 
   const { data: meta, isLoading } = useQuery({
     queryKey: ["yt-meta", videoId],
@@ -136,6 +138,48 @@ function WatchYtPage() {
       toast.error(e.message || "تعذّرت الإضافة");
     } finally {
       setAdding(false);
+    }
+  };
+
+  const publishToFeed = async () => {
+    if (!user || !meta || publishing) return;
+    setPublishing(true);
+    try {
+      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      let id = postId;
+      if (id) {
+        // Re-publish: bump updated_at so it surfaces in the feed again
+        const { error } = await supabase
+          .from("posts")
+          .update({ updated_at: new Date().toISOString(), content: meta.title })
+          .eq("id", id);
+        if (error) throw error;
+      } else {
+        const { data: created, error } = await supabase
+          .from("posts")
+          .insert({
+            user_id: user.id,
+            type: "video" as any,
+            content: meta.title,
+            media_urls: [ytUrl],
+          })
+          .select("id")
+          .single();
+        if (error) throw error;
+        id = created.id;
+        setPostId(id);
+      }
+      toast.success("تم النشر في الخلاصة 🎉", {
+        description: meta.title,
+        action: {
+          label: "عرض",
+          onClick: () => router.navigate({ to: "/feed" }),
+        },
+      });
+    } catch (e: any) {
+      toast.error(e.message || "تعذّر النشر");
+    } finally {
+      setPublishing(false);
     }
   };
 
@@ -270,7 +314,7 @@ function WatchYtPage() {
             </div>
           )}
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 flex-wrap">
           {postId ? (
             <Button size="sm" variant="secondary" disabled className="gap-1">
               <Check className="h-4 w-4" /> مُضاف
@@ -278,6 +322,7 @@ function WatchYtPage() {
           ) : (
             <Button
               size="sm"
+              variant="outline"
               onClick={addToSite}
               disabled={adding || !user || !meta}
               className="gap-1"
@@ -290,6 +335,19 @@ function WatchYtPage() {
               إضافة إلى الموقع
             </Button>
           )}
+          <Button
+            size="sm"
+            onClick={publishToFeed}
+            disabled={publishing || !user || !meta}
+            className="gap-1 bg-cyan-glow/20 hover:bg-cyan-glow/30 text-cyan-glow border border-cyan-glow/40"
+          >
+            {publishing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+            {postId ? "إعادة النشر" : "نشر"}
+          </Button>
         </div>
       </div>
 
