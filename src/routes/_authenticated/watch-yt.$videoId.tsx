@@ -23,6 +23,7 @@ import {
 import { getYoutubeVideoMeta } from "@/utils/youtube.functions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Cinematic3DScreen } from "@/components/videos/Cinematic3DScreen";
 
 export const Route = createFileRoute("/_authenticated/watch-yt/$videoId")({
   component: WatchYtPage,
