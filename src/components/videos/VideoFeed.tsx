@@ -121,6 +121,28 @@ export function VideoFeed() {
     setVideos((vs) => vs.map((v) => (v.id === id ? { ...v, ...patch } : v)));
   }, []);
 
+  // Refs to each card for scroll-to-resume
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const didRestoreRef = useRef(false);
+
+  // After videos load, scroll to the persisted active video (resume)
+  useEffect(() => {
+    if (loading || didRestoreRef.current || !activeId) return;
+    const el = cardRefs.current.get(activeId);
+    if (el) {
+      el.scrollIntoView({ behavior: "auto", block: "start" });
+      didRestoreRef.current = true;
+    }
+  }, [loading, activeId, videos]);
+
+  // Index of active video for prefetching the next one
+  const activeIdx = videos.findIndex((v) => v.id === activeId);
+  const nextUrl =
+    activeIdx >= 0 && activeIdx < videos.length - 1
+      ? videos[activeIdx + 1]?.media_urls?.[0]
+      : undefined;
+
   if (loading) {
     return (
       <div className="flex justify-center py-20">
