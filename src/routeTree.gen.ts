@@ -41,6 +41,7 @@ import { Route as OwnerOwnerX9k2m7FinanceRouteImport } from './routes/_owner/own
 import { Route as OwnerOwnerX9k2m7FeaturesRouteImport } from './routes/_owner/owner-x9k2m7.features'
 import { Route as OwnerOwnerX9k2m7ContentRouteImport } from './routes/_owner/owner-x9k2m7.content'
 import { Route as OwnerOwnerX9k2m7AuditRouteImport } from './routes/_owner/owner-x9k2m7.audit'
+import { Route as AuthenticatedMessagesConversationIdRouteImport } from './routes/_authenticated/messages.$conversationId'
 import { Route as AuthenticatedGroupsGroupIdRouteImport } from './routes/_authenticated/groups.$groupId'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
 import { Route as AdminAdminMarketplaceRouteImport } from './routes/_admin/admin.marketplace'
@@ -212,6 +213,12 @@ const OwnerOwnerX9k2m7AuditRoute = OwnerOwnerX9k2m7AuditRouteImport.update({
   path: '/owner-x9k2m7/audit',
   getParentRoute: () => OwnerRoute,
 } as any)
+const AuthenticatedMessagesConversationIdRoute =
+  AuthenticatedMessagesConversationIdRouteImport.update({
+    id: '/$conversationId',
+    path: '/$conversationId',
+    getParentRoute: () => AuthenticatedMessagesRoute,
+  } as any)
 const AuthenticatedGroupsGroupIdRoute =
   AuthenticatedGroupsGroupIdRouteImport.update({
     id: '/$groupId',
@@ -256,7 +263,7 @@ export interface FileRoutesByFullPath {
   '/invite': typeof AuthenticatedInviteRoute
   '/live': typeof AuthenticatedLiveRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
-  '/messages': typeof AuthenticatedMessagesRoute
+  '/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/stories': typeof AuthenticatedStoriesRoute
@@ -268,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
+  '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
   '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
   '/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
@@ -293,7 +301,7 @@ export interface FileRoutesByTo {
   '/invite': typeof AuthenticatedInviteRoute
   '/live': typeof AuthenticatedLiveRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
-  '/messages': typeof AuthenticatedMessagesRoute
+  '/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/stories': typeof AuthenticatedStoriesRoute
@@ -305,6 +313,7 @@ export interface FileRoutesByTo {
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
+  '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
   '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
   '/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
@@ -334,7 +343,7 @@ export interface FileRoutesById {
   '/_authenticated/invite': typeof AuthenticatedInviteRoute
   '/_authenticated/live': typeof AuthenticatedLiveRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
-  '/_authenticated/messages': typeof AuthenticatedMessagesRoute
+  '/_authenticated/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/stories': typeof AuthenticatedStoriesRoute
@@ -346,6 +355,7 @@ export interface FileRoutesById {
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
   '/_authenticated/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
+  '/_authenticated/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
   '/_owner/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/_owner/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
   '/_owner/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
     | '/admin/marketplace'
     | '/admin/users'
     | '/groups/$groupId'
+    | '/messages/$conversationId'
     | '/owner-x9k2m7/audit'
     | '/owner-x9k2m7/content'
     | '/owner-x9k2m7/features'
@@ -422,6 +433,7 @@ export interface FileRouteTypes {
     | '/admin/marketplace'
     | '/admin/users'
     | '/groups/$groupId'
+    | '/messages/$conversationId'
     | '/owner-x9k2m7/audit'
     | '/owner-x9k2m7/content'
     | '/owner-x9k2m7/features'
@@ -462,6 +474,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/marketplace'
     | '/_admin/admin/users'
     | '/_authenticated/groups/$groupId'
+    | '/_authenticated/messages/$conversationId'
     | '/_owner/owner-x9k2m7/audit'
     | '/_owner/owner-x9k2m7/content'
     | '/_owner/owner-x9k2m7/features'
@@ -711,6 +724,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerOwnerX9k2m7AuditRouteImport
       parentRoute: typeof OwnerRoute
     }
+    '/_authenticated/messages/$conversationId': {
+      id: '/_authenticated/messages/$conversationId'
+      path: '/$conversationId'
+      fullPath: '/messages/$conversationId'
+      preLoaderRoute: typeof AuthenticatedMessagesConversationIdRouteImport
+      parentRoute: typeof AuthenticatedMessagesRoute
+    }
     '/_authenticated/groups/$groupId': {
       id: '/_authenticated/groups/$groupId'
       path: '/$groupId'
@@ -800,6 +820,20 @@ const AuthenticatedGroupsRouteChildren: AuthenticatedGroupsRouteChildren = {
 const AuthenticatedGroupsRouteWithChildren =
   AuthenticatedGroupsRoute._addFileChildren(AuthenticatedGroupsRouteChildren)
 
+interface AuthenticatedMessagesRouteChildren {
+  AuthenticatedMessagesConversationIdRoute: typeof AuthenticatedMessagesConversationIdRoute
+}
+
+const AuthenticatedMessagesRouteChildren: AuthenticatedMessagesRouteChildren = {
+  AuthenticatedMessagesConversationIdRoute:
+    AuthenticatedMessagesConversationIdRoute,
+}
+
+const AuthenticatedMessagesRouteWithChildren =
+  AuthenticatedMessagesRoute._addFileChildren(
+    AuthenticatedMessagesRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
   AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
@@ -809,7 +843,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedInviteRoute: typeof AuthenticatedInviteRoute
   AuthenticatedLiveRoute: typeof AuthenticatedLiveRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
-  AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
+  AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRouteWithChildren
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedStoriesRoute: typeof AuthenticatedStoriesRoute
@@ -827,7 +861,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedInviteRoute: AuthenticatedInviteRoute,
   AuthenticatedLiveRoute: AuthenticatedLiveRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
-  AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
+  AuthenticatedMessagesRoute: AuthenticatedMessagesRouteWithChildren,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedStoriesRoute: AuthenticatedStoriesRoute,
