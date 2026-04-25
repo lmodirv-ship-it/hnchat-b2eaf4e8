@@ -158,17 +158,31 @@ function YoutubePage() {
         </div>
       </header>
 
-      <form onSubmit={submit} className="flex gap-2 mb-6">
-        <Input
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://www.youtube.com/@MrBeast  أو  /channel/UC..."
-          className="bg-ice-card border-ice-border h-12 text-base"
-          dir="ltr"
-        />
-        <Button type="submit" size="lg" disabled={mutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
-          {mutation.isPending ? "جارٍ التحميل..." : (<><Search className="h-4 w-4 ml-1" /> عرض</>)}
-        </Button>
+      <form onSubmit={submit} className="mb-6 space-y-2">
+        <div className="flex gap-2">
+          <Input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://www.youtube.com/@MrBeast  أو  /channel/UC..."
+            className="bg-ice-card border-ice-border h-12 text-base"
+            dir="ltr"
+          />
+          <Button type="submit" size="lg" disabled={mutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
+            {mutation.isPending ? "جارٍ التحميل..." : (<><Search className="h-4 w-4 ml-1" /> عرض</>)}
+          </Button>
+        </div>
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            size="lg"
+            onClick={showAndAddAll}
+            disabled={mutation.isPending || bulkAdding || !user || !url.trim()}
+            className="gap-1"
+          >
+            {(mutation.isPending || bulkAdding) ? <Loader2 className="h-4 w-4 animate-spin" /> : <PlusSquare className="h-4 w-4" />}
+            إضافة كل فيديوهات القناة إلى الخلاصة
+          </Button>
+        </div>
       </form>
 
       {history.length > 0 && !result && (
