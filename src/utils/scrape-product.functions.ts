@@ -10,6 +10,14 @@ export type ScrapedProduct = {
   siteName: string;
 };
 
+export type ScrapedListItem = {
+  url: string;
+  title: string;
+  image: string | null;
+  price: number | null;
+  currency: string;
+};
+
 function pickMeta(html: string, patterns: RegExp[]): string | null {
   for (const re of patterns) {
     const m = html.match(re);
