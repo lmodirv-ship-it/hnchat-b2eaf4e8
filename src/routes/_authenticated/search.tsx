@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/search")({
 });
 
 const TAB_ICONS: Record<string, any> = {
-  all: SearchIcon, people: User, posts: FileText, reels: Film, groups: Users, products: ShoppingBag,
+  all: SearchIcon, creators: Video, people: User, posts: FileText, reels: Film, groups: Users, products: ShoppingBag,
 };
 
 function SearchPage() {
