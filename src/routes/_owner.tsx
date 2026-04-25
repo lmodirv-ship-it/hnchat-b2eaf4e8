@@ -75,7 +75,7 @@ function OwnerShell() {
             return (
               <Link
                 key={item.to}
-                to={item.to}
+                to={item.to as any}
                 className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all ${
                   active
                     ? "bg-gradient-to-r from-[oklch(0.75_0.18_50/0.18)] to-[oklch(0.55_0.22_25/0.12)] text-[oklch(0.92_0.1_50)] shadow-[inset_0_0_0_1px_oklch(0.75_0.18_50/0.3)]"
