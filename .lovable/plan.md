@@ -1,40 +1,51 @@
-# خطة: إكمال الشريط الجانبي بقسم "More"
+# خطة: صفحة Notifications تفاعلية كاملة
 
 ## الوضع الحالي
-الشريط الجانبي يحتوي على كل عناصر "Navigation" الـ 26 الموجودة في الصورة (Home Feed → Profile + Admin). الناقص هو **قسم "More"** الذي يظهر أسفل الشريط في الصورة:
-- Notifications (5) — الصفحة موجودة لكنها غير مربوطة في الشريط
-- Bookmarks — صفحة غير موجودة
-- Settings — صفحة غير موجودة (Preferences ≠ Settings)
-- Privacy Policy — صفحة غير موجودة
-- Terms of Service — صفحة غير موجودة
+`src/routes/_authenticated/notifications.tsx` placeholder ثابت ("You're all caught up"). جدول `notifications` موجود في قاعدة البيانات مع RLS مناسب (`notif_select_own` + `notif_update_own`)، وأنواع الإشعارات: `like, comment, follow, mention, message, system`.
 
 ## ما سأنفّذه
 
-### 1. إنشاء 4 صفحات جديدة في `src/routes/_authenticated/`
-- `bookmarks.tsx` — قائمة العناصر المحفوظة (placeholder بتصميم متّسق عبر `ComingSoon`، مع أيقونة Bookmark وأقسام: Posts / Videos / Products).
-- `settings.tsx` — صفحة إعدادات حقيقية بسيطة: Account info (email + role)، Theme toggle (dark/light)، Language، Sign out — وليست placeholder.
-- `privacy-policy.tsx` — صفحة محتوى ثابت بسياسة خصوصية موجزة (مقدمة + جمع البيانات + الاستخدام + المشاركة + الحقوق + التواصل).
-- `terms-of-service.tsx` — صفحة محتوى ثابت بشروط استخدام موجزة (القبول + الحساب + المحتوى + الاستخدام المحظور + إخلاء المسؤولية + التعديل).
+### إعادة كتابة `src/routes/_authenticated/notifications.tsx`
+صفحة كاملة تعرض إشعارات المستخدم الحالي مع:
 
-### 2. تحديث `src/components/AppSidebar.tsx`
-- إضافة قسم منفصل بعنوان **"More"** أسفل قائمة Navigation وقبل قسم Admin، يحتوي على:
-  ```
-  Notifications  [5]
-  Bookmarks
-  Settings
-  Privacy Policy
-  Terms of Service
-  ```
-- استخدام نفس نمط الأيقونات (`Bell, Bookmark, Settings, FileText, ScrollText`) ونفس مكوّن `Badge` المستخدم حالياً (tone="count" للرقم 5).
-- نفس نمط active state ونفس الـ Link.
+1. **جلب البيانات** عبر TanStack Query من جدول `notifications`:
+   - `select * where user_id = auth.uid() order by created_at desc limit 100`
+   - مفتاح cache: `["notifications", user.id]`
 
-### 3. لا حاجة لأي migration أو backend
-كل العناصر الجديدة إمّا صفحات محتوى ثابت أو placeholder، ولا تتطلب جداول أو RLS.
+2. **تبويبات (tabs)** بثلاث حالات:
+   - **الكل** — جميع الإشعارات
+   - **غير مقروء** — `is_read = false` (مع شارة العدد)
+   - **مقروء** — `is_read = true`
+   - تبديل client-side بدون إعادة جلب (تصفية في الذاكرة).
 
-## التحقق
-- `tsc --noEmit` للتأكد من أن `<Link to="...">` لكل المسارات الجديدة type-safe بعد توليد `routeTree.gen.ts` تلقائياً.
-- التأكد من ظهور القسم الجديد في الـ viewport الحالي (785px) — الشريط الجانبي مخفي تحت `md:` فلا تأثير على الموبايل.
+3. **زر "تعليم الكل كمقروء"** في الـ header:
+   - mutation: `update notifications set is_read=true where user_id=auth.uid() and is_read=false`
+   - معطّل عند عدم وجود إشعارات غير مقروءة
+   - toast نجاح/خطأ + invalidate للـ cache.
+
+4. **تعليم إشعار واحد كمقروء**:
+   - زر check بجانب كل إشعار غير مقروء
+   - تلقائياً عند النقر على إشعار يحتوي `link` (ينقل بـ `<Link>`).
+
+5. **تصميم العنصر الواحد**:
+   - أيقونة ملوّنة حسب النوع (Heart/MessageCircle/UserPlus/AtSign/Mail/Sparkles) بتدرّج cyan/violet/pink من design tokens
+   - نص "أعجب بمنشورك / علّق / بدأ بمتابعتك..." حسب النوع
+   - timestamp نسبي بالعربية (ث/د/س/ي)
+   - خلفية مميّزة للإشعارات غير المقروءة (تدرّج cyan-glow خفيف + حدّ ملوّن + نقطة glow)
+   - الإشعارات المقروءة بخلفية محايدة باهتة.
+
+6. **Realtime**: قناة Supabase على `notifications` مفلترة بـ `user_id` لتحديث القائمة فوراً عند وصول إشعار جديد.
+
+7. **حالات فارغة وتحميل**:
+   - Skeleton loader أثناء الجلب
+   - Empty state مخصّص لكل تبويب (لا إشعارات / لا إشعارات غير مقروءة / لا إشعارات مقروءة).
+
+8. **PageShell** مع subtitle ديناميكي يعرض عدد غير المقروء.
 
 ## الملفات
-- إنشاء: `src/routes/_authenticated/bookmarks.tsx`, `settings.tsx`, `privacy-policy.tsx`, `terms-of-service.tsx`
-- تعديل: `src/components/AppSidebar.tsx`
+- تعديل: `src/routes/_authenticated/notifications.tsx` فقط.
+
+## لا حاجة لـ
+- migration (الجدول والسياسات جاهزة)
+- ملفات جديدة
+- backend changes
