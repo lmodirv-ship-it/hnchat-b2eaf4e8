@@ -314,7 +314,7 @@ function WatchYtPage() {
             </div>
           )}
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 flex-wrap">
           {postId ? (
             <Button size="sm" variant="secondary" disabled className="gap-1">
               <Check className="h-4 w-4" /> مُضاف
@@ -322,6 +322,7 @@ function WatchYtPage() {
           ) : (
             <Button
               size="sm"
+              variant="outline"
               onClick={addToSite}
               disabled={adding || !user || !meta}
               className="gap-1"
@@ -334,6 +335,19 @@ function WatchYtPage() {
               إضافة إلى الموقع
             </Button>
           )}
+          <Button
+            size="sm"
+            onClick={publishToFeed}
+            disabled={publishing || !user || !meta}
+            className="gap-1 bg-cyan-glow/20 hover:bg-cyan-glow/30 text-cyan-glow border border-cyan-glow/40"
+          >
+            {publishing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+            {postId ? "إعادة النشر" : "نشر"}
+          </Button>
         </div>
       </div>
 
