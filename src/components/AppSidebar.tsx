@@ -6,7 +6,7 @@ import {
   User, LogOut, Shield, Sparkles, Radio, Mic, BookOpen, Gift,
   TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
   Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
-  Settings, Cpu, Bookmark, FileText, ScrollText,
+  Settings, Cpu, Bookmark, FileText, ScrollText, Youtube,
 } from "lucide-react";
 
 const MORE: readonly NavItem[] = [
