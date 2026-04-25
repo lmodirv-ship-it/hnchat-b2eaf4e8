@@ -1,4 +1,4 @@
-import { MessageCircle, Zap } from "lucide-react";
+import hnLogoImage from "@/assets/hn-logo.png";
 
 interface HnLogoProps {
   size?: number;
@@ -11,21 +11,26 @@ export function HnLogo({ size = 40, showText = false, subtitle, className }: HnL
   return (
     <div className={`flex items-center gap-3 ${className ?? ""}`}>
       <div
-        className="relative flex items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-glow to-violet-glow shadow-[0_0_24px_oklch(0.78_0.18_220/0.4)]"
+        className="relative flex items-center justify-center overflow-hidden rounded-2xl shadow-[0_0_24px_oklch(0.78_0.18_60/0.35)] ring-1 ring-amber-400/30"
         style={{ width: size, height: size }}
       >
-        <MessageCircle className="text-primary-foreground" size={size * 0.55} strokeWidth={2.2} />
-        <Zap
-          className="absolute -bottom-1 -right-1 text-cyan-glow drop-shadow-[0_0_6px_oklch(0.78_0.18_220)]"
-          size={size * 0.4}
-          strokeWidth={2.5}
-          fill="currentColor"
+        <img
+          src={hnLogoImage}
+          alt="HN-Groupe"
+          className="h-full w-full object-cover"
+          loading="eager"
         />
       </div>
       {showText && (
         <div className="leading-tight">
-          <div className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent text-xl font-bold tracking-tight">hnChat</div>
-          {subtitle && <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{subtitle}</div>}
+          <div className="bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent text-xl font-bold tracking-tight">
+            HN-Groupe
+          </div>
+          {subtitle && (
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              {subtitle}
+            </div>
+          )}
         </div>
       )}
     </div>
