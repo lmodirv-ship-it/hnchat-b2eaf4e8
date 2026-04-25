@@ -109,12 +109,12 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
       return list[0]?.id ?? null;
     });
     setLoading(false);
-  }, [user]);
+  }, [user, feedType]);
 
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  }, [user?.id, feedType]);
 
   // Optimistic local update for like (avoid full reload)
   const updateLocal = useCallback((id: string, patch: Partial<VideoPost>) => {
