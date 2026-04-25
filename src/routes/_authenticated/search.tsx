@@ -69,7 +69,7 @@ function SearchPage() {
         <div className="max-w-4xl mx-auto">
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="w-full justify-start overflow-x-auto flex-nowrap mb-4">
-              {(["all", "people", "posts", "reels", "groups", "products"] as const).map((t) => {
+              {(["all", "creators", "people", "posts", "reels", "groups", "products"] as const).map((t) => {
                 const Icon = TAB_ICONS[t];
                 return (
                   <TabsTrigger key={t} value={t} className="gap-2">
@@ -83,11 +83,13 @@ function SearchPage() {
             {tab === "all" && <AISummary query={q} />}
 
             <TabsContent value="all" className="space-y-6">
+              <CreatorsResults q={q} limit={4} />
               <PeopleResults q={q} limit={3} />
               <PostsResults q={q} limit={5} />
               <GroupsResults q={q} limit={3} />
               <ProductsResults q={q} limit={4} />
             </TabsContent>
+            <TabsContent value="creators"><CreatorsResults q={q} limit={20} /></TabsContent>
             <TabsContent value="people"><PeopleResults q={q} limit={20} /></TabsContent>
             <TabsContent value="posts"><PostsResults q={q} limit={30} /></TabsContent>
             <TabsContent value="reels"><ReelsResults q={q} limit={20} /></TabsContent>
