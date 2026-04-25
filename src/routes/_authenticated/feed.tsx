@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send, Loader2, Sparkles, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { PostCard, type FeedPost } from "@/components/feed/PostCard";
+import { StoriesRail } from "@/components/stories/StoriesRail";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   component: FeedPage,
@@ -101,6 +102,7 @@ function FeedPage() {
 
   return (
     <PageShell title="التغذية" subtitle="اكتشف ما يحدث في عالمك الآن">
+      <StoriesRail />
       {/* Composer */}
       <Card className="p-4 mb-6 bg-ice-card border-ice-border backdrop-blur-xl">
         <div className="flex gap-3">
