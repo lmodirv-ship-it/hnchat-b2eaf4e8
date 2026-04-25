@@ -827,6 +827,9 @@ export type Database = {
         | "push_template"
         | "email_template"
         | "ai_tool"
+        | "live_stream"
+        | "voice_room"
+        | "page"
       notification_type:
         | "like"
         | "comment"
@@ -973,6 +976,9 @@ export const Constants = {
         "push_template",
         "email_template",
         "ai_tool",
+        "live_stream",
+        "voice_room",
+        "page",
       ],
       notification_type: [
         "like",
