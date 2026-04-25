@@ -55,8 +55,16 @@ export function VideoFeed() {
   const [videos, setVideos] = useState<VideoPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [muted, setMuted] = useState(true);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return sessionStorage.getItem("videos:activeId");
+  });
   const [commentsForId, setCommentsForId] = useState<string | null>(null);
+
+  // Persist active video so user resumes on the same one when returning
+  useEffect(() => {
+    if (activeId) sessionStorage.setItem("videos:activeId", activeId);
+  }, [activeId]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -96,9 +104,12 @@ export function VideoFeed() {
       liked_by_me: likedSet.has(p.id),
     })) as VideoPost[];
     setVideos(list);
-    if (!activeId && list[0]) setActiveId(list[0].id);
+    setActiveId((prev) => {
+      if (prev && list.some((v) => v.id === prev)) return prev;
+      return list[0]?.id ?? null;
+    });
     setLoading(false);
-  }, [user, activeId]);
+  }, [user]);
 
   useEffect(() => {
     load();
@@ -109,6 +120,28 @@ export function VideoFeed() {
   const updateLocal = useCallback((id: string, patch: Partial<VideoPost>) => {
     setVideos((vs) => vs.map((v) => (v.id === id ? { ...v, ...patch } : v)));
   }, []);
+
+  // Refs to each card for scroll-to-resume
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const didRestoreRef = useRef(false);
+
+  // After videos load, scroll to the persisted active video (resume)
+  useEffect(() => {
+    if (loading || didRestoreRef.current || !activeId) return;
+    const el = cardRefs.current.get(activeId);
+    if (el) {
+      el.scrollIntoView({ behavior: "auto", block: "start" });
+      didRestoreRef.current = true;
+    }
+  }, [loading, activeId, videos]);
+
+  // Index of active video for prefetching the next one
+  const activeIdx = videos.findIndex((v) => v.id === activeId);
+  const nextUrl =
+    activeIdx >= 0 && activeIdx < videos.length - 1
+      ? videos[activeIdx + 1]?.media_urls?.[0]
+      : undefined;
 
   if (loading) {
     return (
@@ -142,20 +175,38 @@ export function VideoFeed() {
         </div>
       ) : (
         <div
+          ref={scrollerRef}
           className="h-[calc(100vh-200px)] overflow-y-auto snap-y snap-mandatory rounded-lg bg-black scroll-smooth"
         >
-          {videos.map((v) => (
-            <VideoCard
-              key={v.id}
-              video={v}
-              isActive={v.id === activeId}
-              muted={muted}
-              onVisible={() => setActiveId(v.id)}
-              onUpdateLocal={updateLocal}
-              onOpenComments={() => setCommentsForId(v.id)}
-            />
-          ))}
+          {videos.map((v, i) => {
+            const distance = activeIdx >= 0 ? Math.abs(i - activeIdx) : i;
+            // active=auto, neighbors=metadata, far=none (lazy)
+            const preload: "auto" | "metadata" | "none" =
+              distance === 0 ? "auto" : distance === 1 ? "metadata" : "none";
+            return (
+              <VideoCard
+                key={v.id}
+                video={v}
+                isActive={v.id === activeId}
+                muted={muted}
+                preload={preload}
+                shouldRenderSrc={distance <= 2}
+                registerRef={(el) => {
+                  if (el) cardRefs.current.set(v.id, el);
+                  else cardRefs.current.delete(v.id);
+                }}
+                onVisible={() => setActiveId(v.id)}
+                onUpdateLocal={updateLocal}
+                onOpenComments={() => setCommentsForId(v.id)}
+              />
+            );
+          })}
         </div>
+      )}
+
+      {/* Prefetch the next video so it's instant when scrolled to */}
+      {nextUrl && (
+        <link rel="prefetch" as="video" href={nextUrl} key={nextUrl} />
       )}
 
       <Sheet open={!!commentsForId} onOpenChange={(o) => !o && setCommentsForId(null)}>
@@ -190,6 +241,9 @@ function VideoCard({
   video,
   isActive,
   muted,
+  preload,
+  shouldRenderSrc,
+  registerRef,
   onVisible,
   onUpdateLocal,
   onOpenComments,
@@ -197,6 +251,9 @@ function VideoCard({
   video: VideoPost;
   isActive: boolean;
   muted: boolean;
+  preload: "auto" | "metadata" | "none";
+  shouldRenderSrc: boolean;
+  registerRef: (el: HTMLDivElement | null) => void;
   onVisible: () => void;
   onUpdateLocal: (id: string, patch: Partial<VideoPost>) => void;
   onOpenComments: () => void;
@@ -214,6 +271,7 @@ function VideoCard({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    registerRef(el);
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -223,10 +281,49 @@ function VideoCard({
       { threshold: [0, 0.6, 1] },
     );
     obs.observe(el);
-    return () => obs.disconnect();
-  }, [onVisible]);
+    return () => {
+      obs.disconnect();
+      registerRef(null);
+    };
+  }, [onVisible, registerRef]);
 
-  // Play/pause based on isActive
+  // Persist playback position so we resume at the same spot on return
+  const positionKey = `videos:pos:${video.id}`;
+
+  // Restore position when the <video> element mounts/loads
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const saved = sessionStorage.getItem(positionKey);
+    if (saved) {
+      const t = parseFloat(saved);
+      if (!isNaN(t) && t > 0) {
+        const onLoaded = () => {
+          try {
+            el.currentTime = Math.min(t, (el.duration || t) - 0.1);
+          } catch {}
+          el.removeEventListener("loadedmetadata", onLoaded);
+        };
+        if (el.readyState >= 1) onLoaded();
+        else el.addEventListener("loadedmetadata", onLoaded);
+      }
+    }
+  }, [positionKey, video.media_urls]);
+
+  // Save current position periodically while playing
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onTime = () => {
+      if (el.currentTime > 0) {
+        sessionStorage.setItem(positionKey, String(el.currentTime));
+      }
+    };
+    el.addEventListener("timeupdate", onTime);
+    return () => el.removeEventListener("timeupdate", onTime);
+  }, [positionKey]);
+
+  // Play/pause based on isActive (DON'T reset currentTime — keep resume position)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -234,7 +331,6 @@ function VideoCard({
       el.play().catch(() => {});
     } else {
       el.pause();
-      if (!isActive) el.currentTime = 0;
     }
   }, [isActive, paused]);
 
@@ -324,17 +420,22 @@ function VideoCard({
       ref={containerRef}
       className="snap-start h-full w-full relative flex items-center justify-center"
     >
-      {url && (
+      {url && shouldRenderSrc ? (
         <video
           ref={ref}
           src={url}
           muted={muted}
           loop
           playsInline
-          preload="metadata"
+          preload={preload}
           className="max-h-full max-w-full object-contain"
           onClick={handleTap}
         />
+      ) : (
+        // Lightweight placeholder for far-away cards (saves bandwidth)
+        <div className="h-full w-full flex items-center justify-center text-white/40 text-sm">
+          ...
+        </div>
       )}
 
       {/* Pause indicator */}
