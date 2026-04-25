@@ -222,3 +222,18 @@
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+
+/* Mobile / PWA polish */
+html, body {
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+@media (display-mode: standalone) {
+  /* Hide things that don't make sense in installed app */
+  .pwa-hide { display: none !important; }
+}
