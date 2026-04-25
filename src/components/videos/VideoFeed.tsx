@@ -359,6 +359,7 @@ function VideoCard({
     if (!user || liking) return;
     setLiking(true);
     const wasLiked = video.liked_by_me;
+    if (!wasLiked) setLikeBurst((n) => n + 1);
     // optimistic
     onUpdateLocal(video.id, {
       liked_by_me: !wasLiked,
