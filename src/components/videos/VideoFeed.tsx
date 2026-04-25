@@ -175,20 +175,38 @@ export function VideoFeed() {
         </div>
       ) : (
         <div
+          ref={scrollerRef}
           className="h-[calc(100vh-200px)] overflow-y-auto snap-y snap-mandatory rounded-lg bg-black scroll-smooth"
         >
-          {videos.map((v) => (
-            <VideoCard
-              key={v.id}
-              video={v}
-              isActive={v.id === activeId}
-              muted={muted}
-              onVisible={() => setActiveId(v.id)}
-              onUpdateLocal={updateLocal}
-              onOpenComments={() => setCommentsForId(v.id)}
-            />
-          ))}
+          {videos.map((v, i) => {
+            const distance = activeIdx >= 0 ? Math.abs(i - activeIdx) : i;
+            // active=auto, neighbors=metadata, far=none (lazy)
+            const preload: "auto" | "metadata" | "none" =
+              distance === 0 ? "auto" : distance === 1 ? "metadata" : "none";
+            return (
+              <VideoCard
+                key={v.id}
+                video={v}
+                isActive={v.id === activeId}
+                muted={muted}
+                preload={preload}
+                shouldRenderSrc={distance <= 2}
+                registerRef={(el) => {
+                  if (el) cardRefs.current.set(v.id, el);
+                  else cardRefs.current.delete(v.id);
+                }}
+                onVisible={() => setActiveId(v.id)}
+                onUpdateLocal={updateLocal}
+                onOpenComments={() => setCommentsForId(v.id)}
+              />
+            );
+          })}
         </div>
+      )}
+
+      {/* Prefetch the next video so it's instant when scrolled to */}
+      {nextUrl && (
+        <link rel="prefetch" as="video" href={nextUrl} key={nextUrl} />
       )}
 
       <Sheet open={!!commentsForId} onOpenChange={(o) => !o && setCommentsForId(null)}>
