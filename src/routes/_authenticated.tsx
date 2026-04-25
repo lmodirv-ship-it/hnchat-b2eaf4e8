@@ -4,6 +4,9 @@ import { useAuth } from "@/lib/auth";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import { FloatingComposeButton } from "@/components/composer/FloatingComposeButton";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+import { OfflineBanner } from "@/components/layout/OfflineBanner";
+import { InstallPrompt } from "@/components/layout/InstallPrompt";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -34,11 +37,14 @@ function AuthenticatedLayout() {
           <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-glow/10 blur-3xl" />
           <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-glow/10 blur-3xl" />
         </div>
+        <OfflineBanner />
         <TopBar />
-        <div className="flex-1">
+        <div className="flex-1 pb-16 md:pb-0">
           <Outlet />
         </div>
         <FloatingComposeButton />
+        <MobileBottomNav />
+        <InstallPrompt />
       </main>
     </div>
   );
