@@ -14,7 +14,7 @@ import ReactMarkdown from "react-markdown";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
-  tab: fallback(z.enum(["all", "people", "posts", "reels", "groups", "products"]), "all").default("all"),
+  tab: fallback(z.enum(["all", "creators", "people", "posts", "reels", "groups", "products"]), "all").default("all"),
 });
 
 export const Route = createFileRoute("/_authenticated/search")({
