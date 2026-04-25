@@ -14,6 +14,7 @@ import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
 import { Route as AuthenticatedTradeRouteImport } from './routes/_authenticated/trade'
@@ -61,6 +62,7 @@ import { Route as OwnerOwnerX9k2m7FeaturesRouteImport } from './routes/_owner/ow
 import { Route as OwnerOwnerX9k2m7ContentRouteImport } from './routes/_owner/owner-x9k2m7.content'
 import { Route as OwnerOwnerX9k2m7AuditRouteImport } from './routes/_owner/owner-x9k2m7.audit'
 import { Route as AuthenticatedWatchIdRouteImport } from './routes/_authenticated/watch.$id'
+import { Route as AuthenticatedWatchYtVideoIdRouteImport } from './routes/_authenticated/watch-yt.$videoId'
 import { Route as AuthenticatedMessagesConversationIdRouteImport } from './routes/_authenticated/messages.$conversationId'
 import { Route as AuthenticatedGroupsGroupIdRouteImport } from './routes/_authenticated/groups.$groupId'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
@@ -90,6 +92,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
+  id: '/youtube',
+  path: '/youtube',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedVoiceRoute = AuthenticatedVoiceRouteImport.update({
   id: '/voice',
@@ -340,6 +347,12 @@ const AuthenticatedWatchIdRoute = AuthenticatedWatchIdRouteImport.update({
   path: '/watch/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedWatchYtVideoIdRoute =
+  AuthenticatedWatchYtVideoIdRouteImport.update({
+    id: '/watch-yt/$videoId',
+    path: '/watch-yt/$videoId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedMessagesConversationIdRoute =
   AuthenticatedMessagesConversationIdRouteImport.update({
     id: '/$conversationId',
@@ -416,12 +429,14 @@ export interface FileRoutesByFullPath {
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
+  '/youtube': typeof AuthenticatedYoutubeRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
   '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
@@ -474,12 +489,14 @@ export interface FileRoutesByTo {
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
+  '/youtube': typeof AuthenticatedYoutubeRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
   '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
@@ -536,12 +553,14 @@ export interface FileRoutesById {
   '/_authenticated/trade': typeof AuthenticatedTradeRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
+  '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
   '/_authenticated/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/_authenticated/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/_authenticated/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/_authenticated/watch/$id': typeof AuthenticatedWatchIdRoute
   '/_owner/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/_owner/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
@@ -596,12 +615,14 @@ export interface FileRouteTypes {
     | '/trade'
     | '/videos'
     | '/voice'
+    | '/youtube'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
     | '/admin/users'
     | '/groups/$groupId'
     | '/messages/$conversationId'
+    | '/watch-yt/$videoId'
     | '/watch/$id'
     | '/owner-x9k2m7/audit'
     | '/owner-x9k2m7/content'
@@ -654,12 +675,14 @@ export interface FileRouteTypes {
     | '/trade'
     | '/videos'
     | '/voice'
+    | '/youtube'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
     | '/admin/users'
     | '/groups/$groupId'
     | '/messages/$conversationId'
+    | '/watch-yt/$videoId'
     | '/watch/$id'
     | '/owner-x9k2m7/audit'
     | '/owner-x9k2m7/content'
@@ -715,12 +738,14 @@ export interface FileRouteTypes {
     | '/_authenticated/trade'
     | '/_authenticated/videos'
     | '/_authenticated/voice'
+    | '/_authenticated/youtube'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
     | '/_admin/admin/users'
     | '/_authenticated/groups/$groupId'
     | '/_authenticated/messages/$conversationId'
+    | '/_authenticated/watch-yt/$videoId'
     | '/_authenticated/watch/$id'
     | '/_owner/owner-x9k2m7/audit'
     | '/_owner/owner-x9k2m7/content'
@@ -781,6 +806,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/youtube': {
+      id: '/_authenticated/youtube'
+      path: '/youtube'
+      fullPath: '/youtube'
+      preLoaderRoute: typeof AuthenticatedYoutubeRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/voice': {
       id: '/_authenticated/voice'
@@ -1111,6 +1143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWatchIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/watch-yt/$videoId': {
+      id: '/_authenticated/watch-yt/$videoId'
+      path: '/watch-yt/$videoId'
+      fullPath: '/watch-yt/$videoId'
+      preLoaderRoute: typeof AuthenticatedWatchYtVideoIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/messages/$conversationId': {
       id: '/_authenticated/messages/$conversationId'
       path: '/$conversationId'
@@ -1256,6 +1295,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedTradeRoute: typeof AuthenticatedTradeRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
   AuthenticatedVoiceRoute: typeof AuthenticatedVoiceRoute
+  AuthenticatedYoutubeRoute: typeof AuthenticatedYoutubeRoute
+  AuthenticatedWatchYtVideoIdRoute: typeof AuthenticatedWatchYtVideoIdRoute
   AuthenticatedWatchIdRoute: typeof AuthenticatedWatchIdRoute
 }
 
@@ -1294,6 +1335,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTradeRoute: AuthenticatedTradeRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
   AuthenticatedVoiceRoute: AuthenticatedVoiceRoute,
+  AuthenticatedYoutubeRoute: AuthenticatedYoutubeRoute,
+  AuthenticatedWatchYtVideoIdRoute: AuthenticatedWatchYtVideoIdRoute,
   AuthenticatedWatchIdRoute: AuthenticatedWatchIdRoute,
 }
 

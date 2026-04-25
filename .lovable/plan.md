@@ -1,122 +1,89 @@
-# خطة: Super App موحّد (Facebook + Instagram + TikTok + YouTube + Google)
+# استيراد قناة YouTube وعرض كل فيديوهاتها
 
-## الرؤية
-تحويل hnChat الحالي إلى **منصة موحّدة معزولة** تجمع أفضل تجارب الشبكات الاجتماعية الكبرى في تجربة واحدة سلسة، دون الاعتماد على أي خدمة خارجية. كل المحتوى والبيانات والتفاعل داخل النظام (Self-hosted Super App).
+## الفكرة
+يلصق المستخدم رابط قناة YouTube (مثل `youtube.com/@MrBeast` أو `youtube.com/channel/UC...`)، فيعرض الموقع كل فيديوهات القناة في شبكة جميلة، مع إمكانية تشغيل أي فيديو داخل صفحة `/watch-yt/$videoId` بنمط مشابه لـ `/watch/$id`.
 
-## ما هو موجود فعليًا (الأساس القوي)
-لديك 36 صفحة مفعّلة + قاعدة بيانات كاملة:
-- ✅ **Feed + Posts + Likes + Comments** (Facebook-like)
-- ✅ **Stories** (Instagram-like) — مع bucket تخزين
-- ✅ **Videos + Short Videos** (TikTok/YouTube-like) — مع VideoFeed
-- ✅ **Live Stream + Voice Rooms** (Twitch/Clubhouse)
-- ✅ **Messages + Conversations** (Messenger/WhatsApp)
-- ✅ **Groups + Pages** (Facebook Groups)
-- ✅ **Marketplace + hnShop** (Facebook Marketplace)
-- ✅ **AI Hub + AI Assistant** (Google Gemini-like)
-- ✅ **Profile + Bookmarks + Notifications**
+## النطاق
+صفحة جديدة `/youtube` + صفحة مشاهدة `/watch-yt/$videoId` + Server Function لجلب الفيديوهات + رابط في القائمة الجانبية + تكامل مع البحث الموحّد.
 
-## ما سيُضاف لجعلها تجربة موحّدة حقيقية
+---
 
-### 1. الصفحة الرئيسية الموحّدة (/)
-**Hub رئيسي** يجمع كل شيء في "موجز ذكي" مثل الصفحة الرئيسية لـ Facebook لكن بأقسام:
-- **Stories rail** (Instagram) في الأعلى
-- **Live now** شريط أفقي (TikTok Live)
-- **Smart Feed** يدمج: منشورات + reels قصيرة بين كل 3 منشورات + اقتراحات مجموعات + إعلانات
-- **Trending sidebar** (Twitter-style) — هاشتاقات + أشخاص للمتابعة
+## طريقة جلب البيانات (الجزء التقني الحرج)
 
-### 2. تجربة TikTok/Reels منغمسة (/reels)
-شاشة كاملة عمودية مع تمرير عمودي (snap scroll):
-- فيديو ملء الشاشة + أزرار جانبية (إعجاب/تعليق/مشاركة/متابعة)
-- تشغيل تلقائي + كتم/فك بنقرة
-- الانتقال للفيديو التالي بـ swipe
-- يستخدم جدول `posts` مع `type='video'`
+YouTube لا يسمح بسحب فيديوهات قناة مباشرةً من المتصفح (CORS + شروط الاستخدام). لذلك سنستخدم **خادم TanStack Start** عبر `createServerFn` بإحدى طريقتين:
 
-### 3. منصة فيديوهات شبيهة بـ YouTube (/watch)
-- **مشغّل كبير** + معلومات الفيديو + وصف
-- **قائمة Up Next** على اليمين
-- **تعليقات** أسفل الفيديو
-- زر **Subscribe** (يستخدم نظام `follows` الحالي)
-- صفحة قناة منفصلة `/channel/$username`
+### الخيار A — RSS العام (مجاني، بدون مفتاح، مُوصى به للبداية)
+كل قناة YouTube لها feed عام:  
+`https://www.youtube.com/feeds/videos.xml?channel_id=UCxxxxx`
 
-### 4. بحث Google-like موحّد (/search)
-محرّك بحث واحد لكل شيء:
-- **All / People / Posts / Videos / Groups / Products** كتبويبات
-- نتائج فورية مع debounce
-- اقتراحات سريعة
-- بحث AI عن إجابات (يستخدم Lovable AI)
+- نُحوّل الرابط الذي ألصقه المستخدم (`@handle` أو `/c/name` أو `/channel/UC...`) إلى `channel_id` بسحب صفحة القناة وقراءة `<meta itemprop="identifier">` أو `channelId` من الـ HTML.
+- ثم نقرأ الـ RSS ونُحلّله لاستخراج: عنوان الفيديو، videoId، الصورة المصغّرة، تاريخ النشر، الوصف.
+- **القيد**: RSS يُرجع آخر **15 فيديو فقط** من القناة.
 
-### 5. Profile موحّد كـ "كل شيء عن المستخدم"
-بناء على `/profile` الحالي، إضافة تبويبات على غرار Instagram/TikTok:
-- **Posts** | **Reels** | **Videos** | **Stories Highlights** | **About**
-- شبكة 3×N للمنشورات (Instagram grid)
-- عدّاد متابعين/متابعة قابل للنقر
+### الخيار B — YouTube Data API v3 (يحتاج مفتاحًا، يدعم آلاف الفيديوهات)
+- يتطلب مفتاح `YOUTUBE_API_KEY` من Google Cloud Console.
+- يعطي قوائم تشغيل كاملة، عدد المشاهدات، المدة، إلخ.
 
-### 6. صندوق إنشاء عام (Universal Composer)
-زر عائم `+` في كل مكان يفتح modal بـ تبويبات:
-- **Post** (نص + صور)
-- **Story** (صورة سريعة 24س)
-- **Reel** (فيديو قصير)
-- **Live** (بدء بث)
-- **Marketplace** (منتج)
-الكل يُحفظ في الجداول الموجودة بدون تكرار.
+**اقتراحي**: نبدأ بالخيار A (يعمل فورًا بدون أي إعداد)، ونضيف زرّ "تحميل المزيد عبر API" لاحقًا إن أردتَ تفعيل الخيار B.
 
-### 7. اكتشاف موحّد (/explore — تحسين)
-شبكة Pinterest/Instagram Explore: مزيج بصري من Reels + صور + Live thumbnails.
+---
 
-### 8. شريط حالة عام (Top Bar)
-في كل صفحة: شعار + بحث Google-style + إشعارات + رسائل + Avatar — تجربة واحدة متّسقة.
+## الملفات الجديدة/المعدّلة
 
-## التغييرات التقنية
+### 1. `src/utils/youtube.functions.ts` (جديد)
+Server function:
+```ts
+resolveYoutubeChannel({ url }) → { channelId, title, avatar, subscribers? }
+fetchChannelVideos({ channelId }) → Video[]  // عبر RSS
+```
+- يستخدم `fetch` على الخادم (لا CORS).
+- يُحلّل XML بـ regex بسيطة (لا حاجة لمكتبة).
+- يُخزّن النتائج مؤقتًا في الذاكرة لمدة 10 دقائق لتقليل الطلبات.
 
-### ملفات جديدة:
-- `src/routes/index.tsx` — Hub الرئيسي الموحّد (Smart Feed)
-- `src/routes/_authenticated/reels.tsx` — TikTok-style full-screen
-- `src/routes/_authenticated/watch.$videoId.tsx` — YouTube-style player page
-- `src/routes/_authenticated/channel.$username.tsx` — صفحة قناة
-- `src/components/composer/UniversalComposer.tsx` — صندوق إنشاء عام
-- `src/components/composer/FloatingComposeButton.tsx` — زر عائم
-- `src/components/layout/TopBar.tsx` — شريط علوي موحّد
-- `src/components/feed/SmartFeed.tsx` — موجز يمزج أنواع متعددة
-- `src/components/reels/ReelsViewer.tsx` — مشغّل عمودي full-screen
-- `src/components/search/UnifiedSearch.tsx` — بحث ذكي موحّد
+### 2. `src/routes/_authenticated/youtube.tsx` (جديد)
+- حقل إدخال كبير لرابط قناة YouTube + زر "عرض الفيديوهات".
+- بطاقة "ملف القناة" (الصورة + الاسم + عدد المشتركين إن توفّر).
+- شبكة فيديوهات (responsive grid) مع thumbnail + عنوان + تاريخ.
+- نقر على فيديو → `/watch-yt/$videoId`.
+- دعم تاريخ القنوات المُستوردة سابقًا (محفوظة في `localStorage` للوصول السريع).
 
-### ملفات معدّلة:
-- `src/routes/_authenticated/profile.tsx` — تبويبات Instagram-style
-- `src/routes/_authenticated/explore.tsx` — شبكة بصرية
-- `src/routes/_authenticated/search.tsx` — Google-like
-- `src/components/AppSidebar.tsx` — تنظيم وإضافة Reels/Watch
-- `src/routes/__root.tsx` أو layout — إضافة TopBar + FloatingCompose
+### 3. `src/routes/_authenticated/watch-yt.$videoId.tsx` (جديد)
+- مُشغّل YouTube مدمج عبر `<iframe src="https://www.youtube.com/embed/$videoId">` بإطار 16:9.
+- عنوان الفيديو + رابط القناة الأصلية.
+- **التعليقات**: نُعيد استخدام `CommentsSection` لكن بـ `postId` ديناميكي — نُنشئ سجلًا في جدول `posts` بنوع خاص (`type = 'video'`) عند أول مشاهدة لكل فيديو YouTube حتى يقدر المستخدمون يعلّقوا داخل تطبيقنا (التعليقات داخلية، لا تُرسل لـ YouTube).
+- زر "فتح في YouTube" للوصول للأصل.
 
-### قاعدة البيانات
-**لا حاجة لجداول جديدة** — البنية الحالية كافية:
-- `posts.type` يميز بين post/video/short
-- `stories` للقصص
-- `follows` للاشتراكات
-- `catalog_items` للمنتجات والتطبيقات
-- ستضاف فقط: عمود `posts.thumbnail_url` (اختياري) لمعاينات الفيديو
+### 4. `src/components/AppSidebar.tsx` (تعديل بسيط)
+إضافة بند "YouTube" مع أيقونة `Youtube` من lucide-react يقود إلى `/youtube`.
 
-### التنفيذ على مراحل
-نظرًا لحجم العمل، سأنفّذ على **3 جولات** في رسائل متتالية:
+### 5. (اختياري) `src/routes/_authenticated/search.tsx`
+إضافة تبويب "YouTube" في البحث الموحّد يستدعي نفس الـ server function لو كان الاستعلام رابط قناة.
 
-**الجولة 1 (هذه):**
-- TopBar موحّد + UniversalComposer + FloatingButton
-- Smart Feed على الصفحة الرئيسية
-- صفحة Reels (TikTok)
+---
 
-**الجولة 2:**
-- صفحة Watch (YouTube) + Channel
-- بحث موحّد محسّن
-- تحسين Profile بتبويبات
+## مخطط البيانات
 
-**الجولة 3:**
-- Explore بشبكة بصرية
-- ربط الإشعارات بكل التفاعلات
-- صقل التصميم والانتقالات
+لا حاجة لجدول جديد. نستخدم جدول `posts` الموجود لتخزين فيديوهات YouTube المعروضة (لأجل التعليقات الداخلية فقط)، مع:
+- `type = 'video'`
+- `media_urls = [`https://www.youtube.com/embed/${videoId}`]`
+- `content = العنوان`
+- ميتاداتا في حقل النص (مصدر = youtube، videoId).
 
-## الأمان والصلاحيات
-- كل المحتوى يستخدم RLS الموجود (ملكية المستخدم لمنشوراته)
-- الإجراءات الإدارية تستخدم `useAuth().isAdmin/isOwner`
-- لا تكامل مع APIs خارجية — كل شيء داخلي
+أو نتركها بالكامل بدون تخزين، ونُفعّل التعليقات فقط عند الطلب.
 
-## النتيجة
-بعد الجولات الثلاث: تطبيق موحّد، هوية بصرية واحدة، يمكن للمستخدم التنقل بين تجربة Facebook (Feed/Groups) → Instagram (Stories/Reels) → TikTok (Reels Viewer) → YouTube (Watch/Channels) → Google (Search) كلها داخل **app واحد معزول** بدون مغادرة الموقع.
+---
+
+## QA
+- لصق `https://www.youtube.com/@MrBeast` → عرض آخر 15 فيديو.
+- لصق `https://www.youtube.com/channel/UCX6OQ3DkcsbYNE6H8uQQuVA` → نفس النتيجة.
+- نقر فيديو → التشغيل في `/watch-yt/$videoId` بـ iframe.
+- التعليقات تعمل وتُحفظ.
+
+---
+
+## ملاحظة قانونية
+عرض فيديوهات YouTube عبر `<iframe>` الرسمي مسموح بشروط YouTube (Embed Player). سحب الميتاداتا من RSS العام مسموح أيضًا. لا نقوم بتنزيل الفيديوهات نفسها.
+
+---
+
+هل توافق على البدء بـ **الخيار A (RSS مجاني، آخر 15 فيديو لكل قناة)**؟ أم تفضّل تفعيل الخيار B (YouTube API بمفتاح، فيديوهات غير محدودة) من البداية؟

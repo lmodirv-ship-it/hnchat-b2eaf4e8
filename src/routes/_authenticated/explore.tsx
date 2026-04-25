@@ -60,8 +60,7 @@ function ExplorePage() {
           {people?.map((p) => (
             <Link
               key={p.id}
-              to="/profile/$username"
-              params={{ username: p.username }}
+              to="/profile"
               className="rounded-xl border border-ice-border bg-ice-card p-4 text-center hover:border-cyan-glow/50 transition-all"
             >
               <Avatar className="h-14 w-14 mx-auto mb-2">
