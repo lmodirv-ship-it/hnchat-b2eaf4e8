@@ -416,11 +416,13 @@ function GroupsResults({ q, limit }: { q: string; limit: number }) {
     <Section title="مجموعات" icon={Users} count={data?.length} loading={isLoading}>
       <div className="grid gap-2 sm:grid-cols-2">
         {data?.map((g) => (
-          <Card key={g.id} className="p-3 hover:border-cyan-glow/40 transition">
-            <div className="font-semibold">{g.name}</div>
-            <div className="text-xs text-muted-foreground line-clamp-1">{g.description}</div>
-            <div className="text-xs mt-1 text-cyan-glow">{g.member_count} عضو</div>
-          </Card>
+          <Link key={g.id} to="/groups/$groupId" params={{ groupId: g.id }}>
+            <Card className="p-3 hover:border-cyan-glow/40 transition">
+              <div className="font-semibold">{g.name}</div>
+              <div className="text-xs text-muted-foreground line-clamp-1">{g.description}</div>
+              <div className="text-xs mt-1 text-cyan-glow">{g.member_count} عضو</div>
+            </Card>
+          </Link>
         ))}
       </div>
     </Section>
