@@ -382,7 +382,7 @@ function ReelsResults({ q, limit }: { q: string; limit: number }) {
     <Section title="Reels" icon={Film} count={data?.length} loading={isLoading}>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         {data?.map((r) => (
-          <Link key={r.id} to="/reels" className="aspect-[9/16] rounded-lg bg-black overflow-hidden relative group">
+          <Link key={r.id} to="/watch/$id" params={{ id: r.id }} className="aspect-[9/16] rounded-lg bg-black overflow-hidden relative group">
             {r.media_urls?.[0] ? (
               <video src={r.media_urls[0]} className="w-full h-full object-cover" muted />
             ) : (
