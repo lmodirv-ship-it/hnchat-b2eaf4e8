@@ -109,6 +109,29 @@ export function AppSidebar() {
           );
         })}
 
+        <div className="mt-4 mb-2 px-3 text-[10px] uppercase tracking-wider text-muted-foreground">
+          More
+        </div>
+        {MORE.map((item) => {
+          const Icon = item.icon;
+          const active = location.pathname === item.to || location.pathname.startsWith(item.to + "/");
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all ${
+                active
+                  ? "bg-gradient-to-r from-cyan-glow/15 to-violet-glow/10 text-foreground shadow-[inset_0_0_0_1px_oklch(0.78_0.18_220/0.3)]"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
+              }`}
+            >
+              <Icon className="h-4 w-4 shrink-0" />
+              <span className="truncate">{item.label}</span>
+              {item.badge && <Badge tone={item.badge.tone} text={item.badge.text} />}
+            </Link>
+          );
+        })}
+
         {isAdmin && (
           <>
             <div className="mt-4 mb-2 px-3 text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
