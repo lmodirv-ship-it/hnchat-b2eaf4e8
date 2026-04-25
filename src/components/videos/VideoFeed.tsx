@@ -50,7 +50,7 @@ interface VideoPost {
   };
 }
 
-export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedType?: "video" | "short"; storageKey?: string } = {}) {
+export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedType?: "video" | "short" | Array<"video" | "short">; storageKey?: string } = {}) {
   const { user } = useAuth();
   const [videos, setVideos] = useState<VideoPost[]>([]);
   const [loading, setLoading] = useState(true);
