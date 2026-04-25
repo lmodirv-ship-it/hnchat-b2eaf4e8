@@ -126,7 +126,7 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
           setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
           if (user && m.sender_id !== user.id) {
             markRead();
-            triggerHaptic("light");
+            haptic("light");
           }
         },
       )
@@ -189,7 +189,7 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
     e?.preventDefault();
     if (!user || !text.trim() || sending) return;
     setSending(true);
-    triggerHaptic("light");
+    haptic("light");
     const content = text.trim();
     setText("");
     setShowEmojis(false);
