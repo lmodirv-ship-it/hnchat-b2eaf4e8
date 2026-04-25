@@ -68,7 +68,7 @@ function AssistantPage() {
   };
 
   return (
-    <PageShell title="AI Assistant" subtitle="مساعدك الذكي بدعم Lovable AI">
+    <PageShell title="AI Assistant" subtitle="مساعدك الذكي بدعم الذكاء الاصطناعي">
       <div className="grid lg:grid-cols-[1fr,320px] gap-6">
         <Card className="bg-ice-card border-ice-border flex flex-col h-[600px]">
           <div ref={scrollerRef} className="flex-1 overflow-y-auto p-4 space-y-3">
