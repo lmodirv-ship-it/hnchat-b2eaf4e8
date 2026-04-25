@@ -4,26 +4,62 @@ import { HnLogo } from "@/components/HnLogo";
 import {
   Home, Video, MessageCircle, ShoppingBag, Compass, Users, Bell,
   User, LogOut, Shield, Sparkles, Radio, Mic, BookOpen, Gift,
-  TrendingUp, Globe, Bot, Settings,
+  TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
+  Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
+  Settings, Cpu,
 } from "lucide-react";
 
-const NAV = [
-  { to: "/feed", label: "Feed", icon: Home },
-  { to: "/videos", label: "Videos", icon: Video },
-  { to: "/messages", label: "Messages", icon: MessageCircle },
-  { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
-  { to: "/explore", label: "Explore", icon: Compass },
-  { to: "/groups", label: "Groups", icon: Users },
-  { to: "/live", label: "Live", icon: Radio },
-  { to: "/voice", label: "Voice Rooms", icon: Mic },
+type NavItem = {
+  to: string;
+  label: string;
+  icon: any;
+  badge?: { text: string; tone: "new" | "ai" | "live" | "count" };
+};
+
+const NAV: readonly NavItem[] = [
+  { to: "/feed", label: "Home Feed", icon: Home },
+  { to: "/messages", label: "Messages", icon: MessageCircle, badge: { text: "12", tone: "count" } },
+  { to: "/videos", label: "Videos & Live", icon: Video, badge: { text: "3", tone: "count" } },
+  { to: "/live", label: "Live Stream", icon: Radio, badge: { text: "LIVE", tone: "live" } },
+  { to: "/short-videos", label: "Short Videos", icon: Film },
   { to: "/stories", label: "Stories", icon: BookOpen },
+  { to: "/voice", label: "Voice Rooms", icon: Mic, badge: { text: "2", tone: "count" } },
+  { to: "/pages-groups", label: "Pages & Groups", icon: Users },
+  { to: "/hnshop", label: "hnShop", icon: ShoppingCart, badge: { text: "NEW", tone: "new" } },
+  { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
   { to: "/invite", label: "Invite & Earn", icon: Gift },
-  { to: "/trade", label: "hnTrade", icon: TrendingUp },
+  { to: "/trade", label: "hnTrade Crypto", icon: TrendingUp },
   { to: "/geo", label: "GeoContent", icon: Globe },
-  { to: "/ai-hub", label: "AI Hub", icon: Bot },
-  { to: "/notifications", label: "Notifications", icon: Bell },
+  { to: "/ai-hub", label: "hn AI Hub", icon: Bot, badge: { text: "AI", tone: "ai" } },
+  { to: "/ai-assistant", label: "AI Assistant", icon: Cpu },
+  { to: "/ads-manager", label: "Ads Manager", icon: Megaphone },
+  { to: "/ads-promo", label: "Ads & Promo", icon: Zap },
+  { to: "/search", label: "Search", icon: Search },
+  { to: "/app-store", label: "App Store", icon: Store },
+  { to: "/games", label: "Games Hub", icon: Gamepad2 },
+  { to: "/growth", label: "Growth Analytics", icon: BarChart3 },
+  { to: "/push", label: "Push Strategy", icon: Send },
+  { to: "/email-dashboard", label: "Email Dashboard", icon: Mail },
+  { to: "/monitoring", label: "Monitoring Pro", icon: Activity },
+  { to: "/preferences", label: "Preferences", icon: Settings },
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
+
+function Badge({ tone, text }: { tone: NavItem["badge"] extends infer B ? B extends { tone: infer T } ? T : never : never; text: string }) {
+  const cls =
+    tone === "new"
+      ? "bg-cyan-glow/20 text-cyan-glow border-cyan-glow/40"
+      : tone === "ai"
+      ? "bg-violet-glow/20 text-violet-glow border-violet-glow/40"
+      : tone === "live"
+      ? "bg-red-500/20 text-red-400 border-red-500/40 animate-pulse"
+      : "bg-pink-glow/20 text-pink-glow border-pink-glow/40";
+  return (
+    <span className={`ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded border ${cls}`}>
+      {text}
+    </span>
+  );
+}
 
 export function AppSidebar() {
   const { user, isAdmin, signOut, roles } = useAuth();
@@ -33,14 +69,18 @@ export function AppSidebar() {
   return (
     <aside className="hidden md:flex w-64 flex-col border-l border-ice-border bg-sidebar/60 backdrop-blur-xl sticky top-0 h-screen">
       <div className="p-4 border-b border-ice-border flex items-center gap-2">
-        <HnLogo className="h-8 w-8" />
-        <div>
+        <HnLogo className="h-9 w-9" />
+        <div className="min-w-0">
           <div className="font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">hnChat</div>
-          <div className="text-[10px] text-muted-foreground">Your World. One App.</div>
+          <div className="text-[9px] uppercase tracking-widest text-muted-foreground">Super App</div>
         </div>
       </div>
 
       <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
+        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+          Navigation
+        </div>
+
         {NAV.map((item) => {
           const Icon = item.icon;
           const active = location.pathname === item.to || location.pathname.startsWith(item.to + "/");
@@ -54,8 +94,9 @@ export function AppSidebar() {
                   : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
               }`}
             >
-              <Icon className="h-4 w-4" />
-              <span>{item.label}</span>
+              <Icon className="h-4 w-4 shrink-0" />
+              <span className="truncate">{item.label}</span>
+              {item.badge && <Badge tone={item.badge.tone} text={item.badge.text} />}
             </Link>
           );
         })}
@@ -87,8 +128,9 @@ export function AppSidebar() {
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-medium truncate">{user?.email}</div>
-            <div className="text-[10px] text-muted-foreground">
-              {isAdmin ? "Admin" : roles[0] ?? "user"}
+            <div className="text-[10px] text-muted-foreground flex items-center gap-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              {isAdmin ? "Admin" : roles[0] ?? "Online"}
             </div>
           </div>
         </div>
