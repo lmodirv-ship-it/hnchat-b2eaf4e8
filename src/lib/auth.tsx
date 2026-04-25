@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { detectAndStoreLocale } from "@/lib/locale";
 import type { Session, User } from "@supabase/supabase-js";
 
-export type AppRole = "admin" | "creator" | "shopper" | "user";
+export type AppRole = "admin" | "creator" | "shopper" | "user" | "owner" | "group_admin";
 
 export interface AuthContextValue {
   session: Session | null;
@@ -10,6 +11,7 @@ export interface AuthContextValue {
   roles: AppRole[];
   isLoading: boolean;
   isAdmin: boolean;
+  isOwner: boolean;
   isAuthenticated: boolean;
   signOut: () => Promise<void>;
 }
