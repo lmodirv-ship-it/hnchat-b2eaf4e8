@@ -43,6 +43,7 @@ export const Route = createRootRoute({
       { name: "keywords", content: "hnChat, شبكة اجتماعية, تواصل اجتماعي, دردشة, متجر, فيديوهات, super app, social network" },
       { name: "author", content: "hnChat" },
       { name: "robots", content: "index, follow" },
+      { name: "google-site-verification", content: "334BDyhs3KGF40Y5XDt2OMoQOM9HLurOS-W1BnERuM0" },
       { property: "og:site_name", content: "hnChat" },
       { property: "og:title", content: "hnChat — Your World. One App." },
       { property: "og:description", content: "منصة سوبر آب تجمع التواصل الاجتماعي، الفيديو، التسوق، والمراسلة في مكان واحد" },
