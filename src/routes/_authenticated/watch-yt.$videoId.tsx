@@ -18,6 +18,7 @@ import {
   Eye,
   Bookmark,
   BookmarkCheck,
+  Send,
 } from "lucide-react";
 import { getYoutubeVideoMeta } from "@/utils/youtube.functions";
 import { toast } from "sonner";
