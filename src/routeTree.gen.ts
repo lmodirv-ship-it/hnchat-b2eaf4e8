@@ -15,6 +15,7 @@ import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
@@ -98,6 +99,11 @@ const AdminRoute = AdminRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostIdRoute = PostIdRouteImport.update({
+  id: '/post/$id',
+  path: '/post/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
@@ -444,6 +450,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/post/$id': typeof PostIdRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -506,6 +513,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/post/$id': typeof PostIdRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -572,6 +580,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
+  '/post/$id': typeof PostIdRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -636,6 +645,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/post/$id'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -698,6 +708,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/post/$id'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -763,6 +774,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
+    | '/post/$id'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
@@ -793,6 +805,7 @@ export interface RootRouteChildren {
   OwnerRoute: typeof OwnerRouteWithChildren
   SignUpLoginRoute: typeof SignUpLoginRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  PostIdRoute: typeof PostIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -837,6 +850,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/post/$id': {
+      id: '/post/$id'
+      path: '/post/$id'
+      fullPath: '/post/$id'
+      preLoaderRoute: typeof PostIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/youtube': {
@@ -1422,6 +1442,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerRoute: OwnerRouteWithChildren,
   SignUpLoginRoute: SignUpLoginRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  PostIdRoute: PostIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
