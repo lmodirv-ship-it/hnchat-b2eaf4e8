@@ -17,11 +17,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
 import { Route as AuthenticatedTradeRouteImport } from './routes/_authenticated/trade'
+import { Route as AuthenticatedTermsOfServiceRouteImport } from './routes/_authenticated/terms-of-service'
 import { Route as AuthenticatedStoriesRouteImport } from './routes/_authenticated/stories'
 import { Route as AuthenticatedShortVideosRouteImport } from './routes/_authenticated/short-videos'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedPushRouteImport } from './routes/_authenticated/push'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedPrivacyPolicyRouteImport } from './routes/_authenticated/privacy-policy'
 import { Route as AuthenticatedPreferencesRouteImport } from './routes/_authenticated/preferences'
 import { Route as AuthenticatedPagesGroupsRouteImport } from './routes/_authenticated/pages-groups'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
@@ -38,6 +41,7 @@ import { Route as AuthenticatedGamesRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
 import { Route as AuthenticatedExploreRouteImport } from './routes/_authenticated/explore'
 import { Route as AuthenticatedEmailDashboardRouteImport } from './routes/_authenticated/email-dashboard'
+import { Route as AuthenticatedBookmarksRouteImport } from './routes/_authenticated/bookmarks'
 import { Route as AuthenticatedAppStoreRouteImport } from './routes/_authenticated/app-store'
 import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/ai-hub'
 import { Route as AuthenticatedAiAssistantRouteImport } from './routes/_authenticated/ai-assistant'
@@ -100,6 +104,12 @@ const AuthenticatedTradeRoute = AuthenticatedTradeRouteImport.update({
   path: '/trade',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTermsOfServiceRoute =
+  AuthenticatedTermsOfServiceRouteImport.update({
+    id: '/terms-of-service',
+    path: '/terms-of-service',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedStoriesRoute = AuthenticatedStoriesRouteImport.update({
   id: '/stories',
   path: '/stories',
@@ -111,6 +121,11 @@ const AuthenticatedShortVideosRoute =
     path: '/short-videos',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -126,6 +141,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPrivacyPolicyRoute =
+  AuthenticatedPrivacyPolicyRouteImport.update({
+    id: '/privacy-policy',
+    path: '/privacy-policy',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPreferencesRoute =
   AuthenticatedPreferencesRouteImport.update({
     id: '/preferences',
@@ -211,6 +232,11 @@ const AuthenticatedEmailDashboardRoute =
     path: '/email-dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedBookmarksRoute = AuthenticatedBookmarksRouteImport.update({
+  id: '/bookmarks',
+  path: '/bookmarks',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAppStoreRoute = AuthenticatedAppStoreRouteImport.update({
   id: '/app-store',
   path: '/app-store',
@@ -349,6 +375,7 @@ export interface FileRoutesByFullPath {
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
   '/ai-hub': typeof AuthenticatedAiHubRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
+  '/bookmarks': typeof AuthenticatedBookmarksRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
   '/feed': typeof AuthenticatedFeedRoute
@@ -365,11 +392,14 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/pages-groups': typeof AuthenticatedPagesGroupsRoute
   '/preferences': typeof AuthenticatedPreferencesRoute
+  '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/push': typeof AuthenticatedPushRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
   '/stories': typeof AuthenticatedStoriesRoute
+  '/terms-of-service': typeof AuthenticatedTermsOfServiceRoute
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
@@ -401,6 +431,7 @@ export interface FileRoutesByTo {
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
   '/ai-hub': typeof AuthenticatedAiHubRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
+  '/bookmarks': typeof AuthenticatedBookmarksRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
   '/feed': typeof AuthenticatedFeedRoute
@@ -417,11 +448,14 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/pages-groups': typeof AuthenticatedPagesGroupsRoute
   '/preferences': typeof AuthenticatedPreferencesRoute
+  '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/push': typeof AuthenticatedPushRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
   '/stories': typeof AuthenticatedStoriesRoute
+  '/terms-of-service': typeof AuthenticatedTermsOfServiceRoute
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
@@ -457,6 +491,7 @@ export interface FileRoutesById {
   '/_authenticated/ai-assistant': typeof AuthenticatedAiAssistantRoute
   '/_authenticated/ai-hub': typeof AuthenticatedAiHubRoute
   '/_authenticated/app-store': typeof AuthenticatedAppStoreRoute
+  '/_authenticated/bookmarks': typeof AuthenticatedBookmarksRoute
   '/_authenticated/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/_authenticated/explore': typeof AuthenticatedExploreRoute
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
@@ -473,11 +508,14 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/pages-groups': typeof AuthenticatedPagesGroupsRoute
   '/_authenticated/preferences': typeof AuthenticatedPreferencesRoute
+  '/_authenticated/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/push': typeof AuthenticatedPushRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/short-videos': typeof AuthenticatedShortVideosRoute
   '/_authenticated/stories': typeof AuthenticatedStoriesRoute
+  '/_authenticated/terms-of-service': typeof AuthenticatedTermsOfServiceRoute
   '/_authenticated/trade': typeof AuthenticatedTradeRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
@@ -511,6 +549,7 @@ export interface FileRouteTypes {
     | '/ai-assistant'
     | '/ai-hub'
     | '/app-store'
+    | '/bookmarks'
     | '/email-dashboard'
     | '/explore'
     | '/feed'
@@ -527,11 +566,14 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/pages-groups'
     | '/preferences'
+    | '/privacy-policy'
     | '/profile'
     | '/push'
     | '/search'
+    | '/settings'
     | '/short-videos'
     | '/stories'
+    | '/terms-of-service'
     | '/trade'
     | '/videos'
     | '/voice'
@@ -563,6 +605,7 @@ export interface FileRouteTypes {
     | '/ai-assistant'
     | '/ai-hub'
     | '/app-store'
+    | '/bookmarks'
     | '/email-dashboard'
     | '/explore'
     | '/feed'
@@ -579,11 +622,14 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/pages-groups'
     | '/preferences'
+    | '/privacy-policy'
     | '/profile'
     | '/push'
     | '/search'
+    | '/settings'
     | '/short-videos'
     | '/stories'
+    | '/terms-of-service'
     | '/trade'
     | '/videos'
     | '/voice'
@@ -618,6 +664,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai-assistant'
     | '/_authenticated/ai-hub'
     | '/_authenticated/app-store'
+    | '/_authenticated/bookmarks'
     | '/_authenticated/email-dashboard'
     | '/_authenticated/explore'
     | '/_authenticated/feed'
@@ -634,11 +681,14 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/pages-groups'
     | '/_authenticated/preferences'
+    | '/_authenticated/privacy-policy'
     | '/_authenticated/profile'
     | '/_authenticated/push'
     | '/_authenticated/search'
+    | '/_authenticated/settings'
     | '/_authenticated/short-videos'
     | '/_authenticated/stories'
+    | '/_authenticated/terms-of-service'
     | '/_authenticated/trade'
     | '/_authenticated/videos'
     | '/_authenticated/voice'
@@ -729,6 +779,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTradeRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/terms-of-service': {
+      id: '/_authenticated/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof AuthenticatedTermsOfServiceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/stories': {
       id: '/_authenticated/stories'
       path: '/stories'
@@ -741,6 +798,13 @@ declare module '@tanstack/react-router' {
       path: '/short-videos'
       fullPath: '/short-videos'
       preLoaderRoute: typeof AuthenticatedShortVideosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/search': {
@@ -762,6 +826,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/privacy-policy': {
+      id: '/_authenticated/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof AuthenticatedPrivacyPolicyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/preferences': {
@@ -874,6 +945,13 @@ declare module '@tanstack/react-router' {
       path: '/email-dashboard'
       fullPath: '/email-dashboard'
       preLoaderRoute: typeof AuthenticatedEmailDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/bookmarks': {
+      id: '/_authenticated/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/bookmarks'
+      preLoaderRoute: typeof AuthenticatedBookmarksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/app-store': {
@@ -1111,6 +1189,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAiAssistantRoute: typeof AuthenticatedAiAssistantRoute
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
   AuthenticatedAppStoreRoute: typeof AuthenticatedAppStoreRoute
+  AuthenticatedBookmarksRoute: typeof AuthenticatedBookmarksRoute
   AuthenticatedEmailDashboardRoute: typeof AuthenticatedEmailDashboardRoute
   AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
@@ -1127,11 +1206,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPagesGroupsRoute: typeof AuthenticatedPagesGroupsRoute
   AuthenticatedPreferencesRoute: typeof AuthenticatedPreferencesRoute
+  AuthenticatedPrivacyPolicyRoute: typeof AuthenticatedPrivacyPolicyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedPushRoute: typeof AuthenticatedPushRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedShortVideosRoute: typeof AuthenticatedShortVideosRoute
   AuthenticatedStoriesRoute: typeof AuthenticatedStoriesRoute
+  AuthenticatedTermsOfServiceRoute: typeof AuthenticatedTermsOfServiceRoute
   AuthenticatedTradeRoute: typeof AuthenticatedTradeRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
   AuthenticatedVoiceRoute: typeof AuthenticatedVoiceRoute
@@ -1143,6 +1225,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAiAssistantRoute: AuthenticatedAiAssistantRoute,
   AuthenticatedAiHubRoute: AuthenticatedAiHubRoute,
   AuthenticatedAppStoreRoute: AuthenticatedAppStoreRoute,
+  AuthenticatedBookmarksRoute: AuthenticatedBookmarksRoute,
   AuthenticatedEmailDashboardRoute: AuthenticatedEmailDashboardRoute,
   AuthenticatedExploreRoute: AuthenticatedExploreRoute,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
@@ -1159,11 +1242,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPagesGroupsRoute: AuthenticatedPagesGroupsRoute,
   AuthenticatedPreferencesRoute: AuthenticatedPreferencesRoute,
+  AuthenticatedPrivacyPolicyRoute: AuthenticatedPrivacyPolicyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedPushRoute: AuthenticatedPushRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedShortVideosRoute: AuthenticatedShortVideosRoute,
   AuthenticatedStoriesRoute: AuthenticatedStoriesRoute,
+  AuthenticatedTermsOfServiceRoute: AuthenticatedTermsOfServiceRoute,
   AuthenticatedTradeRoute: AuthenticatedTradeRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
   AuthenticatedVoiceRoute: AuthenticatedVoiceRoute,

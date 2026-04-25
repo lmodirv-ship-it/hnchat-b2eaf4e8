@@ -6,8 +6,16 @@ import {
   User, LogOut, Shield, Sparkles, Radio, Mic, BookOpen, Gift,
   TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
   Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
-  Settings, Cpu,
+  Settings, Cpu, Bookmark, FileText, ScrollText,
 } from "lucide-react";
+
+const MORE: readonly NavItem[] = [
+  { to: "/notifications", label: "Notifications", icon: Bell, badge: { text: "5", tone: "count" } },
+  { to: "/bookmarks", label: "Bookmarks", icon: Bookmark },
+  { to: "/settings", label: "Settings", icon: Settings },
+  { to: "/privacy-policy", label: "Privacy Policy", icon: FileText },
+  { to: "/terms-of-service", label: "Terms of Service", icon: ScrollText },
+] as const;
 
 type NavItem = {
   to: string;
