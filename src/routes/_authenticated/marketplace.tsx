@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
 import { NewProductDialog } from "@/components/marketplace/NewProductDialog";
+import { ImportProductDialog } from "@/components/marketplace/ImportProductDialog";
 
 export const Route = createFileRoute("/_authenticated/marketplace")({
   component: MarketplacePage,
@@ -14,7 +15,12 @@ function MarketplacePage() {
     <PageShell
       title="السوق"
       subtitle="اكتشف وبِع منتجات داخل المجتمع"
-      action={<NewProductDialog onCreated={() => setRefreshKey((k) => k + 1)} />}
+      action={
+        <div className="flex gap-2">
+          <ImportProductDialog onCreated={() => setRefreshKey((k) => k + 1)} />
+          <NewProductDialog onCreated={() => setRefreshKey((k) => k + 1)} />
+        </div>
+      }
     >
       <ProductGrid refreshKey={refreshKey} />
     </PageShell>
