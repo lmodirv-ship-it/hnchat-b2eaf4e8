@@ -208,7 +208,7 @@ function YoutubePage() {
 
       {result && !mutation.isPending && (
         <>
-          <Card className="p-4 mb-6 bg-ice-card border-ice-border flex items-center gap-4">
+          <Card className="p-4 mb-6 bg-ice-card border-ice-border flex items-center gap-4 flex-wrap">
             {result.channel.avatar && (
               <img src={result.channel.avatar} alt="" className="h-16 w-16 rounded-full object-cover" />
             )}
@@ -217,38 +217,66 @@ function YoutubePage() {
               {result.channel.description && (
                 <p className="text-sm text-muted-foreground line-clamp-2">{result.channel.description}</p>
               )}
-              <p className="text-xs text-muted-foreground mt-1">{result.videos.length} فيديو</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {result.videos.length} فيديو · {addedIds.size} مُضاف
+              </p>
             </div>
+            {result.videos.length > 0 && (
+              <Button onClick={addAll} disabled={bulkAdding || !user} className="gap-1">
+                {bulkAdding ? <Loader2 className="h-4 w-4 animate-spin" /> : <PlusSquare className="h-4 w-4" />}
+                إضافة كل الفيديوهات إلى الخلاصة
+              </Button>
+            )}
           </Card>
 
           {result.videos.length === 0 ? (
-            <Card className="p-8 text-center text-muted-foreground">لا توجد فيديوهات متاحة عبر RSS لهذه القناة.</Card>
+            <Card className="p-8 text-center text-muted-foreground">لا توجد فيديوهات متاحة لهذه القناة.</Card>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {result.videos.map((v) => (
-                <Link
-                  key={v.videoId}
-                  to="/watch-yt/$videoId"
-                  params={{ videoId: v.videoId }}
-                  className="group block rounded-xl overflow-hidden border border-ice-border bg-ice-card hover:border-red-600/50 transition"
-                >
-                  <div className="relative aspect-video bg-black">
-                    <img src={v.thumbnail} alt={v.title} className="w-full h-full object-cover" loading="lazy" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40">
-                      <div className="h-14 w-14 rounded-full bg-red-600 flex items-center justify-center">
-                        <Play className="h-7 w-7 text-white fill-white" />
+              {result.videos.map((v) => {
+                const added = addedIds.has(v.videoId);
+                return (
+                  <div
+                    key={v.videoId}
+                    className="group block rounded-xl overflow-hidden border border-ice-border bg-ice-card hover:border-red-600/50 transition"
+                  >
+                    <Link to="/watch-yt/$videoId" params={{ videoId: v.videoId }}>
+                      <div className="relative aspect-video bg-black">
+                        <img src={v.thumbnail} alt={v.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40">
+                          <div className="h-14 w-14 rounded-full bg-red-600 flex items-center justify-center">
+                            <Play className="h-7 w-7 text-white fill-white" />
+                          </div>
+                        </div>
                       </div>
+                      <div className="p-3 pb-2">
+                        <h3 className="font-semibold text-sm line-clamp-2 mb-1">{v.title}</h3>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          {v.publishedAt && formatDistanceToNow(new Date(v.publishedAt), { addSuffix: true, locale: ar })}
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="px-3 pb-3">
+                      {added ? (
+                        <Button size="sm" variant="secondary" disabled className="w-full gap-1">
+                          <Check className="h-4 w-4" /> مُضاف
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => addVideo(v)}
+                          disabled={addingId === v.videoId || !user}
+                          className="w-full gap-1"
+                        >
+                          {addingId === v.videoId ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                          إضافة إلى الخلاصة
+                        </Button>
+                      )}
                     </div>
                   </div>
-                  <div className="p-3">
-                    <h3 className="font-semibold text-sm line-clamp-2 mb-1">{v.title}</h3>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {v.publishedAt && formatDistanceToNow(new Date(v.publishedAt), { addSuffix: true, locale: ar })}
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           )}
         </>
