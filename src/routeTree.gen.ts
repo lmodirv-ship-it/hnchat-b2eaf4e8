@@ -9,13 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignUpLoginRouteImport } from './routes/sign-up-login'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostIdRouteImport } from './routes/post.$id'
+import { Route as LiveIdRouteImport } from './routes/live.$id'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
@@ -74,6 +79,11 @@ import { Route as AdminAdminContentRouteImport } from './routes/_admin/admin.con
 import { Route as AdminAdminAnalyticsRouteImport } from './routes/_admin/admin.analytics'
 import { Route as AuthenticatedGroupsGroupIdManageRouteImport } from './routes/_authenticated/groups.$groupId.manage'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -82,6 +92,21 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SignUpLoginRoute = SignUpLoginRouteImport.update({
   id: '/sign-up-login',
   path: '/sign-up-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OwnerRoute = OwnerRouteImport.update({
@@ -104,6 +129,11 @@ const IndexRoute = IndexRouteImport.update({
 const PostIdRoute = PostIdRouteImport.update({
   id: '/post/$id',
   path: '/post/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveIdRoute = LiveIdRouteImport.update({
+  id: '/live/$id',
+  path: '/live/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
@@ -412,8 +442,12 @@ const AuthenticatedGroupsGroupIdManageRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -450,6 +484,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
@@ -475,8 +510,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -513,6 +552,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
@@ -542,8 +582,12 @@ export interface FileRoutesById {
   '/_admin': typeof AdminRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_owner': typeof OwnerRouteWithChildren
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/_authenticated/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/_authenticated/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/_authenticated/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -580,6 +624,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
+  '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
@@ -607,8 +652,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/contact'
+    | '/privacy'
     | '/sign-up-login'
     | '/sitemap.xml'
+    | '/terms'
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
@@ -645,6 +694,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/live/$id'
     | '/post/$id'
     | '/admin/analytics'
     | '/admin/content'
@@ -670,8 +720,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/contact'
+    | '/privacy'
     | '/sign-up-login'
     | '/sitemap.xml'
+    | '/terms'
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
@@ -708,6 +762,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/live/$id'
     | '/post/$id'
     | '/admin/analytics'
     | '/admin/content'
@@ -736,8 +791,12 @@ export interface FileRouteTypes {
     | '/_admin'
     | '/_authenticated'
     | '/_owner'
+    | '/about'
+    | '/contact'
+    | '/privacy'
     | '/sign-up-login'
     | '/sitemap.xml'
+    | '/terms'
     | '/_authenticated/ads-manager'
     | '/_authenticated/ads-promo'
     | '/_authenticated/ai-assistant'
@@ -774,6 +833,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
+    | '/live/$id'
     | '/post/$id'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
@@ -803,13 +863,25 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   OwnerRoute: typeof OwnerRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  PrivacyRoute: typeof PrivacyRoute
   SignUpLoginRoute: typeof SignUpLoginRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
+  LiveIdRoute: typeof LiveIdRoute
   PostIdRoute: typeof PostIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -822,6 +894,27 @@ declare module '@tanstack/react-router' {
       path: '/sign-up-login'
       fullPath: '/sign-up-login'
       preLoaderRoute: typeof SignUpLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_owner': {
@@ -857,6 +950,13 @@ declare module '@tanstack/react-router' {
       path: '/post/$id'
       fullPath: '/post/$id'
       preLoaderRoute: typeof PostIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live/$id': {
+      id: '/live/$id'
+      path: '/live/$id'
+      fullPath: '/live/$id'
+      preLoaderRoute: typeof LiveIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/youtube': {
@@ -1440,8 +1540,13 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   OwnerRoute: OwnerRouteWithChildren,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  PrivacyRoute: PrivacyRoute,
   SignUpLoginRoute: SignUpLoginRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
+  LiveIdRoute: LiveIdRoute,
   PostIdRoute: PostIdRoute,
 }
 export const routeTree = rootRouteImport
