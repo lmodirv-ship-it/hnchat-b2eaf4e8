@@ -33,6 +33,7 @@ import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authen
 import { Route as AuthenticatedMonitoringRouteImport } from './routes/_authenticated/monitoring'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedMarketplaceRouteImport } from './routes/_authenticated/marketplace'
+import { Route as AuthenticatedMailRouteImport } from './routes/_authenticated/mail'
 import { Route as AuthenticatedLiveRouteImport } from './routes/_authenticated/live'
 import { Route as AuthenticatedInviteRouteImport } from './routes/_authenticated/invite'
 import { Route as AuthenticatedHnshopRouteImport } from './routes/_authenticated/hnshop'
@@ -195,6 +196,11 @@ const AuthenticatedMarketplaceRoute =
     path: '/marketplace',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedMailRoute = AuthenticatedMailRouteImport.update({
+  id: '/mail',
+  path: '/mail',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLiveRoute = AuthenticatedLiveRouteImport.update({
   id: '/live',
   path: '/live',
@@ -411,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/hnshop': typeof AuthenticatedHnshopRoute
   '/invite': typeof AuthenticatedInviteRoute
   '/live': typeof AuthenticatedLiveRoute
+  '/mail': typeof AuthenticatedMailRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
   '/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/monitoring': typeof AuthenticatedMonitoringRoute
@@ -471,6 +478,7 @@ export interface FileRoutesByTo {
   '/hnshop': typeof AuthenticatedHnshopRoute
   '/invite': typeof AuthenticatedInviteRoute
   '/live': typeof AuthenticatedLiveRoute
+  '/mail': typeof AuthenticatedMailRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
   '/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/monitoring': typeof AuthenticatedMonitoringRoute
@@ -535,6 +543,7 @@ export interface FileRoutesById {
   '/_authenticated/hnshop': typeof AuthenticatedHnshopRoute
   '/_authenticated/invite': typeof AuthenticatedInviteRoute
   '/_authenticated/live': typeof AuthenticatedLiveRoute
+  '/_authenticated/mail': typeof AuthenticatedMailRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRouteWithChildren
   '/_authenticated/monitoring': typeof AuthenticatedMonitoringRoute
@@ -597,6 +606,7 @@ export interface FileRouteTypes {
     | '/hnshop'
     | '/invite'
     | '/live'
+    | '/mail'
     | '/marketplace'
     | '/messages'
     | '/monitoring'
@@ -657,6 +667,7 @@ export interface FileRouteTypes {
     | '/hnshop'
     | '/invite'
     | '/live'
+    | '/mail'
     | '/marketplace'
     | '/messages'
     | '/monitoring'
@@ -720,6 +731,7 @@ export interface FileRouteTypes {
     | '/_authenticated/hnshop'
     | '/_authenticated/invite'
     | '/_authenticated/live'
+    | '/_authenticated/mail'
     | '/_authenticated/marketplace'
     | '/_authenticated/messages'
     | '/_authenticated/monitoring'
@@ -938,6 +950,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof AuthenticatedMarketplaceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/mail': {
+      id: '/_authenticated/mail'
+      path: '/mail'
+      fullPath: '/mail'
+      preLoaderRoute: typeof AuthenticatedMailRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/live': {
@@ -1277,6 +1296,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHnshopRoute: typeof AuthenticatedHnshopRoute
   AuthenticatedInviteRoute: typeof AuthenticatedInviteRoute
   AuthenticatedLiveRoute: typeof AuthenticatedLiveRoute
+  AuthenticatedMailRoute: typeof AuthenticatedMailRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRouteWithChildren
   AuthenticatedMonitoringRoute: typeof AuthenticatedMonitoringRoute
@@ -1317,6 +1337,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHnshopRoute: AuthenticatedHnshopRoute,
   AuthenticatedInviteRoute: AuthenticatedInviteRoute,
   AuthenticatedLiveRoute: AuthenticatedLiveRoute,
+  AuthenticatedMailRoute: AuthenticatedMailRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRouteWithChildren,
   AuthenticatedMonitoringRoute: AuthenticatedMonitoringRoute,

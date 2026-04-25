@@ -117,7 +117,7 @@ function MailPage() {
       toast.error(error.message);
       setItems([]);
     } else {
-      const rows = (data || []) as MailRow[];
+      const rows = (data || []) as unknown as MailRow[];
       setItems(rows);
       // Fetch profiles
       const ids = new Set<string>();
