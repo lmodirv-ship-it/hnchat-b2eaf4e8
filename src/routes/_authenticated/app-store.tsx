@@ -1,21 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
-import { ComingSoon } from "@/components/ComingSoon";
+import { CatalogGrid } from "@/components/catalog/CatalogGrid";
 import { Store } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/app-store")({
   component: () => (
-    <PageShell title="App Store" subtitle="إضافات وتطبيقات صغيرة داخل hnChat">
-      <ComingSoon
-        icon={Store}
-        title="hnChat App Store 🧩"
-        description="مكتبة تطبيقات وإضافات (mini-apps) تعمل داخل hnChat — من ألعاب وأدوات إنتاجية إلى بوتات ذكية."
-        features={[
-          "Mini-apps تعمل بدون تنزيل",
-          "SDK للمطوّرين الخارجيين",
-          "نظام تقييم ومراجعات",
-          "تكامل مع المحفظة والدفع",
-        ]}
+    <PageShell title="App Store" subtitle="تطبيقات وأدوات تثري تجربتك في hnChat">
+      <CatalogGrid
+        type="app"
+        cardIcon={Store}
+        ctaLabel="تثبيت"
+        accent="cyan"
+        emptyText="لا توجد تطبيقات بعد"
+        onAction={(item) => toast.success(`تم بدء تثبيت ${item.title}`)}
       />
     </PageShell>
   ),

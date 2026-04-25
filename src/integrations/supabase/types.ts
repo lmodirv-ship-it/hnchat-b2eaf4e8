@@ -74,6 +74,69 @@ export type Database = {
         }
         Relationships: []
       }
+      catalog_items: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          description: string | null
+          downloads_count: number
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_featured: boolean
+          link_url: string | null
+          metadata: Json
+          price: number | null
+          rating: number | null
+          sort_order: number
+          title: string
+          type: Database["public"]["Enums"]["catalog_item_type"]
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          description?: string | null
+          downloads_count?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          link_url?: string | null
+          metadata?: Json
+          price?: number | null
+          rating?: number | null
+          sort_order?: number
+          title: string
+          type: Database["public"]["Enums"]["catalog_item_type"]
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          description?: string | null
+          downloads_count?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          link_url?: string | null
+          metadata?: Json
+          price?: number | null
+          rating?: number | null
+          sort_order?: number
+          title?: string
+          type?: Database["public"]["Enums"]["catalog_item_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           content: string
@@ -641,6 +704,63 @@ export type Database = {
         }
         Relationships: []
       }
+      user_bookmarks: {
+        Row: {
+          created_at: string
+          folder: string
+          id: string
+          item_id: string
+          item_type: string
+          note: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          folder?: string
+          id?: string
+          item_id: string
+          item_type: string
+          note?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          folder?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          note?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_metrics: {
+        Row: {
+          dimension: string | null
+          id: string
+          metric_key: string
+          recorded_at: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          dimension?: string | null
+          id?: string
+          metric_key: string
+          recorded_at?: string
+          user_id: string
+          value?: number
+        }
+        Update: {
+          dimension?: string | null
+          id?: string
+          metric_key?: string
+          recorded_at?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -699,6 +819,14 @@ export type Database = {
         | "user"
         | "owner"
         | "group_admin"
+      catalog_item_type:
+        | "app"
+        | "game"
+        | "shop_product"
+        | "ad_template"
+        | "push_template"
+        | "email_template"
+        | "ai_tool"
       notification_type:
         | "like"
         | "comment"
@@ -837,6 +965,15 @@ export const Constants = {
       ad_status: ["draft", "active", "paused", "ended"],
       ad_type: ["video", "banner", "story", "product", "sponsored_post"],
       app_role: ["admin", "creator", "shopper", "user", "owner", "group_admin"],
+      catalog_item_type: [
+        "app",
+        "game",
+        "shop_product",
+        "ad_template",
+        "push_template",
+        "email_template",
+        "ai_tool",
+      ],
       notification_type: [
         "like",
         "comment",

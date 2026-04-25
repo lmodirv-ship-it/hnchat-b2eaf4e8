@@ -1,33 +1,34 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
-import { ComingSoon } from "@/components/ComingSoon";
+import { CatalogGrid } from "@/components/catalog/CatalogGrid";
 import { Zap } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/ads-promo")({
-  component: () => (
+  component: AdsPromoPage,
+});
+
+function AdsPromoPage() {
+  return (
     <PageShell
       title="Ads & Promo"
-      subtitle="عروض ترويجية وأكواد خصم لحملاتك"
+      subtitle="قوالب إعلانية جاهزة لإطلاق حملات بنقرة واحدة"
       action={
-        <Link
-          to="/ads-manager"
-          className="text-xs px-3 py-1.5 rounded-lg bg-cyan-glow/15 text-cyan-glow border border-cyan-glow/40 hover:bg-cyan-glow/25 transition"
-        >
-          فتح Ads Manager →
-        </Link>
+        <Button asChild size="sm" variant="outline">
+          <Link to="/ads-manager">إدارة الحملات ←</Link>
+        </Button>
       }
     >
-      <ComingSoon
-        icon={Zap}
-        title="عروض ترويجية ذكية ⚡"
-        description="أنشئ أكواد خصم، عروض محدودة المدة، وحملات ترويج تلقائية مدمجة مع Ads Manager."
-        features={[
-          "أكواد خصم قابلة للمشاركة",
-          "Flash sales بمؤقت تنازلي",
-          "ترويج تلقائي للحملات الأكثر أداءً",
-          "تكامل كامل مع Ads Manager",
-        ]}
+      <CatalogGrid
+        type="ad_template"
+        cardIcon={Zap}
+        ctaLabel="استخدم القالب"
+        accent="pink"
+        emptyText="لا توجد قوالب بعد"
+        onAction={(item) => toast.success(`جاري إنشاء حملة من قالب: ${item.title}`)}
       />
     </PageShell>
-  ),
-});
+  );
+}

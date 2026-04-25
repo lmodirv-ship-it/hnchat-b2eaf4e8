@@ -1,21 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
-import { ComingSoon } from "@/components/ComingSoon";
+import { CatalogGrid } from "@/components/catalog/CatalogGrid";
 import { ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/hnshop")({
   component: () => (
-    <PageShell title="hnShop" subtitle="متجر hnChat الرسمي للمنتجات الرقمية والاشتراكات">
-      <ComingSoon
-        icon={ShoppingCart}
-        title="hnShop قادم بقوة 🛍️"
-        description="منصة تسوّق متكاملة داخل hnChat تجمع المنتجات الرقمية، الاشتراكات المميّزة، والعملات الافتراضية في مكان واحد."
-        features={[
-          "اشتراكات Premium بميزات حصرية",
-          "عملات hnChat لشراء الهدايا والملصقات",
-          "خصومات يومية ومجموعات حصرية",
-          "محفظة موحّدة عبر كل المنصة",
-        ]}
+    <PageShell title="hnShop" subtitle="متجر hnChat الرسمي للاشتراكات والعملات والملصقات">
+      <CatalogGrid
+        type="shop_product"
+        cardIcon={ShoppingCart}
+        ctaLabel="شراء"
+        accent="cyan"
+        emptyText="لا توجد منتجات بعد"
+        onAction={(item) => toast.info(`المدفوعات قريباً — ${item.title}`)}
       />
     </PageShell>
   ),

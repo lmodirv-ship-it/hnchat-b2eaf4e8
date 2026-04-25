@@ -1,21 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
-import { ComingSoon } from "@/components/ComingSoon";
+import { CatalogGrid } from "@/components/catalog/CatalogGrid";
 import { Gamepad2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/games")({
   component: () => (
-    <PageShell title="Games Hub" subtitle="ألعاب اجتماعية للعب مع الأصدقاء">
-      <ComingSoon
-        icon={Gamepad2}
-        title="Games Hub 🎮"
-        description="ألعاب سريعة متعددة اللاعبين بداخل المحادثات — تحدّى أصدقاءك واربح نقاطاً."
-        features={[
-          "ألعاب 1v1 و multiplayer",
-          "لوحة متصدّرين أسبوعية",
-          "نقاط XP وإنجازات",
-          "بثّ مباشر للمباريات",
-        ]}
+    <PageShell title="Games Hub" subtitle="ألعاب اجتماعية تلعبها مع أصدقائك مباشرة">
+      <CatalogGrid
+        type="game"
+        cardIcon={Gamepad2}
+        ctaLabel="العب"
+        accent="violet"
+        emptyText="لا توجد ألعاب بعد"
+        onAction={(item) => toast.success(`جاري تحميل ${item.title}...`)}
       />
     </PageShell>
   ),
