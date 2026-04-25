@@ -99,31 +99,26 @@ function WatchYtPage() {
 
       <div className="flex items-start justify-between gap-4 mb-4 flex-wrap">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl md:text-2xl font-bold mb-1">{meta?.title || "YouTube"}</h1>
+          <h1 className="text-xl md:text-2xl font-bold mb-1">{meta?.title || "Video"}</h1>
           {meta?.author && <p className="text-sm text-muted-foreground">{meta.author}</p>}
         </div>
         <div className="flex gap-2">
-          {meta?.channelId && (
-            <Link
-              to="/youtube"
-              className="text-xs px-3 py-2 rounded-md border border-ice-border hover:border-red-600/50"
-            >
-              قناة YouTube
-            </Link>
+          {postId ? (
+            <Button size="sm" variant="secondary" disabled className="gap-1">
+              <Check className="h-4 w-4" /> مُضاف إلى الموقع
+            </Button>
+          ) : (
+            <Button size="sm" onClick={addToSite} disabled={adding || !user || !meta} className="gap-1">
+              {adding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+              إضافة إلى الموقع
+            </Button>
           )}
-          <a
-            href={`https://www.youtube.com/watch?v=${videoId}`}
-            target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <Youtube className="h-4 w-4" /> فتح في YouTube <ExternalLink className="h-3 w-3" />
-          </a>
         </div>
       </div>
 
       <Card className="p-4 mb-4 bg-muted/40">
         <p className="text-sm text-muted-foreground">
-          هذا الفيديو يُشغَّل من YouTube مباشرة. التعليقات أدناه داخلية في تطبيقنا فقط.
+          فيديو يُعرض داخل التطبيق. أضِفه إلى الموقع ليظهر في الخلاصة ويُمكّن التعليقات.
         </p>
       </Card>
 
