@@ -63,10 +63,87 @@ function YoutubePage() {
     onError: (err: Error) => toast.error(err.message),
   });
 
+  // After loading channel, check which videos are already added
+  useEffect(() => {
+    if (!result || !user) return;
+    const urls = result.videos.map((v) => `https://www.youtube.com/watch?v=${v.videoId}`);
+    if (urls.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("posts")
+        .select("media_urls")
+        .overlaps("media_urls", urls);
+      if (cancelled || !data) return;
+      const found = new Set<string>();
+      for (const row of data) {
+        for (const u of row.media_urls || []) {
+          const m = u.match(/[?&]v=([\w-]{11})|youtu\.be\/([\w-]{11})/);
+          const id = m?.[1] || m?.[2];
+          if (id) found.add(id);
+        }
+      }
+      setAddedIds(found);
+    })();
+    return () => { cancelled = true; };
+  }, [result, user?.id]);
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
+    setAddedIds(new Set());
     mutation.mutate(url.trim());
+  };
+
+  const addVideo = async (v: YtVideo) => {
+    if (!user || addedIds.has(v.videoId)) return;
+    setAddingId(v.videoId);
+    try {
+      const ytUrl = `https://www.youtube.com/watch?v=${v.videoId}`;
+      const { error } = await supabase.from("posts").insert({
+        user_id: user.id,
+        type: "video" as any,
+        content: v.title,
+        media_urls: [ytUrl],
+      });
+      if (error) throw error;
+      setAddedIds((s) => new Set(s).add(v.videoId));
+      toast.success("تمت الإضافة إلى الخلاصة");
+    } catch (e: any) {
+      toast.error(e.message || "تعذّرت الإضافة");
+    } finally {
+      setAddingId(null);
+    }
+  };
+
+  const addAll = async () => {
+    if (!user || !result) return;
+    const toAdd = result.videos.filter((v) => !addedIds.has(v.videoId));
+    if (toAdd.length === 0) {
+      toast.info("كل الفيديوهات مُضافة بالفعل");
+      return;
+    }
+    setBulkAdding(true);
+    try {
+      const rows = toAdd.map((v) => ({
+        user_id: user.id,
+        type: "video" as any,
+        content: v.title,
+        media_urls: [`https://www.youtube.com/watch?v=${v.videoId}`],
+      }));
+      const { error } = await supabase.from("posts").insert(rows);
+      if (error) throw error;
+      setAddedIds((s) => {
+        const n = new Set(s);
+        toAdd.forEach((v) => n.add(v.videoId));
+        return n;
+      });
+      toast.success(`تمت إضافة ${toAdd.length} فيديو إلى الخلاصة`);
+    } catch (e: any) {
+      toast.error(e.message || "تعذّرت إضافة الفيديوهات");
+    } finally {
+      setBulkAdding(false);
+    }
   };
 
   return (
