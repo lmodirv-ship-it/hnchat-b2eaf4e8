@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
+import { VisitorCounter } from "@/components/layout/VisitorCounter";
 
 export function TopBar() {
   const { user } = useAuth();
@@ -53,7 +54,8 @@ export function TopBar() {
           </div>
         </form>
 
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <VisitorCounter />
           <Link
             to="/messages"
             className="p-2 rounded-full hover:bg-muted transition relative"

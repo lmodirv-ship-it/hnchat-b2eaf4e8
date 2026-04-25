@@ -1163,6 +1163,33 @@ export type Database = {
         }
         Relationships: []
       }
+      site_visits: {
+        Row: {
+          first_seen: string
+          id: string
+          last_seen: string
+          path: string | null
+          session_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          first_seen?: string
+          id?: string
+          last_seen?: string
+          path?: string | null
+          session_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          first_seen?: string
+          id?: string
+          last_seen?: string
+          path?: string | null
+          session_id?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       stories: {
         Row: {
           caption: string | null
@@ -1410,6 +1437,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_visitor_stats: {
+        Args: never
+        Returns: {
+          online_count: number
+          total_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
