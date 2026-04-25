@@ -146,6 +146,59 @@ function YoutubePage() {
     }
   };
 
+  const showAndAddAll = async () => {
+    if (!user || !url.trim()) return;
+    setBulkAdding(true);
+    try {
+      const u = url.trim();
+      const res = await importYoutubeChannel({ data: { url: u } });
+      if ("error" in res) throw new Error(res.error);
+      setResult(res);
+      const entry: HistoryEntry = { url: u, title: res.channel.title, avatar: res.channel.avatar, at: Date.now() };
+      const next = [entry, ...history.filter((h) => h.url !== u)].slice(0, 10);
+      setHistory(next);
+      try { localStorage.setItem("yt-history", JSON.stringify(next)); } catch {}
+
+      // Find which are already added
+      const allUrls = res.videos.map((v) => `https://www.youtube.com/watch?v=${v.videoId}`);
+      const { data: existing } = await supabase
+        .from("posts")
+        .select("media_urls")
+        .overlaps("media_urls", allUrls);
+      const already = new Set<string>();
+      for (const row of existing || []) {
+        for (const x of row.media_urls || []) {
+          const m = x.match(/[?&]v=([\w-]{11})|youtu\.be\/([\w-]{11})/);
+          const id = m?.[1] || m?.[2];
+          if (id) already.add(id);
+        }
+      }
+
+      const toAdd = res.videos.filter((v) => !already.has(v.videoId));
+      if (toAdd.length === 0) {
+        setAddedIds(already);
+        toast.info("كل فيديوهات هذه القناة مُضافة بالفعل");
+        return;
+      }
+      const rows = toAdd.map((v) => ({
+        user_id: user.id,
+        type: "video" as any,
+        content: v.title,
+        media_urls: [`https://www.youtube.com/watch?v=${v.videoId}`],
+      }));
+      const { error } = await supabase.from("posts").insert(rows);
+      if (error) throw error;
+      const merged = new Set(already);
+      toAdd.forEach((v) => merged.add(v.videoId));
+      setAddedIds(merged);
+      toast.success(`تمت إضافة ${toAdd.length} فيديو إلى الخلاصة`);
+    } catch (e: any) {
+      toast.error(e.message || "تعذّرت العملية");
+    } finally {
+      setBulkAdding(false);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <header className="mb-6 flex items-center gap-3">
@@ -158,17 +211,31 @@ function YoutubePage() {
         </div>
       </header>
 
-      <form onSubmit={submit} className="flex gap-2 mb-6">
-        <Input
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://www.youtube.com/@MrBeast  أو  /channel/UC..."
-          className="bg-ice-card border-ice-border h-12 text-base"
-          dir="ltr"
-        />
-        <Button type="submit" size="lg" disabled={mutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
-          {mutation.isPending ? "جارٍ التحميل..." : (<><Search className="h-4 w-4 ml-1" /> عرض</>)}
-        </Button>
+      <form onSubmit={submit} className="mb-6 space-y-2">
+        <div className="flex gap-2">
+          <Input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://www.youtube.com/@MrBeast  أو  /channel/UC..."
+            className="bg-ice-card border-ice-border h-12 text-base"
+            dir="ltr"
+          />
+          <Button type="submit" size="lg" disabled={mutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
+            {mutation.isPending ? "جارٍ التحميل..." : (<><Search className="h-4 w-4 ml-1" /> عرض</>)}
+          </Button>
+        </div>
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            size="lg"
+            onClick={showAndAddAll}
+            disabled={mutation.isPending || bulkAdding || !user || !url.trim()}
+            className="gap-1"
+          >
+            {(mutation.isPending || bulkAdding) ? <Loader2 className="h-4 w-4 animate-spin" /> : <PlusSquare className="h-4 w-4" />}
+            إضافة كل فيديوهات القناة إلى الخلاصة
+          </Button>
+        </div>
       </form>
 
       {history.length > 0 && !result && (
