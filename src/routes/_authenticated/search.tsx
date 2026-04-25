@@ -41,11 +41,11 @@ function SearchPage() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate({ search: (prev) => ({ ...prev, q: input.trim() }) as any });
+    navigate({ to: "/search", search: (prev: any) => ({ ...prev, q: input.trim() }) });
   };
 
   const setTab = (t: string) => {
-    navigate({ search: (prev) => ({ ...prev, tab: t }) as any });
+    navigate({ to: "/search", search: (prev: any) => ({ ...prev, tab: t }) });
   };
 
   return (
@@ -64,7 +64,7 @@ function SearchPage() {
       </form>
 
       {!q ? (
-        <EmptyState onPick={(s) => { setInput(s); navigate({ search: (prev) => ({ ...prev, q: s }) as any }); }} />
+        <EmptyState onPick={(s) => { setInput(s); navigate({ to: "/search", search: (prev: any) => ({ ...prev, q: s }) }); }} />
       ) : (
         <div className="max-w-4xl mx-auto">
           <Tabs value={tab} onValueChange={setTab}>
