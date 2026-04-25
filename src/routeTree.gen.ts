@@ -41,10 +41,12 @@ import { Route as OwnerOwnerX9k2m7FinanceRouteImport } from './routes/_owner/own
 import { Route as OwnerOwnerX9k2m7FeaturesRouteImport } from './routes/_owner/owner-x9k2m7.features'
 import { Route as OwnerOwnerX9k2m7ContentRouteImport } from './routes/_owner/owner-x9k2m7.content'
 import { Route as OwnerOwnerX9k2m7AuditRouteImport } from './routes/_owner/owner-x9k2m7.audit'
+import { Route as AuthenticatedGroupsGroupIdRouteImport } from './routes/_authenticated/groups.$groupId'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
 import { Route as AdminAdminMarketplaceRouteImport } from './routes/_admin/admin.marketplace'
 import { Route as AdminAdminContentRouteImport } from './routes/_admin/admin.content'
 import { Route as AdminAdminAnalyticsRouteImport } from './routes/_admin/admin.analytics'
+import { Route as AuthenticatedGroupsGroupIdManageRouteImport } from './routes/_authenticated/groups.$groupId.manage'
 
 const SignUpLoginRoute = SignUpLoginRouteImport.update({
   id: '/sign-up-login',
@@ -210,6 +212,12 @@ const OwnerOwnerX9k2m7AuditRoute = OwnerOwnerX9k2m7AuditRouteImport.update({
   path: '/owner-x9k2m7/audit',
   getParentRoute: () => OwnerRoute,
 } as any)
+const AuthenticatedGroupsGroupIdRoute =
+  AuthenticatedGroupsGroupIdRouteImport.update({
+    id: '/$groupId',
+    path: '/$groupId',
+    getParentRoute: () => AuthenticatedGroupsRoute,
+  } as any)
 const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -230,6 +238,12 @@ const AdminAdminAnalyticsRoute = AdminAdminAnalyticsRouteImport.update({
   path: '/admin/analytics',
   getParentRoute: () => AdminRoute,
 } as any)
+const AuthenticatedGroupsGroupIdManageRoute =
+  AuthenticatedGroupsGroupIdManageRouteImport.update({
+    id: '/manage',
+    path: '/manage',
+    getParentRoute: () => AuthenticatedGroupsGroupIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -238,7 +252,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof AuthenticatedExploreRoute
   '/feed': typeof AuthenticatedFeedRoute
   '/geo': typeof AuthenticatedGeoRoute
-  '/groups': typeof AuthenticatedGroupsRoute
+  '/groups': typeof AuthenticatedGroupsRouteWithChildren
   '/invite': typeof AuthenticatedInviteRoute
   '/live': typeof AuthenticatedLiveRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
@@ -253,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/admin/users': typeof AdminAdminUsersRoute
+  '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
   '/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
@@ -265,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
   '/admin/': typeof AdminAdminIndexRoute
   '/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
+  '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -273,7 +289,7 @@ export interface FileRoutesByTo {
   '/explore': typeof AuthenticatedExploreRoute
   '/feed': typeof AuthenticatedFeedRoute
   '/geo': typeof AuthenticatedGeoRoute
-  '/groups': typeof AuthenticatedGroupsRoute
+  '/groups': typeof AuthenticatedGroupsRouteWithChildren
   '/invite': typeof AuthenticatedInviteRoute
   '/live': typeof AuthenticatedLiveRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
@@ -288,6 +304,7 @@ export interface FileRoutesByTo {
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/admin/users': typeof AdminAdminUsersRoute
+  '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
   '/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
@@ -300,6 +317,7 @@ export interface FileRoutesByTo {
   '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
   '/admin': typeof AdminAdminIndexRoute
   '/owner-x9k2m7': typeof OwnerOwnerX9k2m7IndexRoute
+  '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -312,7 +330,7 @@ export interface FileRoutesById {
   '/_authenticated/explore': typeof AuthenticatedExploreRoute
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
   '/_authenticated/geo': typeof AuthenticatedGeoRoute
-  '/_authenticated/groups': typeof AuthenticatedGroupsRoute
+  '/_authenticated/groups': typeof AuthenticatedGroupsRouteWithChildren
   '/_authenticated/invite': typeof AuthenticatedInviteRoute
   '/_authenticated/live': typeof AuthenticatedLiveRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
@@ -327,6 +345,7 @@ export interface FileRoutesById {
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
+  '/_authenticated/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/_owner/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
   '/_owner/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
   '/_owner/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
@@ -339,6 +358,7 @@ export interface FileRoutesById {
   '/_owner/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_owner/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
+  '/_authenticated/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -364,6 +384,7 @@ export interface FileRouteTypes {
     | '/admin/content'
     | '/admin/marketplace'
     | '/admin/users'
+    | '/groups/$groupId'
     | '/owner-x9k2m7/audit'
     | '/owner-x9k2m7/content'
     | '/owner-x9k2m7/features'
@@ -376,6 +397,7 @@ export interface FileRouteTypes {
     | '/owner-x9k2m7/users'
     | '/admin/'
     | '/owner-x9k2m7/'
+    | '/groups/$groupId/manage'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -399,6 +421,7 @@ export interface FileRouteTypes {
     | '/admin/content'
     | '/admin/marketplace'
     | '/admin/users'
+    | '/groups/$groupId'
     | '/owner-x9k2m7/audit'
     | '/owner-x9k2m7/content'
     | '/owner-x9k2m7/features'
@@ -411,6 +434,7 @@ export interface FileRouteTypes {
     | '/owner-x9k2m7/users'
     | '/admin'
     | '/owner-x9k2m7'
+    | '/groups/$groupId/manage'
   id:
     | '__root__'
     | '/'
@@ -437,6 +461,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
     | '/_admin/admin/users'
+    | '/_authenticated/groups/$groupId'
     | '/_owner/owner-x9k2m7/audit'
     | '/_owner/owner-x9k2m7/content'
     | '/_owner/owner-x9k2m7/features'
@@ -449,6 +474,7 @@ export interface FileRouteTypes {
     | '/_owner/owner-x9k2m7/users'
     | '/_admin/admin/'
     | '/_owner/owner-x9k2m7/'
+    | '/_authenticated/groups/$groupId/manage'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -685,6 +711,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerOwnerX9k2m7AuditRouteImport
       parentRoute: typeof OwnerRoute
     }
+    '/_authenticated/groups/$groupId': {
+      id: '/_authenticated/groups/$groupId'
+      path: '/$groupId'
+      fullPath: '/groups/$groupId'
+      preLoaderRoute: typeof AuthenticatedGroupsGroupIdRouteImport
+      parentRoute: typeof AuthenticatedGroupsRoute
+    }
     '/_admin/admin/users': {
       id: '/_admin/admin/users'
       path: '/admin/users'
@@ -713,6 +746,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminAnalyticsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_authenticated/groups/$groupId/manage': {
+      id: '/_authenticated/groups/$groupId/manage'
+      path: '/manage'
+      fullPath: '/groups/$groupId/manage'
+      preLoaderRoute: typeof AuthenticatedGroupsGroupIdManageRouteImport
+      parentRoute: typeof AuthenticatedGroupsGroupIdRoute
+    }
   }
 }
 
@@ -734,12 +774,38 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface AuthenticatedGroupsGroupIdRouteChildren {
+  AuthenticatedGroupsGroupIdManageRoute: typeof AuthenticatedGroupsGroupIdManageRoute
+}
+
+const AuthenticatedGroupsGroupIdRouteChildren: AuthenticatedGroupsGroupIdRouteChildren =
+  {
+    AuthenticatedGroupsGroupIdManageRoute:
+      AuthenticatedGroupsGroupIdManageRoute,
+  }
+
+const AuthenticatedGroupsGroupIdRouteWithChildren =
+  AuthenticatedGroupsGroupIdRoute._addFileChildren(
+    AuthenticatedGroupsGroupIdRouteChildren,
+  )
+
+interface AuthenticatedGroupsRouteChildren {
+  AuthenticatedGroupsGroupIdRoute: typeof AuthenticatedGroupsGroupIdRouteWithChildren
+}
+
+const AuthenticatedGroupsRouteChildren: AuthenticatedGroupsRouteChildren = {
+  AuthenticatedGroupsGroupIdRoute: AuthenticatedGroupsGroupIdRouteWithChildren,
+}
+
+const AuthenticatedGroupsRouteWithChildren =
+  AuthenticatedGroupsRoute._addFileChildren(AuthenticatedGroupsRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
   AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
   AuthenticatedGeoRoute: typeof AuthenticatedGeoRoute
-  AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRoute
+  AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRouteWithChildren
   AuthenticatedInviteRoute: typeof AuthenticatedInviteRoute
   AuthenticatedLiveRoute: typeof AuthenticatedLiveRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
@@ -757,7 +823,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedExploreRoute: AuthenticatedExploreRoute,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
   AuthenticatedGeoRoute: AuthenticatedGeoRoute,
-  AuthenticatedGroupsRoute: AuthenticatedGroupsRoute,
+  AuthenticatedGroupsRoute: AuthenticatedGroupsRouteWithChildren,
   AuthenticatedInviteRoute: AuthenticatedInviteRoute,
   AuthenticatedLiveRoute: AuthenticatedLiveRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,

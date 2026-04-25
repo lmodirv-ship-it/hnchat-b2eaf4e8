@@ -63,7 +63,8 @@ function GroupManagePage() {
   });
 
   async function togglePost(id: string, field: "is_hidden" | "is_pinned", val: boolean) {
-    const { error } = await supabase.from("group_posts").update({ [field]: val }).eq("id", id);
+    const update = field === "is_hidden" ? { is_hidden: val } : { is_pinned: val };
+    const { error } = await supabase.from("group_posts").update(update).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Updated");
     refetchPosts();
