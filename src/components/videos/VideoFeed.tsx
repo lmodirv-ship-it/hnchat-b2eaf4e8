@@ -68,12 +68,15 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data: posts } = await supabase
+    const types = Array.isArray(feedType) ? feedType : [feedType];
+    const query = supabase
       .from("posts")
       .select("*")
-      .eq("type", feedType)
       .order("created_at", { ascending: false })
       .limit(30);
+    const { data: posts } = types.length > 1
+      ? await query.in("type", types)
+      : await query.eq("type", types[0]);
     if (!posts) {
       setVideos([]);
       setLoading(false);
