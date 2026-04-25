@@ -99,6 +99,33 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flags: {
+        Row: {
+          description: string | null
+          enabled: boolean
+          key: string
+          rollout_percent: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          description?: string | null
+          enabled?: boolean
+          key: string
+          rollout_percent?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          description?: string | null
+          enabled?: boolean
+          key?: string
+          rollout_percent?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string
@@ -117,6 +144,139 @@ export type Database = {
           follower_id?: string
           following_id?: string
           id?: string
+        }
+        Relationships: []
+      }
+      group_members: {
+        Row: {
+          group_id: string
+          id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_posts: {
+        Row: {
+          comments_count: number
+          content: string | null
+          country_code: string | null
+          created_at: string
+          group_id: string
+          id: string
+          is_hidden: boolean
+          is_pinned: boolean
+          language_code: string | null
+          likes_count: number
+          media_urls: string[] | null
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number
+          content?: string | null
+          country_code?: string | null
+          created_at?: string
+          group_id: string
+          id?: string
+          is_hidden?: boolean
+          is_pinned?: boolean
+          language_code?: string | null
+          likes_count?: number
+          media_urls?: string[] | null
+          user_id: string
+        }
+        Update: {
+          comments_count?: number
+          content?: string | null
+          country_code?: string | null
+          created_at?: string
+          group_id?: string
+          id?: string
+          is_hidden?: boolean
+          is_pinned?: boolean
+          language_code?: string | null
+          likes_count?: number
+          media_urls?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_posts_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          country_code: string | null
+          cover_url: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_private: boolean
+          language_code: string | null
+          member_count: number
+          name: string
+          post_count: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          country_code?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          language_code?: string | null
+          member_count?: number
+          name: string
+          post_count?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          country_code?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          language_code?: string | null
+          member_count?: number
+          name?: string
+          post_count?: number
+          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -217,6 +377,39 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           comments_count: number
@@ -305,6 +498,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          country_code: string | null
           cover_url: string | null
           created_at: string
           followers_count: number
@@ -313,6 +507,8 @@ export type Database = {
           id: string
           is_online: boolean
           is_verified: boolean
+          language_code: string | null
+          locale_source: string | null
           posts_count: number
           updated_at: string
           username: string
@@ -320,6 +516,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          country_code?: string | null
           cover_url?: string | null
           created_at?: string
           followers_count?: number
@@ -328,6 +525,8 @@ export type Database = {
           id: string
           is_online?: boolean
           is_verified?: boolean
+          language_code?: string | null
+          locale_source?: string | null
           posts_count?: number
           updated_at?: string
           username: string
@@ -335,6 +534,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          country_code?: string | null
           cover_url?: string | null
           created_at?: string
           followers_count?: number
@@ -343,6 +543,8 @@ export type Database = {
           id?: string
           is_online?: boolean
           is_verified?: boolean
+          language_code?: string | null
+          locale_source?: string | null
           posts_count?: number
           updated_at?: string
           username?: string
@@ -417,9 +619,24 @@ export type Database = {
         Args: { _conversation_id: string; _user_id: string }
         Returns: boolean
       }
+      is_group_admin: {
+        Args: { _group_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_group_member: {
+        Args: { _group_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_owner: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "creator" | "shopper" | "user"
+      app_role:
+        | "admin"
+        | "creator"
+        | "shopper"
+        | "user"
+        | "owner"
+        | "group_admin"
       notification_type:
         | "like"
         | "comment"
@@ -555,7 +772,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "creator", "shopper", "user"],
+      app_role: ["admin", "creator", "shopper", "user", "owner", "group_admin"],
       notification_type: [
         "like",
         "comment",
