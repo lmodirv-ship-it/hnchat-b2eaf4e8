@@ -28,18 +28,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       if (newSession?.user) {
-        // Defer Supabase calls to avoid blocking auth callback
-        setTimeout(() => loadRoles(newSession.user.id), 0);
+        const uid = newSession.user.id;
+        setTimeout(() => {
+          loadRoles(uid);
+          detectAndStoreLocale(uid);
+        }, 0);
       } else {
         setRoles([]);
       }
     });
 
-    // Then check existing session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       if (currentSession?.user) {
-        loadRoles(currentSession.user.id).finally(() => setIsLoading(false));
+        const uid = currentSession.user.id;
+        loadRoles(uid).finally(() => setIsLoading(false));
+        detectAndStoreLocale(uid);
       } else {
         setIsLoading(false);
       }
@@ -64,7 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user: session?.user ?? null,
     roles,
     isLoading,
-    isAdmin: roles.includes("admin"),
+    isAdmin: roles.includes("admin") || roles.includes("owner"),
+    isOwner: roles.includes("owner"),
     isAuthenticated: !!session,
     signOut,
   };
