@@ -271,6 +271,7 @@ function VideoCard({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    registerRef(el);
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -280,10 +281,49 @@ function VideoCard({
       { threshold: [0, 0.6, 1] },
     );
     obs.observe(el);
-    return () => obs.disconnect();
-  }, [onVisible]);
+    return () => {
+      obs.disconnect();
+      registerRef(null);
+    };
+  }, [onVisible, registerRef]);
 
-  // Play/pause based on isActive
+  // Persist playback position so we resume at the same spot on return
+  const positionKey = `videos:pos:${video.id}`;
+
+  // Restore position when the <video> element mounts/loads
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const saved = sessionStorage.getItem(positionKey);
+    if (saved) {
+      const t = parseFloat(saved);
+      if (!isNaN(t) && t > 0) {
+        const onLoaded = () => {
+          try {
+            el.currentTime = Math.min(t, (el.duration || t) - 0.1);
+          } catch {}
+          el.removeEventListener("loadedmetadata", onLoaded);
+        };
+        if (el.readyState >= 1) onLoaded();
+        else el.addEventListener("loadedmetadata", onLoaded);
+      }
+    }
+  }, [positionKey, video.media_urls]);
+
+  // Save current position periodically while playing
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onTime = () => {
+      if (el.currentTime > 0) {
+        sessionStorage.setItem(positionKey, String(el.currentTime));
+      }
+    };
+    el.addEventListener("timeupdate", onTime);
+    return () => el.removeEventListener("timeupdate", onTime);
+  }, [positionKey]);
+
+  // Play/pause based on isActive (DON'T reset currentTime — keep resume position)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -291,7 +331,6 @@ function VideoCard({
       el.play().catch(() => {});
     } else {
       el.pause();
-      if (!isActive) el.currentTime = 0;
     }
   }, [isActive, paused]);
 
