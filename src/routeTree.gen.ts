@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignUpLoginRouteImport } from './routes/sign-up-login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
@@ -27,6 +28,11 @@ import { Route as AuthenticatedGeoRouteImport } from './routes/_authenticated/ge
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
 import { Route as AuthenticatedExploreRouteImport } from './routes/_authenticated/explore'
 import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/ai-hub'
+import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
+import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
+import { Route as AdminAdminMarketplaceRouteImport } from './routes/_admin/admin.marketplace'
+import { Route as AdminAdminContentRouteImport } from './routes/_admin/admin.content'
+import { Route as AdminAdminAnalyticsRouteImport } from './routes/_admin/admin.analytics'
 
 const SignUpLoginRoute = SignUpLoginRouteImport.update({
   id: '/sign-up-login',
@@ -35,6 +41,10 @@ const SignUpLoginRoute = SignUpLoginRouteImport.update({
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/_admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -119,6 +129,31 @@ const AuthenticatedAiHubRoute = AuthenticatedAiHubRouteImport.update({
   path: '/ai-hub',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminMarketplaceRoute = AdminAdminMarketplaceRouteImport.update({
+  id: '/admin/marketplace',
+  path: '/admin/marketplace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminContentRoute = AdminAdminContentRouteImport.update({
+  id: '/admin/content',
+  path: '/admin/content',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminAnalyticsRoute = AdminAdminAnalyticsRouteImport.update({
+  id: '/admin/analytics',
+  path: '/admin/analytics',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,6 +173,11 @@ export interface FileRoutesByFullPath {
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
+  '/admin/analytics': typeof AdminAdminAnalyticsRoute
+  '/admin/content': typeof AdminAdminContentRoute
+  '/admin/marketplace': typeof AdminAdminMarketplaceRoute
+  '/admin/users': typeof AdminAdminUsersRoute
+  '/admin/': typeof AdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -157,10 +197,16 @@ export interface FileRoutesByTo {
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
+  '/admin/analytics': typeof AdminAdminAnalyticsRoute
+  '/admin/content': typeof AdminAdminContentRoute
+  '/admin/marketplace': typeof AdminAdminMarketplaceRoute
+  '/admin/users': typeof AdminAdminUsersRoute
+  '/admin': typeof AdminAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_admin': typeof AdminRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/sign-up-login': typeof SignUpLoginRoute
   '/_authenticated/ai-hub': typeof AuthenticatedAiHubRoute
@@ -178,6 +224,11 @@ export interface FileRoutesById {
   '/_authenticated/trade': typeof AuthenticatedTradeRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
+  '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
+  '/_admin/admin/content': typeof AdminAdminContentRoute
+  '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
+  '/_admin/admin/users': typeof AdminAdminUsersRoute
+  '/_admin/admin/': typeof AdminAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -199,6 +250,11 @@ export interface FileRouteTypes {
     | '/trade'
     | '/videos'
     | '/voice'
+    | '/admin/analytics'
+    | '/admin/content'
+    | '/admin/marketplace'
+    | '/admin/users'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -218,9 +274,15 @@ export interface FileRouteTypes {
     | '/trade'
     | '/videos'
     | '/voice'
+    | '/admin/analytics'
+    | '/admin/content'
+    | '/admin/marketplace'
+    | '/admin/users'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_admin'
     | '/_authenticated'
     | '/sign-up-login'
     | '/_authenticated/ai-hub'
@@ -238,10 +300,16 @@ export interface FileRouteTypes {
     | '/_authenticated/trade'
     | '/_authenticated/videos'
     | '/_authenticated/voice'
+    | '/_admin/admin/analytics'
+    | '/_admin/admin/content'
+    | '/_admin/admin/marketplace'
+    | '/_admin/admin/users'
+    | '/_admin/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   SignUpLoginRoute: typeof SignUpLoginRoute
 }
@@ -260,6 +328,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -374,8 +449,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiHubRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_admin/admin/': {
+      id: '/_admin/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminAdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/users': {
+      id: '/_admin/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminAdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/marketplace': {
+      id: '/_admin/admin/marketplace'
+      path: '/admin/marketplace'
+      fullPath: '/admin/marketplace'
+      preLoaderRoute: typeof AdminAdminMarketplaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/content': {
+      id: '/_admin/admin/content'
+      path: '/admin/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AdminAdminContentRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/analytics': {
+      id: '/_admin/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAdminAnalyticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAdminAnalyticsRoute: typeof AdminAdminAnalyticsRoute
+  AdminAdminContentRoute: typeof AdminAdminContentRoute
+  AdminAdminMarketplaceRoute: typeof AdminAdminMarketplaceRoute
+  AdminAdminUsersRoute: typeof AdminAdminUsersRoute
+  AdminAdminIndexRoute: typeof AdminAdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAdminAnalyticsRoute: AdminAdminAnalyticsRoute,
+  AdminAdminContentRoute: AdminAdminContentRoute,
+  AdminAdminMarketplaceRoute: AdminAdminMarketplaceRoute,
+  AdminAdminUsersRoute: AdminAdminUsersRoute,
+  AdminAdminIndexRoute: AdminAdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
@@ -419,6 +547,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   SignUpLoginRoute: SignUpLoginRoute,
 }
