@@ -538,6 +538,90 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
               }
             }
 
+            // Fallback: use Firecrawl's link list to detect product URLs
+            // (works for SPAs where anchors aren't in the rendered HTML in the
+            // same shape but links were collected by the real browser).
+            if (items.length < 3) {
+              const links: string[] = Array.isArray(fcJson?.data?.links)
+                ? fcJson.data.links
+                : [];
+              const productLinks = links.filter((l) =>
+                /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
+              );
+              for (const l of productLinks.slice(0, 24)) {
+                if (seen.has(l)) continue;
+                seen.add(l);
+                items.push({
+                  url: l,
+                  title: "",
+                  image: null,
+                  price: null,
+                  currency: "USD",
+                });
+              }
+
+              // Enrich first batch with metadata via parallel scrapes
+              const toEnrich = items.filter((it) => !it.title).slice(0, 12);
+              await Promise.all(
+                toEnrich.map(async (it) => {
+                  try {
+                    const r = await fetch(
+                      "https://api.firecrawl.dev/v2/scrape",
+                      {
+                        method: "POST",
+                        headers: {
+                          Authorization: `Bearer ${fcKey}`,
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          url: it.url,
+                          formats: ["html"],
+                          onlyMainContent: false,
+                          waitFor: 2000,
+                        }),
+                      }
+                    );
+                    if (!r.ok) return;
+                    const j: any = await r.json();
+                    const h: string = j?.data?.html || j?.data?.rawHtml || "";
+                    const title =
+                      pickMeta(h, [
+                        metaRe("og:title"),
+                        metaReRev("og:title"),
+                      ]) ||
+                      pickMeta(h, [/<title[^>]*>([^<]+)<\/title>/i]) ||
+                      "";
+                    const img = pickMeta(h, [
+                      metaRe("og:image"),
+                      metaReRev("og:image"),
+                    ]);
+                    const priceMeta = pickMeta(h, [
+                      metaRe("product:price:amount"),
+                      metaRe("og:price:amount"),
+                    ]);
+                    const curMeta = pickMeta(h, [
+                      metaRe("product:price:currency"),
+                      metaRe("og:price:currency"),
+                    ]);
+                    it.title = String(title).slice(0, 200);
+                    if (img) it.image = absolutize(img, it.url);
+                    if (priceMeta) {
+                      const n = parseFloat(
+                        priceMeta.replace(/[^\d.,]/g, "").replace(",", ".")
+                      );
+                      if (!isNaN(n)) it.price = n;
+                    }
+                    if (curMeta) it.currency = curMeta.toUpperCase();
+                  } catch {}
+                })
+              );
+
+              // Drop items that still have no title AND no image (likely junk)
+              const cleaned = items.filter((it) => it.title || it.image);
+              items.length = 0;
+              items.push(...cleaned);
+            }
+
             if (items.length > 0) {
               return {
                 items: items.slice(0, 60),
