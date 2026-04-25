@@ -1,157 +1,62 @@
-## نظرة عامة
+## الوضع الحالي
 
-**hnChat** = منصة اجتماعية شاملة شعارها "Your World. One App." — تجمع التواصل الاجتماعي، الفيديوهات القصيرة، البث المباشر، السوق التجاري، والتوصيات بالذكاء الاصطناعي في تطبيق واحد بهوية بصرية مستقبلية (Diamond/Ice).
+- `admin@hnchat.demo` موجود في قاعدة البيانات (لكن دوره `user` فقط، وليس `owner` فعلياً).
+- `lmodurv@gmail.com` **غير مسجل** في الموقع حتى الآن — لا يوجد حساب له في نظام المصادقة.
 
-سنبني نسخة Lovable من الموقع تطابق التصميم الحالي على hnchat.net، مع تنفيذ الوظائف الأساسية فعلياً (وليس فقط واجهة).
+## الخطة
 
-> ⚠️ **تنبيه أمني عاجل:** مفتاح **Brevo API** الذي ظهر في `.env` المرفوع أصبح مكشوفاً علنياً. يجب إلغاؤه وإنشاء بديل من لوحة Brevo فوراً.
+### 1. التأكد من تسجيل lmodurv@gmail.com
+يجب على `lmodurv@gmail.com` التسجيل أولاً عبر صفحة `/sign-up-login` في الموقع لإنشاء حساب. بدون حساب لا يمكن منحه أي صلاحية.
 
----
+### 2. إنشاء Trigger تلقائي للمالك (حل دائم وآمن)
+بدلاً من تنفيذ SQL يدوي في كل مرة، سننشئ trigger في قاعدة البيانات:
+- عند تسجيل أي حساب جديد بإيميل `lmodurv@gmail.com` → يُمنح دور `owner` تلقائياً.
+- إذا كان الحساب مسجلاً مسبقاً، سيُمنح الدور فوراً بـ migration.
 
-## الإصدار الأول (MVP) — ما سيُبنى
+### 3. إزالة صلاحيات admin@hnchat.demo
+- حذف أي دور `owner` أو `admin` من المستخدم `admin@hnchat.demo` (id: `c365fef4-f2d1-46be-920f-8070bf3f9d01`).
+- إبقاء دور `user` العادي فقط (أو حذف الحساب كاملاً إذا رغبت لاحقاً).
 
-### 1. صفحة الترحيب / تسجيل الدخول `/sign-up-login`
-نسخة طبق الأصل من الصفحة الحالية:
-- **العمود الأيسر:** شعار hnChat، عنوان "Your World. One App."، وصف، وقائمة المميزات الخمس مع أيقونات سماوية متوهجة (Messaging, Short Videos, Marketplace, Smart Search, AI Recommendations)
-- **العمود الأيمن:** بطاقة زجاجية تحوي:
-  - شارة "Early access open"
-  - تبويبان: **Join hnChat** / **Sign In**
-  - زر "Sign up with Google"
-  - نموذج بريد + كلمة سر (مع Full Name, Username, Confirm Password للتسجيل)
-  - زر متدرج "Join hnChat Now"
-  - بطاقة **Demo Accounts** (Creator, Shopper, Admin) لتعبئة سريعة
-- **شريط سفلي:** Early Access Open · Growing Fast · 100% Free to Join
+### 4. تحديث وثائق الإعداد
+تحديث أي إشارة في الكود إلى `admin@hnchat.demo` كحساب تجريبي للمالك.
 
-### 2. الخلاصة الرئيسية `/feed` (الصفحة بعد الدخول)
-- عمود يسار: شريط جانبي للتنقل (Home, Explore, Videos, Marketplace, Messages, Profile)
-- عمود وسط: تدفق منشورات (نص + صور)، إعجاب، تعليق، مشاركة
-- عمود يمين: اقتراحات متابعة + موضوعات رائجة
+## التفاصيل التقنية
 
-### 3. الفيديوهات القصيرة `/videos`
-- عرض عمودي بملء الشاشة (TikTok-style)
-- تشغيل/إيقاف عند التمرير
-- إعجاب، تعليق، مشاركة
+Migration SQL مقترح:
 
-### 4. السوق `/marketplace`
-- شبكة منتجات (صورة، اسم، سعر، بائع)
-- بحث وفلاتر بالفئة
-- صفحة تفاصيل منتج بسيطة
+```sql
+-- إزالة صلاحيات admin@hnchat.demo
+DELETE FROM public.user_roles
+WHERE user_id = 'c365fef4-f2d1-46be-920f-8070bf3f9d01'
+  AND role IN ('owner','admin');
 
-### 5. الرسائل `/messages`
-- قائمة محادثات + نافذة محادثة 1-1 لحظية
-- مؤشر "كاتب الآن" والقراءة
-- بحث في المحادثات
+-- منح المالك للحساب lmodurv@gmail.com إن وُجد الآن
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, 'owner'::app_role FROM auth.users WHERE email = 'lmodurv@gmail.com'
+ON CONFLICT (user_id, role) DO NOTHING;
 
-### 6. الملف الشخصي `/profile/$username`
-- صورة غلاف + صورة شخصية + bio + إحصائيات (متابعون/متابَعون/منشورات)
-- شبكة منشورات المستخدم
-- زر Follow/Unfollow
+-- Trigger يضيف دور owner تلقائياً عند تسجيل lmodurv@gmail.com
+CREATE OR REPLACE FUNCTION public.assign_owner_to_lmodurv()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  IF NEW.email = 'lmodurv@gmail.com' THEN
+    INSERT INTO public.user_roles (user_id, role)
+    VALUES (NEW.id, 'owner')
+    ON CONFLICT (user_id, role) DO NOTHING;
+  END IF;
+  RETURN NEW;
+END; $$;
 
-### 7. الإعدادات `/settings`
-- الملف الشخصي، الخصوصية، الإشعارات، تسجيل الخروج
-
----
-
-## الهوية البصرية (طبقاً للموقع الأصلي)
-
-| العنصر | القيمة |
-|---|---|
-| الخلفية | أسود جليدي `#050508` → `#0a0a12` (متدرج) |
-| لون أساسي | سماوي توهج `#00d2ff` |
-| لون ثانوي | بنفسجي `#9b59ff` ووردي `#e879f9` |
-| البطاقات | زجاجية: `rgba(255,255,255,0.04)` + blur + حدود رفيعة |
-| الأزرار الأساسية | متدرج سماوي→بنفسجي مع توهج |
-| الخط | **Plus Jakarta Sans** (نصوص) + **JetBrains Mono** (كود) |
-| الأيقونات | lucide-react بتوهج سماوي |
-| التأثيرات | glassmorphism, glow shadows, smooth transitions |
-| الشعار | فقاعة محادثة بنفسجية متدرجة + برق سماوي |
-
----
-
-## البنية التقنية
-
-### قاعدة البيانات (Lovable Cloud)
-
-```text
-profiles          → id, username, full_name, avatar_url, bio, role
-posts             → id, user_id, content, media_url, type (post/video), created_at
-comments          → id, post_id, user_id, content, created_at
-likes             → id, post_id, user_id (unique pair)
-follows           → follower_id, following_id (unique pair)
-conversations     → id, created_at
-conversation_participants → conversation_id, user_id
-messages          → id, conversation_id, sender_id, content, created_at, read_at
-products          → id, seller_id, title, description, price, images, category
-user_roles        → user_id, role (admin/creator/shopper) ← جدول منفصل لمنع الصلاحيات الخاطئة
+DROP TRIGGER IF EXISTS trg_assign_owner_lmodurv ON auth.users;
+CREATE TRIGGER trg_assign_owner_lmodurv
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.assign_owner_to_lmodurv();
 ```
 
-كل جدول محمي بـ **Row-Level Security (RLS)** صارمة.
+## ما عليك فعله
 
-### المسارات (TanStack Start)
+1. اطلب من `lmodurv@gmail.com` التسجيل في الموقع عبر `/sign-up-login` (إذا لم يكن قد سجل بعد).
+2. وافق على هذه الخطة لأقوم بتنفيذ الـ migration.
+3. بعد التسجيل، ادخل بحساب `lmodurv@gmail.com` ثم انتقل إلى `/owner-x9k2m7` لرؤية لوحة المالك.
 
-```text
-src/routes/
-├── __root.tsx
-├── index.tsx              → إعادة توجيه إلى /sign-up-login أو /feed
-├── sign-up-login.tsx      → عام
-├── _authenticated.tsx     → بوابة الحماية
-└── _authenticated/
-    ├── feed.tsx
-    ├── videos.tsx
-    ├── marketplace.tsx
-    ├── marketplace.$id.tsx
-    ├── messages.tsx
-    ├── messages.$conversationId.tsx
-    ├── profile.$username.tsx
-    └── settings.tsx
-```
-
-### الذكاء الاصطناعي
-**Lovable AI Gateway** (Gemini + GPT-5، بدون مفاتيح):
-- توصيات منشورات/مستخدمين على `/feed`
-- بحث ذكي عن المنتجات في `/marketplace`
-
-### المصادقة
-- بريد + كلمة سر عبر Lovable Cloud
-- جدول `profiles` مع trigger لإنشاء profile تلقائياً عند التسجيل
-- Google OAuth (يحتاج إعداداً لاحقاً من المستخدم)
-
----
-
-## ما لن يُبنى في الإصدار الأول
-
-لتجنّب التضخم، سنؤجل لمراحل لاحقة:
-- البث المباشر (Live Streams) — يتطلب WebRTC وبنية تحتية معقدة
-- المدفوعات الفعلية (Stripe) — يُضاف عند جاهزية المتجر
-- إشعارات Push
-- Brevo للبريد — Lovable Cloud يوفر بريد مدمج
-- Google Analytics + AdSense — تُضاف بعد النشر
-
----
-
-## ملاحظات مهمة
-
-1. **الإطار يتغير:** الكود الأصلي مبني بـ Next.js — Lovable تستخدم TanStack Start. سنعيد كتابة الكود بنفس التصميم والوظائف، وليس نسخه حرفياً.
-
-2. **قاعدة البيانات الحالية لن تُربط:** سننشئ قاعدة جديدة عبر Lovable Cloud بدلاً من استخدام مشروع Supabase الحالي (لتفادي تضارب المفاتيح والحفاظ على الأمان). إن أردت لاحقاً، يمكن نقل البيانات يدوياً.
-
-3. **الحسابات التجريبية (Demo Accounts):** سأنشئها فعلياً في قاعدة البيانات (Creator, Shopper, Admin) مع بيانات أولية لكل دور حتى تعمل أزرار "Use" مباشرة.
-
----
-
-## ترتيب التنفيذ بعد الموافقة
-
-1. تفعيل Lovable Cloud + إعداد المصادقة
-2. تطبيق ثيم Diamond/Ice (ألوان، خطوط، تأثيرات زجاجية)
-3. إنشاء جداول قاعدة البيانات + RLS + Trigger للـ profiles
-4. بناء صفحة `/sign-up-login` مطابقة للأصل
-5. بناء بوابة `_authenticated` + Header + Sidebar مشترك
-6. صفحة `/feed` مع المنشورات والإعجاب والتعليق
-7. صفحة `/videos`
-8. صفحة `/marketplace` + تفاصيل المنتج
-9. صفحة `/messages` لحظية
-10. صفحة `/profile/$username` + `/settings`
-11. إضافة Lovable AI للتوصيات والبحث الذكي
-12. إنشاء بيانات Demo + 3 حسابات تجريبية
-
-اضغط **Implement plan** لبدء البناء، أو أخبرني بتعديل تريده.
+هل توافق على التنفيذ؟
