@@ -1,15 +1,30 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Bell, MessageCircle, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
 
 export function TopBar() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
+
+  const { data: profile } = useQuery({
+    queryKey: ["topbar-profile", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("username, avatar_url")
+        .eq("id", user!.id)
+        .maybeSingle();
+      return data;
+    },
+  });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
