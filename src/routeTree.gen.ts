@@ -14,6 +14,7 @@ import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
 import { Route as AuthenticatedTradeRouteImport } from './routes/_authenticated/trade'
@@ -90,6 +91,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
+  id: '/youtube',
+  path: '/youtube',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedVoiceRoute = AuthenticatedVoiceRouteImport.update({
   id: '/voice',
@@ -416,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
+  '/youtube': typeof AuthenticatedYoutubeRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -474,6 +481,7 @@ export interface FileRoutesByTo {
   '/trade': typeof AuthenticatedTradeRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
+  '/youtube': typeof AuthenticatedYoutubeRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -536,6 +544,7 @@ export interface FileRoutesById {
   '/_authenticated/trade': typeof AuthenticatedTradeRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
+  '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -596,6 +605,7 @@ export interface FileRouteTypes {
     | '/trade'
     | '/videos'
     | '/voice'
+    | '/youtube'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -654,6 +664,7 @@ export interface FileRouteTypes {
     | '/trade'
     | '/videos'
     | '/voice'
+    | '/youtube'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -715,6 +726,7 @@ export interface FileRouteTypes {
     | '/_authenticated/trade'
     | '/_authenticated/videos'
     | '/_authenticated/voice'
+    | '/_authenticated/youtube'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
@@ -781,6 +793,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/youtube': {
+      id: '/_authenticated/youtube'
+      path: '/youtube'
+      fullPath: '/youtube'
+      preLoaderRoute: typeof AuthenticatedYoutubeRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/voice': {
       id: '/_authenticated/voice'
@@ -1256,6 +1275,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedTradeRoute: typeof AuthenticatedTradeRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
   AuthenticatedVoiceRoute: typeof AuthenticatedVoiceRoute
+  AuthenticatedYoutubeRoute: typeof AuthenticatedYoutubeRoute
   AuthenticatedWatchIdRoute: typeof AuthenticatedWatchIdRoute
 }
 
@@ -1294,6 +1314,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTradeRoute: AuthenticatedTradeRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
   AuthenticatedVoiceRoute: AuthenticatedVoiceRoute,
+  AuthenticatedYoutubeRoute: AuthenticatedYoutubeRoute,
   AuthenticatedWatchIdRoute: AuthenticatedWatchIdRoute,
 }
 
