@@ -318,3 +318,163 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
 
     return { items: items.slice(0, 60), siteName };
   });
+
+// ----- Quick import by site name only -----
+// User types "nike" or "nike.com" and we try common product/collection paths.
+
+function normalizeSiteToOrigin(input: string): string {
+  let s = input.trim().toLowerCase();
+  s = s.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  if (!s.includes(".")) s = `${s}.com`;
+  s = s.split("/")[0];
+  return `https://${s}`;
+}
+
+const COMMON_PRODUCT_PATHS = [
+  "/collections/all",
+  "/collections/all-products",
+  "/products",
+  "/shop",
+  "/store",
+  "/catalog",
+  "/all",
+  "/",
+];
+
+async function fetchHtml(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
+        Accept: "text/html,application/xhtml+xml",
+      },
+      redirect: "follow",
+    });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch {
+    return null;
+  }
+}
+
+export const scrapeBySiteName = createServerFn({ method: "POST" })
+  .inputValidator((input: { site: string }) => {
+    if (!input?.site || typeof input.site !== "string") {
+      throw new Error("Site name is required");
+    }
+    return { site: input.site };
+  })
+  .handler(
+    async ({
+      data,
+    }): Promise<{
+      items: ScrapedListItem[];
+      siteName: string;
+      origin: string;
+      sourceUrl: string;
+    }> => {
+      const origin = normalizeSiteToOrigin(data.site);
+
+      // 1) Try Shopify products.json (works on most Shopify stores)
+      try {
+        const shopifyRes = await fetch(`${origin}/products.json?limit=60`, {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
+            Accept: "application/json",
+          },
+          redirect: "follow",
+        });
+        if (shopifyRes.ok) {
+          const json: any = await shopifyRes.json();
+          if (Array.isArray(json?.products) && json.products.length > 0) {
+            const items: ScrapedListItem[] = json.products
+              .slice(0, 60)
+              .map((p: any) => {
+                const variant = Array.isArray(p.variants) ? p.variants[0] : null;
+                const image = Array.isArray(p.images) && p.images[0]
+                  ? p.images[0].src
+                  : null;
+                const price = variant?.price ? parseFloat(variant.price) : null;
+                return {
+                  url: `${origin}/products/${p.handle}`,
+                  title: String(p.title || "").slice(0, 200),
+                  image,
+                  price,
+                  currency: "USD",
+                };
+              })
+              .filter((it: ScrapedListItem) => it.title);
+            if (items.length > 0) {
+              return {
+                items,
+                siteName: new URL(origin).hostname,
+                origin,
+                sourceUrl: `${origin}/products.json`,
+              };
+            }
+          }
+        }
+      } catch {}
+
+      // 2) Try common HTML paths
+      for (const path of COMMON_PRODUCT_PATHS) {
+        const url = `${origin}${path}`;
+        const html = await fetchHtml(url);
+        if (!html) continue;
+
+        const siteName =
+          pickMeta(html, [metaRe("og:site_name"), metaReRev("og:site_name")]) ||
+          new URL(origin).hostname;
+
+        const items: ScrapedListItem[] = [];
+        const seen = new Set<string>();
+
+        const ld = extractJsonLd(html);
+        const ldItems = extractItemListJsonLd(ld);
+        for (const it of ldItems) {
+          const u = it.url || it["@id"];
+          if (!u || typeof u !== "string") continue;
+          const abs = absolutize(u, url);
+          if (seen.has(abs)) continue;
+          const offer = Array.isArray(it.offers) ? it.offers[0] : it.offers;
+          const price = offer?.price ?? offer?.lowPrice;
+          const img = Array.isArray(it.image) ? it.image[0] : it.image;
+          seen.add(abs);
+          items.push({
+            url: abs,
+            title: String(it.name || "").slice(0, 200),
+            image: img
+              ? absolutize(typeof img === "string" ? img : img.url, url)
+              : null,
+            price: price != null ? parseFloat(String(price)) : null,
+            currency: offer?.priceCurrency
+              ? String(offer.priceCurrency).toUpperCase()
+              : "USD",
+          });
+        }
+        if (items.length < 3) {
+          for (const it of scrapeAnchorProducts(html, url)) {
+            if (!seen.has(it.url)) {
+              seen.add(it.url);
+              items.push(it);
+            }
+          }
+        }
+
+        if (items.length >= 3) {
+          return {
+            items: items.slice(0, 60),
+            siteName,
+            origin,
+            sourceUrl: url,
+          };
+        }
+      }
+
+      throw new Error(
+        "تعذر العثور على منتجات في هذا الموقع. جرّب رابط صفحة المنتجات مباشرة."
+      );
+    }
+  );
