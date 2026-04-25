@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CommentsSection } from "@/components/feed/CommentsSection";
-import { ArrowLeft, ExternalLink, Youtube } from "lucide-react";
+import { ArrowLeft, Plus, Check, Loader2 } from "lucide-react";
 import { getYoutubeVideoMeta } from "@/utils/youtube.functions";
 import { toast } from "sonner";
 
