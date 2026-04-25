@@ -1,62 +1,77 @@
-## الوضع الحالي
+## 🎯 المرحلة 1: Feed كامل احترافي
 
-- `admin@hnchat.demo` موجود في قاعدة البيانات (لكن دوره `user` فقط، وليس `owner` فعلياً).
-- `lmodurv@gmail.com` **غير مسجل** في الموقع حتى الآن — لا يوجد حساب له في نظام المصادقة.
+سأبني نظام تغذية (Feed) كامل بمستوى الشبكات الاجتماعية الحديثة (Twitter/Instagram).
 
-## الخطة
+### ✨ الميزات
 
-### 1. التأكد من تسجيل lmodurv@gmail.com
-يجب على `lmodurv@gmail.com` التسجيل أولاً عبر صفحة `/sign-up-login` في الموقع لإنشاء حساب. بدون حساب لا يمكن منحه أي صلاحية.
+#### المنشور (Post Card)
+- 👤 صورة البروفايل الحقيقية (مع fallback للحرف الأول)
+- ✓ شارة التوثيق للمستخدمين الموثقين
+- 🕐 توقيت بالعربية ("منذ 5 دقائق")
+- 📝 محتوى نصي مع كسر أسطر
+- 🖼️ شبكة صور (1-4) مع معاينة
+- ⋯ قائمة منسدلة للمالك (حذف)
 
-### 2. إنشاء Trigger تلقائي للمالك (حل دائم وآمن)
-بدلاً من تنفيذ SQL يدوي في كل مرة، سننشئ trigger في قاعدة البيانات:
-- عند تسجيل أي حساب جديد بإيميل `lmodurv@gmail.com` → يُمنح دور `owner` تلقائياً.
-- إذا كان الحساب مسجلاً مسبقاً، سيُمنح الدور فوراً بـ migration.
+#### التفاعلات
+- ❤️ **إعجاب توجلي حقيقي** — نقرة لإعجاب، نقرة لإلغاء
+  - تحديث متفائل (Optimistic UI) — يستجيب فوراً
+  - يتبع حالة المستخدم الفعلية (هل أنا أعجبني أم لا)
+- 💬 **تعليقات قابلة للفتح/الإغلاق** بشكل inline
+  - كتابة + إرسال + حذف تعليقاتي
+  - عرض اسم وصورة المعلّق + التوقيت
+  - دعم Enter للإرسال
+- 🔗 **مشاركة** — نسخ الرابط للحافظة
 
-### 3. إزالة صلاحيات admin@hnchat.demo
-- حذف أي دور `owner` أو `admin` من المستخدم `admin@hnchat.demo` (id: `c365fef4-f2d1-46be-920f-8070bf3f9d01`).
-- إبقاء دور `user` العادي فقط (أو حذف الحساب كاملاً إذا رغبت لاحقاً).
+#### الناشر (Composer)
+- 📝 textarea أنيق مع عداد أحرف (max 2000)
+- 👤 صورة بروفايلي بجانب
+- ✨ زر نشر بـ gradient (سماوي → بنفسجي)
+- 📊 إحصائيات الأحرف بجانب أيقونة Sparkles
 
-### 4. تحديث وثائق الإعداد
-تحديث أي إشارة في الكود إلى `admin@hnchat.demo` كحساب تجريبي للمالك.
+#### Realtime ⚡
+- 🔔 إشعار في أعلى الصفحة "X منشور جديد — اضغط للتحديث"
+- 📡 يستمع لـ INSERT events على جدول posts عبر Supabase Realtime
+- 🔄 ضغط البانر → تحديث + scroll لأعلى
 
-## التفاصيل التقنية
+#### تجربة المستخدم
+- ⏳ Loader أنيق بألوان السماوي والبنفسجي
+- 💬 رسائل خطأ بالعربية مع toasts
+- 📱 متجاوب (Responsive) للموبايل والديسكتوب
+- 🎨 ثيم Diamond/Ice الموحد
 
-Migration SQL مقترح:
+### 📁 الملفات الجديدة
 
+1. **`src/components/feed/PostCard.tsx`** — مكوّن المنشور المنفصل
+2. **`src/components/feed/CommentsSection.tsx`** — قسم التعليقات
+
+### 📝 الملفات المعدّلة
+
+1. **`src/routes/_authenticated/feed.tsx`** — صفحة الـ Feed كاملاً (إعادة كتابة احترافية)
+
+### 🗄️ التعديلات على قاعدة البيانات
+
+سأطلب migration لتفعيل **Realtime** على الجداول:
 ```sql
--- إزالة صلاحيات admin@hnchat.demo
-DELETE FROM public.user_roles
-WHERE user_id = 'c365fef4-f2d1-46be-920f-8070bf3f9d01'
-  AND role IN ('owner','admin');
-
--- منح المالك للحساب lmodurv@gmail.com إن وُجد الآن
-INSERT INTO public.user_roles (user_id, role)
-SELECT id, 'owner'::app_role FROM auth.users WHERE email = 'lmodurv@gmail.com'
-ON CONFLICT (user_id, role) DO NOTHING;
-
--- Trigger يضيف دور owner تلقائياً عند تسجيل lmodurv@gmail.com
-CREATE OR REPLACE FUNCTION public.assign_owner_to_lmodurv()
-RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
-BEGIN
-  IF NEW.email = 'lmodurv@gmail.com' THEN
-    INSERT INTO public.user_roles (user_id, role)
-    VALUES (NEW.id, 'owner')
-    ON CONFLICT (user_id, role) DO NOTHING;
-  END IF;
-  RETURN NEW;
-END; $$;
-
-DROP TRIGGER IF EXISTS trg_assign_owner_lmodurv ON auth.users;
-CREATE TRIGGER trg_assign_owner_lmodurv
-AFTER INSERT ON auth.users
-FOR EACH ROW EXECUTE FUNCTION public.assign_owner_to_lmodurv();
+ALTER TABLE public.posts REPLICA IDENTITY FULL;
+ALTER TABLE public.likes REPLICA IDENTITY FULL;
+ALTER TABLE public.comments REPLICA IDENTITY FULL;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.posts, public.likes, public.comments;
 ```
 
-## ما عليك فعله
+### ⏭️ ما سيُؤجَّل للمرحلة التالية (المرحلة 2: Messages)
 
-1. اطلب من `lmodurv@gmail.com` التسجيل في الموقع عبر `/sign-up-login` (إذا لم يكن قد سجل بعد).
-2. وافق على هذه الخطة لأقوم بتنفيذ الـ migration.
-3. بعد التسجيل، ادخل بحساب `lmodurv@gmail.com` ثم انتقل إلى `/owner-x9k2m7` لرؤية لوحة المالك.
+- 🖼️ **رفع صور** يحتاج Storage bucket — سأضيفه عند بناء Stories لاحقاً
+- 🔔 إشعارات push عند الإعجاب/التعليق — مع نظام Notifications
+- 📈 خوارزمية Trending — تحتاج بيانات تفاعل أكثر
 
-هل توافق على التنفيذ؟
+### 🎬 النتيجة المتوقعة
+
+تغذية حية تشبه Twitter/X مع:
+- منشورات جديدة تظهر فوراً للجميع
+- إعجابات وتعليقات بدون تأخير
+- ثيم Diamond/Ice المميز
+- دعم كامل للعربية وRTL
+
+---
+
+**هل توافق على البدء؟** سأنفذ كل ما سبق دفعة واحدة.
