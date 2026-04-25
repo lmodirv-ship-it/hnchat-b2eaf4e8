@@ -158,15 +158,19 @@ export function PostCard({ post, onChange }: { post: FeedPost; onChange: () => v
         })();
         if (ytId) {
           return (
-            <div className="aspect-video w-full bg-black rounded-xl overflow-hidden mb-3 border border-ice-border">
+            <div className="relative aspect-video w-full bg-black rounded-xl overflow-hidden mb-3 border border-ice-border">
               <iframe
-                src={`https://www.youtube.com/embed/${ytId}?rel=0`}
+                src={`https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&playsinline=1`}
                 title={post.content || "Video"}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full border-0"
                 loading="lazy"
               />
+              {/* Hide "Watch on YouTube" button (bottom-left) */}
+              <div className="absolute bottom-0 left-0 h-12 w-44 bg-black pointer-events-none z-10" aria-hidden />
+              {/* Hide YouTube logo (bottom-right area) */}
+              <div className="absolute bottom-0 right-0 h-12 w-32 bg-black pointer-events-none z-10" aria-hidden />
             </div>
           );
         }
