@@ -14,7 +14,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CommentsSection } from "./CommentsSection";
+import { SocialShareMenu } from "./SocialShareMenu";
 import { cn } from "@/lib/utils";
+
+function getPostVideoUrl(urls: string[] | null | undefined): string | null {
+  if (!urls) return null;
+  for (const u of urls) {
+    if (/(?:youtube\.com|youtu\.be)/.test(u)) return u;
+    if (/\.(mp4|webm|mov|m4v)(\?|$)/i.test(u)) return u;
+  }
+  return null;
+}
 
 export interface FeedPost {
   id: string;
