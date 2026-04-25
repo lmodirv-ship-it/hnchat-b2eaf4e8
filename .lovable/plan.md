@@ -1,77 +1,40 @@
-## 🎯 المرحلة 1: Feed كامل احترافي
+# خطة: إكمال الشريط الجانبي بقسم "More"
 
-سأبني نظام تغذية (Feed) كامل بمستوى الشبكات الاجتماعية الحديثة (Twitter/Instagram).
+## الوضع الحالي
+الشريط الجانبي يحتوي على كل عناصر "Navigation" الـ 26 الموجودة في الصورة (Home Feed → Profile + Admin). الناقص هو **قسم "More"** الذي يظهر أسفل الشريط في الصورة:
+- Notifications (5) — الصفحة موجودة لكنها غير مربوطة في الشريط
+- Bookmarks — صفحة غير موجودة
+- Settings — صفحة غير موجودة (Preferences ≠ Settings)
+- Privacy Policy — صفحة غير موجودة
+- Terms of Service — صفحة غير موجودة
 
-### ✨ الميزات
+## ما سأنفّذه
 
-#### المنشور (Post Card)
-- 👤 صورة البروفايل الحقيقية (مع fallback للحرف الأول)
-- ✓ شارة التوثيق للمستخدمين الموثقين
-- 🕐 توقيت بالعربية ("منذ 5 دقائق")
-- 📝 محتوى نصي مع كسر أسطر
-- 🖼️ شبكة صور (1-4) مع معاينة
-- ⋯ قائمة منسدلة للمالك (حذف)
+### 1. إنشاء 4 صفحات جديدة في `src/routes/_authenticated/`
+- `bookmarks.tsx` — قائمة العناصر المحفوظة (placeholder بتصميم متّسق عبر `ComingSoon`، مع أيقونة Bookmark وأقسام: Posts / Videos / Products).
+- `settings.tsx` — صفحة إعدادات حقيقية بسيطة: Account info (email + role)، Theme toggle (dark/light)، Language، Sign out — وليست placeholder.
+- `privacy-policy.tsx` — صفحة محتوى ثابت بسياسة خصوصية موجزة (مقدمة + جمع البيانات + الاستخدام + المشاركة + الحقوق + التواصل).
+- `terms-of-service.tsx` — صفحة محتوى ثابت بشروط استخدام موجزة (القبول + الحساب + المحتوى + الاستخدام المحظور + إخلاء المسؤولية + التعديل).
 
-#### التفاعلات
-- ❤️ **إعجاب توجلي حقيقي** — نقرة لإعجاب، نقرة لإلغاء
-  - تحديث متفائل (Optimistic UI) — يستجيب فوراً
-  - يتبع حالة المستخدم الفعلية (هل أنا أعجبني أم لا)
-- 💬 **تعليقات قابلة للفتح/الإغلاق** بشكل inline
-  - كتابة + إرسال + حذف تعليقاتي
-  - عرض اسم وصورة المعلّق + التوقيت
-  - دعم Enter للإرسال
-- 🔗 **مشاركة** — نسخ الرابط للحافظة
+### 2. تحديث `src/components/AppSidebar.tsx`
+- إضافة قسم منفصل بعنوان **"More"** أسفل قائمة Navigation وقبل قسم Admin، يحتوي على:
+  ```
+  Notifications  [5]
+  Bookmarks
+  Settings
+  Privacy Policy
+  Terms of Service
+  ```
+- استخدام نفس نمط الأيقونات (`Bell, Bookmark, Settings, FileText, ScrollText`) ونفس مكوّن `Badge` المستخدم حالياً (tone="count" للرقم 5).
+- نفس نمط active state ونفس الـ Link.
 
-#### الناشر (Composer)
-- 📝 textarea أنيق مع عداد أحرف (max 2000)
-- 👤 صورة بروفايلي بجانب
-- ✨ زر نشر بـ gradient (سماوي → بنفسجي)
-- 📊 إحصائيات الأحرف بجانب أيقونة Sparkles
+### 3. لا حاجة لأي migration أو backend
+كل العناصر الجديدة إمّا صفحات محتوى ثابت أو placeholder، ولا تتطلب جداول أو RLS.
 
-#### Realtime ⚡
-- 🔔 إشعار في أعلى الصفحة "X منشور جديد — اضغط للتحديث"
-- 📡 يستمع لـ INSERT events على جدول posts عبر Supabase Realtime
-- 🔄 ضغط البانر → تحديث + scroll لأعلى
+## التحقق
+- `tsc --noEmit` للتأكد من أن `<Link to="...">` لكل المسارات الجديدة type-safe بعد توليد `routeTree.gen.ts` تلقائياً.
+- التأكد من ظهور القسم الجديد في الـ viewport الحالي (785px) — الشريط الجانبي مخفي تحت `md:` فلا تأثير على الموبايل.
 
-#### تجربة المستخدم
-- ⏳ Loader أنيق بألوان السماوي والبنفسجي
-- 💬 رسائل خطأ بالعربية مع toasts
-- 📱 متجاوب (Responsive) للموبايل والديسكتوب
-- 🎨 ثيم Diamond/Ice الموحد
-
-### 📁 الملفات الجديدة
-
-1. **`src/components/feed/PostCard.tsx`** — مكوّن المنشور المنفصل
-2. **`src/components/feed/CommentsSection.tsx`** — قسم التعليقات
-
-### 📝 الملفات المعدّلة
-
-1. **`src/routes/_authenticated/feed.tsx`** — صفحة الـ Feed كاملاً (إعادة كتابة احترافية)
-
-### 🗄️ التعديلات على قاعدة البيانات
-
-سأطلب migration لتفعيل **Realtime** على الجداول:
-```sql
-ALTER TABLE public.posts REPLICA IDENTITY FULL;
-ALTER TABLE public.likes REPLICA IDENTITY FULL;
-ALTER TABLE public.comments REPLICA IDENTITY FULL;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.posts, public.likes, public.comments;
-```
-
-### ⏭️ ما سيُؤجَّل للمرحلة التالية (المرحلة 2: Messages)
-
-- 🖼️ **رفع صور** يحتاج Storage bucket — سأضيفه عند بناء Stories لاحقاً
-- 🔔 إشعارات push عند الإعجاب/التعليق — مع نظام Notifications
-- 📈 خوارزمية Trending — تحتاج بيانات تفاعل أكثر
-
-### 🎬 النتيجة المتوقعة
-
-تغذية حية تشبه Twitter/X مع:
-- منشورات جديدة تظهر فوراً للجميع
-- إعجابات وتعليقات بدون تأخير
-- ثيم Diamond/Ice المميز
-- دعم كامل للعربية وRTL
-
----
-
-**هل توافق على البدء؟** سأنفذ كل ما سبق دفعة واحدة.
+## الملفات
+- إنشاء: `src/routes/_authenticated/bookmarks.tsx`, `settings.tsx`, `privacy-policy.tsx`, `terms-of-service.tsx`
+- تعديل: `src/components/AppSidebar.tsx`
