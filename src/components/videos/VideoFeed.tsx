@@ -104,9 +104,12 @@ export function VideoFeed() {
       liked_by_me: likedSet.has(p.id),
     })) as VideoPost[];
     setVideos(list);
-    if (!activeId && list[0]) setActiveId(list[0].id);
+    setActiveId((prev) => {
+      if (prev && list.some((v) => v.id === prev)) return prev;
+      return list[0]?.id ?? null;
+    });
     setLoading(false);
-  }, [user, activeId]);
+  }, [user]);
 
   useEffect(() => {
     load();
