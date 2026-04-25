@@ -212,6 +212,73 @@ function AISummary({ query }: { query: string }) {
   );
 }
 
+// ============ Creators (channels) ============
+function CreatorsResults({ q, limit }: { q: string; limit: number }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["search-creators", q, limit],
+    enabled: !!q,
+    queryFn: async () => {
+      // Find profiles matching query who have published video/short content
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, username, full_name, avatar_url, cover_url, bio, is_verified, followers_count, posts_count")
+        .or(`username.ilike.%${q}%,full_name.ilike.%${q}%,bio.ilike.%${q}%`)
+        .order("followers_count", { ascending: false })
+        .limit(limit * 3);
+      if (!profs?.length) return [];
+      const ids = profs.map((p) => p.id);
+      const { data: vids } = await supabase
+        .from("posts")
+        .select("user_id")
+        .in("user_id", ids)
+        .in("type", ["video", "short"]);
+      const videoCount = new Map<string, number>();
+      (vids ?? []).forEach((v) => videoCount.set(v.user_id, (videoCount.get(v.user_id) ?? 0) + 1));
+      return profs
+        .map((p) => ({ ...p, video_count: videoCount.get(p.id) ?? 0 }))
+        .filter((p) => p.video_count > 0)
+        .slice(0, limit);
+    },
+  });
+  return (
+    <Section title="قنوات / Creators" icon={Video} count={data?.length} loading={isLoading}>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {data?.map((c) => (
+          <Link
+            key={c.id}
+            to="/profile"
+            search={{ user: c.username } as any}
+            className="block group"
+          >
+            <Card className="overflow-hidden hover:border-cyan-glow/40 transition">
+              <div className="h-20 bg-gradient-to-br from-cyan-glow/20 to-violet-glow/20 relative">
+                {c.cover_url && <img src={c.cover_url} alt="" className="w-full h-full object-cover" />}
+              </div>
+              <div className="p-3 flex items-start gap-3 -mt-8">
+                <Avatar className="h-14 w-14 border-2 border-background">
+                  <AvatarImage src={c.avatar_url ?? undefined} />
+                  <AvatarFallback>{c.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0 pt-8">
+                  <div className="font-semibold flex items-center gap-1 truncate">
+                    {c.full_name ?? c.username}
+                    {c.is_verified && <BadgeCheck className="h-4 w-4 text-cyan-glow shrink-0" />}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">@{c.username}</div>
+                  <div className="text-xs mt-1 text-cyan-glow">
+                    {c.followers_count} متابع · {c.video_count} فيديو
+                  </div>
+                </div>
+              </div>
+              {c.bio && <p className="px-3 pb-3 text-xs text-muted-foreground line-clamp-2">{c.bio}</p>}
+            </Card>
+          </Link>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 // ============ People ============
 function PeopleResults({ q, limit }: { q: string; limit: number }) {
   const { data, isLoading } = useQuery({
@@ -230,16 +297,21 @@ function PeopleResults({ q, limit }: { q: string; limit: number }) {
     <Section title="أشخاص" icon={User} count={data?.length} loading={isLoading}>
       <div className="grid gap-2 sm:grid-cols-2">
         {data?.map((p) => (
-          <Card key={p.id} className="p-3 flex items-center gap-3 hover:border-cyan-glow/40 transition">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={p.avatar_url ?? undefined} />
-              <AvatarFallback>{p.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="font-semibold truncate">{p.full_name ?? p.username}</div>
-              <div className="text-xs text-muted-foreground truncate">@{p.username} · {p.followers_count} متابع</div>
-            </div>
-          </Card>
+          <Link key={p.id} to="/profile" search={{ user: p.username } as any} className="block">
+            <Card className="p-3 flex items-center gap-3 hover:border-cyan-glow/40 transition">
+              <Avatar className="h-12 w-12">
+                <AvatarImage src={p.avatar_url ?? undefined} />
+                <AvatarFallback>{p.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold truncate flex items-center gap-1">
+                  {p.full_name ?? p.username}
+                  {p.is_verified && <BadgeCheck className="h-3 w-3 text-cyan-glow" />}
+                </div>
+                <div className="text-xs text-muted-foreground truncate">@{p.username} · {p.followers_count} متابع</div>
+              </div>
+            </Card>
+          </Link>
         ))}
       </div>
     </Section>
