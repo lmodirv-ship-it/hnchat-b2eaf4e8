@@ -54,6 +54,7 @@ function WatchYtPage() {
   });
   const [liking, setLiking] = useState(false);
   const [bookmarking, setBookmarking] = useState(false);
+  const [publishing, setPublishing] = useState(false);
 
   const { data: meta, isLoading } = useQuery({
     queryKey: ["yt-meta", videoId],
