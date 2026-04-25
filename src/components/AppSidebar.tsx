@@ -26,6 +26,7 @@ type NavItem = {
 
 const NAV: readonly NavItem[] = [
   { to: "/feed", label: "Home Feed", icon: Home },
+  { to: "/reels", label: "Reels", icon: Film, badge: { text: "HOT", tone: "live" } },
   { to: "/messages", label: "Messages", icon: MessageCircle, badge: { text: "12", tone: "count" } },
   { to: "/videos", label: "Videos & Live", icon: Video, badge: { text: "3", tone: "count" } },
   { to: "/live", label: "Live Stream", icon: Radio, badge: { text: "LIVE", tone: "live" } },

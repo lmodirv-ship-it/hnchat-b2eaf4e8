@@ -22,6 +22,7 @@ import { Route as AuthenticatedStoriesRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedShortVideosRouteImport } from './routes/_authenticated/short-videos'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
+import { Route as AuthenticatedReelsRouteImport } from './routes/_authenticated/reels'
 import { Route as AuthenticatedPushRouteImport } from './routes/_authenticated/push'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedPrivacyPolicyRouteImport } from './routes/_authenticated/privacy-policy'
@@ -129,6 +130,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
 const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedReelsRoute = AuthenticatedReelsRouteImport.update({
+  id: '/reels',
+  path: '/reels',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedPushRoute = AuthenticatedPushRouteImport.update({
@@ -395,6 +401,7 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/push': typeof AuthenticatedPushRoute
+  '/reels': typeof AuthenticatedReelsRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
@@ -451,6 +458,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/push': typeof AuthenticatedPushRoute
+  '/reels': typeof AuthenticatedReelsRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
@@ -511,6 +519,7 @@ export interface FileRoutesById {
   '/_authenticated/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/push': typeof AuthenticatedPushRoute
+  '/_authenticated/reels': typeof AuthenticatedReelsRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/short-videos': typeof AuthenticatedShortVideosRoute
@@ -569,6 +578,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/profile'
     | '/push'
+    | '/reels'
     | '/search'
     | '/settings'
     | '/short-videos'
@@ -625,6 +635,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/profile'
     | '/push'
+    | '/reels'
     | '/search'
     | '/settings'
     | '/short-videos'
@@ -684,6 +695,7 @@ export interface FileRouteTypes {
     | '/_authenticated/privacy-policy'
     | '/_authenticated/profile'
     | '/_authenticated/push'
+    | '/_authenticated/reels'
     | '/_authenticated/search'
     | '/_authenticated/settings'
     | '/_authenticated/short-videos'
@@ -812,6 +824,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/reels': {
+      id: '/_authenticated/reels'
+      path: '/reels'
+      fullPath: '/reels'
+      preLoaderRoute: typeof AuthenticatedReelsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/push': {
@@ -1209,6 +1228,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPrivacyPolicyRoute: typeof AuthenticatedPrivacyPolicyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedPushRoute: typeof AuthenticatedPushRoute
+  AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedShortVideosRoute: typeof AuthenticatedShortVideosRoute
@@ -1245,6 +1265,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPrivacyPolicyRoute: AuthenticatedPrivacyPolicyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedPushRoute: AuthenticatedPushRoute,
+  AuthenticatedReelsRoute: AuthenticatedReelsRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedShortVideosRoute: AuthenticatedShortVideosRoute,
