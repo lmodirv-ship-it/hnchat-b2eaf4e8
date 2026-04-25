@@ -1,84 +1,122 @@
-# خطة: تفعيل جميع الصفحات بنية قابلة للتوسع
+# خطة: Super App موحّد (Facebook + Instagram + TikTok + YouTube + Google)
 
-## التحدي
-11 صفحة placeholder حالياً تعرض "Coming Soon" فقط. المطلوب تفعيل وظيفي حقيقي مع بنية تحتية تجعل التوسع المستقبلي سهلاً.
+## الرؤية
+تحويل hnChat الحالي إلى **منصة موحّدة معزولة** تجمع أفضل تجارب الشبكات الاجتماعية الكبرى في تجربة واحدة سلسة، دون الاعتماد على أي خدمة خارجية. كل المحتوى والبيانات والتفاعل داخل النظام (Self-hosted Super App).
 
-## فلسفة الحل: "Generic Items + Categories" قابلة للتوسع
-بدل بناء 11 جدولاً منفصلاً، أُنشئ **بنية تحتية موحّدة** تخدم كل الصفحات:
+## ما هو موجود فعليًا (الأساس القوي)
+لديك 36 صفحة مفعّلة + قاعدة بيانات كاملة:
+- ✅ **Feed + Posts + Likes + Comments** (Facebook-like)
+- ✅ **Stories** (Instagram-like) — مع bucket تخزين
+- ✅ **Videos + Short Videos** (TikTok/YouTube-like) — مع VideoFeed
+- ✅ **Live Stream + Voice Rooms** (Twitch/Clubhouse)
+- ✅ **Messages + Conversations** (Messenger/WhatsApp)
+- ✅ **Groups + Pages** (Facebook Groups)
+- ✅ **Marketplace + hnShop** (Facebook Marketplace)
+- ✅ **AI Hub + AI Assistant** (Google Gemini-like)
+- ✅ **Profile + Bookmarks + Notifications**
 
-### 1. جداول قاعدة بيانات قابلة للتوسع (3 جداول فقط)
-- **`catalog_items`** — جدول موحّد لكل ما يُعرض كـ"بطاقة": apps, games, shop products, AI tools, push templates, email templates...
-  - `id, type (enum), title, description, image_url, link_url, metadata jsonb, price, currency, rating, downloads_count, is_featured, is_active, sort_order, created_by, created_at`
-  - `type` enum: `app, game, shop_product, ad_template, push_template, email_template, ai_tool, bookmark`
-  - يخدم: hnShop, App Store, Games, AI Assistant catalog, Ads & Promo templates, Push templates, Email templates
-- **`user_bookmarks`** — لربط المستخدمين بأي محتوى (posts, products, videos, catalog_items)
-  - `id, user_id, item_type, item_id, folder, created_at`
-  - يخدم: Bookmarks
-- **`user_metrics`** — لتخزين إحصاءات قابلة للعرض (growth, monitoring)
-  - `id, user_id, metric_key, value numeric, dimension text, recorded_at`
-  - يخدم: Growth Analytics, Monitoring Pro
+## ما سيُضاف لجعلها تجربة موحّدة حقيقية
 
-كلها مع RLS كاملة:
-- `catalog_items`: قراءة عامة للنشط؛ كتابة للمالك أو owner
-- `user_bookmarks`: كل مستخدم يرى/يدير الخاص به
-- `user_metrics`: كل مستخدم يرى الخاص به + admin يرى الكل
+### 1. الصفحة الرئيسية الموحّدة (/)
+**Hub رئيسي** يجمع كل شيء في "موجز ذكي" مثل الصفحة الرئيسية لـ Facebook لكن بأقسام:
+- **Stories rail** (Instagram) في الأعلى
+- **Live now** شريط أفقي (TikTok Live)
+- **Smart Feed** يدمج: منشورات + reels قصيرة بين كل 3 منشورات + اقتراحات مجموعات + إعلانات
+- **Trending sidebar** (Twitter-style) — هاشتاقات + أشخاص للمتابعة
 
-### 2. مكونات مشتركة (3 مكونات)
-- **`<CatalogGrid type="..." />`** — يجلب من `catalog_items` بنوع معيّن، يعرض شبكة بطاقات بحث/فلتر
-- **`<CatalogCard />`** — بطاقة موحّدة (صورة، عنوان، وصف، سعر/تحميل، CTA)
-- **`<MetricsDashboard userId="..." />`** — لوحة إحصاءات تستهلك `user_metrics`
+### 2. تجربة TikTok/Reels منغمسة (/reels)
+شاشة كاملة عمودية مع تمرير عمودي (snap scroll):
+- فيديو ملء الشاشة + أزرار جانبية (إعجاب/تعليق/مشاركة/متابعة)
+- تشغيل تلقائي + كتم/فك بنقرة
+- الانتقال للفيديو التالي بـ swipe
+- يستخدم جدول `posts` مع `type='video'`
 
-### 3. تفعيل الصفحات الـ 11
+### 3. منصة فيديوهات شبيهة بـ YouTube (/watch)
+- **مشغّل كبير** + معلومات الفيديو + وصف
+- **قائمة Up Next** على اليمين
+- **تعليقات** أسفل الفيديو
+- زر **Subscribe** (يستخدم نظام `follows` الحالي)
+- صفحة قناة منفصلة `/channel/$username`
 
-| الصفحة | التفعيل |
-|---|---|
-| **hnshop** | `<CatalogGrid type="shop_product" />` + بحث + فلتر فئات + Empty state حقيقي |
-| **app-store** | `<CatalogGrid type="app" />` + tabs (مثبّت/مقترح/جديد) |
-| **games** | `<CatalogGrid type="game" />` + tabs (mine/popular) |
-| **ai-assistant** | محادثة AI حقيقية مع `lovable-ai` (تستفيد من edge function `ai-chat` الموجود) + سجل محادثات في sessionStorage |
-| **ads-promo** | `<CatalogGrid type="ad_template" />` لقوالب جاهزة + زر "أنشئ من قالب" يفتح dialog من Ads Manager الموجود |
-| **push** | `<CatalogGrid type="push_template" />` + form لإرسال إشعار test (يكتب في `notifications` للـ user الحالي فقط) |
-| **email-dashboard** | `<CatalogGrid type="email_template" />` + إحصائيات وهمية مع المتغيّر `user_metrics` |
-| **bookmarks** | يقرأ من `user_bookmarks` بـ tabs لكل `item_type`، مع زر إزالة |
-| **growth** | `<MetricsDashboard />` يقرأ من `user_metrics`: متابعون، إعجابات، مشاهدات، نمو 7/30 يوم؛ مع رسم recharts |
-| **monitoring** | يعرض حالة الخدمات (DB ping، last sign-in من `auth.users` عبر RPC) + uptime من `user_metrics` |
-| **short-videos** | يعيد استخدام `<VideoFeed />` الموجود مع فلتر `posts.type = 'short'` بدل `'video'` |
+### 4. بحث Google-like موحّد (/search)
+محرّك بحث واحد لكل شيء:
+- **All / People / Posts / Videos / Groups / Products** كتبويبات
+- نتائج فورية مع debounce
+- اقتراحات سريعة
+- بحث AI عن إجابات (يستخدم Lovable AI)
 
-### 4. بيانات افتتاحية (seed)
-عبر `INSERT` بسيط: ~20-30 صف في `catalog_items` موزّعة على الأنواع لتعطي للصفحات محتوى يظهر فوراً.
+### 5. Profile موحّد كـ "كل شيء عن المستخدم"
+بناء على `/profile` الحالي، إضافة تبويبات على غرار Instagram/TikTok:
+- **Posts** | **Reels** | **Videos** | **Stories Highlights** | **About**
+- شبكة 3×N للمنشورات (Instagram grid)
+- عدّاد متابعين/متابعة قابل للنقر
 
-## التنفيذ بدفعتين
+### 6. صندوق إنشاء عام (Universal Composer)
+زر عائم `+` في كل مكان يفتح modal بـ تبويبات:
+- **Post** (نص + صور)
+- **Story** (صورة سريعة 24س)
+- **Reel** (فيديو قصير)
+- **Live** (بدء بث)
+- **Marketplace** (منتج)
+الكل يُحفظ في الجداول الموجودة بدون تكرار.
 
-### الدفعة A — البنية التحتية + 5 صفحات
-1. Migration: enum `catalog_item_type` + 3 جداول + RLS + triggers `updated_at`
-2. Seed بيانات تجريبية
-3. مكونات: `CatalogGrid`, `CatalogCard`, `MetricsDashboard`
-4. تفعيل: `hnshop`, `app-store`, `games`, `ads-promo`, `bookmarks`
+### 7. اكتشاف موحّد (/explore — تحسين)
+شبكة Pinterest/Instagram Explore: مزيج بصري من Reels + صور + Live thumbnails.
 
-### الدفعة B — 6 صفحات متبقية
-5. تفعيل: `short-videos`, `ai-assistant`, `push`, `email-dashboard`, `growth`, `monitoring`
-6. حذف import `ComingSoon` من الصفحات المُفعّلة (يبقى المكون لاستخدام مستقبلي)
-7. `tsc --noEmit` للتحقق
+### 8. شريط حالة عام (Top Bar)
+في كل صفحة: شعار + بحث Google-style + إشعارات + رسائل + Avatar — تجربة واحدة متّسقة.
 
-## الملفات
+## التغييرات التقنية
 
-**جديد**:
-- `supabase/migrations/<ts>_catalog_metrics_bookmarks.sql`
-- `src/components/catalog/CatalogGrid.tsx`
-- `src/components/catalog/CatalogCard.tsx`
-- `src/components/catalog/MetricsDashboard.tsx`
-- `src/hooks/useCatalog.ts` (TanStack Query hook موحّد)
+### ملفات جديدة:
+- `src/routes/index.tsx` — Hub الرئيسي الموحّد (Smart Feed)
+- `src/routes/_authenticated/reels.tsx` — TikTok-style full-screen
+- `src/routes/_authenticated/watch.$videoId.tsx` — YouTube-style player page
+- `src/routes/_authenticated/channel.$username.tsx` — صفحة قناة
+- `src/components/composer/UniversalComposer.tsx` — صندوق إنشاء عام
+- `src/components/composer/FloatingComposeButton.tsx` — زر عائم
+- `src/components/layout/TopBar.tsx` — شريط علوي موحّد
+- `src/components/feed/SmartFeed.tsx` — موجز يمزج أنواع متعددة
+- `src/components/reels/ReelsViewer.tsx` — مشغّل عمودي full-screen
+- `src/components/search/UnifiedSearch.tsx` — بحث ذكي موحّد
 
-**تعديل** (11 ملف صفحة):
-- جميع ملفات الـ placeholder المذكورة أعلاه
+### ملفات معدّلة:
+- `src/routes/_authenticated/profile.tsx` — تبويبات Instagram-style
+- `src/routes/_authenticated/explore.tsx` — شبكة بصرية
+- `src/routes/_authenticated/search.tsx` — Google-like
+- `src/components/AppSidebar.tsx` — تنظيم وإضافة Reels/Watch
+- `src/routes/__root.tsx` أو layout — إضافة TopBar + FloatingCompose
 
-## ما لن أفعله
-- لن أبني نظام مدفوعات حقيقي لـ hnShop (يحتاج Stripe — يمكن إضافته لاحقاً)
-- لن أبني تكامل Push API حقيقي للمتصفح (الإشعار يُحفظ في DB فقط)
-- لن أبني نظام upload فيديو جديد لـ short-videos (يعيد استخدام `videos` bucket والمنشورات)
-- لن أبني تكامل بريد حقيقي (email-dashboard للقوالب والإحصاءات فقط)
+### قاعدة البيانات
+**لا حاجة لجداول جديدة** — البنية الحالية كافية:
+- `posts.type` يميز بين post/video/short
+- `stories` للقصص
+- `follows` للاشتراكات
+- `catalog_items` للمنتجات والتطبيقات
+- ستضاف فقط: عمود `posts.thumbnail_url` (اختياري) لمعاينات الفيديو
 
-كل هذه يمكن إضافتها لاحقاً فوق نفس البنية بدون تغيير هيكلي.
+### التنفيذ على مراحل
+نظرًا لحجم العمل، سأنفّذ على **3 جولات** في رسائل متتالية:
 
-## التوسع المستقبلي
-أي صفحة جديدة تحتاج "كتالوج" تستخدم `<CatalogGrid type="new_type" />` — يكفي إضافة قيمة للـ enum وصفّ بيانات. أي إحصاءات جديدة تكتب في `user_metrics` بـ `metric_key` جديد.
+**الجولة 1 (هذه):**
+- TopBar موحّد + UniversalComposer + FloatingButton
+- Smart Feed على الصفحة الرئيسية
+- صفحة Reels (TikTok)
+
+**الجولة 2:**
+- صفحة Watch (YouTube) + Channel
+- بحث موحّد محسّن
+- تحسين Profile بتبويبات
+
+**الجولة 3:**
+- Explore بشبكة بصرية
+- ربط الإشعارات بكل التفاعلات
+- صقل التصميم والانتقالات
+
+## الأمان والصلاحيات
+- كل المحتوى يستخدم RLS الموجود (ملكية المستخدم لمنشوراته)
+- الإجراءات الإدارية تستخدم `useAuth().isAdmin/isOwner`
+- لا تكامل مع APIs خارجية — كل شيء داخلي
+
+## النتيجة
+بعد الجولات الثلاث: تطبيق موحّد، هوية بصرية واحدة، يمكن للمستخدم التنقل بين تجربة Facebook (Feed/Groups) → Instagram (Stories/Reels) → TikTok (Reels Viewer) → YouTube (Watch/Channels) → Google (Search) كلها داخل **app واحد معزول** بدون مغادرة الموقع.
