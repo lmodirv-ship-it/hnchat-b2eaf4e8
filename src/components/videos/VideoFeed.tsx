@@ -315,13 +315,16 @@ function VideoCard({
     }
   }, [positionKey, video.media_urls]);
 
-  // Save current position periodically while playing
+  // Save current position periodically while playing + update progress
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const onTime = () => {
       if (el.currentTime > 0) {
         sessionStorage.setItem(positionKey, String(el.currentTime));
+      }
+      if (el.duration > 0) {
+        setProgress((el.currentTime / el.duration) * 100);
       }
     };
     el.addEventListener("timeupdate", onTime);
