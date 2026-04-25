@@ -27,9 +27,13 @@ type Result = { channel: YtChannel; videos: YtVideo[] };
 type HistoryEntry = { url: string; title: string; avatar: string | null; at: number };
 
 function YoutubePage() {
+  const { user } = useAuth();
   const [url, setUrl] = useState("");
   const [result, setResult] = useState<Result | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
+  const [addingId, setAddingId] = useState<string | null>(null);
+  const [bulkAdding, setBulkAdding] = useState(false);
 
   useEffect(() => {
     try {
