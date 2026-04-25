@@ -1,0 +1,31 @@
+User-agent: *
+Allow: /
+
+# Disallow auth and admin pages
+Disallow: /sign-up-login
+Disallow: /admin/
+Disallow: /owner/
+
+# Allow all major search engines and social crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+Sitemap: https://www.hnchat.net/sitemap.xml

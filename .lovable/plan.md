@@ -1,88 +1,124 @@
-## المشكلة
+# خطة تسريع انتشار hnChat
 
-`bun install` فشل لأنه لا يوجد `package.json` في `C:\hn\site`. هذا يعني أحد ثلاثة احتمالات:
-
-1. ملف الـ ZIP لم يُفك بعد
-2. ملف الـ ZIP فُك في مكان آخر (مثل `C:\hn` مباشرة وليس `C:\hn\site`)
-3. اسم المجلد داخل الـ ZIP مختلف (مثلاً `lovable-site-complete` بدل `site`)
+سنُنفّذ 5 ميزات بالترتيب — كل ميزة منها كاملة ومستقلة وتزيد فرص النمو.
 
 ---
 
-## خطوات التشخيص (نفّذها بالترتيب في PowerShell)
+## 1. أساس SEO (الظهور في جوجل ومشاركات السوشيال) 🔍
 
-### 1. اعرف ما الموجود فعلاً في `C:\hn`
+**الهدف**: جوجل يفهرس كل صفحة، ومشاركات الروابط على واتساب/فيسبوك/تويتر تظهر بصورة جذابة.
 
-```powershell
-cd C:\hn
-dir
-```
-
-أرسل لي النتيجة. سأعرف منها:
-- هل ملف الـ ZIP موجود؟
-- هل تم فكه؟
-- ما الاسم الفعلي للمجلد؟
-
-### 2. لو رأيت ملف ZIP فقط (لم يُفك)
-
-```powershell
-cd C:\hn
-Expand-Archive -Path .\lovable-site-complete.zip -DestinationPath .\site -Force
-cd site
-dir
-```
-
-ثم تأكد من رؤية `package.json` في القائمة.
-
-### 3. لو رأيت مجلداً باسم آخر (مثل `lovable-site-complete`)
-
-```powershell
-cd C:\hn\lovable-site-complete
-dir
-```
-
-لو ظهر `package.json` هنا، فهذا هو المجلد الصحيح. كمل العمل من داخله:
-
-```powershell
-bun install
-bun run dev
-```
-
-### 4. لو الملفات فُكت داخل مجلد فرعي إضافي
-
-أحياناً ZIP يحتوي مجلد داخل مجلد، مثل:
-`C:\hn\site\lovable-site-complete\package.json`
-
-تحقق:
-
-```powershell
-cd C:\hn\site
-dir
-```
-
-لو رأيت مجلداً واحداً فقط بدون `package.json`، ادخله:
-
-```powershell
-cd C:\hn\site\<اسم-المجلد>
-dir
-bun install
-```
+**ما سيتم تنفيذه:**
+- `public/robots.txt` — يسمح للزواحف بفهرسة الموقع
+- `src/routes/sitemap[.]xml.tsx` — sitemap ديناميكي يحوي كل المنشورات والصفحات العامة من قاعدة البيانات
+- صورة OG افتراضية (`public/og-image.png`) — معاينة جذابة لمشاركات الروابط
+- إضافة `og:image` و `twitter:card` و `canonical` للصفحة الرئيسية
+- صفحات منفصلة بـ `head()` خاص بكل واحدة: `/about`, `/explore`, `/marketplace` (إن لم تكن موجودة)
+- JSON-LD منظم (Schema.org) من نوع `WebApplication` و `Organization` في الجذر
+- meta tags خاصة بالعربية (`og:locale: ar_AR`)
 
 ---
 
-## الإجراء المطلوب منك الآن
+## 2. نظام الإحالة (Referral) 🎁
 
-نفّذ **الخطوة 1 فقط** وأرسل لي ناتج `dir` لمجلد `C:\hn`. بناءً على ذلك سأعطيك الأمر التالي بالضبط.
+**الهدف**: كل مستخدم يدعو أصدقاءه ويحصل على مكافأة → نمو فيروسي.
+
+**قاعدة البيانات (migration):**
+- جدول `referrals`: `referrer_id`, `referred_id`, `created_at`, `reward_granted`
+- إضافة عمود `referral_code` (نص فريد قصير) لجدول `profiles`
+- trigger يولّد `referral_code` تلقائياً عند إنشاء أي ملف شخصي
+- عداد `referrals_count` في `profiles`
+
+**الواجهة:**
+- صفحة `/invite` تعرض:
+  - رابط الإحالة الشخصي مع زر نسخ
+  - QR code للرابط
+  - زر مشاركة على واتساب/تيليجرام/تويتر مباشرة
+  - عداد عدد الذين دعوتهم
+  - leaderboard لأكثر 10 مستخدمين دعوة
+- في صفحة التسجيل: قبول `?ref=CODE` من الرابط وحفظه
+- بعد التسجيل: ربط المستخدم الجديد بمن دعاه + منح badge "مدعو من X"
+
+**المكافآت المقترحة:**
+- بعد 5 دعوات: badge "Influencer"
+- بعد 10: badge "Ambassador" + تمييز في الملف
+- بعد 25: badge "VIP" + شارة ذهبية
 
 ---
 
-## ملاحظة تقنية
+## 3. PWA (تطبيق قابل للتثبيت) 📲
 
-ملف المشروع المضغوط الذي حُمّل سابقاً يجب أن يحتوي على هذه الملفات في الجذر:
-- `package.json`
-- `bun.lockb` أو `bun.lock`
-- `vite.config.ts`
-- `src/`
-- `supabase/`
-- `.env`
+**الهدف**: الزوار يثبّتون الموقع كتطبيق على الهاتف بضغطة → عودة مستمرة.
 
-لو أي من هذه ناقص، سنحتاج إعادة تحميل الملف.
+**ما سيتم:**
+- تحديث `manifest.webmanifest` كاملاً (الاسم، الأيقونات، الألوان، الاختصارات)
+- إضافة Service Worker للتخزين المؤقت (يعمل أوفلاين جزئياً)
+- شاشة splash مخصصة
+- prompt تلقائي "ثبّت hnChat على هاتفك" بعد ثاني زيارة
+- اختصارات سريعة (shortcuts) في القائمة: Feed, Messages, Marketplace
+
+---
+
+## 4. نظام Badges & Leaderboard 🏆
+
+**الهدف**: تحفيز المستخدمين على النشاط اليومي → engagement أعلى.
+
+**قاعدة البيانات:**
+- جدول `badges`: `id`, `name`, `description`, `icon`, `criteria`
+- جدول `user_badges`: `user_id`, `badge_id`, `earned_at`
+- function `check_and_award_badges(user_id)` تُشغّل عند كل نشاط
+
+**Badges جاهزة:**
+- "First Post", "10 Posts", "100 Posts"
+- "First Like", "100 Likes Received"
+- "Early Adopter" (لأول 1000 مستخدم)
+- "Verified", "Influencer", "Ambassador"
+- "Streak 7" (نشاط 7 أيام متتالية)
+
+**الواجهة:**
+- عرض الـ badges في الملف الشخصي
+- صفحة `/leaderboard` تعرض:
+  - أكثر المستخدمين منشورات
+  - أكثر إعجاباً
+  - أكثر متابعين
+  - تحديث أسبوعي
+
+---
+
+## 5. إشعارات Push 🔔
+
+**الهدف**: إعادة الزوار للموقع تلقائياً.
+
+**ما سيتم:**
+- تفعيل Web Push API في الـ Service Worker
+- جدول `push_subscriptions` لتخزين اشتراكات المستخدمين
+- زر "تفعيل الإشعارات" في الإعدادات
+- Edge function لإرسال الإشعارات عند:
+  - رسالة جديدة
+  - تعليق على منشورك
+  - إعجاب جديد
+  - متابع جديد
+- إعدادات تفصيلية يختار منها المستخدم نوع الإشعارات
+
+---
+
+## ترتيب التنفيذ
+
+سأنفذ كل خطوة وأخبرك عند الانتهاء قبل الانتقال للتالية، حتى تتمكن من المراجعة.
+
+1. ✅ **SEO** (سريعة - بدون قاعدة بيانات)
+2. ✅ **Referral** (متوسطة - migration + صفحة)
+3. ✅ **PWA** (سريعة - service worker)
+4. ✅ **Badges + Leaderboard** (متوسطة - migration + صفحات)
+5. ✅ **Push Notifications** (الأطول - VAPID keys + edge function)
+
+---
+
+## ملاحظة مهمة
+
+بعد تنفيذ كل خطوة:
+- اضغط **Publish → Update** لتطبيق التغييرات على الموقع المباشر
+- بعد SEO: سجّل الموقع في **Google Search Console** وأرسل sitemap
+- بعد Push: سيُطلب منك تأكيد إضافة VAPID keys (مفاتيح أمنية لإشعارات Push)
+
+هل توافق على البدء؟
