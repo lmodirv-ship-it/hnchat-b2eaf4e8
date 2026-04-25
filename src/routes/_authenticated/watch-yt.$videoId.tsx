@@ -23,29 +23,35 @@ function WatchYtPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [postId, setPostId] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
 
   const { data: meta, isLoading } = useQuery({
     queryKey: ["yt-meta", videoId],
     queryFn: () => getYoutubeVideoMeta({ data: { videoId } }),
   });
 
-  // Create or fetch a "post" record so users can comment on this YT video inside our app
+  // Look up if this video has already been added as a post (to enable comments + add state)
   useEffect(() => {
-    if (!user || !meta) return;
+    if (!user) return;
     let cancelled = false;
     (async () => {
       const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
-      // Look up by media_urls containing this URL
       const { data: existing } = await supabase
         .from("posts")
         .select("id")
         .contains("media_urls", [ytUrl])
         .maybeSingle();
       if (cancelled) return;
-      if (existing) {
-        setPostId(existing.id);
-        return;
-      }
+      if (existing) setPostId(existing.id);
+    })();
+    return () => { cancelled = true; };
+  }, [user?.id, videoId]);
+
+  const addToSite = async () => {
+    if (!user || !meta) return;
+    setAdding(true);
+    try {
+      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const { data: created, error } = await supabase
         .from("posts")
         .insert({
@@ -56,16 +62,15 @@ function WatchYtPage() {
         })
         .select("id")
         .single();
-      if (cancelled) return;
-      if (error) {
-        console.error("create yt post failed", error);
-        toast.error("تعذّر تفعيل التعليقات لهذا الفيديو");
-      } else if (created) {
-        setPostId(created.id);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [user?.id, meta?.title, videoId]);
+      if (error) throw error;
+      setPostId(created.id);
+      toast.success("تمت إضافة الفيديو إلى الموقع");
+    } catch (e: any) {
+      toast.error(e.message || "تعذّرت الإضافة");
+    } finally {
+      setAdding(false);
+    }
+  };
 
   if (isLoading) {
     return (
