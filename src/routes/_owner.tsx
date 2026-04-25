@@ -15,7 +15,8 @@ export const Route = createFileRoute("/_owner")({
   component: OwnerShell,
 });
 
-const NAV = [
+type NavItem = { to: string; label: string; icon: any; exact?: boolean };
+const NAV: NavItem[] = [
   { to: "/owner-x9k2m7", label: "Mission Control", icon: Crown, exact: true },
   { to: "/owner-x9k2m7/users", label: "User Operations", icon: Users },
   { to: "/owner-x9k2m7/content", label: "Content & Moderation", icon: FileText },
@@ -27,7 +28,7 @@ const NAV = [
   { to: "/owner-x9k2m7/audit", label: "Audit Logs", icon: Activity },
   { to: "/owner-x9k2m7/finance", label: "Finance", icon: DollarSign },
   { to: "/owner-x9k2m7/settings", label: "System Settings", icon: Settings },
-] as const;
+];
 
 function OwnerShell() {
   const { isOwner, isLoading, signOut, user } = useAuth();
