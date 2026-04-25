@@ -13,7 +13,7 @@ function AiHubPage() {
   return (
     <PageShell
       title="AI Hub"
-      subtitle="مساعد ذكي + توليد صور بقدرات Lovable AI"
+      subtitle="مساعد ذكي + توليد صور بقدرات الذكاء الاصطناعي"
     >
       <Tabs defaultValue="chat" className="w-full">
         <TabsList className="bg-ice-card border border-ice-border mb-4">
