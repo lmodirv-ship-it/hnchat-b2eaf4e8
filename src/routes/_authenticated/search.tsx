@@ -448,13 +448,15 @@ function ProductsResults({ q, limit }: { q: string; limit: number }) {
     <Section title="منتجات" icon={ShoppingBag} count={data?.length} loading={isLoading}>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {data?.map((p) => (
-          <Card key={p.id} className="p-2 hover:border-cyan-glow/40 transition">
-            <div className="aspect-square rounded bg-muted overflow-hidden mb-2">
-              {p.images?.[0] && <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover" />}
-            </div>
-            <div className="text-xs font-medium line-clamp-1">{p.title}</div>
-            <div className="text-sm font-bold text-cyan-glow">{p.price} {p.currency}</div>
-          </Card>
+          <Link key={p.id} to="/marketplace" search={{ product: p.id } as any}>
+            <Card className="p-2 hover:border-cyan-glow/40 transition">
+              <div className="aspect-square rounded bg-muted overflow-hidden mb-2">
+                {p.images?.[0] && <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover" />}
+              </div>
+              <div className="text-xs font-medium line-clamp-1">{p.title}</div>
+              <div className="text-sm font-bold text-cyan-glow">{p.price} {p.currency}</div>
+            </Card>
+          </Link>
         ))}
       </div>
     </Section>
