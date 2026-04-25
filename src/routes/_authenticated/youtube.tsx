@@ -70,8 +70,8 @@ function YoutubePage() {
           <Youtube className="h-7 w-7 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold">استيراد قناة YouTube</h1>
-          <p className="text-sm text-muted-foreground">ألصق رابط القناة وستظهر آخر فيديوهاتها (حتى 15 فيديو من الـ RSS الرسمي).</p>
+          <h1 className="text-2xl font-bold">استيراد قناة فيديو</h1>
+          <p className="text-sm text-muted-foreground">ألصق رابط القناة وستظهر آخر فيديوهاتها داخل التطبيق.</p>
         </div>
       </header>
 
@@ -136,13 +136,6 @@ function YoutubePage() {
               )}
               <p className="text-xs text-muted-foreground mt-1">{result.videos.length} فيديو</p>
             </div>
-            <a
-              href={`https://www.youtube.com/channel/${result.channel.channelId}`}
-              target="_blank" rel="noopener noreferrer"
-              className="text-xs text-red-500 hover:underline"
-            >
-              فتح في YouTube ↗
-            </a>
           </Card>
 
           {result.videos.length === 0 ? (

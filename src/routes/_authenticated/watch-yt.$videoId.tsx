@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CommentsSection } from "@/components/feed/CommentsSection";
-import { ArrowLeft, ExternalLink, Youtube } from "lucide-react";
+import { ArrowLeft, Plus, Check, Loader2 } from "lucide-react";
 import { getYoutubeVideoMeta } from "@/utils/youtube.functions";
 import { toast } from "sonner";
 
@@ -23,29 +23,35 @@ function WatchYtPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [postId, setPostId] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
 
   const { data: meta, isLoading } = useQuery({
     queryKey: ["yt-meta", videoId],
     queryFn: () => getYoutubeVideoMeta({ data: { videoId } }),
   });
 
-  // Create or fetch a "post" record so users can comment on this YT video inside our app
+  // Look up if this video has already been added as a post (to enable comments + add state)
   useEffect(() => {
-    if (!user || !meta) return;
+    if (!user) return;
     let cancelled = false;
     (async () => {
       const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
-      // Look up by media_urls containing this URL
       const { data: existing } = await supabase
         .from("posts")
         .select("id")
         .contains("media_urls", [ytUrl])
         .maybeSingle();
       if (cancelled) return;
-      if (existing) {
-        setPostId(existing.id);
-        return;
-      }
+      if (existing) setPostId(existing.id);
+    })();
+    return () => { cancelled = true; };
+  }, [user?.id, videoId]);
+
+  const addToSite = async () => {
+    if (!user || !meta) return;
+    setAdding(true);
+    try {
+      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
       const { data: created, error } = await supabase
         .from("posts")
         .insert({
@@ -56,16 +62,15 @@ function WatchYtPage() {
         })
         .select("id")
         .single();
-      if (cancelled) return;
-      if (error) {
-        console.error("create yt post failed", error);
-        toast.error("تعذّر تفعيل التعليقات لهذا الفيديو");
-      } else if (created) {
-        setPostId(created.id);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [user?.id, meta?.title, videoId]);
+      if (error) throw error;
+      setPostId(created.id);
+      toast.success("تمت إضافة الفيديو إلى الموقع");
+    } catch (e: any) {
+      toast.error(e.message || "تعذّرت الإضافة");
+    } finally {
+      setAdding(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -94,31 +99,26 @@ function WatchYtPage() {
 
       <div className="flex items-start justify-between gap-4 mb-4 flex-wrap">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl md:text-2xl font-bold mb-1">{meta?.title || "YouTube"}</h1>
+          <h1 className="text-xl md:text-2xl font-bold mb-1">{meta?.title || "Video"}</h1>
           {meta?.author && <p className="text-sm text-muted-foreground">{meta.author}</p>}
         </div>
         <div className="flex gap-2">
-          {meta?.channelId && (
-            <Link
-              to="/youtube"
-              className="text-xs px-3 py-2 rounded-md border border-ice-border hover:border-red-600/50"
-            >
-              قناة YouTube
-            </Link>
+          {postId ? (
+            <Button size="sm" variant="secondary" disabled className="gap-1">
+              <Check className="h-4 w-4" /> مُضاف إلى الموقع
+            </Button>
+          ) : (
+            <Button size="sm" onClick={addToSite} disabled={adding || !user || !meta} className="gap-1">
+              {adding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+              إضافة إلى الموقع
+            </Button>
           )}
-          <a
-            href={`https://www.youtube.com/watch?v=${videoId}`}
-            target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            <Youtube className="h-4 w-4" /> فتح في YouTube <ExternalLink className="h-3 w-3" />
-          </a>
         </div>
       </div>
 
       <Card className="p-4 mb-4 bg-muted/40">
         <p className="text-sm text-muted-foreground">
-          هذا الفيديو يُشغَّل من YouTube مباشرة. التعليقات أدناه داخلية في تطبيقنا فقط.
+          فيديو يُعرض داخل التطبيق. أضِفه إلى الموقع ليظهر في الخلاصة ويُمكّن التعليقات.
         </p>
       </Card>
 
