@@ -14,7 +14,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CommentsSection } from "./CommentsSection";
+import { SocialShareMenu } from "./SocialShareMenu";
 import { cn } from "@/lib/utils";
+
+function getPostVideoUrl(urls: string[] | null | undefined): string | null {
+  if (!urls) return null;
+  for (const u of urls) {
+    if (/(?:youtube\.com|youtu\.be)/.test(u)) return u;
+    if (/\.(mp4|webm|mov|m4v)(\?|$)/i.test(u)) return u;
+  }
+  return null;
+}
 
 export interface FeedPost {
   id: string;
@@ -215,12 +225,24 @@ export function PostCard({ post, onChange }: { post: FeedPost; onChange: () => v
           <MessageCircle className="h-4 w-4" />
           <span className="font-medium">{post.comments_count}</span>
         </button>
-        <button
-          onClick={share}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-violet-glow/10 transition-colors hover:text-violet-glow ms-auto"
-        >
-          <Share2 className="h-4 w-4" />
-        </button>
+        {(() => {
+          const videoUrl = getPostVideoUrl(post.media_urls);
+          if (videoUrl) {
+            return (
+              <div className="ms-auto">
+                <SocialShareMenu videoUrl={videoUrl} caption={post.content} />
+              </div>
+            );
+          }
+          return (
+            <button
+              onClick={share}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-violet-glow/10 transition-colors hover:text-violet-glow ms-auto"
+            >
+              <Share2 className="h-4 w-4" />
+            </button>
+          );
+        })()}
       </div>
 
       {showComments && <CommentsSection postId={post.id} onChange={onChange} />}
