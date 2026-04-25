@@ -1,0 +1,182 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Youtube, Search, Play, Clock, AlertCircle, History } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { ar } from "date-fns/locale";
+import { toast } from "sonner";
+import { importYoutubeChannel, type YtChannel, type YtVideo } from "@/utils/youtube.functions";
+
+export const Route = createFileRoute("/_authenticated/youtube")({
+  component: YoutubePage,
+  head: () => ({
+    meta: [
+      { title: "YouTube — استورد قناة" },
+      { name: "description", content: "ألصق رابط قناة YouTube لعرض كل فيديوهاتها داخل التطبيق." },
+    ],
+  }),
+});
+
+type Result = { channel: YtChannel; videos: YtVideo[] };
+type HistoryEntry = { url: string; title: string; avatar: string | null; at: number };
+
+function YoutubePage() {
+  const [url, setUrl] = useState("");
+  const [result, setResult] = useState<Result | null>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("yt-history");
+      if (raw) setHistory(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  const mutation = useMutation({
+    mutationFn: async (u: string) => {
+      const res = await importYoutubeChannel({ data: { url: u } });
+      if ("error" in res) throw new Error(res.error);
+      return res;
+    },
+    onSuccess: (data, u) => {
+      setResult(data);
+      const entry: HistoryEntry = {
+        url: u,
+        title: data.channel.title,
+        avatar: data.channel.avatar,
+        at: Date.now(),
+      };
+      const next = [entry, ...history.filter((h) => h.url !== u)].slice(0, 10);
+      setHistory(next);
+      try { localStorage.setItem("yt-history", JSON.stringify(next)); } catch {}
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!url.trim()) return;
+    mutation.mutate(url.trim());
+  };
+
+  return (
+    <div className="container mx-auto p-4 max-w-6xl">
+      <header className="mb-6 flex items-center gap-3">
+        <div className="h-12 w-12 rounded-xl bg-red-600 flex items-center justify-center">
+          <Youtube className="h-7 w-7 text-white" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold">استيراد قناة YouTube</h1>
+          <p className="text-sm text-muted-foreground">ألصق رابط القناة وستظهر آخر فيديوهاتها (حتى 15 فيديو من الـ RSS الرسمي).</p>
+        </div>
+      </header>
+
+      <form onSubmit={submit} className="flex gap-2 mb-6">
+        <Input
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="https://www.youtube.com/@MrBeast  أو  /channel/UC..."
+          className="bg-ice-card border-ice-border h-12 text-base"
+          dir="ltr"
+        />
+        <Button type="submit" size="lg" disabled={mutation.isPending} className="bg-red-600 hover:bg-red-700 text-white">
+          {mutation.isPending ? "جارٍ التحميل..." : (<><Search className="h-4 w-4 ml-1" /> عرض</>)}
+        </Button>
+      </form>
+
+      {history.length > 0 && !result && (
+        <Card className="p-4 mb-6 bg-ice-card border-ice-border">
+          <div className="flex items-center gap-2 text-sm font-semibold mb-3">
+            <History className="h-4 w-4" /> قنوات سابقة
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {history.map((h) => (
+              <button
+                key={h.url}
+                onClick={() => { setUrl(h.url); mutation.mutate(h.url); }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-ice-border hover:border-red-600/50 transition text-sm"
+              >
+                {h.avatar && <img src={h.avatar} alt="" className="h-5 w-5 rounded-full object-cover" />}
+                <span>{h.title}</span>
+              </button>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {mutation.isPending && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="aspect-video w-full" />
+          ))}
+        </div>
+      )}
+
+      {mutation.isError && !mutation.isPending && (
+        <Card className="p-6 bg-destructive/10 border-destructive/40 text-center">
+          <AlertCircle className="h-8 w-8 mx-auto mb-2 text-destructive" />
+          <p className="text-destructive font-medium">{(mutation.error as Error).message}</p>
+        </Card>
+      )}
+
+      {result && !mutation.isPending && (
+        <>
+          <Card className="p-4 mb-6 bg-ice-card border-ice-border flex items-center gap-4">
+            {result.channel.avatar && (
+              <img src={result.channel.avatar} alt="" className="h-16 w-16 rounded-full object-cover" />
+            )}
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl font-bold truncate">{result.channel.title}</h2>
+              {result.channel.description && (
+                <p className="text-sm text-muted-foreground line-clamp-2">{result.channel.description}</p>
+              )}
+              <p className="text-xs text-muted-foreground mt-1">{result.videos.length} فيديو</p>
+            </div>
+            <a
+              href={`https://www.youtube.com/channel/${result.channel.channelId}`}
+              target="_blank" rel="noopener noreferrer"
+              className="text-xs text-red-500 hover:underline"
+            >
+              فتح في YouTube ↗
+            </a>
+          </Card>
+
+          {result.videos.length === 0 ? (
+            <Card className="p-8 text-center text-muted-foreground">لا توجد فيديوهات متاحة عبر RSS لهذه القناة.</Card>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {result.videos.map((v) => (
+                <Link
+                  key={v.videoId}
+                  to="/watch-yt/$videoId"
+                  params={{ videoId: v.videoId }}
+                  className="group block rounded-xl overflow-hidden border border-ice-border bg-ice-card hover:border-red-600/50 transition"
+                >
+                  <div className="relative aspect-video bg-black">
+                    <img src={v.thumbnail} alt={v.title} className="w-full h-full object-cover" loading="lazy" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40">
+                      <div className="h-14 w-14 rounded-full bg-red-600 flex items-center justify-center">
+                        <Play className="h-7 w-7 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-semibold text-sm line-clamp-2 mb-1">{v.title}</h3>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      {v.publishedAt && formatDistanceToNow(new Date(v.publishedAt), { addSuffix: true, locale: ar })}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
