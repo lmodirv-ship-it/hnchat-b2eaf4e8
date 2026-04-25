@@ -418,22 +418,64 @@ function VideoCard({
   const url = video.media_urls?.[0];
   const name = video.profile?.full_name || video.profile?.username || "user";
 
+  // Detect external video platforms (YouTube / TikTok / Instagram)
+  const ytMatch = url?.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  const ytId = ytMatch?.[1];
+  const tiktokMatch = url?.match(/tiktok\.com\/.*\/video\/(\d+)/);
+  const tiktokId = tiktokMatch?.[1];
+  const igMatch = url?.match(/instagram\.com\/(?:reel|p|tv)\/([\w-]+)/);
+  const igId = igMatch?.[1];
+  const isExternal = !!(ytId || tiktokId || igId);
+
   return (
     <div
       ref={containerRef}
       className="snap-start h-full w-full relative flex items-center justify-center"
     >
       {url && shouldRenderSrc ? (
-        <video
-          ref={ref}
-          src={url}
-          muted={muted}
-          loop
-          playsInline
-          preload={preload}
-          className="max-h-full max-w-full object-contain"
-          onClick={handleTap}
-        />
+        isExternal ? (
+          <div className="h-full w-full flex items-center justify-center bg-black">
+            {ytId && (
+              <iframe
+                src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${ytId}&controls=1&modestbranding=1&rel=0&playsinline=1`}
+                title="YouTube video"
+                className="w-full h-full max-h-full max-w-full aspect-[9/16] md:aspect-video"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            )}
+            {tiktokId && (
+              <iframe
+                src={`https://www.tiktok.com/embed/v2/${tiktokId}`}
+                title="TikTok video"
+                className="w-full h-full max-h-full max-w-full aspect-[9/16]"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+            {igId && (
+              <iframe
+                src={`https://www.instagram.com/p/${igId}/embed`}
+                title="Instagram video"
+                className="w-full h-full max-h-full max-w-full aspect-[9/16]"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+          </div>
+        ) : (
+          <video
+            ref={ref}
+            src={url}
+            muted={muted}
+            loop
+            playsInline
+            preload={preload}
+            className="max-h-full max-w-full object-contain"
+            onClick={handleTap}
+          />
+        )
       ) : (
         // Lightweight placeholder for far-away cards (saves bandwidth)
         <div className="h-full w-full flex items-center justify-center text-white/40 text-sm">
