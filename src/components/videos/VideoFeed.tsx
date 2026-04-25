@@ -55,8 +55,16 @@ export function VideoFeed() {
   const [videos, setVideos] = useState<VideoPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [muted, setMuted] = useState(true);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return sessionStorage.getItem("videos:activeId");
+  });
   const [commentsForId, setCommentsForId] = useState<string | null>(null);
+
+  // Persist active video so user resumes on the same one when returning
+  useEffect(() => {
+    if (activeId) sessionStorage.setItem("videos:activeId", activeId);
+  }, [activeId]);
 
   const load = useCallback(async () => {
     setLoading(true);
