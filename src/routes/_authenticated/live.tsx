@@ -1,15 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
-import { Card } from "@/components/ui/card";
-import { Sparkles } from "lucide-react";
+import { CatalogGrid } from "@/components/catalog/CatalogGrid";
+import { Radio } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/_authenticated/live")({
   component: () => (
-    <PageShell title="Live" subtitle="Coming soon to your hnChat experience">
-      <Card className="p-12 bg-ice-card border-ice-border text-center backdrop-blur-xl">
-        <Sparkles className="h-10 w-10 mx-auto mb-3 text-violet-glow" />
-        <p className="text-muted-foreground">This feature is being polished — stay tuned</p>
-      </Card>
+    <PageShell
+      title="Live Stream"
+      subtitle="بثوث مباشرة من المنشئين حول العالم"
+      action={
+        <Badge variant="outline" className="border-pink-glow/50 text-pink-glow gap-1">
+          <Radio className="h-3 w-3 animate-pulse" /> LIVE
+        </Badge>
+      }
+    >
+      <CatalogGrid type="live_stream" emptyTitle="لا توجد بثوث الآن" emptyDescription="عُد لاحقًا لمشاهدة المنشئين المباشرين" />
     </PageShell>
   ),
 });
