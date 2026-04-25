@@ -6,7 +6,7 @@ import {
   User, LogOut, Shield, Sparkles, Radio, Mic, BookOpen, Gift,
   TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
   Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
-  Settings, Cpu, Bookmark, FileText, ScrollText, Youtube,
+  Settings, Cpu, Bookmark, FileText, ScrollText, Youtube, Inbox,
 } from "lucide-react";
 
 const MORE: readonly NavItem[] = [
@@ -28,6 +28,7 @@ const NAV: readonly NavItem[] = [
   { to: "/feed", label: "Home Feed", icon: Home },
   { to: "/reels", label: "Reels", icon: Film, badge: { text: "HOT", tone: "live" } },
   { to: "/messages", label: "Messages", icon: MessageCircle, badge: { text: "12", tone: "count" } },
+  { to: "/mail", label: "البريد", icon: Inbox, badge: { text: "NEW", tone: "new" } },
   { to: "/videos", label: "Videos & Live", icon: Video, badge: { text: "3", tone: "count" } },
   { to: "/youtube", label: "YouTube قنوات", icon: Youtube, badge: { text: "NEW", tone: "new" } },
   { to: "/live", label: "Live Stream", icon: Radio, badge: { text: "LIVE", tone: "live" } },

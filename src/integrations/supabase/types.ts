@@ -432,6 +432,147 @@ export type Database = {
           },
         ]
       }
+      mail_labels: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mail_message_labels: {
+        Row: {
+          created_at: string
+          label_id: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          label_id: string
+          message_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          label_id?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mail_message_labels_label_id_fkey"
+            columns: ["label_id"]
+            isOneToOne: false
+            referencedRelation: "mail_labels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mail_message_labels_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "mail_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mail_messages: {
+        Row: {
+          archived_by_recipient: boolean
+          archived_by_sender: boolean
+          attachments: Json
+          bcc_ids: string[]
+          body: string
+          cc_ids: string[]
+          created_at: string
+          id: string
+          is_draft: boolean
+          is_important: boolean
+          is_read: boolean
+          is_starred_by_recipient: boolean
+          is_starred_by_sender: boolean
+          read_at: string | null
+          recipient_id: string | null
+          reply_to: string | null
+          sender_id: string
+          sent_at: string | null
+          spam_by_recipient: boolean
+          subject: string
+          thread_id: string
+          trashed_by_recipient: boolean
+          trashed_by_sender: boolean
+          updated_at: string
+        }
+        Insert: {
+          archived_by_recipient?: boolean
+          archived_by_sender?: boolean
+          attachments?: Json
+          bcc_ids?: string[]
+          body?: string
+          cc_ids?: string[]
+          created_at?: string
+          id?: string
+          is_draft?: boolean
+          is_important?: boolean
+          is_read?: boolean
+          is_starred_by_recipient?: boolean
+          is_starred_by_sender?: boolean
+          read_at?: string | null
+          recipient_id?: string | null
+          reply_to?: string | null
+          sender_id: string
+          sent_at?: string | null
+          spam_by_recipient?: boolean
+          subject?: string
+          thread_id?: string
+          trashed_by_recipient?: boolean
+          trashed_by_sender?: boolean
+          updated_at?: string
+        }
+        Update: {
+          archived_by_recipient?: boolean
+          archived_by_sender?: boolean
+          attachments?: Json
+          bcc_ids?: string[]
+          body?: string
+          cc_ids?: string[]
+          created_at?: string
+          id?: string
+          is_draft?: boolean
+          is_important?: boolean
+          is_read?: boolean
+          is_starred_by_recipient?: boolean
+          is_starred_by_sender?: boolean
+          read_at?: string | null
+          recipient_id?: string | null
+          reply_to?: string | null
+          sender_id?: string
+          sent_at?: string | null
+          spam_by_recipient?: boolean
+          subject?: string
+          thread_id?: string
+          trashed_by_recipient?: boolean
+          trashed_by_sender?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
