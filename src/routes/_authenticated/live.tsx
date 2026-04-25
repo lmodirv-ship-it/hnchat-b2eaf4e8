@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/live")({
         </Badge>
       }
     >
-      <CatalogGrid type="live_stream" emptyTitle="لا توجد بثوث الآن" emptyDescription="عُد لاحقًا لمشاهدة المنشئين المباشرين" />
+      <CatalogGrid type="live_stream" />
     </PageShell>
   ),
 });

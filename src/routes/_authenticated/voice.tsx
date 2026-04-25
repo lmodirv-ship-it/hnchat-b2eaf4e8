@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/voice")({
       subtitle="انضم إلى محادثات صوتية حية مع مجتمعك"
       action={<Mic className="h-5 w-5 text-violet-glow" />}
     >
-      <CatalogGrid type="voice_room" emptyTitle="لا توجد غرف نشطة" emptyDescription="ابدأ غرفة جديدة قريبًا" />
+      <CatalogGrid type="voice_room" />
     </PageShell>
   ),
 });
