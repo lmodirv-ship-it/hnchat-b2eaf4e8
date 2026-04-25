@@ -237,3 +237,116 @@ html, body {
   /* Hide things that don't make sense in installed app */
   .pwa-hide { display: none !important; }
 }
+
+/* Futuristic Reels styling */
+@keyframes neon-sweep {
+  0%, 100% { transform: translateX(-100%); opacity: 0; }
+  40%, 60% { opacity: 1; }
+  50% { transform: translateX(100%); }
+}
+@keyframes ring-pulse {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+@keyframes hue-shift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(40deg); }
+}
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.holo-frame {
+  position: relative;
+}
+.holo-frame::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    oklch(0.78 0.18 220 / 0.8),
+    oklch(0.65 0.25 295 / 0.4),
+    oklch(0.78 0.18 220 / 0.0) 60%,
+    oklch(0.65 0.25 295 / 0.7));
+  background-size: 200% 200%;
+  animation: gradient-flow 6s ease infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+.holo-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, oklch(0 0 0 / 0.55) 100%),
+    linear-gradient(to top, oklch(0 0 0 / 0.6) 0%, transparent 35%, transparent 65%, oklch(0 0 0 / 0.4) 100%);
+}
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    oklch(1 0 0 / 0.015) 3px,
+    oklch(1 0 0 / 0.015) 4px
+  );
+  mix-blend-mode: overlay;
+}
+.ring-burst {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  animation: ring-pulse 0.6s ease-out forwards;
+}
+
+.action-glass {
+  background: linear-gradient(135deg,
+    oklch(1 0 0 / 0.08),
+    oklch(1 0 0 / 0.02));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid oklch(1 0 0 / 0.15);
+  box-shadow:
+    0 4px 16px oklch(0 0 0 / 0.4),
+    inset 0 1px 0 oklch(1 0 0 / 0.15);
+}
+.action-glass-active {
+  background: linear-gradient(135deg,
+    oklch(0.78 0.18 220 / 0.35),
+    oklch(0.65 0.25 295 / 0.25));
+  border-color: oklch(0.78 0.18 220 / 0.6);
+  box-shadow:
+    0 0 20px oklch(0.78 0.18 220 / 0.5),
+    inset 0 1px 0 oklch(1 0 0 / 0.2);
+}
+
+.username-chip {
+  background: linear-gradient(135deg,
+    oklch(0 0 0 / 0.55),
+    oklch(0 0 0 / 0.35));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid oklch(1 0 0 / 0.12);
+}
+
+.live-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: oklch(0.78 0.18 220);
+  border-radius: 9999px;
+  box-shadow: 0 0 8px oklch(0.78 0.18 220), 0 0 16px oklch(0.78 0.18 220 / 0.6);
+  animation: glow-pulse 1.6s ease-in-out infinite;
+}

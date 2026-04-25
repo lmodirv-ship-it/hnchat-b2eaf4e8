@@ -28,6 +28,7 @@ import {
   Share2,
   Play,
   Pause,
+  Eye,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -156,14 +157,17 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
 
   return (
     <div className="relative">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-bold">الفيديوهات</h2>
-        <div className="flex gap-2">
+      {/* Floating header — overlays the video with glass + gradient title */}
+      <div className="absolute top-3 inset-x-3 z-30 flex items-center justify-between pointer-events-none">
+        <h2 className="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+          Reels
+        </h2>
+        <div className="flex gap-2 pointer-events-auto">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMuted((m) => !m)}
-            className="text-cyan-glow"
+            className="action-glass text-white hover:text-cyan-glow rounded-full h-10 w-10"
             aria-label={muted ? "تشغيل الصوت" : "كتم الصوت"}
           >
             {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
@@ -179,7 +183,7 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
       ) : (
         <div
           ref={scrollerRef}
-          className="h-[calc(100vh-200px)] overflow-y-auto snap-y snap-mandatory rounded-lg bg-black scroll-smooth"
+          className="h-[100dvh] md:h-[calc(100vh-3.5rem)] overflow-y-auto snap-y snap-mandatory bg-black scroll-smooth"
         >
           {videos.map((v, i) => {
             const distance = activeIdx >= 0 ? Math.abs(i - activeIdx) : i;
@@ -268,6 +272,8 @@ function VideoCard({
   const [paused, setPaused] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [viewCounted, setViewCounted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [likeBurst, setLikeBurst] = useState(0);
   const lastTapRef = useRef(0);
 
   // IntersectionObserver: detect when this card is the active one
@@ -313,13 +319,16 @@ function VideoCard({
     }
   }, [positionKey, video.media_urls]);
 
-  // Save current position periodically while playing
+  // Save current position periodically while playing + update progress
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const onTime = () => {
       if (el.currentTime > 0) {
         sessionStorage.setItem(positionKey, String(el.currentTime));
+      }
+      if (el.duration > 0) {
+        setProgress((el.currentTime / el.duration) * 100);
       }
     };
     el.addEventListener("timeupdate", onTime);
@@ -354,6 +363,7 @@ function VideoCard({
     if (!user || liking) return;
     setLiking(true);
     const wasLiked = video.liked_by_me;
+    if (!wasLiked) setLikeBurst((n) => n + 1);
     // optimistic
     onUpdateLocal(video.id, {
       liked_by_me: !wasLiked,
@@ -427,151 +437,250 @@ function VideoCard({
   const igId = igMatch?.[1];
   const isExternal = !!(ytId || tiktokId || igId);
 
+  const platformLabel = ytId ? "YouTube" : tiktokId ? "TikTok" : igId ? "Instagram" : null;
+
+  const formatCount = (n: number) => {
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+    if (n >= 1_000) return (n / 1_000).toFixed(1) + "K";
+    return String(n);
+  };
+
   return (
     <div
       ref={containerRef}
       className="snap-start h-full w-full relative flex items-center justify-center"
     >
-      {url && shouldRenderSrc ? (
-        isExternal ? (
-          <div className="h-full w-full flex items-center justify-center bg-black">
-            {ytId && (
-              <iframe
-                src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${ytId}&controls=1&modestbranding=1&rel=0&playsinline=1`}
-                title="YouTube video"
-                className="w-full h-full max-h-full max-w-full aspect-[9/16] md:aspect-video"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
-            )}
-            {tiktokId && (
-              <iframe
-                src={`https://www.tiktok.com/embed/v2/${tiktokId}`}
-                title="TikTok video"
-                className="w-full h-full max-h-full max-w-full aspect-[9/16]"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-              />
-            )}
-            {igId && (
-              <iframe
-                src={`https://www.instagram.com/p/${igId}/embed`}
-                title="Instagram video"
-                className="w-full h-full max-h-full max-w-full aspect-[9/16]"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-              />
-            )}
-          </div>
-        ) : (
-          <video
-            ref={ref}
-            src={url}
-            muted={muted}
-            loop
-            playsInline
-            preload={preload}
-            className="max-h-full max-w-full object-contain"
-            onClick={handleTap}
+      {/* Ambient glow halo behind active video — gives depth */}
+      {isActive && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div
+            className="absolute -top-1/4 left-1/2 -translate-x-1/2 h-[60%] w-[80%] rounded-full blur-3xl opacity-40"
+            style={{ background: "radial-gradient(circle, oklch(0.78 0.18 220 / 0.6), transparent 70%)" }}
           />
-        )
-      ) : (
-        // Lightweight placeholder for far-away cards (saves bandwidth)
-        <div className="h-full w-full flex items-center justify-center text-white/40 text-sm">
-          ...
+          <div
+            className="absolute -bottom-1/4 left-1/2 -translate-x-1/2 h-[60%] w-[80%] rounded-full blur-3xl opacity-30"
+            style={{ background: "radial-gradient(circle, oklch(0.65 0.25 295 / 0.6), transparent 70%)" }}
+          />
         </div>
       )}
 
-      {/* Pause indicator */}
-      {paused && isActive && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="bg-black/40 rounded-full p-4 backdrop-blur-sm">
-            <Play className="h-12 w-12 text-white" fill="white" />
-          </div>
-        </div>
-      )}
-
-      {/* Double-tap heart burst */}
-      {showHeart && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <Heart className="h-24 w-24 text-red-500 fill-red-500 animate-ping" />
-        </div>
-      )}
-
-      {/* Bottom-left meta */}
-      <div className="absolute bottom-4 left-4 right-20 text-white">
-        <div className="flex items-center gap-2 mb-2">
-          <Avatar className="h-9 w-9 border border-white/40">
-            <AvatarImage src={video.profile?.avatar_url || undefined} />
-            <AvatarFallback className="bg-black/50 text-white text-xs">
-              {name.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span className="font-semibold text-sm">@{video.profile?.username}</span>
-        </div>
-        {video.content && (
-          <p className="text-sm bg-black/40 px-2 py-1 rounded backdrop-blur-sm line-clamp-3">
-            {video.content}
-          </p>
-        )}
-        <p className="text-xs text-white/70 mt-1">
-          👁 {video.views_count || 0} مشاهدة
-        </p>
-      </div>
-
-      {/* Right action rail */}
-      <div className="absolute bottom-6 right-3 flex flex-col items-center gap-5 text-white">
-        <button
-          onClick={toggleLike}
-          disabled={liking}
-          className="flex flex-col items-center gap-1 active:scale-90 transition"
-          aria-label="إعجاب"
-        >
-          <div className="bg-black/40 rounded-full p-2 backdrop-blur-sm">
-            <Heart
-              className={cn(
-                "h-6 w-6 transition",
-                video.liked_by_me ? "fill-red-500 text-red-500" : "text-white",
+      {/* Video frame with holographic border */}
+      <div className="holo-frame relative w-full h-full md:w-auto md:h-full md:max-w-[440px] md:rounded-3xl overflow-hidden flex items-center justify-center bg-black">
+        {url && shouldRenderSrc ? (
+          isExternal ? (
+            <div className="h-full w-full flex items-center justify-center bg-black">
+              {ytId && (
+                <iframe
+                  src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${ytId}&controls=1&modestbranding=1&rel=0&playsinline=1`}
+                  title="YouTube video"
+                  className="w-full h-full max-h-full max-w-full aspect-[9/16] md:aspect-video"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
               )}
+              {tiktokId && (
+                <iframe
+                  src={`https://www.tiktok.com/embed/v2/${tiktokId}`}
+                  title="TikTok video"
+                  className="w-full h-full max-h-full max-w-full aspect-[9/16]"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
+              {igId && (
+                <iframe
+                  src={`https://www.instagram.com/p/${igId}/embed`}
+                  title="Instagram video"
+                  className="w-full h-full max-h-full max-w-full aspect-[9/16]"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
+            </div>
+          ) : (
+            <video
+              ref={ref}
+              src={url}
+              muted={muted}
+              loop
+              playsInline
+              preload={preload}
+              className="max-h-full max-w-full object-contain"
+              onClick={handleTap}
+            />
+          )
+        ) : (
+          <div className="h-full w-full flex items-center justify-center text-white/40 text-sm">
+            <Loader2 className="h-6 w-6 animate-spin" />
+          </div>
+        )}
+
+        {/* Vignette + scan lines (skip for iframes — they have their own UI) */}
+        {!isExternal && (
+          <>
+            <div className="holo-vignette" />
+            <div className="scan-overlay" />
+          </>
+        )}
+
+        {/* Platform badge (top-left) */}
+        {platformLabel && (
+          <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase text-white username-chip flex items-center gap-1.5">
+            <span className="live-dot" />
+            {platformLabel}
+          </div>
+        )}
+
+        {/* Pause indicator with animated ring */}
+        {paused && isActive && !isExternal && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <div className="relative h-20 w-20 rounded-full action-glass flex items-center justify-center">
+              <Play className="h-10 w-10 text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]" fill="white" />
+            </div>
+          </div>
+        )}
+
+        {/* Double-tap heart burst */}
+        {showHeart && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <Heart
+              className="h-32 w-32 text-pink-glow fill-pink-glow drop-shadow-[0_0_24px_rgba(236,72,153,0.9)]"
+              style={{ animation: "scale-in 0.25s ease-out, fade-out 0.6s ease-in 0.3s forwards" }}
             />
           </div>
-          <span className="text-xs font-medium">{video.likes_count}</span>
-        </button>
+        )}
 
-        <button
-          onClick={onOpenComments}
-          className="flex flex-col items-center gap-1 active:scale-90 transition"
-          aria-label="تعليقات"
-        >
-          <div className="bg-black/40 rounded-full p-2 backdrop-blur-sm">
+        {/* Bottom-left meta */}
+        <div className="absolute bottom-4 left-4 right-20 text-white z-10">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="relative">
+              <Avatar className="h-10 w-10 ring-2 ring-cyan-glow/60 shadow-glow-cyan">
+                <AvatarImage src={video.profile?.avatar_url || undefined} />
+                <AvatarFallback className="bg-black/50 text-white text-xs">
+                  {name.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-sm leading-tight">@{video.profile?.username}</span>
+              {video.profile?.full_name && (
+                <span className="text-[10px] text-white/60 leading-tight">{video.profile.full_name}</span>
+              )}
+            </div>
+          </div>
+          {video.content && (
+            <p className="text-sm username-chip px-3 py-1.5 rounded-xl line-clamp-3 leading-relaxed">
+              {video.content}
+            </p>
+          )}
+        </div>
+
+        {/* Right action rail — futuristic */}
+        <div className="absolute bottom-6 right-3 flex flex-col items-center gap-4 text-white z-10">
+          <ActionButton
+            onClick={toggleLike}
+            disabled={liking}
+            active={video.liked_by_me}
+            label="إعجاب"
+            count={video.likes_count}
+            burstKey={likeBurst}
+          >
+            <Heart className={cn("h-6 w-6 transition-all", video.liked_by_me && "fill-pink-glow text-pink-glow scale-110")} />
+          </ActionButton>
+
+          <ActionButton onClick={onOpenComments} label="تعليقات" count={video.comments_count}>
             <MessageCircle className="h-6 w-6" />
-          </div>
-          <span className="text-xs font-medium">{video.comments_count}</span>
-        </button>
+          </ActionButton>
 
-        <button
-          onClick={share}
-          className="flex flex-col items-center gap-1 active:scale-90 transition"
-          aria-label="مشاركة"
-        >
-          <div className="bg-black/40 rounded-full p-2 backdrop-blur-sm">
+          <ActionButton onClick={share} label="مشاركة">
             <Share2 className="h-6 w-6" />
-          </div>
-          <span className="text-xs font-medium">شارك</span>
-        </button>
+          </ActionButton>
 
-        <button
-          onClick={() => setPaused((p) => !p)}
-          className="flex flex-col items-center gap-1 active:scale-90 transition md:hidden"
-          aria-label={paused ? "تشغيل" : "إيقاف"}
-        >
-          <div className="bg-black/40 rounded-full p-2 backdrop-blur-sm">
-            {paused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
+          <ActionButton label="مشاهدات" count={video.views_count || 0} dim>
+            <Eye className="h-5 w-5" />
+          </ActionButton>
+
+          <button
+            onClick={() => setPaused((p) => !p)}
+            className="md:hidden h-10 w-10 rounded-full action-glass flex items-center justify-center active:scale-90 transition"
+            aria-label={paused ? "تشغيل" : "إيقاف"}
+          >
+            {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+          </button>
+        </div>
+
+        {/* Bottom progress bar (only for native video) */}
+        {!isExternal && url && (
+          <div className="absolute bottom-0 inset-x-0 h-0.5 bg-white/10 z-10">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow transition-[width] duration-150 shadow-glow-cyan"
+              style={{ width: `${progress}%` }}
+            />
           </div>
-        </button>
+        )}
       </div>
     </div>
+  );
+}
+
+function ActionButton({
+  children,
+  onClick,
+  disabled,
+  active,
+  label,
+  count,
+  dim,
+  burstKey,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  label: string;
+  count?: number;
+  dim?: boolean;
+  burstKey?: number;
+}) {
+  const formatCount = (n: number) => {
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+    if (n >= 1_000) return (n / 1_000).toFixed(1) + "K";
+    return String(n);
+  };
+  const Comp = onClick ? "button" : "div";
+  return (
+    <Comp
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        "group flex flex-col items-center gap-1 active:scale-90 transition",
+        dim && "opacity-80",
+      )}
+      aria-label={label}
+    >
+      <div
+        className={cn(
+          "relative h-11 w-11 rounded-full flex items-center justify-center transition",
+          active ? "action-glass-active" : "action-glass group-hover:scale-105",
+        )}
+      >
+        {children}
+        {/* Burst ring on activation */}
+        {active && burstKey ? (
+          <span
+            key={burstKey}
+            className="ring-burst text-pink-glow"
+            style={{ pointerEvents: "none" }}
+          />
+        ) : null}
+      </div>
+      {count !== undefined && (
+        <span className="text-[11px] font-bold tracking-tight tabular-nums drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+          {formatCount(count)}
+        </span>
+      )}
+    </Comp>
   );
 }
 
