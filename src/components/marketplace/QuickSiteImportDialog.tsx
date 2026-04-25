@@ -46,7 +46,13 @@ export function QuickSiteImportDialog({ onCreated }: { onCreated?: () => void })
       setItems(res.items);
       setSiteName(res.siteName);
       setSelected(new Set(res.items.map((i) => i.url)));
-      toast.success(`تم العثور على ${res.items.length} منتج من ${res.siteName}`);
+      if (res.items.length === 0) {
+        toast.error(
+          `لم نجد منتجات في ${res.siteName}. جرّب رابط صفحة المنتجات مباشرةً عبر "استيراد من رابط".`
+        );
+      } else {
+        toast.success(`تم العثور على ${res.items.length} منتج من ${res.siteName}`);
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "فشل جلب المنتجات");
     } finally {
