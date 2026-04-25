@@ -103,7 +103,7 @@ function SearchPage() {
 }
 
 function labelFor(t: string) {
-  return ({ all: "الكل", people: "أشخاص", posts: "منشورات", reels: "Reels", groups: "مجموعات", products: "منتجات" } as Record<string, string>)[t] ?? t;
+  return ({ all: "الكل", creators: "قنوات/Creators", people: "أشخاص", posts: "منشورات", reels: "Reels", groups: "مجموعات", products: "منتجات" } as Record<string, string>)[t] ?? t;
 }
 
 function EmptyState({ onPick }: { onPick: (s: string) => void }) {
