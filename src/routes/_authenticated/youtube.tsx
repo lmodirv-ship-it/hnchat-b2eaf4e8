@@ -70,8 +70,8 @@ function YoutubePage() {
           <Youtube className="h-7 w-7 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold">استيراد قناة YouTube</h1>
-          <p className="text-sm text-muted-foreground">ألصق رابط القناة وستظهر آخر فيديوهاتها (حتى 15 فيديو من الـ RSS الرسمي).</p>
+          <h1 className="text-2xl font-bold">استيراد قناة فيديو</h1>
+          <p className="text-sm text-muted-foreground">ألصق رابط القناة وستظهر آخر فيديوهاتها داخل التطبيق.</p>
         </div>
       </header>
 
