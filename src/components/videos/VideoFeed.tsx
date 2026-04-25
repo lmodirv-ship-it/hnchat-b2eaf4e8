@@ -241,6 +241,9 @@ function VideoCard({
   video,
   isActive,
   muted,
+  preload,
+  shouldRenderSrc,
+  registerRef,
   onVisible,
   onUpdateLocal,
   onOpenComments,
@@ -248,6 +251,9 @@ function VideoCard({
   video: VideoPost;
   isActive: boolean;
   muted: boolean;
+  preload: "auto" | "metadata" | "none";
+  shouldRenderSrc: boolean;
+  registerRef: (el: HTMLDivElement | null) => void;
   onVisible: () => void;
   onUpdateLocal: (id: string, patch: Partial<VideoPost>) => void;
   onOpenComments: () => void;
