@@ -420,17 +420,22 @@ function VideoCard({
       ref={containerRef}
       className="snap-start h-full w-full relative flex items-center justify-center"
     >
-      {url && (
+      {url && shouldRenderSrc ? (
         <video
           ref={ref}
           src={url}
           muted={muted}
           loop
           playsInline
-          preload="metadata"
+          preload={preload}
           className="max-h-full max-w-full object-contain"
           onClick={handleTap}
         />
+      ) : (
+        // Lightweight placeholder for far-away cards (saves bandwidth)
+        <div className="h-full w-full flex items-center justify-center text-white/40 text-sm">
+          ...
+        </div>
       )}
 
       {/* Pause indicator */}
