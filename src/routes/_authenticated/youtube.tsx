@@ -136,13 +136,6 @@ function YoutubePage() {
               )}
               <p className="text-xs text-muted-foreground mt-1">{result.videos.length} فيديو</p>
             </div>
-            <a
-              href={`https://www.youtube.com/channel/${result.channel.channelId}`}
-              target="_blank" rel="noopener noreferrer"
-              className="text-xs text-red-500 hover:underline"
-            >
-              فتح في YouTube ↗
-            </a>
           </Card>
 
           {result.videos.length === 0 ? (
