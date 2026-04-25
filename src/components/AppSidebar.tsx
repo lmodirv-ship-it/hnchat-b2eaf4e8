@@ -6,8 +6,16 @@ import {
   User, LogOut, Shield, Sparkles, Radio, Mic, BookOpen, Gift,
   TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
   Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
-  Settings, Cpu,
+  Settings, Cpu, Bookmark, FileText, ScrollText,
 } from "lucide-react";
+
+const MORE: readonly NavItem[] = [
+  { to: "/notifications", label: "Notifications", icon: Bell, badge: { text: "5", tone: "count" } },
+  { to: "/bookmarks", label: "Bookmarks", icon: Bookmark },
+  { to: "/settings", label: "Settings", icon: Settings },
+  { to: "/privacy-policy", label: "Privacy Policy", icon: FileText },
+  { to: "/terms-of-service", label: "Terms of Service", icon: ScrollText },
+] as const;
 
 type NavItem = {
   to: string;
@@ -82,6 +90,29 @@ export function AppSidebar() {
         </div>
 
         {NAV.map((item) => {
+          const Icon = item.icon;
+          const active = location.pathname === item.to || location.pathname.startsWith(item.to + "/");
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all ${
+                active
+                  ? "bg-gradient-to-r from-cyan-glow/15 to-violet-glow/10 text-foreground shadow-[inset_0_0_0_1px_oklch(0.78_0.18_220/0.3)]"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
+              }`}
+            >
+              <Icon className="h-4 w-4 shrink-0" />
+              <span className="truncate">{item.label}</span>
+              {item.badge && <Badge tone={item.badge.tone} text={item.badge.text} />}
+            </Link>
+          );
+        })}
+
+        <div className="mt-4 mb-2 px-3 text-[10px] uppercase tracking-wider text-muted-foreground">
+          More
+        </div>
+        {MORE.map((item) => {
           const Icon = item.icon;
           const active = location.pathname === item.to || location.pathname.startsWith(item.to + "/");
           return (
