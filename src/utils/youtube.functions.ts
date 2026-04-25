@@ -56,7 +56,7 @@ async function resolveChannelIdFromUrl(input: string): Promise<{ channelId: stri
     const res = await fetch(url, {
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; LovableBot/1.0; +https://lovable.dev)",
+          "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.net)",
         "Accept-Language": "en-US,en;q=0.9",
       },
     });
@@ -137,7 +137,7 @@ export const importYoutubeChannel = createServerFn({ method: "POST" })
     } else {
       try {
         const r = await fetch(`https://www.youtube.com/channel/${channelId}`, {
-          headers: { "User-Agent": "Mozilla/5.0 (compatible; LovableBot/1.0)" },
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; HnBot/1.0)" },
         });
         if (r.ok) meta = extractChannelMeta(await r.text());
       } catch {}
@@ -188,7 +188,7 @@ export const getYoutubeVideoMeta = createServerFn({ method: "POST" })
       }
       // Try to get channelId from watch page
       const watch = await fetch(`https://www.youtube.com/watch?v=${data.videoId}`, {
-        headers: { "User-Agent": "Mozilla/5.0 (compatible; LovableBot/1.0)" },
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; HnBot/1.0)" },
       });
       if (watch.ok) {
         const html = await watch.text();
