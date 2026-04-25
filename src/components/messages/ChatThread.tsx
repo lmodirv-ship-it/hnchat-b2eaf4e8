@@ -8,7 +8,7 @@ import { Loader2, Send, ShieldCheck, Smile, Paperclip, Users, Sparkles, ArrowDow
 import { format, isToday, isYesterday } from "date-fns";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { triggerHaptic } from "@/lib/haptics";
+import { haptic } from "@/lib/haptics";
 
 interface Message {
   id: string;
