@@ -473,6 +473,85 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
         }
       }
 
+      // 3) Fallback: use Firecrawl (real browser) for SPA sites
+      const fcKey = process.env.FIRECRAWL_API_KEY;
+      if (fcKey) {
+        const targetUrl = data.site.startsWith("http")
+          ? data.site
+          : `${origin}${data.site.includes("/") ? "/" + data.site.split("/").slice(1).join("/") : ""}`;
+
+        try {
+          const fcRes = await fetch("https://api.firecrawl.dev/v2/scrape", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${fcKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: targetUrl,
+              formats: ["html", "links"],
+              onlyMainContent: false,
+              waitFor: 3000,
+            }),
+          });
+          if (fcRes.ok) {
+            const fcJson: any = await fcRes.json();
+            const html: string =
+              fcJson?.data?.html || fcJson?.data?.rawHtml || "";
+            const siteName =
+              pickMeta(html, [
+                metaRe("og:site_name"),
+                metaReRev("og:site_name"),
+              ]) || new URL(origin).hostname;
+
+            const items: ScrapedListItem[] = [];
+            const seen = new Set<string>();
+
+            const ld = extractJsonLd(html);
+            const ldItems = extractItemListJsonLd(ld);
+            for (const it of ldItems) {
+              const u = it.url || it["@id"];
+              if (!u || typeof u !== "string") continue;
+              const abs = absolutize(u, targetUrl);
+              if (seen.has(abs)) continue;
+              const offer = Array.isArray(it.offers) ? it.offers[0] : it.offers;
+              const price = offer?.price ?? offer?.lowPrice;
+              const img = Array.isArray(it.image) ? it.image[0] : it.image;
+              seen.add(abs);
+              items.push({
+                url: abs,
+                title: String(it.name || "").slice(0, 200),
+                image: img
+                  ? absolutize(typeof img === "string" ? img : img.url, targetUrl)
+                  : null,
+                price: price != null ? parseFloat(String(price)) : null,
+                currency: offer?.priceCurrency
+                  ? String(offer.priceCurrency).toUpperCase()
+                  : "USD",
+              });
+            }
+
+            for (const it of scrapeAnchorProducts(html, targetUrl)) {
+              if (!seen.has(it.url)) {
+                seen.add(it.url);
+                items.push(it);
+              }
+            }
+
+            if (items.length > 0) {
+              return {
+                items: items.slice(0, 60),
+                siteName,
+                origin,
+                sourceUrl: targetUrl,
+              };
+            }
+          }
+        } catch (e) {
+          console.error("Firecrawl fallback failed:", e);
+        }
+      }
+
       return {
         items: [],
         siteName: new URL(origin).hostname,
