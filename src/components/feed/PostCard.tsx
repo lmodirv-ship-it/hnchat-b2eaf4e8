@@ -148,23 +148,46 @@ export function PostCard({ post, onChange }: { post: FeedPost; onChange: () => v
         </p>
       )}
 
-      {post.media_urls && post.media_urls.length > 0 && (
-        <div
-          className={cn(
-            "grid gap-2 mb-3 rounded-xl overflow-hidden",
-            post.media_urls.length === 1 ? "grid-cols-1" : "grid-cols-2"
-          )}
-        >
-          {post.media_urls.slice(0, 4).map((url, i) => (
-            <img
-              key={i}
-              src={url}
-              alt=""
-              className="w-full h-full max-h-96 object-cover rounded-lg border border-ice-border"
-            />
-          ))}
-        </div>
-      )}
+      {post.media_urls && post.media_urls.length > 0 && (() => {
+        const ytId = (() => {
+          for (const u of post.media_urls!) {
+            const m = u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+            if (m) return m[1];
+          }
+          return null;
+        })();
+        if (ytId) {
+          return (
+            <div className="aspect-video w-full bg-black rounded-xl overflow-hidden mb-3 border border-ice-border">
+              <iframe
+                src={`https://www.youtube.com/embed/${ytId}?rel=0`}
+                title={post.content || "Video"}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full border-0"
+                loading="lazy"
+              />
+            </div>
+          );
+        }
+        return (
+          <div
+            className={cn(
+              "grid gap-2 mb-3 rounded-xl overflow-hidden",
+              post.media_urls!.length === 1 ? "grid-cols-1" : "grid-cols-2"
+            )}
+          >
+            {post.media_urls!.slice(0, 4).map((url, i) => (
+              <img
+                key={i}
+                src={url}
+                alt=""
+                className="w-full h-full max-h-96 object-cover rounded-lg border border-ice-border"
+              />
+            ))}
+          </div>
+        );
+      })()}
 
       <div className="flex items-center gap-1 text-xs text-muted-foreground -mx-1">
         <button
