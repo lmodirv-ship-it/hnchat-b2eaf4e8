@@ -1,89 +1,67 @@
-# استيراد قناة YouTube وعرض كل فيديوهاتها
+# خطة: تطوير الموقع وتحويله إلى تطبيق هاتف
 
-## الفكرة
-يلصق المستخدم رابط قناة YouTube (مثل `youtube.com/@MrBeast` أو `youtube.com/channel/UC...`)، فيعرض الموقع كل فيديوهات القناة في شبكة جميلة، مع إمكانية تشغيل أي فيديو داخل صفحة `/watch-yt/$videoId` بنمط مشابه لـ `/watch/$id`.
+الموقع غني بالميزات (Feed, Reels, Messages, Stories, Mail, Marketplace, Groups, AI Hub…) لكنه مصمم أساسًا للويب. الهدف: رفع جودة تجربة الجوّال + إتاحة تثبيته كتطبيق حقيقي على Android و iOS.
 
-## النطاق
-صفحة جديدة `/youtube` + صفحة مشاهدة `/watch-yt/$videoId` + Server Function لجلب الفيديوهات + رابط في القائمة الجانبية + تكامل مع البحث الموحّد.
+## المرحلة 1 — تحسينات تطوير الموقع (Polish)
 
----
+1. **Bottom Navigation للجوّال**: شريط سفلي ثابت (Feed / Reels / + Compose / Messages / Profile) بدل الاعتماد على السايدبار في الجوّال.
+2. **Header علوي مضغوط** مع أيقونة بحث + إشعارات + قصص (Stories Bar).
+3. **Pull-to-Refresh** في Feed و Notifications و Messages.
+4. **Skeletons موحّدة + Lazy loading** للصور والفيديوهات (بدّل أي `<img>` ثقيل بـ loading="lazy").
+5. **Haptics** (اهتزاز خفيف) عند الإعجاب/الحفظ/الإرسال على الجوّال.
+6. **Splash Screen + Logo Animation** عند فتح التطبيق.
+7. **Safe-area insets** (دعم نوتش iPhone) عبر `env(safe-area-inset-*)`.
+8. **Dark/Light theme toggle** في الإعدادات + احترام تفضيل النظام.
+9. **Offline banner** يظهر عند انقطاع الشبكة.
+10. **إصلاح خطأ runtime**: `Cannot set property attributeName of MutationRecord` (يبدو من تعديل DOM يدوي خاطئ — سأبحث وأصلح).
 
-## طريقة جلب البيانات (الجزء التقني الحرج)
+## المرحلة 2 — جعله "App-Like" (Installable PWA)
 
-YouTube لا يسمح بسحب فيديوهات قناة مباشرةً من المتصفح (CORS + شروط الاستخدام). لذلك سنستخدم **خادم TanStack Start** عبر `createServerFn` بإحدى طريقتين:
+PWA = أبسط وأسرع طريق ليصبح "تطبيق على الهاتف" يُثبَّت من المتصفح بدون متاجر.
+- إضافة `manifest.json` بأيقونات (192/512) + `display: "standalone"` + theme color.
+- شاشة Splash + أيقونة على Home Screen.
+- زر "تثبيت التطبيق" داخل الإعدادات.
+- بدون Service Worker / دون offline (لتفادي مشاكل preview حسب توجيهات Lovable).
 
-### الخيار A — RSS العام (مجاني، بدون مفتاح، مُوصى به للبداية)
-كل قناة YouTube لها feed عام:  
-`https://www.youtube.com/feeds/videos.xml?channel_id=UCxxxxx`
+النتيجة: يضغط المستخدم "إضافة إلى الشاشة الرئيسية" فيظهر التطبيق بأيقونة كاملة وبدون شريط متصفح، ويعمل على iOS و Android.
 
-- نُحوّل الرابط الذي ألصقه المستخدم (`@handle` أو `/c/name` أو `/channel/UC...`) إلى `channel_id` بسحب صفحة القناة وقراءة `<meta itemprop="identifier">` أو `channelId` من الـ HTML.
-- ثم نقرأ الـ RSS ونُحلّله لاستخراج: عنوان الفيديو، videoId، الصورة المصغّرة، تاريخ النشر، الوصف.
-- **القيد**: RSS يُرجع آخر **15 فيديو فقط** من القناة.
+## المرحلة 3 — تطبيق Native حقيقي (Android APK + iOS) عبر Capacitor
 
-### الخيار B — YouTube Data API v3 (يحتاج مفتاحًا، يدعم آلاف الفيديوهات)
-- يتطلب مفتاح `YOUTUBE_API_KEY` من Google Cloud Console.
-- يعطي قوائم تشغيل كاملة، عدد المشاهدات، المدة، إلخ.
+لمن يريد APK/IPA حقيقي للنشر على Google Play / App Store:
+- إعداد **Capacitor** (يلفّ الموقع داخل WebView مع وصول للـ native APIs).
+- إعداد `capacitor.config.ts` + مجلدات `android/` و `ios/`.
+- إضافة plugins: Push Notifications، Camera (للقصص)، Haptics، Status Bar، Splash Screen، Share.
+- توثيق خطوات البناء (يحتاج Android Studio محليًا أو خدمة build سحابية لأن Lovable لا تبني APK داخل الـ sandbox).
 
-**اقتراحي**: نبدأ بالخيار A (يعمل فورًا بدون أي إعداد)، ونضيف زرّ "تحميل المزيد عبر API" لاحقًا إن أردتَ تفعيل الخيار B.
+سأقدم سكربتًا جاهزًا + ملف README بالخطوات.
 
----
+## التفاصيل التقنية
 
-## الملفات الجديدة/المعدّلة
+- **Bottom Nav**: مكوّن `<MobileBottomNav />` يظهر فقط `md:hidden`، يستخدم `Link` من TanStack Router مع `activeProps`.
+- **Safe area**: في `styles.css` إضافة `padding-bottom: env(safe-area-inset-bottom)` للشريط السفلي و `viewport-fit=cover` في `__root.tsx`.
+- **PWA Manifest**: ملف ثابت في `public/manifest.webmanifest` + ربطه من `__root.tsx` head، بدون vite-plugin-pwa.
+- **أيقونات**: توليد PNG من شعار `HnLogo` بأحجام 192 و 512 و 180 (Apple touch).
+- **Capacitor**: `bun add @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios` + `npx cap init` + إضافة `server.url` يشير للنسخة المنشورة.
+- **Haptics**: استخدام `navigator.vibrate(20)` على الويب، و `@capacitor/haptics` داخل التطبيق الأصلي.
+- **Pull-to-refresh**: مكوّن خفيف يدويًا (touchstart/touchmove) بدون مكتبة إضافية.
 
-### 1. `src/utils/youtube.functions.ts` (جديد)
-Server function:
-```ts
-resolveYoutubeChannel({ url }) → { channelId, title, avatar, subscribers? }
-fetchChannelVideos({ channelId }) → Video[]  // عبر RSS
-```
-- يستخدم `fetch` على الخادم (لا CORS).
-- يُحلّل XML بـ regex بسيطة (لا حاجة لمكتبة).
-- يُخزّن النتائج مؤقتًا في الذاكرة لمدة 10 دقائق لتقليل الطلبات.
+## ما لن أفعله (وسبب ذلك)
 
-### 2. `src/routes/_authenticated/youtube.tsx` (جديد)
-- حقل إدخال كبير لرابط قناة YouTube + زر "عرض الفيديوهات".
-- بطاقة "ملف القناة" (الصورة + الاسم + عدد المشتركين إن توفّر).
-- شبكة فيديوهات (responsive grid) مع thumbnail + عنوان + تاريخ.
-- نقر على فيديو → `/watch-yt/$videoId`.
-- دعم تاريخ القنوات المُستوردة سابقًا (محفوظة في `localStorage` للوصول السريع).
+- لن أضيف Service Worker كامل لأن Lovable توصي بتجنّبه (يكسر الـ preview).
+- لن أبني APK داخل sandbox (غير متاح) — سأجهّز المشروع وأوفّر تعليمات البناء.
 
-### 3. `src/routes/_authenticated/watch-yt.$videoId.tsx` (جديد)
-- مُشغّل YouTube مدمج عبر `<iframe src="https://www.youtube.com/embed/$videoId">` بإطار 16:9.
-- عنوان الفيديو + رابط القناة الأصلية.
-- **التعليقات**: نُعيد استخدام `CommentsSection` لكن بـ `postId` ديناميكي — نُنشئ سجلًا في جدول `posts` بنوع خاص (`type = 'video'`) عند أول مشاهدة لكل فيديو YouTube حتى يقدر المستخدمون يعلّقوا داخل تطبيقنا (التعليقات داخلية، لا تُرسل لـ YouTube).
-- زر "فتح في YouTube" للوصول للأصل.
+## التسليم
 
-### 4. `src/components/AppSidebar.tsx` (تعديل بسيط)
-إضافة بند "YouTube" مع أيقونة `Youtube` من lucide-react يقود إلى `/youtube`.
-
-### 5. (اختياري) `src/routes/_authenticated/search.tsx`
-إضافة تبويب "YouTube" في البحث الموحّد يستدعي نفس الـ server function لو كان الاستعلام رابط قناة.
-
----
-
-## مخطط البيانات
-
-لا حاجة لجدول جديد. نستخدم جدول `posts` الموجود لتخزين فيديوهات YouTube المعروضة (لأجل التعليقات الداخلية فقط)، مع:
-- `type = 'video'`
-- `media_urls = [`https://www.youtube.com/embed/${videoId}`]`
-- `content = العنوان`
-- ميتاداتا في حقل النص (مصدر = youtube، videoId).
-
-أو نتركها بالكامل بدون تخزين، ونُفعّل التعليقات فقط عند الطلب.
+ملفات معدّلة/جديدة متوقعة:
+- `src/components/layout/MobileBottomNav.tsx` (جديد)
+- `src/components/layout/InstallPrompt.tsx` (جديد)
+- `src/components/layout/OfflineBanner.tsx` (جديد)
+- `src/routes/__root.tsx` (head meta + viewport-fit)
+- `src/routes/_authenticated.tsx` (تركيب Bottom Nav)
+- `src/styles.css` (safe-area + theme polish)
+- `public/manifest.webmanifest` + `public/icon-192.png` + `public/icon-512.png` + `public/apple-touch-icon.png` (جديدة)
+- `capacitor.config.ts` + `MOBILE_APP_README.md` (للمرحلة 3)
 
 ---
 
-## QA
-- لصق `https://www.youtube.com/@MrBeast` → عرض آخر 15 فيديو.
-- لصق `https://www.youtube.com/channel/UCX6OQ3DkcsbYNE6H8uQQuVA` → نفس النتيجة.
-- نقر فيديو → التشغيل في `/watch-yt/$videoId` بـ iframe.
-- التعليقات تعمل وتُحفظ.
-
----
-
-## ملاحظة قانونية
-عرض فيديوهات YouTube عبر `<iframe>` الرسمي مسموح بشروط YouTube (Embed Player). سحب الميتاداتا من RSS العام مسموح أيضًا. لا نقوم بتنزيل الفيديوهات نفسها.
-
----
-
-هل توافق على البدء بـ **الخيار A (RSS مجاني، آخر 15 فيديو لكل قناة)**؟ أم تفضّل تفعيل الخيار B (YouTube API بمفتاح، فيديوهات غير محدودة) من البداية؟
+**ملاحظة**: هذه خطة كبيرة. أنصح بتنفيذها على دفعات: **(أ) المرحلة 1 + 2 معًا** أولًا (تحسين + PWA قابل للتثبيت)، ثم **(ب) المرحلة 3** عند رغبتك في APK رسمي. هل أبدأ بـ (أ)؟
