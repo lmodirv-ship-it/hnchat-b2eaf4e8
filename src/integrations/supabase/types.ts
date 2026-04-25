@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_campaigns: {
+        Row: {
+          budget: number
+          clicks: number
+          conversions: number
+          created_at: string
+          description: string | null
+          ends_at: string | null
+          id: string
+          impressions: number
+          name: string
+          spent: number
+          starts_at: string | null
+          status: Database["public"]["Enums"]["ad_status"]
+          target_audience: Json | null
+          thumbnail_url: string | null
+          type: Database["public"]["Enums"]["ad_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget?: number
+          clicks?: number
+          conversions?: number
+          created_at?: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          impressions?: number
+          name: string
+          spent?: number
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["ad_status"]
+          target_audience?: Json | null
+          thumbnail_url?: string | null
+          type?: Database["public"]["Enums"]["ad_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget?: number
+          clicks?: number
+          conversions?: number
+          created_at?: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          impressions?: number
+          name?: string
+          spent?: number
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["ad_status"]
+          target_audience?: Json | null
+          thumbnail_url?: string | null
+          type?: Database["public"]["Enums"]["ad_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       comments: {
         Row: {
           content: string
@@ -630,6 +690,8 @@ export type Database = {
       is_owner: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
+      ad_status: "draft" | "active" | "paused" | "ended"
+      ad_type: "video" | "banner" | "story" | "product" | "sponsored_post"
       app_role:
         | "admin"
         | "creator"
@@ -772,6 +834,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ad_status: ["draft", "active", "paused", "ended"],
+      ad_type: ["video", "banner", "story", "product", "sponsored_post"],
       app_role: ["admin", "creator", "shopper", "user", "owner", "group_admin"],
       notification_type: [
         "like",
