@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search as SearchIcon, Sparkles, Loader2, Film, Users, ShoppingBag, FileText, User, Hash } from "lucide-react";
+import { Search as SearchIcon, Sparkles, Loader2, Film, Users, ShoppingBag, FileText, User, Hash, Video, BadgeCheck } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 const searchSchema = z.object({
