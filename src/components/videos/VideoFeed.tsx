@@ -28,6 +28,7 @@ import {
   Share2,
   Play,
   Pause,
+  Eye,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
