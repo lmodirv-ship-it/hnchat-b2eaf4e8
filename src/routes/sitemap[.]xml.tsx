@@ -9,6 +9,10 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const staticRoutes = [
           { loc: "/", priority: "1.0", changefreq: "daily" },
+          { loc: "/about", priority: "0.8", changefreq: "monthly" },
+          { loc: "/contact", priority: "0.7", changefreq: "monthly" },
+          { loc: "/privacy", priority: "0.5", changefreq: "yearly" },
+          { loc: "/terms", priority: "0.5", changefreq: "yearly" },
           { loc: "/sign-up-login", priority: "0.7", changefreq: "monthly" },
         ];
 
@@ -19,7 +23,6 @@ export const Route = createFileRoute("/sitemap.xml")({
             .select("id, updated_at")
             .order("created_at", { ascending: false })
             .limit(1000);
-
           if (posts) {
             postUrls = posts.map(
               (p: { id: string; updated_at: string }) =>
@@ -27,7 +30,25 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
           }
         } catch {
-          // Ignore — sitemap still works with static routes
+          // ignore
+        }
+
+        let liveUrls: string[] = [];
+        try {
+          const { data: streams } = await supabaseAdmin
+            .from("live_streams")
+            .select("id, updated_at")
+            .eq("is_private", false)
+            .order("created_at", { ascending: false })
+            .limit(500);
+          if (streams) {
+            liveUrls = streams.map(
+              (s: { id: string; updated_at: string }) =>
+                `<url><loc>${SITE_URL}/live/${s.id}</loc><lastmod>${new Date(s.updated_at).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>`
+            );
+          }
+        } catch {
+          // ignore
         }
 
         const staticUrls = staticRoutes.map(
@@ -39,6 +60,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${staticUrls.join("\n")}
 ${postUrls.join("\n")}
+${liveUrls.join("\n")}
 </urlset>`;
 
         return new Response(xml, {
