@@ -285,14 +285,16 @@ function WatchYtPage() {
         <ArrowLeft className="h-4 w-4 ml-1" /> رجوع
       </Button>
 
-      <div className="aspect-video w-full bg-black rounded-xl overflow-hidden mb-4">
+      <div className="relative aspect-video w-full bg-black rounded-xl overflow-hidden mb-4">
         <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&fs=1&playsinline=1`}
           title={meta?.title || "Video"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className="w-full h-full border-0"
         />
+        {/* Cover the "Watch on YouTube" button + logo (top-right area of player) */}
+        <div className="absolute top-0 right-0 h-12 w-32 bg-black pointer-events-none z-10" aria-hidden />
       </div>
 
       <div className="flex items-start justify-between gap-4 mb-3 flex-wrap">
