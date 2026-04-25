@@ -473,8 +473,11 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
         }
       }
 
-      throw new Error(
-        "تعذر العثور على منتجات في هذا الموقع. جرّب رابط صفحة المنتجات مباشرة."
-      );
+      return {
+        items: [],
+        siteName: new URL(origin).hostname,
+        origin,
+        sourceUrl: origin,
+      };
     }
   );
