@@ -124,6 +124,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="ar" dir="rtl" className="dark">
       <head>
         <HeadContent />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14" />
       </head>
       <body className="dark">
         {children}
