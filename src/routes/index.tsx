@@ -1,8 +1,14 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { LandingPage } from "@/components/landing/LandingPage";
 
-// الصفحة الرئيسية: تحوّل إلى /feed (الـ Smart Feed الموحّد)
 export const Route = createFileRoute("/")({
-  beforeLoad: () => {
-    throw redirect({ to: "/feed" });
-  },
+  head: () => ({
+    meta: [
+      { title: "HN-Chat — عالمك في تطبيق واحد | دردشة ذكاء اصطناعي" },
+      { name: "description", content: "HN-Chat أفضل منصة سوبر آب عربية. دردشة ذكاء اصطناعي، تواصل اجتماعي، تسوق، تداول عملات رقمية، وفيديوهات في تطبيق واحد. ابدأ مجاناً الآن." },
+      { property: "og:title", content: "HN-Chat — عالمك في تطبيق واحد" },
+      { property: "og:description", content: "دردشة AI، تواصل اجتماعي، تسوق، تداول عملات رقمية — كل ما تحتاجه في مكان واحد." },
+    ],
+  }),
+  component: LandingPage,
 });
