@@ -273,14 +273,24 @@ function GlowButton({
 /* ── Main Component ── */
 export function LandingPage() {
   const [lang, setLang] = useState<Lang>("ar");
+  const [mounted, setMounted] = useState(false);
   const l = t[lang];
   const chatMessages = useFakeChat();
 
   useEffect(() => {
+    setMounted(true);
     setLang(detectLang());
   }, []);
 
   const isRTL = lang === "ar";
+
+  // Prevent framer-motion from rendering opacity:0 during SSR
+  const animProps = mounted
+    ? { initial: "hidden" as const, animate: "visible" as const, variants: fadeUp }
+    : { initial: "visible" as const, animate: "visible" as const, variants: fadeUp };
+  const viewAnimProps = mounted
+    ? { initial: "hidden" as const, whileInView: "visible" as const, viewport: { once: true }, variants: fadeUp }
+    : { variants: fadeUp };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden" dir={isRTL ? "rtl" : "ltr"}>
