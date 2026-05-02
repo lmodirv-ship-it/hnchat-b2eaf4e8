@@ -43,6 +43,7 @@ function AuthenticatedLayout() {
         <div className="flex-1 pb-16 md:pb-0">
           <Outlet />
         </div>
+        <SiteFooter />
         <FloatingComposeButton />
         <MobileBottomNav />
         <InstallPrompt />
