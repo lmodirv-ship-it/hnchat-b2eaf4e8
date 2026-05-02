@@ -431,7 +431,7 @@ function useFakeChat() {
    COMPONENT
    ═══════════════════════════════════════════════════════════ */
 export function LandingPage() {
-  const [lang, setLang] = useState<Lang>("ar");
+  const [lang, setLang] = useState<Lang>("en");
   const [mounted, setMounted] = useState(false);
   const l = t[lang];
   const chatMessages = useFakeChat();
