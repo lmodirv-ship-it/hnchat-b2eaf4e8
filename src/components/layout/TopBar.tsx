@@ -37,9 +37,12 @@ export function TopBar() {
       <div className="flex items-center gap-3 px-4 py-2.5">
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <HnLogo className="h-7 w-7" />
-          <span className="hidden sm:block font-bold text-sm bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
-            hnChat
-          </span>
+          <div className="hidden sm:flex flex-col leading-none">
+            <span className="font-bold text-sm bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
+              hnChat
+            </span>
+            <span className="text-[9px] text-muted-foreground tracking-wide">www.hn-chat.com</span>
+          </div>
         </Link>
 
         <form onSubmit={submit} className="flex-1 max-w-2xl mx-auto">

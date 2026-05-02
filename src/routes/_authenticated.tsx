@@ -6,6 +6,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { FloatingComposeButton } from "@/components/composer/FloatingComposeButton";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { InstallPrompt } from "@/components/layout/InstallPrompt";
 import { Loader2 } from "lucide-react";
 
@@ -42,6 +43,7 @@ function AuthenticatedLayout() {
         <div className="flex-1 pb-16 md:pb-0">
           <Outlet />
         </div>
+        <SiteFooter />
         <FloatingComposeButton />
         <MobileBottomNav />
         <InstallPrompt />
