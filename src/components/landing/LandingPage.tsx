@@ -273,14 +273,20 @@ function GlowButton({
 /* ── Main Component ── */
 export function LandingPage() {
   const [lang, setLang] = useState<Lang>("ar");
+  const [mounted, setMounted] = useState(false);
   const l = t[lang];
   const chatMessages = useFakeChat();
 
   useEffect(() => {
+    setMounted(true);
     setLang(detectLang());
   }, []);
 
   const isRTL = lang === "ar";
+
+  // On SSR, skip animation initial state (opacity:0) to avoid blank page
+  const initAnim = mounted ? "hidden" as const : undefined;
+  const enterAnim = mounted ? "visible" as const : undefined;
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden" dir={isRTL ? "rtl" : "ltr"}>
@@ -329,7 +335,7 @@ export function LandingPage() {
       <section className="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-20 flex flex-col lg:flex-row gap-8 items-start">
         {/* Hero content */}
         <div className="flex-1 text-center lg:text-start pt-4">
-          <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
+          <motion.div initial={initAnim} animate={enterAnim} variants={fadeUp} custom={0}>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border bg-ice-card/50 text-xs text-muted-foreground mb-6">
               <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
               {l.badge}
@@ -338,7 +344,7 @@ export function LandingPage() {
 
           <motion.h1
             className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4"
-            initial="hidden" animate="visible" variants={fadeUp} custom={1}
+            initial={initAnim} animate={enterAnim} variants={fadeUp} custom={1}
           >
             {l.heroTitle1}{" "}
             <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent">
@@ -348,21 +354,21 @@ export function LandingPage() {
 
           <motion.p
             className="text-xl text-cyan-glow font-semibold mb-4"
-            initial="hidden" animate="visible" variants={fadeUp} custom={1.5}
+            initial={initAnim} animate={enterAnim} variants={fadeUp} custom={1.5}
           >
             {l.heroSub}
           </motion.p>
 
           <motion.p
             className="text-base text-muted-foreground max-w-xl mb-10"
-            initial="hidden" animate="visible" variants={fadeUp} custom={2}
+            initial={initAnim} animate={enterAnim} variants={fadeUp} custom={2}
           >
             {l.heroDesc}
           </motion.p>
 
           <motion.div
             className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start"
-            initial="hidden" animate="visible" variants={fadeUp} custom={3}
+            initial={initAnim} animate={enterAnim} variants={fadeUp} custom={3}
           >
             <Link to="/sign-up-login">
               <GlowButton variant="primary" size="lg">
@@ -382,8 +388,8 @@ export function LandingPage() {
         {/* Side Live Chat — Glassmorphism */}
         <motion.div
           className="w-full lg:w-80 shrink-0"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={mounted ? { opacity: 0, x: 40 } : undefined}
+          animate={mounted ? { opacity: 1, x: 0 } : undefined}
           transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" as const }}
         >
           <div className="rounded-2xl border border-ice-border/60 bg-ice-card/20 backdrop-blur-2xl shadow-glass overflow-hidden">
@@ -438,7 +444,7 @@ export function LandingPage() {
             <motion.div
               key={s.label}
               className="rounded-xl border border-ice-border bg-ice-card/40 backdrop-blur-xl p-5 text-center"
-              initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
+              initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={i}
             >
               <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
                 {s.value}
@@ -453,7 +459,7 @@ export function LandingPage() {
       <section className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
         <motion.h2
           className="text-3xl font-bold text-center mb-12"
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
+          initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={0}
         >
           {l.allInOne} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.onePlace}</span>
         </motion.h2>
@@ -464,7 +470,7 @@ export function LandingPage() {
               <motion.div
                 key={f.title}
                 className="group relative rounded-2xl border border-ice-border bg-ice-card/30 backdrop-blur-xl p-6 hover:shadow-card-hover transition-all duration-300 hover:border-cyan-glow/30 hover:scale-[1.02]"
-                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
+                initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={i}
               >
                 <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${featureColors[i]} bg-opacity-20 mb-4`}>
                   <div className="rounded-lg bg-background/60 p-2">
@@ -483,13 +489,13 @@ export function LandingPage() {
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-20">
         <motion.h2
           className="text-3xl font-bold text-center mb-4"
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
+          initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={0}
         >
           {l.tryAI} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.aiWord}</span>
         </motion.h2>
         <motion.p
           className="text-center text-muted-foreground mb-10"
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}
+          initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={1}
         >
           {l.aiSub}
         </motion.p>
@@ -500,7 +506,7 @@ export function LandingPage() {
               <motion.div
                 key={c.title}
                 className="rounded-2xl border border-ice-border bg-ice-card/30 backdrop-blur-xl p-6 text-center hover:shadow-diamond transition-all duration-300 hover:scale-[1.03]"
-                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i + 2}
+                initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={i + 2}
               >
                 <div className="inline-flex p-3 rounded-full bg-gradient-to-br from-cyan-glow/20 to-violet-glow/20 mb-4">
                   <Icon className="h-7 w-7 text-cyan-glow" />
@@ -513,7 +519,7 @@ export function LandingPage() {
         </div>
         <motion.div
           className="text-center mt-8"
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={5}
+          initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={5}
         >
           <Link to="/sign-up-login">
             <GlowButton variant="primary" size="lg">{l.tryFree}</GlowButton>
@@ -525,7 +531,7 @@ export function LandingPage() {
       <section className="relative z-10 max-w-4xl mx-auto px-6 pb-20">
         <motion.div
           className="rounded-2xl border border-ice-border bg-ice-card/40 backdrop-blur-xl p-8 flex flex-col md:flex-row items-center gap-6"
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
+          initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={0}
         >
           <Shield className="h-12 w-12 text-cyan-glow shrink-0" />
           <div className="text-center md:text-start flex-1">
