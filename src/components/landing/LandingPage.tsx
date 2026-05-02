@@ -105,7 +105,7 @@ const t: Record<Lang, {
   },
   fr: {
     signIn: "Connexion", startFree: "Commencer",
-    badge: "La 1ère Super App arabe",
+    badge: "La Super App mondiale #1",
     heroTitle1: "Bienvenue sur", heroTitle2: "hnChat",
     heroSub: "Votre compagnon intelligent pour le travail et la communication",
     heroDesc: "Chat IA, réseau social, shopping, trading crypto et vidéos — tout ce dont vous avez besoin en un seul endroit.",
