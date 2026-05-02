@@ -33,7 +33,7 @@ const t: Record<Lang, {
 }> = {
   ar: {
     signIn: "تسجيل الدخول", startFree: "ابدأ مجاناً",
-    badge: "منصة Super App العربية الأولى",
+    badge: "The Global #1 Super App",
     heroTitle1: "مرحباً بك في عالم", heroTitle2: "hnChat",
     heroSub: "رفيقك الذكي للعمل والتواصل",
     heroDesc: "دردشة ذكاء اصطناعي، تواصل اجتماعي، تسوق، تداول عملات رقمية، وفيديوهات — كل ما تحتاجه في مكان واحد.",
