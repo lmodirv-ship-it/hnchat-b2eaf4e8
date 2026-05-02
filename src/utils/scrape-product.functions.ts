@@ -342,7 +342,9 @@ function normalizeSiteToOrigin(input: string): string {
   s = s.replace(/^https?:\/\//, "").replace(/\/$/, "");
   if (!s.includes(".")) s = `${s}.com`;
   s = s.split("/")[0];
-  return `https://${s}`;
+  const origin = `https://${s}`;
+  blockPrivateNetworks(origin);
+  return origin;
 }
 
 const COMMON_PRODUCT_PATHS = [
