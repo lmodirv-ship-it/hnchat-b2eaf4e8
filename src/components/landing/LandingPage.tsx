@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { HnLogo } from "@/components/HnLogo";
+import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { useState, useEffect, useMemo } from "react";
 import {
   MessageCircle,
