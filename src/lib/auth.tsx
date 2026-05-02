@@ -73,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user: session?.user ?? null,
     roles,
     isLoading,
+    rolesLoaded,
     isAdmin: roles.includes("admin") || roles.includes("owner"),
     isOwner: roles.includes("owner"),
     isAuthenticated: !!session,
