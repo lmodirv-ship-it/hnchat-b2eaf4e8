@@ -1,4 +1,4 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
@@ -112,13 +112,6 @@ export const Route = createRootRoute({
           ],
         }),
       },
-      {
-        src: "https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14",
-        async: true,
-      },
-      {
-        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`,
-      },
     ],
   }),
   shellComponent: RootShell,
@@ -131,6 +124,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="ar" dir="rtl" className="dark">
       <head>
         <HeadContent />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14" />
       </head>
       <body className="dark">
         {children}
@@ -147,6 +141,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <ScriptOnce children={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`} />
         <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
