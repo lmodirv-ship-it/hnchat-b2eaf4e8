@@ -1247,6 +1247,33 @@ export type Database = {
         }
         Relationships: []
       }
+      shared_chats: {
+        Row: {
+          created_at: string
+          id: string
+          messages: Json
+          share_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          share_id?: string
+          title?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          share_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       site_visits: {
         Row: {
           first_seen: string
