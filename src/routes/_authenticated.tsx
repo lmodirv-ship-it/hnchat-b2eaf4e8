@@ -8,7 +8,7 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { InstallPrompt } from "@/components/layout/InstallPrompt";
-import { NavigationProgress } from "@/components/layout/NavigationProgress";
+
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -33,7 +33,7 @@ function AuthenticatedLayout() {
 
   return (
     <div className="min-h-screen flex w-full">
-      <NavigationProgress />
+      
       <AppSidebar />
       <main className="flex-1 min-w-0 relative flex flex-col">
         {/* Ambient background glows - fixed, never re-renders */}
