@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { fetchPublicStream } from "@/server/public-pages.functions";
 
 const SITE_URL = "https://www.hnchat.net";
 
@@ -24,37 +24,9 @@ type PublicStream = {
 
 export const Route = createFileRoute("/live/$id")({
   loader: async ({ params }) => {
-    const { data: stream, error } = await supabaseAdmin
-      .from("live_streams")
-      .select("id, user_id, title, description, thumbnail_url, status, viewer_count, peak_viewers, category, started_at, ended_at, created_at, is_private")
-      .eq("id", params.id)
-      .maybeSingle();
-
-    if (error || !stream || stream.is_private) {
-      throw notFound();
-    }
-
-    const { data: author } = await supabaseAdmin
-      .from("profiles")
-      .select("username, full_name, avatar_url")
-      .eq("id", stream.user_id)
-      .maybeSingle();
-
-    const result: PublicStream = {
-      id: stream.id,
-      title: stream.title,
-      description: stream.description,
-      thumbnail_url: stream.thumbnail_url,
-      status: stream.status,
-      viewer_count: stream.viewer_count,
-      peak_viewers: stream.peak_viewers,
-      category: stream.category,
-      started_at: stream.started_at,
-      ended_at: stream.ended_at,
-      created_at: stream.created_at,
-      author: author ?? null,
-    };
-    return result;
+    const stream = await fetchPublicStream({ data: { id: params.id } });
+    if (!stream) throw notFound();
+    return stream as PublicStream;
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
