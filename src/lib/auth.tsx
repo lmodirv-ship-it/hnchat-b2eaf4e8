@@ -10,6 +10,7 @@ export interface AuthContextValue {
   user: User | null;
   roles: AppRole[];
   isLoading: boolean;
+  rolesLoaded: boolean;
   isAdmin: boolean;
   isOwner: boolean;
   isAuthenticated: boolean;
@@ -22,6 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [rolesLoaded, setRolesLoaded] = useState(false);
 
   useEffect(() => {
     // Set up listener FIRST
@@ -29,12 +31,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession);
       if (newSession?.user) {
         const uid = newSession.user.id;
+        setRolesLoaded(false);
         setTimeout(() => {
-          loadRoles(uid);
+          loadRoles(uid).finally(() => setRolesLoaded(true));
           detectAndStoreLocale(uid);
         }, 0);
       } else {
         setRoles([]);
+        setRolesLoaded(true);
       }
     });
 
@@ -42,9 +46,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(currentSession);
       if (currentSession?.user) {
         const uid = currentSession.user.id;
-        loadRoles(uid).finally(() => setIsLoading(false));
+        loadRoles(uid).finally(() => { setRolesLoaded(true); setIsLoading(false); });
         detectAndStoreLocale(uid);
       } else {
+        setRolesLoaded(true);
         setIsLoading(false);
       }
     });
@@ -68,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user: session?.user ?? null,
     roles,
     isLoading,
+    rolesLoaded,
     isAdmin: roles.includes("admin") || roles.includes("owner"),
     isOwner: roles.includes("owner"),
     isAuthenticated: !!session,
