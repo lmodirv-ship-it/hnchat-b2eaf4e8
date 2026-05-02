@@ -22,7 +22,7 @@ const DEMOS = [
 
 function AuthPage() {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isOwner, isAdmin } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,8 +30,16 @@ function AuthPage() {
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) navigate({ to: "/feed" });
-  }, [isAuthenticated, isLoading, navigate]);
+    if (!isLoading && isAuthenticated) {
+      if (isOwner) {
+        navigate({ to: "/owner-x9k2m7" });
+      } else if (isAdmin) {
+        navigate({ to: "/admin" });
+      } else {
+        navigate({ to: "/feed" });
+      }
+    }
+  }, [isAuthenticated, isLoading, isOwner, isAdmin, navigate]);
 
   async function ensureDemo(em: string, pw: string, uname: string) {
     // Try sign in; if fails, sign up then sign in
@@ -91,10 +99,10 @@ function AuthPage() {
         if (error) throw error;
         toast.success("Check your email to confirm your account");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back!");
-        navigate({ to: "/feed" });
+        // Redirect will be handled by useEffect after roles load
       }
     } catch (e: any) {
       toast.error(e.message ?? "Authentication failed");
