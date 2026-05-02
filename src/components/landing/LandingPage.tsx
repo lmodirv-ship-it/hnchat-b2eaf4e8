@@ -388,18 +388,20 @@ const chatIcons = [Zap, Globe, Sparkles];
 
 /* ═══ Chat messages ═══ */
 const chatPool = [
-  { user: "أحمد", msg: "مرحباً بالجميع! 👋", avatar: "🧑‍💻", time: "الآن" },
-  { user: "Sarah", msg: "This app is amazing!", avatar: "👩‍🎨", time: "1m" },
-  { user: "يوسف", msg: "جربت الذكاء الاصطناعي، مذهل! 🤖", avatar: "🧑‍🚀", time: "2m" },
+  { user: "Ahmed", msg: "مرحباً بالجميع! 👋 Hello everyone!", avatar: "🧑‍💻", time: "now" },
+  { user: "Sarah", msg: "This app is amazing! 🌟", avatar: "👩‍🎨", time: "1m" },
+  { user: "Carlos", msg: "¡Me encanta esta plataforma! 💜", avatar: "🧑‍🚀", time: "2m" },
   { user: "Marie", msg: "J'adore cette plateforme 💜", avatar: "👩‍🔬", time: "3m" },
-  { user: "خالد", msg: "السوق فيه منتجات رائعة 🛍️", avatar: "🧑‍💼", time: "4m" },
-  { user: "Lina", msg: "Voice rooms are so cool! 🎙️", avatar: "👩‍🎤", time: "5m" },
-  { user: "عمر", msg: "التداول سهل وسريع 📈", avatar: "🧑‍💻", time: "6m" },
-  { user: "Fatima", msg: "أحب الفيديوهات القصيرة ❤️", avatar: "👩‍🎓", time: "7m" },
-  { user: "Alex", msg: "Best super app I've tried!", avatar: "🧑‍🎨", time: "8m" },
-  { user: "نور", msg: "مستقبل التطبيقات هنا 🚀", avatar: "👩‍💻", time: "9m" },
-  { user: "Karim", msg: "الترجمة الفورية خرافية 🌍", avatar: "🧑‍🏫", time: "10m" },
-  { user: "Amira", msg: "J'ai gagné avec le crypto! 💰", avatar: "👩‍💼", time: "11m" },
+  { user: "Hans", msg: "Die KI ist unglaublich! 🤖", avatar: "🧑‍💼", time: "4m" },
+  { user: "Yuki", msg: "最高のアプリです！🎌", avatar: "👩‍🎤", time: "5m" },
+  { user: "Priya", msg: "Loving the AI features! 🚀", avatar: "👩‍💻", time: "6m" },
+  { user: "Marco", msg: "Marketplace is fantastic! 🛍️", avatar: "🧑‍🎨", time: "7m" },
+  { user: "Alex", msg: "Best super app I've tried!", avatar: "🧑‍🎓", time: "8m" },
+  { user: "Elena", msg: "Отличное приложение! ⭐", avatar: "👩‍💼", time: "9m" },
+  { user: "Chen", msg: "这个平台太棒了！🔥", avatar: "🧑‍🏫", time: "10m" },
+  { user: "Isabella", msg: "Crypto trading is so easy here 📈", avatar: "👩‍💼", time: "11m" },
+  { user: "Mehmet", msg: "Harika bir uygulama! 🇹🇷", avatar: "🧑‍💻", time: "12m" },
+  { user: "Lucas", msg: "Adorei o app! 🇧🇷", avatar: "🧑‍🚀", time: "13m" },
 ];
 
 const bubbleGradients = [
