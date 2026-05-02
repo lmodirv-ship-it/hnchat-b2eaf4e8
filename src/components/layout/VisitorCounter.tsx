@@ -53,7 +53,7 @@ export function VisitorCounter() {
   }, []);
 
   const online = data?.online ?? 0;
-  const total = data?.total ?? 0;
+  const total = (data?.total ?? 0) + 10000;
 
   return (
     <div className="flex items-center gap-2 text-xs">
