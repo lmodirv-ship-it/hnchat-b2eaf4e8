@@ -238,8 +238,8 @@ export function LandingPage() {
       {/* ═══ NAVBAR ═══ */}
       <nav className="relative z-20 flex items-center justify-between px-4 sm:px-6 py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
-          <HnLogo className="h-10 w-10" />
-          <span className="text-xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">hnChat</span>
+          <HnLogo size={48} showText={false} />
+          <span className="text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
           <VisitorCounter />
         </div>
         <div className="flex items-center gap-2 sm:gap-3">

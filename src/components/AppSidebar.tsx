@@ -167,7 +167,7 @@ export function AppSidebar() {
   return (
     <aside className="hidden md:flex w-64 flex-col border-l border-ice-border/30 bg-background/50 backdrop-blur-2xl backdrop-saturate-150 sticky top-0 h-screen shadow-[4px_0_30px_oklch(0_0_0/0.2)]">
       <div className="p-4 border-b border-ice-border flex items-center gap-2">
-        <HnLogo className="h-9 w-9" />
+        <HnLogo size={38} showText={false} />
         <div className="min-w-0">
           <div className="font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">hnChat</div>
           <div className="text-[9px] uppercase tracking-widest text-muted-foreground">Super App</div>

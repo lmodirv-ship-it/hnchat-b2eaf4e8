@@ -35,10 +35,10 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-30 border-b border-ice-border/30 bg-background/60 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_4px_30px_oklch(0_0_0/0.3)]">
       <div className="flex items-center gap-3 px-4 py-2.5">
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <HnLogo className="h-7 w-7" />
+        <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
+          <HnLogo size={36} showText={false} />
           <div className="hidden sm:flex flex-col leading-none">
-            <span className="font-bold text-sm bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
+            <span className="font-extrabold text-base bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_oklch(0.78_0.18_60/0.3)] group-hover:drop-shadow-[0_0_14px_oklch(0.78_0.18_60/0.5)] transition-all duration-300">
               hnChat
             </span>
             <span className="text-[9px] text-muted-foreground tracking-wide">www.hn-chat.com</span>
