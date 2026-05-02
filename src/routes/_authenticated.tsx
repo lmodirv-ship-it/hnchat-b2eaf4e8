@@ -6,6 +6,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { FloatingComposeButton } from "@/components/composer/FloatingComposeButton";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { InstallPrompt } from "@/components/layout/InstallPrompt";
 import { Loader2 } from "lucide-react";
 
