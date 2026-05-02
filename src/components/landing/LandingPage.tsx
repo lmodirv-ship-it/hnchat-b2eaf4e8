@@ -15,7 +15,7 @@ import {
 /* ═══════════════════════════════════════════════════════════
    i18n
    ═══════════════════════════════════════════════════════════ */
-type Lang = "ar" | "en" | "fr";
+type Lang = "ar" | "en" | "fr" | "es" | "de" | "tr" | "pt" | "zh" | "ru";
 
 const t: Record<Lang, {
   signIn: string; startFree: string; badge: string;
