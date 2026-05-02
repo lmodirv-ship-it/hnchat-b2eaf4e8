@@ -90,27 +90,34 @@ function OwnerShell() {
           <OwnerCommandPalette />
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
-          {NAV.map((item) => {
-            const Icon = item.icon;
-            const active = item.exact
-              ? location.pathname === item.to
-              : location.pathname === item.to || location.pathname.startsWith(item.to + "/");
-            return (
-              <Link
-                key={item.to}
-                to={item.to as any}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all ${
-                  active
-                    ? "bg-gradient-to-r from-[oklch(0.75_0.18_50/0.18)] to-[oklch(0.55_0.22_25/0.12)] text-[oklch(0.92_0.1_50)] shadow-[inset_0_0_0_1px_oklch(0.75_0.18_50/0.3)]"
-                    : "text-[oklch(0.65_0.04_40)] hover:bg-[oklch(0.1_0.03_40)] hover:text-[oklch(0.85_0.1_50)]"
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+        <nav className="flex-1 overflow-y-auto p-2 space-y-3">
+          {NAV_SECTIONS.map((section) => (
+            <div key={section.title}>
+              <div className="text-[9px] uppercase tracking-[0.2em] text-[oklch(0.45_0.04_40)] px-3 py-1.5 font-semibold">{section.title}</div>
+              <div className="space-y-0.5">
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = item.exact
+                    ? location.pathname === item.to
+                    : location.pathname === item.to || location.pathname.startsWith(item.to + "/");
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to as any}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all ${
+                        active
+                          ? "bg-gradient-to-r from-[oklch(0.75_0.18_50/0.18)] to-[oklch(0.55_0.22_25/0.12)] text-[oklch(0.92_0.1_50)] shadow-[inset_0_0_0_1px_oklch(0.75_0.18_50/0.3)]"
+                          : "text-[oklch(0.65_0.04_40)] hover:bg-[oklch(0.1_0.03_40)] hover:text-[oklch(0.85_0.1_50)]"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         <div className="p-3 border-t border-[oklch(0.2_0.05_30)]">
