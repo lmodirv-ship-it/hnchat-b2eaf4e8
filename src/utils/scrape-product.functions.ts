@@ -279,6 +279,7 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
     let u: URL;
     try { u = new URL(input.url); } catch { throw new Error("Invalid URL"); }
     if (!["http:", "https:"].includes(u.protocol)) throw new Error("Only http/https URLs are allowed");
+    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<{ items: ScrapedListItem[]; siteName: string }> => {
