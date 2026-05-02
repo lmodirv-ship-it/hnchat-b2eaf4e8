@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { HnLogo } from "@/components/HnLogo";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
+import { SocialProofToast } from "@/components/landing/SocialProofToast";
 import { useState, useEffect, useMemo } from "react";
 import {
   MessageCircle,
@@ -291,6 +292,7 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden" dir={isRTL ? "rtl" : "ltr"}>
+      <SocialProofToast />
       {/* Ambient Glows */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-glow/15 blur-[100px]" />
