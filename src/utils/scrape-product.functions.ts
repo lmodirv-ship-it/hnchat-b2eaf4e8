@@ -109,6 +109,7 @@ export const scrapeProductUrl = createServerFn({ method: "POST" })
     if (!["http:", "https:"].includes(u.protocol)) {
       throw new Error("Only http/https URLs are allowed");
     }
+    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<ScrapedProduct> => {
