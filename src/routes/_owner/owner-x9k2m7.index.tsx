@@ -16,6 +16,66 @@ const CYAN = "#22d3ee";
 const ROSE = "#f43f5e";
 const VIOLET = "#a78bfa";
 
+function AnalyticsStatusCard() {
+  const [gaStatus, setGaStatus] = useState<"checking" | "connected" | "not-detected">("checking");
+
+  useEffect(() => {
+    const check = () => {
+      if (typeof window !== "undefined" && window.gtag && window.dataLayer && window.dataLayer.length > 0) {
+        setGaStatus("connected");
+      } else {
+        setGaStatus("not-detected");
+      }
+    };
+    const timer = setTimeout(check, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <OwnerCard className="p-4 mb-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className={`p-2 rounded-lg ${gaStatus === "connected" ? "bg-emerald-500/10" : gaStatus === "not-detected" ? "bg-red-500/10" : "bg-yellow-500/10"}`}>
+            <BarChart3 className={`h-5 w-5 ${gaStatus === "connected" ? "text-emerald-400" : gaStatus === "not-detected" ? "text-red-400" : "text-yellow-400"}`} />
+          </div>
+          <div>
+            <h3 className="font-semibold text-sm text-[oklch(0.9_0.05_50)]">Google Analytics 4</h3>
+            <p className="text-xs text-[oklch(0.5_0.04_40)]">Measurement ID: G-QPQ40Z8H14</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          {gaStatus === "checking" && (
+            <div className="flex items-center gap-1.5 text-xs text-yellow-400">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              جارِ الفحص...
+            </div>
+          )}
+          {gaStatus === "connected" && (
+            <div className="flex items-center gap-1.5 text-xs text-emerald-400">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              متصل ويعمل
+            </div>
+          )}
+          {gaStatus === "not-detected" && (
+            <div className="flex items-center gap-1.5 text-xs text-red-400">
+              <XCircle className="h-3.5 w-3.5" />
+              غير مكتشف
+            </div>
+          )}
+          <a
+            href="https://analytics.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs text-[oklch(0.6_0.15_50)] hover:text-[oklch(0.75_0.18_50)] transition"
+          >
+            فتح GA4 <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+    </OwnerCard>
+  );
+}
+
 function MissionControl() {
   const { data, isLoading } = useQuery({
     queryKey: ["owner-overview-v2"],
