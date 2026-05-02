@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useLocation, useNavigate, redirect } fro
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Crown, Users, FileText, ShoppingBag, ShieldAlert, Settings, Activity, DollarSign, Globe, Flag, Power, LogOut, Bell } from "lucide-react";
+import { Loader2, Crown, Users, FileText, ShoppingBag, ShieldAlert, Settings, Activity, DollarSign, Globe, Flag, Power, LogOut, Bell, Cpu, LifeBuoy, Zap } from "lucide-react";
 import { OwnerCommandPalette } from "@/components/owner/OwnerCommandPalette";
 
 // Secret obscured path. Keep in sync with internal docs only.
@@ -42,13 +42,20 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    title: "AI والاستهلاك",
+    items: [
+      { to: "/owner-x9k2m7/api-usage", label: "API & Token Usage", icon: Cpu },
+      { to: "/owner-x9k2m7/tickets", label: "Support Tickets", icon: LifeBuoy },
+    ],
+  },
+  {
     title: "النظام والأمان",
     items: [
       { to: "/owner-x9k2m7/features", label: "Feature Flags", icon: Power },
       { to: "/owner-x9k2m7/security", label: "Security & RLS", icon: ShieldAlert },
       { to: "/owner-x9k2m7/audit", label: "Audit Logs", icon: Activity },
       { to: "/owner-x9k2m7/geography", label: "Geo & Language", icon: Globe },
-      { to: "/owner-x9k2m7/settings", label: "System Settings", icon: Settings },
+      { to: "/owner-x9k2m7/settings", label: "Global Config", icon: Settings },
     ],
   },
 ];
