@@ -56,15 +56,16 @@ function OwnerShell() {
       {/* Distinct dark gold/red theme — clearly NOT the public app */}
       <aside className="w-72 border-r border-[oklch(0.2_0.05_30)] bg-gradient-to-b from-[oklch(0.06_0.02_30)] to-[oklch(0.04_0.01_280)] sticky top-0 h-screen flex flex-col">
         <div className="p-5 border-b border-[oklch(0.2_0.05_30)]">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 mb-3">
             <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[oklch(0.75_0.18_50)] to-[oklch(0.55_0.22_25)] flex items-center justify-center shadow-[0_0_24px_oklch(0.75_0.18_50/0.4)]">
               <Crown className="h-5 w-5 text-[oklch(0.04_0.01_280)]" />
             </div>
-            <div>
+            <div className="flex-1">
               <div className="font-bold text-[oklch(0.85_0.15_50)]">OWNER CONSOLE</div>
               <div className="text-[9px] uppercase tracking-[0.25em] text-[oklch(0.55_0.05_50)]">Restricted · Level 0</div>
             </div>
           </div>
+          <OwnerCommandPalette />
         </div>
 
         <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
