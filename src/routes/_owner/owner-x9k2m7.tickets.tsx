@@ -23,7 +23,7 @@ function TicketsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["owner-tickets", statusFilter],
     queryFn: async () => {
-      let q = supabase.from("support_tickets").select("*").order("created_at", { ascending: false }).limit(100);
+      let q = supabase.from("support_tickets" as any).select("*").order("created_at", { ascending: false }).limit(100);
       if (statusFilter !== "all") q = q.eq("status", statusFilter);
       const { data: tickets } = await q;
       const allTickets = tickets ?? [];
@@ -52,7 +52,7 @@ function TicketsPage() {
       const updates: any = { status };
       if (status === "resolved") updates.resolved_at = new Date().toISOString();
       if (status === "in_progress") updates.assigned_to = user!.id;
-      const { error } = await supabase.from("support_tickets").update(updates).eq("id", id);
+      const { error } = await supabase.from("support_tickets" as any).update(updates).eq("id", id);
       if (error) throw error;
       await supabase.from("owner_audit_logs").insert({
         actor_id: user!.id,

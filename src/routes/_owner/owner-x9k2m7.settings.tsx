@@ -22,7 +22,7 @@ function GlobalConfigPage() {
   const { data: appSettings, isLoading } = useQuery({
     queryKey: ["owner-app-settings"],
     queryFn: async () => {
-      const { data } = await supabase.from("app_settings").select("*").order("key");
+      const { data } = await supabase.from("app_settings" as any).select("*").order("key");
       return data ?? [];
     },
   });
