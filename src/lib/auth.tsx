@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [rolesLoaded, setRolesLoaded] = useState(false);
 
   useEffect(() => {
     // Set up listener FIRST
@@ -29,12 +30,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession);
       if (newSession?.user) {
         const uid = newSession.user.id;
+        setRolesLoaded(false);
         setTimeout(() => {
-          loadRoles(uid);
+          loadRoles(uid).finally(() => setRolesLoaded(true));
           detectAndStoreLocale(uid);
         }, 0);
       } else {
         setRoles([]);
+        setRolesLoaded(true);
       }
     });
 
@@ -42,9 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(currentSession);
       if (currentSession?.user) {
         const uid = currentSession.user.id;
-        loadRoles(uid).finally(() => setIsLoading(false));
+        loadRoles(uid).finally(() => { setRolesLoaded(true); setIsLoading(false); });
         detectAndStoreLocale(uid);
       } else {
+        setRolesLoaded(true);
         setIsLoading(false);
       }
     });
