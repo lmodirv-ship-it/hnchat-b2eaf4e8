@@ -69,7 +69,7 @@ const t: Record<Lang, {
   },
   en: {
     signIn: "Sign In", startFree: "Start Free",
-    badge: "The #1 Arabic Super App",
+    badge: "The Global #1 Super App",
     heroTitle1: "Welcome to", heroTitle2: "hnChat",
     heroSub: "Your smart companion for work & communication",
     heroDesc: "AI chat, social networking, shopping, crypto trading, and videos — everything you need in one place.",
