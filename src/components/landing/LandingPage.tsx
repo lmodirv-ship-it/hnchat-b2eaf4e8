@@ -284,13 +284,9 @@ export function LandingPage() {
 
   const isRTL = lang === "ar";
 
-  // Prevent framer-motion from rendering opacity:0 during SSR
-  const animProps = mounted
-    ? { initial: "hidden" as const, animate: "visible" as const, variants: fadeUp }
-    : { initial: "visible" as const, animate: "visible" as const, variants: fadeUp };
-  const viewAnimProps = mounted
-    ? { initial: "hidden" as const, whileInView: "visible" as const, viewport: { once: true }, variants: fadeUp }
-    : { variants: fadeUp };
+  // On SSR, skip animation initial state (opacity:0) to avoid blank page
+  const initAnim = mounted ? "hidden" as const : undefined;
+  const enterAnim = mounted ? "visible" as const : undefined;
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden" dir={isRTL ? "rtl" : "ltr"}>
