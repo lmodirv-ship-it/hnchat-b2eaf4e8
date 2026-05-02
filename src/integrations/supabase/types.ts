@@ -1623,6 +1623,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_stream_ingest_url: { Args: { _stream_id: string }; Returns: string }
       get_visitor_stats: {
         Args: never
         Returns: {
@@ -1651,6 +1652,15 @@ export type Database = {
         Returns: boolean
       }
       is_owner: { Args: { _user_id: string }; Returns: boolean }
+      write_owner_audit: {
+        Args: {
+          _action: string
+          _metadata?: Json
+          _target_id?: string
+          _target_type?: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       ad_status: "draft" | "active" | "paused" | "ended"

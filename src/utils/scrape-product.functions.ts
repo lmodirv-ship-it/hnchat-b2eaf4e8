@@ -1,5 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 
+const PRIVATE_IP_PATTERNS = [
+  /^127\./, /^10\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./,
+  /^169\.254\./, /^0\./, /^::1$/, /^localhost$/i, /^fc00:/i, /^fe80:/i,
+];
+
+function blockPrivateNetworks(urlStr: string): void {
+  const u = new URL(urlStr);
+  const hostname = u.hostname.replace(/^\[|\]$/g, "");
+  if (PRIVATE_IP_PATTERNS.some((r) => r.test(hostname))) {
+    throw new Error("Private network addresses are not allowed");
+  }
+}
+
 export type ScrapedProduct = {
   url: string;
   title: string;
@@ -96,6 +109,7 @@ export const scrapeProductUrl = createServerFn({ method: "POST" })
     if (!["http:", "https:"].includes(u.protocol)) {
       throw new Error("Only http/https URLs are allowed");
     }
+    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<ScrapedProduct> => {
@@ -265,6 +279,7 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
     let u: URL;
     try { u = new URL(input.url); } catch { throw new Error("Invalid URL"); }
     if (!["http:", "https:"].includes(u.protocol)) throw new Error("Only http/https URLs are allowed");
+    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<{ items: ScrapedListItem[]; siteName: string }> => {
@@ -327,7 +342,9 @@ function normalizeSiteToOrigin(input: string): string {
   s = s.replace(/^https?:\/\//, "").replace(/\/$/, "");
   if (!s.includes(".")) s = `${s}.com`;
   s = s.split("/")[0];
-  return `https://${s}`;
+  const origin = `https://${s}`;
+  blockPrivateNetworks(origin);
+  return origin;
 }
 
 const COMMON_PRODUCT_PATHS = [
