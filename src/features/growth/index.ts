@@ -2,4 +2,3 @@
 // Route files remain in src/routes/.
 
 export { AdsManager } from "@/components/ads/AdsManager";
-export { MetricsDashboard } from "@/components/catalog/MetricsDashboard";
