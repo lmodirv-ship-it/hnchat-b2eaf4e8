@@ -2,8 +2,20 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { UserPlus, Crown, ShoppingBag, MessageCircle, Star } from "lucide-react";
 
-const countries = ["المغرب", "مصر", "السعودية", "الإمارات", "الجزائر", "تونس", "العراق", "الأردن", "فرنسا", "ألمانيا", "كندا", "أمريكا", "تركيا", "قطر", "الكويت", "عُمان", "ليبيا", "السودان", "لبنان", "البحرين"];
-const names = ["أحمد", "سارة", "يوسف", "فاطمة", "خالد", "نور", "عمر", "مريم", "حسن", "ليلى", "محمد", "هند", "علي", "رانيا", "كريم", "سلمى", "ياسين", "دنيا", "أمين", "إيمان"];
+const countries = [
+  "Morocco", "Egypt", "Saudi Arabia", "UAE", "France", "Germany", "USA",
+  "Canada", "Turkey", "Brazil", "Spain", "Japan", "India", "UK",
+  "Russia", "Mexico", "Argentina", "South Korea", "Australia", "Italy",
+  "Netherlands", "Sweden", "Portugal", "Poland", "Indonesia", "Nigeria",
+  "South Africa", "Colombia", "Chile", "Thailand",
+];
+
+const names = [
+  "Ahmed", "Sarah", "Youssef", "Fatima", "John", "Emma", "Carlos",
+  "Maria", "Hans", "Sophie", "Yuki", "Priya", "Alex", "Lina",
+  "Omar", "Mia", "Lucas", "Amira", "David", "Nour", "Chen",
+  "Anna", "Karim", "Isabella", "Raj", "Elena", "Marco", "Aiko",
+];
 
 type NotifType = "signup" | "upgrade" | "purchase" | "chat" | "review";
 
@@ -12,31 +24,31 @@ const templates: { type: NotifType; icon: typeof UserPlus; color: string; make: 
     type: "signup",
     icon: UserPlus,
     color: "text-emerald-400",
-    make: () => `سجّل مستخدم جديد من ${countries[Math.floor(Math.random() * countries.length)]} للتو`,
+    make: () => `New user from ${countries[Math.floor(Math.random() * countries.length)]} just signed up`,
   },
   {
     type: "upgrade",
     icon: Crown,
     color: "text-amber-400",
-    make: () => `قام ${names[Math.floor(Math.random() * names.length)]} بترقية حسابه لـ Pro الآن`,
+    make: () => `${names[Math.floor(Math.random() * names.length)]} upgraded to Pro`,
   },
   {
     type: "purchase",
     icon: ShoppingBag,
     color: "text-cyan-glow",
-    make: () => `اشترى ${names[Math.floor(Math.random() * names.length)]} منتجاً من المتجر`,
+    make: () => `${names[Math.floor(Math.random() * names.length)]} bought a product from the marketplace`,
   },
   {
     type: "chat",
     icon: MessageCircle,
     color: "text-violet-glow",
-    make: () => `بدأ ${names[Math.floor(Math.random() * names.length)]} محادثة AI جديدة`,
+    make: () => `${names[Math.floor(Math.random() * names.length)]} started a new AI chat`,
   },
   {
     type: "review",
     icon: Star,
     color: "text-pink-glow",
-    make: () => `أعطى ${names[Math.floor(Math.random() * names.length)]} تقييم ⭐⭐⭐⭐⭐`,
+    make: () => `${names[Math.floor(Math.random() * names.length)]} gave a ⭐⭐⭐⭐⭐ review`,
   },
 ];
 
@@ -49,17 +61,11 @@ export function SocialProofToast() {
   const [notif, setNotif] = useState<{ text: string; icon: typeof UserPlus; color: string } | null>(null);
 
   useEffect(() => {
-    // Show first after 8 seconds
-    const first = setTimeout(() => {
-      show();
-    }, 8000);
+    const first = setTimeout(() => { show(); }, 8000);
 
-    // Then every 45-75 seconds
     let interval: ReturnType<typeof setInterval>;
     const startInterval = setTimeout(() => {
-      interval = setInterval(() => {
-        show();
-      }, 45000 + Math.random() * 30000);
+      interval = setInterval(() => { show(); }, 45000 + Math.random() * 30000);
     }, 8000);
 
     function show() {
@@ -76,7 +82,7 @@ export function SocialProofToast() {
   }, []);
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 pointer-events-none" dir="rtl">
+    <div className="fixed bottom-6 left-6 z-50 pointer-events-none">
       <AnimatePresence>
         {notif && (
           <motion.div
@@ -90,7 +96,7 @@ export function SocialProofToast() {
               <notif.icon className="h-5 w-5" />
             </div>
             <p className="text-sm text-foreground leading-snug">{notif.text}</p>
-            <span className="shrink-0 text-[10px] text-muted-foreground whitespace-nowrap">الآن</span>
+            <span className="shrink-0 text-[10px] text-muted-foreground whitespace-nowrap">Just now</span>
           </motion.div>
         )}
       </AnimatePresence>
