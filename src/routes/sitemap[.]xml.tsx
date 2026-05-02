@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { fetchSitemapData } from "@/server/public-pages.functions";
 
 const SITE_URL = "https://www.hnchat.net";
 
@@ -16,40 +16,17 @@ export const Route = createFileRoute("/sitemap.xml")({
           { loc: "/sign-up-login", priority: "0.7", changefreq: "monthly" },
         ];
 
-        let postUrls: string[] = [];
-        try {
-          const { data: posts } = await supabaseAdmin
-            .from("posts")
-            .select("id, updated_at")
-            .order("created_at", { ascending: false })
-            .limit(1000);
-          if (posts) {
-            postUrls = posts.map(
-              (p: { id: string; updated_at: string }) =>
-                `<url><loc>${SITE_URL}/post/${p.id}</loc><lastmod>${new Date(p.updated_at).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>`
-            );
-          }
-        } catch {
-          // ignore
-        }
+        const { posts, streams } = await fetchSitemapData();
 
-        let liveUrls: string[] = [];
-        try {
-          const { data: streams } = await supabaseAdmin
-            .from("live_streams")
-            .select("id, updated_at")
-            .eq("is_private", false)
-            .order("created_at", { ascending: false })
-            .limit(500);
-          if (streams) {
-            liveUrls = streams.map(
-              (s: { id: string; updated_at: string }) =>
-                `<url><loc>${SITE_URL}/live/${s.id}</loc><lastmod>${new Date(s.updated_at).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>`
-            );
-          }
-        } catch {
-          // ignore
-        }
+        const postUrls = posts.map(
+          (p) =>
+            `<url><loc>${SITE_URL}/post/${p.id}</loc><lastmod>${new Date(p.updated_at).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>`
+        );
+
+        const liveUrls = streams.map(
+          (s) =>
+            `<url><loc>${SITE_URL}/live/${s.id}</loc><lastmod>${new Date(s.updated_at).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>`
+        );
 
         const staticUrls = staticRoutes.map(
           (r) =>

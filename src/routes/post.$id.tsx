@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { fetchPublicPost } from "@/server/public-pages.functions";
 
 const SITE_URL = "https://www.hnchat.net";
 
@@ -21,34 +21,9 @@ type PublicPost = {
 
 export const Route = createFileRoute("/post/$id")({
   loader: async ({ params }) => {
-    const { data: post, error } = await supabaseAdmin
-      .from("posts")
-      .select("id, content, media_urls, type, likes_count, comments_count, views_count, created_at, user_id")
-      .eq("id", params.id)
-      .maybeSingle();
-
-    if (error || !post) {
-      throw notFound();
-    }
-
-    const { data: author } = await supabaseAdmin
-      .from("profiles")
-      .select("username, full_name, avatar_url")
-      .eq("id", post.user_id)
-      .maybeSingle();
-
-    const result: PublicPost = {
-      id: post.id,
-      content: post.content,
-      media_urls: post.media_urls ?? [],
-      type: post.type,
-      likes_count: post.likes_count,
-      comments_count: post.comments_count,
-      views_count: post.views_count,
-      created_at: post.created_at,
-      author: author ?? null,
-    };
-    return result;
+    const post = await fetchPublicPost({ data: { id: params.id } });
+    if (!post) throw notFound();
+    return post as PublicPost;
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
