@@ -1,5 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 
+const PRIVATE_IP_PATTERNS = [
+  /^127\./, /^10\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./,
+  /^169\.254\./, /^0\./, /^::1$/, /^localhost$/i, /^fc00:/i, /^fe80:/i,
+];
+
+function blockPrivateNetworks(urlStr: string): void {
+  const u = new URL(urlStr);
+  const hostname = u.hostname.replace(/^\[|\]$/g, "");
+  if (PRIVATE_IP_PATTERNS.some((r) => r.test(hostname))) {
+    throw new Error("Private network addresses are not allowed");
+  }
+}
+
 export type ScrapedProduct = {
   url: string;
   title: string;
