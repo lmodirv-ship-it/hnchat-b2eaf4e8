@@ -8,7 +8,7 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { InstallPrompt } from "@/components/layout/InstallPrompt";
-import { NavigationProgress } from "@/components/layout/NavigationProgress";
+
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
