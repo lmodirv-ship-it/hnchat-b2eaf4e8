@@ -6,6 +6,12 @@ import { AiChat } from "@/components/ai/AiChat";
 import { AiImageGen } from "@/components/ai/AiImageGen";
 
 export const Route = createFileRoute("/_authenticated/ai-hub")({
+  head: () => ({
+    meta: [
+      { title: "AI Hub — HN-Chat | دردشة وتوليد صور بالذكاء الاصطناعي" },
+      { name: "description", content: "استخدم AI Chat لطرح الأسئلة وتوليد الصور بالذكاء الاصطناعي مجاناً على HN-Chat. أقوى بوت دردشة عربي." },
+    ],
+  }),
   component: AiHubPage,
 });
 
