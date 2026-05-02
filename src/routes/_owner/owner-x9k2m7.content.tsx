@@ -41,16 +41,23 @@ function ContentPage() {
     queryKey: ["owner-content", tab, search, page],
     queryFn: async () => {
       if (tab === "posts") {
-        let q = supabase.from("posts").select("*, profiles!posts_user_id_fkey1(username, avatar_url)", { count: "exact" } as any)
+        let q = supabase.from("posts").select("*", { count: "exact" })
           .order("created_at", { ascending: false }).range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
         if (search.trim()) q = q.ilike("content", `%${search.trim()}%`);
         const { data, count } = await q;
-        return { items: data ?? [], total: count ?? 0 };
+        // Fetch profiles for these posts
+        const userIds = [...new Set((data ?? []).map((p) => p.user_id))];
+        const { data: profiles } = userIds.length ? await supabase.from("profiles").select("id, username, avatar_url").in("id", userIds) : { data: [] };
+        const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+        return { items: (data ?? []).map((p) => ({ ...p, profile: profileMap.get(p.user_id) })), total: count ?? 0 };
       } else {
-        let q = supabase.from("stories").select("*, profiles!stories_user_id_fkey1(username, avatar_url)", { count: "exact" } as any)
+        let q = supabase.from("stories").select("*", { count: "exact" })
           .order("created_at", { ascending: false }).range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
         const { data, count } = await q;
-        return { items: data ?? [], total: count ?? 0 };
+        const userIds = [...new Set((data ?? []).map((s) => s.user_id))];
+        const { data: profiles } = userIds.length ? await supabase.from("profiles").select("id, username, avatar_url").in("id", userIds) : { data: [] };
+        const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+        return { items: (data ?? []).map((s) => ({ ...s, profile: profileMap.get(s.user_id) })), total: count ?? 0 };
       }
     },
   });
