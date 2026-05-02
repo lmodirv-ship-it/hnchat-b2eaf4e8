@@ -10,6 +10,7 @@ export interface AuthContextValue {
   user: User | null;
   roles: AppRole[];
   isLoading: boolean;
+  rolesLoaded: boolean;
   isAdmin: boolean;
   isOwner: boolean;
   isAuthenticated: boolean;
