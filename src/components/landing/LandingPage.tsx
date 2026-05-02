@@ -358,11 +358,17 @@ const t: Record<Lang, {
 };
 
 function detectLang(): Lang {
-  if (typeof navigator === "undefined") return "ar";
+  if (typeof navigator === "undefined") return "en";
   const nav = navigator.language?.toLowerCase() ?? "";
+  if (nav.startsWith("ar")) return "ar";
   if (nav.startsWith("fr")) return "fr";
-  if (nav.startsWith("en")) return "en";
-  return "ar";
+  if (nav.startsWith("es")) return "es";
+  if (nav.startsWith("de")) return "de";
+  if (nav.startsWith("tr")) return "tr";
+  if (nav.startsWith("pt")) return "pt";
+  if (nav.startsWith("zh")) return "zh";
+  if (nav.startsWith("ru")) return "ru";
+  return "en";
 }
 
 /* ═══ Animations ═══ */
