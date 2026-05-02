@@ -2,6 +2,9 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Google Fonts — Cairo for Arabic, Inter for Latin */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -372,4 +375,13 @@ html, body {
   border-radius: 9999px;
   box-shadow: 0 0 8px oklch(0.78 0.18 220), 0 0 16px oklch(0.78 0.18 220 / 0.6);
   animation: glow-pulse 1.6s ease-in-out infinite;
+}
+
+/* i18n Font System */
+[dir="rtl"] {
+  font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+}
+
+[dir="ltr"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
