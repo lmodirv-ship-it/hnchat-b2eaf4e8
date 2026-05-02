@@ -17,6 +17,11 @@ import {
    ═══════════════════════════════════════════════════════════ */
 type Lang = "ar" | "en" | "fr" | "es" | "de" | "tr" | "pt" | "zh" | "ru";
 
+const langLabels: Record<Lang, string> = {
+  ar: "العربية", en: "English", fr: "Français", es: "Español",
+  de: "Deutsch", tr: "Türkçe", pt: "Português", zh: "中文", ru: "Русский",
+};
+
 const t: Record<Lang, {
   signIn: string; startFree: string; badge: string;
   heroTitle1: string; heroTitle2: string; heroSub: string; heroDesc: string;
