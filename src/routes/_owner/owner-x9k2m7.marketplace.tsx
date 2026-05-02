@@ -32,8 +32,11 @@ function MarketplacePage() {
   const { data: products, isLoading } = useQuery({
     queryKey: ["owner-products"],
     queryFn: async () => {
-      const { data } = await supabase.from("products").select("*, profiles!products_seller_id_fkey1(username)" as any).order("created_at", { ascending: false }).limit(50);
-      return data ?? [];
+      const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false }).limit(50);
+      const sellerIds = [...new Set((data ?? []).map((p) => p.seller_id))];
+      const { data: profiles } = sellerIds.length ? await supabase.from("profiles").select("id, username").in("id", sellerIds) : { data: [] };
+      const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+      return (data ?? []).map((p) => ({ ...p, seller_username: profileMap.get(p.seller_id)?.username }));
     },
   });
 
