@@ -130,8 +130,6 @@ function AnalyticsOverviewCard() {
     </OwnerCard>
   );
 }
-  );
-}
 
 function MissionControl() {
   const { data, isLoading } = useQuery({
