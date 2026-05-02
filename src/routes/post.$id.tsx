@@ -200,7 +200,7 @@ function PublicPostPage() {
 
           {post.media_urls.length > 0 && (
             <div className="grid gap-2 grid-cols-1">
-              {post.media_urls.slice(0, 4).map((url, i) => (
+              {post.media_urls.slice(0, 4).map((url: string, i: number) => (
                 <img
                   key={i}
                   src={url}
