@@ -111,7 +111,7 @@ function ContentPage() {
           <>
             <div className="divide-y divide-[oklch(0.12_0.03_30)]">
               {postsData?.items.map((item: any) => {
-                const profile = item.profiles;
+                const profile = item.profile;
                 return (
                   <div key={item.id} className="p-4 flex gap-3 hover:bg-[oklch(0.08_0.02_30)] transition">
                     <Avatar className="h-9 w-9 shrink-0">
