@@ -141,6 +141,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function GaPageViewTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("config", "G-QPQ40Z8H14", {
+        page_path: location.pathname,
+      });
+    }
+  }, [location.pathname]);
+  return null;
+}
+
 function RootComponent() {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: { queries: { staleTime: 60_000, refetchOnWindowFocus: false } },
@@ -149,6 +161,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ScriptOnce children={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`} />
+        <GaPageViewTracker />
         <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
