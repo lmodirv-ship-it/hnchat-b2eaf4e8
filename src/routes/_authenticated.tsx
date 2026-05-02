@@ -8,6 +8,7 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { InstallPrompt } from "@/components/layout/InstallPrompt";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -32,15 +33,18 @@ function AuthenticatedLayout() {
 
   return (
     <div className="min-h-screen flex w-full">
+      <NavigationProgress />
       <AppSidebar />
       <main className="flex-1 min-w-0 relative flex flex-col">
+        {/* Ambient background glows - fixed, never re-renders */}
         <div className="pointer-events-none fixed inset-0 -z-10">
           <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-glow/10 blur-3xl" />
           <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-violet-glow/10 blur-3xl" />
         </div>
         <OfflineBanner />
         <TopBar />
-        <div className="flex-1 pb-16 md:pb-0">
+        {/* Content area - only this swaps during navigation */}
+        <div className="flex-1 pb-16 md:pb-0 animate-in fade-in duration-200">
           <Outlet />
         </div>
         <SiteFooter />

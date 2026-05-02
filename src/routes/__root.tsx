@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import { ExternalLinkGuard } from "@/components/system/ExternalLinkGuard";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -136,6 +137,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
         <Toaster />

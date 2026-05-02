@@ -78,7 +78,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
 
   return (
-    <aside className="hidden md:flex w-64 flex-col border-l border-ice-border bg-sidebar/60 backdrop-blur-xl sticky top-0 h-screen">
+    <aside className="hidden md:flex w-64 flex-col border-l border-ice-border/30 bg-background/50 backdrop-blur-2xl backdrop-saturate-150 sticky top-0 h-screen shadow-[4px_0_30px_oklch(0_0_0/0.2)]">
       <div className="p-4 border-b border-ice-border flex items-center gap-2">
         <HnLogo className="h-9 w-9" />
         <div className="min-w-0">
