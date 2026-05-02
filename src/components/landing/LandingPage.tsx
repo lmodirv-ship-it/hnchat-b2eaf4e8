@@ -640,30 +640,44 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ FEATURES GRID — GLASSMORPHISM CARDS ═══ */}
+      {/* ═══ BENTO GRID — FEATURES ═══ */}
       <section className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-        <motion.h2 className="text-3xl font-bold text-center mb-12" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
+        <motion.h2 className="text-3xl sm:text-4xl font-bold text-center mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
           {l.allInOne} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.onePlace}</span>
         </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <motion.p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
+          {l.heroSub}
+        </motion.p>
+
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[180px]">
           {l.features.map((f, i) => {
             const Icon = featureIcons[i];
+            const isLarge = i === 0 || i === 3;
             return (
               <motion.div
                 key={f.title}
-                className="group relative rounded-2xl border border-ice-border/20 bg-ice-card/8 backdrop-blur-2xl p-6 transition-all duration-500 hover:border-cyan-glow/30 hover:bg-ice-card/15 hover:shadow-[0_0_40px_oklch(0.78_0.18_220/0.1)] hover:scale-[1.02]"
-                initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={i}
+                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-default ${isLarge ? "sm:col-span-2 sm:row-span-1" : ""}`}
+                initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={i * 0.5}
               >
-                {/* Spotlight behind card on hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-glow/5 to-violet-glow/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative">
-                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${featureColors[i]} mb-4`}>
-                    <div className="rounded-lg bg-background/60 p-2 backdrop-blur-xl">
-                      <Icon className="h-6 w-6 text-foreground" />
+                {/* Glass background */}
+                <div className="absolute inset-0 bg-ice-card/5 backdrop-blur-2xl border border-ice-border/15 rounded-3xl" />
+                {/* Hover gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${featureColors[i]} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl`} />
+                {/* Content */}
+                <div className="relative h-full flex flex-col justify-between p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="p-3 rounded-2xl bg-background/40 backdrop-blur-xl border border-ice-border/10 group-hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.15)] transition-all duration-500">
+                      <Icon className="h-6 w-6 text-foreground/80 group-hover:text-cyan-glow transition-colors duration-500" />
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
+                      <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                  <div>
+                    <h3 className="text-lg font-bold mb-1.5">{f.title}</h3>
+                    <p className="text-sm text-muted-foreground/70 leading-relaxed line-clamp-2">{f.desc}</p>
+                  </div>
                 </div>
               </motion.div>
             );
@@ -671,49 +685,23 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ AI CHATS ═══ */}
-      <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-20">
-        <motion.h2 className="text-3xl font-bold text-center mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
+      {/* ═══ AI INTERACTIVE DEMO ═══ */}
+      <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-24">
+        <motion.h2 className="text-3xl sm:text-4xl font-bold text-center mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
           {l.tryAI} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.aiWord}</span>
         </motion.h2>
-        <motion.p className="text-center text-muted-foreground mb-10" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
+        <motion.p className="text-center text-muted-foreground mb-10 max-w-lg mx-auto" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
           {l.aiSub}
         </motion.p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {l.chats.map((c, i) => {
-            const Icon = chatIcons[i];
-            return (
-              <motion.div
-                key={c.title}
-                className="group rounded-2xl border border-ice-border/20 bg-ice-card/8 backdrop-blur-2xl p-6 text-center transition-all duration-500 hover:border-violet-glow/30 hover:bg-ice-card/15 hover:shadow-[0_0_40px_oklch(0.65_0.25_295/0.1)] hover:scale-[1.03]"
-                initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={i + 2}
-              >
-                <div className="inline-flex p-3 rounded-full bg-gradient-to-br from-cyan-glow/15 to-violet-glow/15 mb-4 group-hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.3)] transition-all duration-500">
-                  <Icon className="h-7 w-7 text-cyan-glow" />
-                </div>
-                <h3 className="font-semibold mb-1">{c.title}</h3>
-                <p className="text-sm text-muted-foreground">{c.desc}</p>
-              </motion.div>
-            );
-          })}
-        </div>
-        <motion.div className="text-center mt-10" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={5}>
-          <Link to="/sign-up-login">
-            <div className="group relative inline-block">
-              <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundSize: "200% 200%", animation: "borderRotate 4s linear infinite" }} />
-              <button className="relative px-10 py-4 text-base font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground cursor-pointer select-none flex items-center gap-2 transition-all duration-300 hover:bg-background/60">
-                <Sparkles className="h-5 w-5 text-cyan-glow" />
-                {l.tryFree}
-              </button>
-            </div>
-          </Link>
+        <motion.div initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={2}>
+          <AIDemoChat lang={lang} />
         </motion.div>
       </section>
 
       {/* ═══ TRUST BAR ═══ */}
       <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pb-16">
         <motion.div
-          className="rounded-2xl border border-ice-border/20 bg-ice-card/8 backdrop-blur-2xl p-8 flex flex-col md:flex-row items-center gap-6"
+          className="rounded-3xl border border-ice-border/15 bg-ice-card/5 backdrop-blur-2xl p-8 flex flex-col md:flex-row items-center gap-6"
           initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}
         >
           <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-glow/15 to-violet-glow/10">
