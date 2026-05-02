@@ -1,11 +1,18 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce, useLocation } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import { ExternalLinkGuard } from "@/components/system/ExternalLinkGuard";
 import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import appCss from "../styles.css?url";
+
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
 
 function NotFoundComponent() {
   return (
@@ -134,6 +141,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function GaPageViewTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("config", "G-QPQ40Z8H14", {
+        page_path: location.pathname,
+      });
+    }
+  }, [location.pathname]);
+  return null;
+}
+
 function RootComponent() {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: { queries: { staleTime: 60_000, refetchOnWindowFocus: false } },
@@ -142,6 +161,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ScriptOnce children={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`} />
+        <GaPageViewTracker />
         <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
