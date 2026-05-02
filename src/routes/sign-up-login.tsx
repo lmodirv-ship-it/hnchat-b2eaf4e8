@@ -122,7 +122,7 @@ function AuthPage() {
 
       <div className="relative w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <HnLogo className="h-14 w-14 mb-3" />
+          <HnLogo size={56} showText={true} subtitle="hn-chat.com" />
           <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent">
             hnChat
           </h1>

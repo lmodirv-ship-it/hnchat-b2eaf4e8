@@ -92,7 +92,7 @@ export function SiteFooter() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <HnLogo className="h-8 w-8" />
+              <HnLogo size={40} showText={true} subtitle="hn-chat.com" />
               <div>
                 <div className="font-bold text-sm bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
                   hnChat
