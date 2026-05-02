@@ -112,6 +112,13 @@ export const Route = createRootRoute({
           ],
         }),
       },
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14",
+        async: true,
+      },
+      {
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`,
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -124,8 +131,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="ar" dir="rtl" className="dark">
       <head>
         <HeadContent />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14" />
-        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');` }} />
       </head>
       <body className="dark">
         {children}
