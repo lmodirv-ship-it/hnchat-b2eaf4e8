@@ -465,13 +465,19 @@ export function LandingPage() {
           <VisitorCounter />
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Lang Switcher — Glass */}
-          <div className="flex items-center rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl overflow-hidden">
-            {(["ar", "en", "fr"] as Lang[]).map((code) => (
-              <button key={code} onClick={() => setLang(code)}
-                className={`px-2.5 py-1.5 text-xs font-medium transition-all duration-300 ${lang === code ? "bg-gradient-to-r from-cyan-glow/30 to-violet-glow/30 text-foreground shadow-[0_0_12px_oklch(0.78_0.18_220/0.3)]" : "text-muted-foreground hover:text-foreground"}`}
-              >{code === "ar" ? "عربي" : code.toUpperCase()}</button>
-            ))}
+          {/* Lang Switcher — Glass with dropdown */}
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 cursor-pointer">
+              <Globe className="h-3.5 w-3.5 text-cyan-glow" />
+              {langLabels[lang]}
+            </button>
+            <div className="absolute top-full right-0 mt-1 min-w-[140px] rounded-xl border border-ice-border/40 bg-background/90 backdrop-blur-2xl shadow-diamond opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
+              {(Object.keys(t) as Lang[]).map((code) => (
+                <button key={code} onClick={() => setLang(code)}
+                  className={`w-full text-left px-3 py-2 text-xs font-medium transition-all duration-200 ${lang === code ? "bg-gradient-to-r from-cyan-glow/20 to-violet-glow/20 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-ice-card/20"}`}
+                >{langLabels[code]}</button>
+              ))}
+            </div>
           </div>
           <Link to="/sign-up-login">
             <button className="px-4 py-2 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer">
