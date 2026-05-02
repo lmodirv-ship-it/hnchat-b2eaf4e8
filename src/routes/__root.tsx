@@ -112,6 +112,13 @@ export const Route = createRootRoute({
           ],
         }),
       },
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14",
+        async: true,
+      },
+      {
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`,
+      },
     ],
   }),
   shellComponent: RootShell,
