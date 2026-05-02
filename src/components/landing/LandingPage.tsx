@@ -3,7 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HnLogo } from "@/components/HnLogo";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { SocialProofToast } from "@/components/landing/SocialProofToast";
-import { useState, useEffect, useMemo } from "react";
+import { FloatingParticles } from "@/components/landing/FloatingParticles";
+import { PartnerStrip } from "@/components/landing/PartnerStrip";
+import { PhoneMockup } from "@/components/landing/PhoneMockup";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   MessageCircle,
   Bot,
@@ -17,9 +20,7 @@ import {
   Zap,
   ArrowLeft,
   Send,
-  Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 /* ── i18n lightweight ── */
 type Lang = "ar" | "en" | "fr";
@@ -196,79 +197,70 @@ const chatIcons = [Zap, Globe, Sparkles];
 
 /* ── Fake live chat messages ── */
 const fakeChatPool = [
-  { user: "أحمد", msg: "مرحباً بالجميع! 👋", avatar: "🧑‍💻" },
-  { user: "Sarah", msg: "This app is amazing!", avatar: "👩‍🎨" },
-  { user: "يوسف", msg: "جربت الذكاء الاصطناعي، مذهل! 🤖", avatar: "🧑‍🚀" },
-  { user: "Marie", msg: "J'adore cette plateforme 💜", avatar: "👩‍🔬" },
-  { user: "خالد", msg: "السوق فيه منتجات رائعة 🛍️", avatar: "🧑‍💼" },
-  { user: "Lina", msg: "Voice rooms are so cool! 🎙️", avatar: "👩‍🎤" },
-  { user: "عمر", msg: "التداول سهل وسريع 📈", avatar: "🧑‍💻" },
-  { user: "Fatima", msg: "أنا أحب الفيديوهات القصيرة ❤️", avatar: "👩‍🎓" },
-  { user: "Alex", msg: "Best super app I've tried!", avatar: "🧑‍🎨" },
-  { user: "نور", msg: "مستقبل التطبيقات هنا 🚀", avatar: "👩‍💻" },
+  { user: "أحمد", msg: "مرحباً بالجميع! 👋", avatar: "🧑‍💻", time: "الآن" },
+  { user: "Sarah", msg: "This app is amazing!", avatar: "👩‍🎨", time: "1m" },
+  { user: "يوسف", msg: "جربت الذكاء الاصطناعي، مذهل! 🤖", avatar: "🧑‍🚀", time: "2m" },
+  { user: "Marie", msg: "J'adore cette plateforme 💜", avatar: "👩‍🔬", time: "3m" },
+  { user: "خالد", msg: "السوق فيه منتجات رائعة 🛍️", avatar: "🧑‍💼", time: "4m" },
+  { user: "Lina", msg: "Voice rooms are so cool! 🎙️", avatar: "👩‍🎤", time: "5m" },
+  { user: "عمر", msg: "التداول سهل وسريع 📈", avatar: "🧑‍💻", time: "6m" },
+  { user: "Fatima", msg: "أنا أحب الفيديوهات القصيرة ❤️", avatar: "👩‍🎓", time: "7m" },
+  { user: "Alex", msg: "Best super app I've tried!", avatar: "🧑‍🎨", time: "8m" },
+  { user: "نور", msg: "مستقبل التطبيقات هنا 🚀", avatar: "👩‍💻", time: "9m" },
+  { user: "Karim", msg: "الترجمة الفورية خرافية 🌍", avatar: "🧑‍🏫", time: "10m" },
+  { user: "Amira", msg: "J'ai gagné avec le crypto! 💰", avatar: "👩‍💼", time: "11m" },
 ];
 
 function useFakeChat() {
   const [messages, setMessages] = useState<typeof fakeChatPool>([]);
 
   useEffect(() => {
-    // Start with 3 messages
-    setMessages(fakeChatPool.slice(0, 3));
-    let idx = 3;
+    setMessages(fakeChatPool.slice(0, 4));
+    let idx = 4;
     const interval = setInterval(() => {
       setMessages((prev) => {
         const next = [...prev, fakeChatPool[idx % fakeChatPool.length]];
-        if (next.length > 6) next.shift();
+        if (next.length > 8) next.shift();
         return next;
       });
       idx++;
-    }, 3000);
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 
   return messages;
 }
 
-/* ── 3D Button Component ── */
-function GlowButton({
-  children,
-  variant = "primary",
-  size = "default",
-  className = "",
-  ...props
-}: {
+/* ── Glassmorphism CTA Button with animated border ── */
+function GlassCTA({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`group relative ${className}`}>
+      {/* Animated gradient border */}
+      <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow opacity-70 blur-[1px] group-hover:opacity-100 transition-opacity duration-500 animate-[spin_6s_linear_infinite]" style={{ backgroundSize: "200% 200%" }} />
+      <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow opacity-70 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundSize: "200% 200%", animation: "borderRotate 4s linear infinite" }} />
+      <button className="relative px-12 py-5 text-lg font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground hover:bg-background/60 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer select-none">
+        {children}
+      </button>
+    </div>
+  );
+}
+
+/* ── Outline Button ── */
+function GlowButton({ children, variant = "primary", size = "default", className = "", ...props }: {
   children: React.ReactNode;
   variant?: "primary" | "outline";
   size?: "default" | "lg";
   className?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const base =
-    "relative font-bold rounded-xl transition-all duration-300 cursor-pointer select-none active:translate-y-0.5 active:shadow-none";
+  const base = "relative font-bold rounded-xl transition-all duration-300 cursor-pointer select-none active:translate-y-0.5 active:shadow-none";
   const sizeClass = size === "lg" ? "px-10 py-5 text-lg" : "px-6 py-3 text-sm";
-
   if (variant === "primary") {
     return (
-      <button
-        className={`${base} ${sizeClass} bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground
-          shadow-[0_6px_24px_oklch(0.78_0.18_220/0.5),0_2px_8px_oklch(0_0_0/0.4),inset_0_1px_0_oklch(1_0_0/0.2)]
-          hover:shadow-[0_8px_32px_oklch(0.78_0.18_220/0.7),0_4px_12px_oklch(0_0_0/0.5),inset_0_1px_0_oklch(1_0_0/0.3)]
-          hover:scale-[1.05] hover:-translate-y-0.5 ${className}`}
-        {...props}
-      >
-        {children}
-      </button>
+      <button className={`${base} ${sizeClass} bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_6px_24px_oklch(0.78_0.18_220/0.5),0_2px_8px_oklch(0_0_0/0.4),inset_0_1px_0_oklch(1_0_0/0.2)] hover:shadow-[0_8px_32px_oklch(0.78_0.18_220/0.7),0_4px_12px_oklch(0_0_0/0.5),inset_0_1px_0_oklch(1_0_0/0.3)] hover:scale-[1.05] hover:-translate-y-0.5 ${className}`} {...props}>{children}</button>
     );
   }
   return (
-    <button
-      className={`${base} ${sizeClass} border-2 border-ice-border bg-ice-card/30 text-foreground backdrop-blur-xl
-        shadow-[0_4px_16px_oklch(0_0_0/0.3),inset_0_1px_0_oklch(1_0_0/0.05)]
-        hover:shadow-[0_6px_24px_oklch(0.78_0.18_220/0.25),inset_0_1px_0_oklch(1_0_0/0.1)]
-        hover:border-cyan-glow/50 hover:scale-[1.04] hover:-translate-y-0.5 ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
+    <button className={`${base} ${sizeClass} border-2 border-ice-border bg-ice-card/30 text-foreground backdrop-blur-xl shadow-[0_4px_16px_oklch(0_0_0/0.3),inset_0_1px_0_oklch(1_0_0/0.05)] hover:shadow-[0_6px_24px_oklch(0.78_0.18_220/0.25),inset_0_1px_0_oklch(1_0_0/0.1)] hover:border-cyan-glow/50 hover:scale-[1.04] hover:-translate-y-0.5 ${className}`} {...props}>{children}</button>
   );
 }
 
@@ -278,30 +270,44 @@ export function LandingPage() {
   const [mounted, setMounted] = useState(false);
   const l = t[lang];
   const chatMessages = useFakeChat();
+  const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
     setLang(detectLang());
   }, []);
 
-  const isRTL = lang === "ar";
+  // Auto-scroll chat
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
+    }
+  }, [chatMessages]);
 
-  // On SSR, skip animation initial state (opacity:0) to avoid blank page
+  const isRTL = lang === "ar";
   const initAnim = mounted ? "hidden" as const : undefined;
   const enterAnim = mounted ? "visible" as const : undefined;
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden" dir={isRTL ? "rtl" : "ltr"}>
       <SocialProofToast />
-      {/* Ambient Glows */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-glow/15 blur-[100px]" />
-        <div className="absolute top-1/2 -left-40 h-[500px] w-[500px] rounded-full bg-violet-glow/15 blur-[100px]" />
-        <div className="absolute -bottom-40 right-1/3 h-[400px] w-[400px] rounded-full bg-pink-glow/10 blur-[100px]" />
+
+      {/* ═══ Animated Mesh Gradient Background ═══ */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        {/* Mesh gradient orbs — slowly moving */}
+        <div className="absolute -top-32 -right-32 h-[600px] w-[600px] rounded-full bg-cyan-glow/20 blur-[120px] animate-[meshFloat1_20s_ease-in-out_infinite]" />
+        <div className="absolute top-1/3 -left-48 h-[700px] w-[700px] rounded-full bg-violet-glow/20 blur-[140px] animate-[meshFloat2_25s_ease-in-out_infinite]" />
+        <div className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-pink-glow/15 blur-[100px] animate-[meshFloat3_22s_ease-in-out_infinite]" />
+        <div className="absolute top-2/3 left-1/3 h-[400px] w-[400px] rounded-full bg-cyan-glow/10 blur-[100px] animate-[meshFloat1_18s_ease-in-out_infinite_reverse]" />
+        {/* Subtle grid overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
       </div>
 
-      {/* Navbar */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+      {/* ═══ Floating AI Particles ═══ */}
+      <FloatingParticles />
+
+      {/* ═══ Navbar ═══ */}
+      <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
           <HnLogo className="h-10 w-10" />
           <span className="text-xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
@@ -310,37 +316,32 @@ export function LandingPage() {
           <VisitorCounter />
         </div>
         <div className="flex items-center gap-3">
-          {/* Language Switcher */}
           <div className="flex items-center rounded-lg border border-ice-border bg-ice-card/30 backdrop-blur-xl overflow-hidden">
-            {(["ar", "en", "fr"] as Lang[]).map((l) => (
+            {(["ar", "en", "fr"] as Lang[]).map((code) => (
               <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`px-2.5 py-1.5 text-xs font-medium transition-all ${
-                  lang === l
-                    ? "bg-gradient-to-r from-cyan-glow/30 to-violet-glow/30 text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                key={code}
+                onClick={() => setLang(code)}
+                className={`px-2.5 py-1.5 text-xs font-medium transition-all ${lang === code ? "bg-gradient-to-r from-cyan-glow/30 to-violet-glow/30 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
               >
-                {l === "ar" ? "عربي" : l === "en" ? "EN" : "FR"}
+                {code === "ar" ? "عربي" : code === "en" ? "EN" : "FR"}
               </button>
             ))}
           </div>
           <Link to="/sign-up-login">
-            <GlowButton variant="outline" size="default">{l.signIn}</GlowButton>
+            <GlowButton variant="outline">{l.signIn}</GlowButton>
           </Link>
           <Link to="/sign-up-login">
-            <GlowButton variant="primary" size="default">{l.startFree}</GlowButton>
+            <GlowButton variant="primary">{l.startFree}</GlowButton>
           </Link>
         </div>
       </nav>
 
-      {/* Hero + Side Chat Layout */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-20 flex flex-col lg:flex-row gap-8 items-start">
+      {/* ═══ Hero + Side Chat ═══ */}
+      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-8 pb-16 flex flex-col lg:flex-row gap-10 items-center">
         {/* Hero content */}
         <div className="flex-1 text-center lg:text-start pt-4">
           <motion.div initial={initAnim} animate={enterAnim} variants={fadeUp} custom={0}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border bg-ice-card/50 text-xs text-muted-foreground mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border bg-ice-card/50 backdrop-blur-xl text-xs text-muted-foreground mb-6">
               <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
               {l.badge}
             </span>
@@ -351,13 +352,17 @@ export function LandingPage() {
             initial={initAnim} animate={enterAnim} variants={fadeUp} custom={1}
           >
             {l.heroTitle1}{" "}
-            <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent">
-              {l.heroTitle2}
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent drop-shadow-[0_0_30px_oklch(0.78_0.18_220/0.6)]">
+                {l.heroTitle2}
+              </span>
+              {/* Glow pulse behind text */}
+              <span className="absolute inset-0 bg-gradient-to-r from-cyan-glow to-violet-glow opacity-20 blur-2xl rounded-full animate-pulse" />
             </span>
           </motion.h1>
 
           <motion.p
-            className="text-xl text-cyan-glow font-semibold mb-4"
+            className="text-xl font-semibold mb-4 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent drop-shadow-[0_0_20px_oklch(0.78_0.18_220/0.4)]"
             initial={initAnim} animate={enterAnim} variants={fadeUp} custom={1.5}
           >
             {l.heroSub}
@@ -371,17 +376,17 @@ export function LandingPage() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start"
+            className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start"
             initial={initAnim} animate={enterAnim} variants={fadeUp} custom={3}
           >
             <Link to="/sign-up-login">
-              <GlowButton variant="primary" size="lg">
+              <GlassCTA>
                 <span className="flex items-center gap-2">
                   {isRTL && <ArrowLeft className="h-5 w-5" />}
                   {l.joinNow}
                   {!isRTL && <ArrowLeft className="h-5 w-5 rotate-180" />}
                 </span>
-              </GlowButton>
+              </GlassCTA>
             </Link>
             <Link to="/about">
               <GlowButton variant="outline" size="lg">{l.discover}</GlowButton>
@@ -389,65 +394,77 @@ export function LandingPage() {
           </motion.div>
         </div>
 
-        {/* Side Live Chat — Glassmorphism */}
-        <motion.div
-          className="w-full lg:w-80 shrink-0"
-          initial={mounted ? { opacity: 0, x: 40 } : undefined}
-          animate={mounted ? { opacity: 1, x: 0 } : undefined}
-          transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" as const }}
-        >
-          <div className="rounded-2xl border border-ice-border/60 bg-ice-card/20 backdrop-blur-2xl shadow-glass overflow-hidden">
-            {/* Chat header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-ice-border/40">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-cyan-glow" />
-                <span className="text-sm font-semibold">{l.liveChat}</span>
+        {/* Right side: Phone Mockup + Live Chat */}
+        <div className="w-full lg:w-[420px] shrink-0 flex flex-col gap-6">
+          {/* 3D Phone Mockup */}
+          <motion.div
+            initial={mounted ? { opacity: 0, y: 30, rotateY: -15 } : undefined}
+            animate={mounted ? { opacity: 1, y: 0, rotateY: 0 } : undefined}
+            transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
+            className="hidden lg:block"
+          >
+            <PhoneMockup />
+          </motion.div>
+
+          {/* Side Live Chat — Auto-scroll */}
+          <motion.div
+            initial={mounted ? { opacity: 0, x: 40 } : undefined}
+            animate={mounted ? { opacity: 1, x: 0 } : undefined}
+            transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
+          >
+            <div className="rounded-2xl border border-ice-border/50 bg-ice-card/10 backdrop-blur-2xl shadow-glass overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-ice-border/30 bg-ice-card/20">
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4 text-cyan-glow" />
+                  <span className="text-sm font-semibold">{l.liveChat}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-xs text-muted-foreground">{l.online}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs text-muted-foreground">{l.online}</span>
+              {/* Messages with auto-scroll */}
+              <div ref={chatRef} className="h-64 overflow-y-auto px-3 py-2 flex flex-col gap-2 scroll-smooth" style={{ scrollbarWidth: "none" }}>
+                <AnimatePresence initial={false}>
+                  {chatMessages.map((m, i) => (
+                    <motion.div
+                      key={`${m.user}-${i}-${chatMessages.length}`}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut" as const }}
+                      className="flex items-start gap-2.5"
+                    >
+                      <span className="text-xl shrink-0 mt-0.5">{m.avatar}</span>
+                      <div className="flex-1 rounded-xl bg-ice-card/30 backdrop-blur-xl px-3 py-2 border border-ice-border/20">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-xs font-semibold text-cyan-glow">{m.user}</span>
+                          <span className="text-[10px] text-muted-foreground/60">{m.time}</span>
+                        </div>
+                        <p className="text-xs text-foreground/80 leading-relaxed">{m.msg}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+              <div className="px-3 py-2 border-t border-ice-border/30">
+                <Link to="/sign-up-login" className="flex items-center gap-2 rounded-xl bg-ice-card/20 px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/40 transition-all cursor-pointer border border-ice-border/20">
+                  <Send className="h-3.5 w-3.5 text-cyan-glow" />
+                  {lang === "ar" ? "سجّل للمشاركة..." : lang === "fr" ? "Inscrivez-vous..." : "Sign up to chat..."}
+                </Link>
               </div>
             </div>
-            {/* Chat messages */}
-            <div className="h-72 overflow-hidden px-3 py-2 flex flex-col gap-2 relative">
-              <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-ice-card/20 to-transparent z-10 pointer-events-none" />
-              <AnimatePresence initial={false}>
-                {chatMessages.map((m, i) => (
-                  <motion.div
-                    key={`${m.user}-${i}-${chatMessages.length}`}
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, ease: "easeOut" as const }}
-                    className="flex items-start gap-2"
-                  >
-                    <span className="text-lg shrink-0">{m.avatar}</span>
-                    <div className="rounded-xl bg-ice-card/40 backdrop-blur-xl px-3 py-1.5 border border-ice-border/30">
-                      <span className="text-xs font-semibold text-cyan-glow">{m.user}</span>
-                      <p className="text-xs text-foreground/80">{m.msg}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-            {/* Fake input */}
-            <div className="px-3 py-2 border-t border-ice-border/40">
-              <Link to="/sign-up-login" className="flex items-center gap-2 rounded-lg bg-ice-card/30 px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                <Send className="h-3.5 w-3.5 text-cyan-glow" />
-                {lang === "ar" ? "سجّل للمشاركة..." : lang === "fr" ? "Inscrivez-vous..." : "Sign up to chat..."}
-              </Link>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
-      {/* Stats */}
+      {/* ═══ Stats ═══ */}
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {l.stats.map((s, i) => (
             <motion.div
               key={s.label}
-              className="rounded-xl border border-ice-border bg-ice-card/40 backdrop-blur-xl p-5 text-center"
+              className="rounded-xl border border-ice-border/50 bg-ice-card/20 backdrop-blur-xl p-5 text-center hover:bg-ice-card/30 transition-all duration-300"
               initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={i}
             >
               <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
@@ -459,7 +476,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* ═══ Features Grid ═══ */}
       <section className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
         <motion.h2
           className="text-3xl font-bold text-center mb-12"
@@ -473,10 +490,10 @@ export function LandingPage() {
             return (
               <motion.div
                 key={f.title}
-                className="group relative rounded-2xl border border-ice-border bg-ice-card/30 backdrop-blur-xl p-6 hover:shadow-card-hover transition-all duration-300 hover:border-cyan-glow/30 hover:scale-[1.02]"
+                className="group relative rounded-2xl border border-ice-border/40 bg-ice-card/15 backdrop-blur-xl p-6 hover:shadow-card-hover transition-all duration-300 hover:border-cyan-glow/30 hover:scale-[1.02] hover:bg-ice-card/30"
                 initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={i}
               >
-                <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${featureColors[i]} bg-opacity-20 mb-4`}>
+                <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${featureColors[i]} mb-4`}>
                   <div className="rounded-lg bg-background/60 p-2">
                     <Icon className="h-6 w-6 text-foreground" />
                   </div>
@@ -489,7 +506,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Featured AI Chats */}
+      {/* ═══ Featured AI Chats ═══ */}
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-20">
         <motion.h2
           className="text-3xl font-bold text-center mb-4"
@@ -509,7 +526,7 @@ export function LandingPage() {
             return (
               <motion.div
                 key={c.title}
-                className="rounded-2xl border border-ice-border bg-ice-card/30 backdrop-blur-xl p-6 text-center hover:shadow-diamond transition-all duration-300 hover:scale-[1.03]"
+                className="rounded-2xl border border-ice-border/40 bg-ice-card/15 backdrop-blur-xl p-6 text-center hover:shadow-diamond transition-all duration-300 hover:scale-[1.03] hover:bg-ice-card/30"
                 initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={i + 2}
               >
                 <div className="inline-flex p-3 rounded-full bg-gradient-to-br from-cyan-glow/20 to-violet-glow/20 mb-4">
@@ -521,20 +538,22 @@ export function LandingPage() {
             );
           })}
         </div>
-        <motion.div
-          className="text-center mt-8"
-          initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={5}
-        >
+        <motion.div className="text-center mt-8" initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={5}>
           <Link to="/sign-up-login">
-            <GlowButton variant="primary" size="lg">{l.tryFree}</GlowButton>
+            <GlassCTA>
+              <span className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5" />
+                {l.tryFree}
+              </span>
+            </GlassCTA>
           </Link>
         </motion.div>
       </section>
 
-      {/* Trust Bar */}
-      <section className="relative z-10 max-w-4xl mx-auto px-6 pb-20">
+      {/* ═══ Trust Bar ═══ */}
+      <section className="relative z-10 max-w-4xl mx-auto px-6 pb-16">
         <motion.div
-          className="rounded-2xl border border-ice-border bg-ice-card/40 backdrop-blur-xl p-8 flex flex-col md:flex-row items-center gap-6"
+          className="rounded-2xl border border-ice-border/40 bg-ice-card/20 backdrop-blur-xl p-8 flex flex-col md:flex-row items-center gap-6"
           initial={initAnim} whileInView={enterAnim} viewport={{ once: true }} variants={fadeUp} custom={0}
         >
           <Shield className="h-12 w-12 text-cyan-glow shrink-0" />
@@ -548,8 +567,11 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-ice-border py-8 px-6">
+      {/* ═══ Partner / Features Strip ═══ */}
+      <PartnerStrip />
+
+      {/* ═══ Footer ═══ */}
+      <footer className="relative z-10 border-t border-ice-border/30 py-8 px-6 bg-ice-card/5 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto flex flex-col items-center gap-4">
           <div className="flex items-center gap-2">
             <HnLogo className="h-6 w-6" />
@@ -561,7 +583,7 @@ export function LandingPage() {
             <Link to="/privacy" className="hover:text-foreground transition-colors">{l.privacy}</Link>
             <Link to="/terms" className="hover:text-foreground transition-colors">{l.terms}</Link>
           </div>
-          <p className="text-xs text-muted-foreground text-center">{l.copyright}</p>
+          <p className="text-xs text-muted-foreground/70 text-center">{l.copyright}</p>
         </div>
       </footer>
     </div>
