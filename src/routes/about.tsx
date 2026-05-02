@@ -1,20 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-const SITE_URL = "https://www.hnchat.net";
+const SITE_URL = "https://www.hn-chat.com";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "عن HN Chat — منصة التواصل الاجتماعي العربية" },
+      { title: "عن HN-Chat — منصة دردشة ذكاء اصطناعي وتواصل اجتماعي عربي" },
       {
         name: "description",
         content:
-          "HN Chat منصة تواصل اجتماعي عربية شاملة تجمع بين المنشورات، البث المباشر، الفيديوهات، المتجر، والمجموعات في مكان واحد.",
+          "HN-Chat منصة عربية شاملة تجمع بين دردشة الذكاء الاصطناعي، بوتات الدردشة الذكية، المنشورات، البث المباشر، الفيديوهات، والمتجر في مكان واحد.",
       },
-      { property: "og:title", content: "عن HN Chat" },
+      { property: "og:title", content: "عن HN-Chat — دردشة ذكاء اصطناعي وتواصل اجتماعي" },
       {
         property: "og:description",
-        content: "تعرّف على منصة HN Chat — التواصل الاجتماعي العربي المتكامل.",
+        content: "تعرّف على منصة HN-Chat — أفضل منصة دردشة AI عربية وتواصل اجتماعي متكامل.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${SITE_URL}/about` },

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-const SITE_URL = "https://www.hnchat.net";
+const SITE_URL = "https://www.hn-chat.com";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({

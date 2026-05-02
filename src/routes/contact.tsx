@@ -1,18 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-const SITE_URL = "https://www.hnchat.net";
+const SITE_URL = "https://www.hn-chat.com";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "تواصل معنا — HN Chat" },
+      { title: "تواصل معنا — HN-Chat | دعم ومساعدة" },
       {
         name: "description",
         content:
-          "تواصل مع فريق HN Chat للدعم، الاقتراحات، الشراكات، أو الاستفسارات العامة.",
+          "تواصل مع فريق HN-Chat للدعم الفني، الاقتراحات، الشراكات، أو الاستفسارات حول منصة الدردشة الذكية والتواصل الاجتماعي.",
       },
-      { property: "og:title", content: "تواصل معنا — HN Chat" },
-      { property: "og:description", content: "نحن هنا للمساعدة." },
+      { property: "og:title", content: "تواصل معنا — HN-Chat" },
+      { property: "og:description", content: "فريق HN-Chat هنا للمساعدة — دعم فني، شراكات، واستفسارات." },
       { property: "og:url", content: `${SITE_URL}/contact` },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/contact` }],

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { OwnerShell, OwnerStat, OwnerCard } from "@/components/owner/OwnerShell";
-import { Users, FileText, ShoppingBag, MessageCircle, Globe, TrendingUp, Crown, Activity, Eye, DollarSign, Loader2, BarChart3, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
+import { Users, FileText, ShoppingBag, MessageCircle, Globe, TrendingUp, Crown, Activity, Eye, DollarSign, Loader2, BarChart3, ExternalLink } from "lucide-react";
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useState, useEffect } from "react";
 
@@ -16,62 +16,117 @@ const CYAN = "#22d3ee";
 const ROSE = "#f43f5e";
 const VIOLET = "#a78bfa";
 
-function AnalyticsStatusCard() {
+function AnalyticsOverviewCard() {
   const [gaStatus, setGaStatus] = useState<"checking" | "connected" | "not-detected">("checking");
 
   useEffect(() => {
-    const check = () => {
+    const timer = setTimeout(() => {
       if (typeof window !== "undefined" && typeof window.gtag === "function" && Array.isArray(window.dataLayer) && window.dataLayer.length > 0) {
         setGaStatus("connected");
       } else {
         setGaStatus("not-detected");
       }
-    };
-    const timer = setTimeout(check, 2000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
+  // Fetch today's and yesterday's online visitors from site_visits
+  const { data: liveStats } = useQuery({
+    queryKey: ["owner-live-analytics"],
+    queryFn: async () => {
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+      const yesterdayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1).toISOString();
+
+      const [onlineNow, todayVisitors, yesterdayVisitors, topReferrers] = await Promise.all([
+        supabase.from("site_visits").select("*", { count: "exact", head: true }).gte("last_seen", new Date(Date.now() - 5 * 60 * 1000).toISOString()),
+        supabase.from("site_visits").select("*", { count: "exact", head: true }).gte("first_seen", todayStart),
+        supabase.from("site_visits").select("*", { count: "exact", head: true }).gte("first_seen", yesterdayStart).lt("first_seen", todayStart),
+        supabase.from("site_visits").select("referrer").not("referrer", "is", null).order("first_seen", { ascending: false }).limit(200),
+      ]);
+
+      // Count referrers
+      const refMap = new Map<string, number>();
+      (topReferrers.data ?? []).forEach((r: any) => {
+        if (r.referrer) {
+          try {
+            const host = new URL(r.referrer).hostname.replace("www.", "");
+            refMap.set(host, (refMap.get(host) ?? 0) + 1);
+          } catch {
+            refMap.set(r.referrer, (refMap.get(r.referrer) ?? 0) + 1);
+          }
+        }
+      });
+      const topSources = [...refMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+      return {
+        onlineNow: onlineNow.count ?? 0,
+        todayVisitors: todayVisitors.count ?? 0,
+        yesterdayVisitors: yesterdayVisitors.count ?? 0,
+        topSources,
+      };
+    },
+    refetchInterval: 30_000,
+  });
+
+  const todayGrowth = liveStats && liveStats.yesterdayVisitors > 0
+    ? Math.round(((liveStats.todayVisitors - liveStats.yesterdayVisitors) / liveStats.yesterdayVisitors) * 100)
+    : null;
+
   return (
-    <OwnerCard className="p-4 mb-6">
-      <div className="flex items-center justify-between">
+    <OwnerCard className="p-5 mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${gaStatus === "connected" ? "bg-emerald-500/10" : gaStatus === "not-detected" ? "bg-red-500/10" : "bg-yellow-500/10"}`}>
-            <BarChart3 className={`h-5 w-5 ${gaStatus === "connected" ? "text-emerald-400" : gaStatus === "not-detected" ? "text-red-400" : "text-yellow-400"}`} />
+          <div className={`p-2 rounded-lg ${gaStatus === "connected" ? "bg-emerald-500/10" : "bg-yellow-500/10"}`}>
+            <BarChart3 className={`h-5 w-5 ${gaStatus === "connected" ? "text-emerald-400" : "text-yellow-400"}`} />
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-[oklch(0.9_0.05_50)]">Google Analytics 4</h3>
-            <p className="text-xs text-[oklch(0.5_0.04_40)]">Measurement ID: G-QPQ40Z8H14</p>
+            <h3 className="font-semibold text-sm text-[oklch(0.9_0.05_50)]">نظرة عامة على الزيارات</h3>
+            <p className="text-xs text-[oklch(0.5_0.04_40)]">
+              GA4: {gaStatus === "connected" ? "✅ متصل" : gaStatus === "checking" ? "⏳ جارِ الفحص" : "❌ غير مكتشف"} · G-QPQ40Z8H14
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          {gaStatus === "checking" && (
-            <div className="flex items-center gap-1.5 text-xs text-yellow-400">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              جارِ الفحص...
-            </div>
-          )}
-          {gaStatus === "connected" && (
-            <div className="flex items-center gap-1.5 text-xs text-emerald-400">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              متصل ويعمل
-            </div>
-          )}
-          {gaStatus === "not-detected" && (
-            <div className="flex items-center gap-1.5 text-xs text-red-400">
-              <XCircle className="h-3.5 w-3.5" />
-              غير مكتشف
-            </div>
-          )}
-          <a
-            href="https://analytics.google.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs text-[oklch(0.6_0.15_50)] hover:text-[oklch(0.75_0.18_50)] transition"
-          >
-            فتح GA4 <ExternalLink className="h-3 w-3" />
-          </a>
+        <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-[oklch(0.6_0.15_50)] hover:text-[oklch(0.75_0.18_50)] transition">
+          فتح GA4 <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className="bg-[oklch(0.08_0.02_30)] rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-emerald-400">{liveStats?.onlineNow ?? "—"}</div>
+          <div className="text-[10px] text-[oklch(0.5_0.04_40)] mt-1">متصلون الآن</div>
+        </div>
+        <div className="bg-[oklch(0.08_0.02_30)] rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-[oklch(0.75_0.18_50)]">{liveStats?.todayVisitors ?? "—"}</div>
+          <div className="text-[10px] text-[oklch(0.5_0.04_40)] mt-1">زوار اليوم</div>
+        </div>
+        <div className="bg-[oklch(0.08_0.02_30)] rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-cyan-400">
+            {liveStats?.yesterdayVisitors ?? "—"}
+            {todayGrowth !== null && (
+              <span className={`text-xs mr-1 ${todayGrowth >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                {todayGrowth >= 0 ? "↑" : "↓"}{Math.abs(todayGrowth)}%
+              </span>
+            )}
+          </div>
+          <div className="text-[10px] text-[oklch(0.5_0.04_40)] mt-1">زوار أمس</div>
         </div>
       </div>
+
+      {liveStats && liveStats.topSources.length > 0 && (
+        <div>
+          <h4 className="text-xs font-semibold text-[oklch(0.7_0.05_50)] mb-2">أهم مصادر الزيارات</h4>
+          <div className="space-y-1.5">
+            {liveStats.topSources.map(([source, count]) => (
+              <div key={source} className="flex items-center justify-between text-xs">
+                <span className="text-[oklch(0.75_0.04_40)]">{source}</span>
+                <span className="text-[oklch(0.55_0.04_40)]">{count} زيارة</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </OwnerCard>
   );
 }
@@ -199,7 +254,7 @@ function MissionControl() {
       </div>
 
       {/* Analytics Status */}
-      <AnalyticsStatusCard />
+      <AnalyticsOverviewCard />
 
       {/* Charts Row 1: User Growth + Posts Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
