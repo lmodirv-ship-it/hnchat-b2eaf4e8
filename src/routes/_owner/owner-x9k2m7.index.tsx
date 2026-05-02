@@ -21,7 +21,7 @@ function AnalyticsStatusCard() {
 
   useEffect(() => {
     const check = () => {
-      if (typeof window !== "undefined" && window.gtag && window.dataLayer && window.dataLayer.length > 0) {
+      if (typeof window !== "undefined" && typeof window.gtag === "function" && Array.isArray(window.dataLayer) && window.dataLayer.length > 0) {
         setGaStatus("connected");
       } else {
         setGaStatus("not-detected");
