@@ -151,6 +151,33 @@ export type Database = {
           },
         ]
       }
+      app_settings: {
+        Row: {
+          created_at: string
+          description: string | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           added_at: string
@@ -1220,6 +1247,45 @@ export type Database = {
         }
         Relationships: []
       }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          description: string
+          id: string
+          priority: string
+          resolved_at: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: string
+          resolved_at?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: string
+          resolved_at?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       trade_offers: {
         Row: {
           accepted_at: string | null
@@ -1268,6 +1334,42 @@ export type Database = {
           requested_items?: Json
           status?: Database["public"]["Enums"]["trade_status"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      usage_logs: {
+        Row: {
+          cost: number
+          created_at: string
+          id: string
+          metadata: Json
+          model: string | null
+          request_path: string | null
+          service: string
+          tokens_used: number
+          user_id: string
+        }
+        Insert: {
+          cost?: number
+          created_at?: string
+          id?: string
+          metadata?: Json
+          model?: string | null
+          request_path?: string | null
+          service?: string
+          tokens_used?: number
+          user_id: string
+        }
+        Update: {
+          cost?: number
+          created_at?: string
+          id?: string
+          metadata?: Json
+          model?: string | null
+          request_path?: string | null
+          service?: string
+          tokens_used?: number
+          user_id?: string
         }
         Relationships: []
       }
