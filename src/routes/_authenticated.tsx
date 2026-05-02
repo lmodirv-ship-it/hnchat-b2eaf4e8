@@ -33,7 +33,7 @@ function AuthenticatedLayout() {
 
   return (
     <div className="min-h-screen flex w-full">
-      <NavigationProgress />
+      
       <AppSidebar />
       <main className="flex-1 min-w-0 relative flex flex-col">
         {/* Ambient background glows - fixed, never re-renders */}
