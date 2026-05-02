@@ -119,7 +119,7 @@ function MarketplacePage() {
             {recentOrders?.map((o) => (
               <div key={o.id} className="p-3">
                 <div className="flex justify-between text-sm">
-                  <Badge variant="outline" className={`text-[10px] ${o.status === "completed" ? "border-green-500 text-green-400" : o.status === "pending" ? "border-yellow-500 text-yellow-400" : "border-[oklch(0.3_0.04_40)] text-[oklch(0.6_0.04_40)]"}`}>{o.status}</Badge>
+                  <Badge variant="outline" className={`text-[10px] ${o.status === "delivered" ? "border-green-500 text-green-400" : o.status === "pending" ? "border-yellow-500 text-yellow-400" : "border-[oklch(0.3_0.04_40)] text-[oklch(0.6_0.04_40)]"}`}>{o.status}</Badge>
                   <span className="font-medium text-[oklch(0.85_0.05_50)]">{o.total_amount} {o.currency}</span>
                 </div>
                 <div className="text-xs text-[oklch(0.45_0.04_40)] mt-1">{formatDistanceToNow(new Date(o.created_at))} ago</div>

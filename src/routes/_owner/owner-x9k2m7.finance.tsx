@@ -17,7 +17,7 @@ function FinancePage() {
       const { data: orders } = await supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(100);
       const allOrders = orders ?? [];
       const totalRevenue = allOrders.reduce((sum, o) => sum + Number(o.total_amount ?? 0), 0);
-      const completed = allOrders.filter((o) => o.status === "completed");
+      const completed = allOrders.filter((o) => o.status === "delivered" || o.status === "paid");
       const completedRevenue = completed.reduce((sum, o) => sum + Number(o.total_amount ?? 0), 0);
       const pending = allOrders.filter((o) => o.status === "pending");
       return { totalRevenue, completedRevenue, orderCount: allOrders.length, pendingCount: pending.length, recentOrders: allOrders.slice(0, 20) };
@@ -54,7 +54,7 @@ function FinancePage() {
                 {data?.recentOrders.map((o) => (
                   <tr key={o.id} className="hover:bg-[oklch(0.08_0.02_30)] transition">
                     <td className="p-3">
-                      <Badge variant="outline" className={`text-[10px] ${o.status === "completed" ? "border-green-500 text-green-400" : o.status === "pending" ? "border-yellow-500 text-yellow-400" : o.status === "cancelled" ? "border-red-500 text-red-400" : "border-[oklch(0.3_0.04_40)] text-[oklch(0.6_0.04_40)]"}`}>
+                      <Badge variant="outline" className={`text-[10px] ${o.status === "delivered" ? "border-green-500 text-green-400" : o.status === "pending" ? "border-yellow-500 text-yellow-400" : o.status === "cancelled" ? "border-red-500 text-red-400" : "border-[oklch(0.3_0.04_40)] text-[oklch(0.6_0.04_40)]"}`}>
                         {o.status}
                       </Badge>
                     </td>
