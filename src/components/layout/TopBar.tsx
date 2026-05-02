@@ -33,7 +33,7 @@ export function TopBar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-ice-border/30 bg-background/60 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_4px_30px_oklch(0_0_0/0.3)]">
       <div className="flex items-center gap-3 px-4 py-2.5">
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <HnLogo className="h-7 w-7" />
