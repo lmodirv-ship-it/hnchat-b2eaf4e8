@@ -165,10 +165,11 @@ export function AiChat() {
             variant="ghost"
             size="sm"
             onClick={shareConversation}
+            disabled={sharing}
             className="text-xs gap-1.5 text-cyan-glow hover:bg-cyan-glow/10"
           >
-            <Share2 className="h-3.5 w-3.5" />
-            مشاركة المحادثة
+            {sharing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Share2 className="h-3.5 w-3.5" />}
+            {sharing ? "جارِ الإنشاء..." : "مشاركة المحادثة"}
           </Button>
         </div>
       )}
