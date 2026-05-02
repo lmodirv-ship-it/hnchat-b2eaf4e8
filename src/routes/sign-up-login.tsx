@@ -161,6 +161,12 @@ function AuthPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="mt-1.5 bg-input/50" />
             </div>
+            {mode === "login" && (
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="remember" className="h-4 w-4 rounded border-border accent-primary" />
+                <Label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer select-none">تذكرني</Label>
+              </div>
+            )}
             <Button
               type="submit"
               disabled={busy === "form"}
