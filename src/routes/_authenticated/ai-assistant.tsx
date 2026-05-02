@@ -11,6 +11,12 @@ import { toast } from "sonner";
 import type { CatalogItem } from "@/hooks/useCatalog";
 
 export const Route = createFileRoute("/_authenticated/ai-assistant")({
+  head: () => ({
+    meta: [
+      { title: "المساعد الذكي — HN-Chat AI | أفضل دردشة ذكاء اصطناعي عربي" },
+      { name: "description", content: "تحدّث مع المساعد الذكي على HN-Chat. بوت دردشة AI عربي يساعدك في البرمجة، الترجمة، التلخيص، وأكثر." },
+    ],
+  }),
   component: AssistantPage,
 });
 

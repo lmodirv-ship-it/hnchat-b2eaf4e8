@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchSitemapData } from "@/server/public-pages.functions";
 
-const SITE_URL = "https://www.hnchat.net";
+const SITE_URL = "https://www.hn-chat.com";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {

@@ -7,6 +7,12 @@ import { ImportProductDialog } from "@/components/marketplace/ImportProductDialo
 import { QuickSiteImportDialog } from "@/components/marketplace/QuickSiteImportDialog";
 
 export const Route = createFileRoute("/_authenticated/marketplace")({
+  head: () => ({
+    meta: [
+      { title: "السوق — HN-Chat | تسوق داخل المجتمع" },
+      { name: "description", content: "اكتشف وبِع منتجات داخل مجتمع HN-Chat. سوق إلكتروني مدمج في منصة التواصل الاجتماعي." },
+    ],
+  }),
   component: MarketplacePage,
 });
 
