@@ -109,21 +109,51 @@ export function AiChat() {
     }
   }
 
+  const [sharing, setSharing] = useState(false);
+
   const shareConversation = useCallback(async () => {
     if (messages.length === 0) return;
-    const text = messages
-      .map((m) => `${m.role === "user" ? "👤" : "🤖"} ${m.content}`)
-      .join("\n\n");
-    const shareText = `💬 محادثتي مع HN-Chat AI:\n\n${text.slice(0, 800)}${text.length > 800 ? "\n..." : ""}\n\n🔗 جرّب بنفسك: https://www.hn-chat.com`;
+    setSharing(true);
+    try {
+      // Generate title from first user message
+      const firstUserMsg = messages.find((m) => m.role === "user");
+      const title = firstUserMsg ? firstUserMsg.content.slice(0, 80) : "محادثة AI";
 
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "محادثة HN-Chat AI", text: shareText });
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("يجب تسجيل الدخول لمشاركة المحادثة");
         return;
-      } catch {}
+      }
+
+      const { data, error } = await supabase
+        .from("shared_chats")
+        .insert({
+          user_id: user.id,
+          title,
+          messages: messages as any,
+        })
+        .select("share_id")
+        .single();
+
+      if (error) throw error;
+
+      const shareUrl = `https://www.hn-chat.com/share/${data.share_id}`;
+      const shareText = `💬 شاهد محادثتي مع HN-Chat AI:\n${title}\n\n🔗 ${shareUrl}`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: `محادثة AI — HN-Chat`, text: shareText, url: shareUrl });
+          return;
+        } catch {}
+      }
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("تم نسخ رابط المشاركة! 🔗");
+    } catch (err) {
+      console.error(err);
+      toast.error("فشل في إنشاء رابط المشاركة");
+    } finally {
+      setSharing(false);
     }
-    await navigator.clipboard.writeText(shareText);
-    toast.success("تم نسخ المحادثة — شاركها مع أصدقائك!");
   }, [messages]);
 
   return (
