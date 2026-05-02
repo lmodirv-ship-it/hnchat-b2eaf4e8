@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { HnLogo } from "@/components/HnLogo";
+import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { useState, useEffect, useMemo } from "react";
 import {
   MessageCircle,
@@ -304,6 +305,7 @@ export function LandingPage() {
           <span className="text-xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
             hnChat
           </span>
+          <VisitorCounter />
         </div>
         <div className="flex items-center gap-3">
           {/* Language Switcher */}
