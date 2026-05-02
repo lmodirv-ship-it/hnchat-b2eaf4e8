@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Send, Sparkles, User as UserIcon, Share2, Copy, Check } from "lucide-react";
+import { Loader2, Send, Sparkles, User as UserIcon, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
