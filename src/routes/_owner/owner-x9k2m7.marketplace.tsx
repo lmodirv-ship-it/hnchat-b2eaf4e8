@@ -95,7 +95,7 @@ function MarketplacePage() {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-[oklch(0.88_0.05_50)] truncate">{p.title}</div>
-                      <div className="text-xs text-[oklch(0.5_0.04_40)]">@{p.profiles?.username} · {p.price} {p.currency}</div>
+                      <div className="text-xs text-[oklch(0.5_0.04_40)]">@{(p as any).seller_username ?? "?"} · {p.price} {p.currency}</div>
                     </div>
                     <Badge variant="outline" className={`text-[10px] ${p.is_active ? "border-green-500 text-green-400" : "border-red-500 text-red-400"}`}>
                       {p.is_active ? "نشط" : "متوقف"}
