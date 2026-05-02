@@ -22,29 +22,8 @@ type PublicPost = {
 export const Route = createFileRoute("/post/$id")({
   loader: async ({ params }) => {
     const post = await fetchPublicPost({ data: { id: params.id } });
-
-    if (error || !post) {
-      throw notFound();
-    }
-
-    const { data: author } = await supabaseAdmin
-      .from("profiles")
-      .select("username, full_name, avatar_url")
-      .eq("id", post.user_id)
-      .maybeSingle();
-
-    const result: PublicPost = {
-      id: post.id,
-      content: post.content,
-      media_urls: post.media_urls ?? [],
-      type: post.type,
-      likes_count: post.likes_count,
-      comments_count: post.comments_count,
-      views_count: post.views_count,
-      created_at: post.created_at,
-      author: author ?? null,
-    };
-    return result;
+    if (!post) throw notFound();
+    return post as PublicPost;
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
