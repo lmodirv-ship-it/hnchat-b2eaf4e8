@@ -28,4 +28,4 @@ Allow: /
 User-agent: TelegramBot
 Allow: /
 
-Sitemap: https://www.hnchat.net/sitemap.xml
+Sitemap: https://www.hn-chat.com/sitemap.xml
