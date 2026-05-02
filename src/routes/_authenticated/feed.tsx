@@ -13,6 +13,12 @@ import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 
 export const Route = createFileRoute("/_authenticated/feed")({
+  head: () => ({
+    meta: [
+      { title: "التغذية — HN-Chat | دردشة ذكاء اصطناعي وشبكة تواصل" },
+      { name: "description", content: "تصفّح آخر المنشورات والقصص على HN-Chat. شبكة تواصل اجتماعي عربية مع دردشة ذكاء اصطناعي مدمجة." },
+    ],
+  }),
   component: FeedPage,
 });
 
