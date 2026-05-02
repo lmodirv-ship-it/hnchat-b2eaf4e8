@@ -388,8 +388,8 @@ export function LandingPage() {
         {/* Side Live Chat — Glassmorphism */}
         <motion.div
           className="w-full lg:w-80 shrink-0"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={mounted ? { opacity: 0, x: 40 } : undefined}
+          animate={mounted ? { opacity: 1, x: 0 } : undefined}
           transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" as const }}
         >
           <div className="rounded-2xl border border-ice-border/60 bg-ice-card/20 backdrop-blur-2xl shadow-glass overflow-hidden">
