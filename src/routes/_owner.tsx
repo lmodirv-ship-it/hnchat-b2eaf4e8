@@ -17,18 +17,40 @@ export const Route = createFileRoute("/_owner")({
 });
 
 type NavItem = { to: string; label: string; icon: any; exact?: boolean };
-const NAV: NavItem[] = [
-  { to: "/owner-x9k2m7", label: "Mission Control", icon: Crown, exact: true },
-  { to: "/owner-x9k2m7/users", label: "User Operations", icon: Users },
-  { to: "/owner-x9k2m7/content", label: "Content & Moderation", icon: FileText },
-  { to: "/owner-x9k2m7/marketplace", label: "Commerce & Revenue", icon: ShoppingBag },
-  { to: "/owner-x9k2m7/geography", label: "Geo & Language", icon: Globe },
-  { to: "/owner-x9k2m7/groups", label: "Groups Network", icon: Flag },
-  { to: "/owner-x9k2m7/features", label: "Feature Flags", icon: Power },
-  { to: "/owner-x9k2m7/security", label: "Security & RLS", icon: ShieldAlert },
-  { to: "/owner-x9k2m7/audit", label: "Audit Logs", icon: Activity },
-  { to: "/owner-x9k2m7/finance", label: "Finance", icon: DollarSign },
-  { to: "/owner-x9k2m7/settings", label: "System Settings", icon: Settings },
+type NavSection = { title: string; items: NavItem[] };
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    title: "الرئيسية",
+    items: [
+      { to: "/owner-x9k2m7", label: "Mission Control", icon: Crown, exact: true },
+    ],
+  },
+  {
+    title: "المستخدمين والمحتوى",
+    items: [
+      { to: "/owner-x9k2m7/users", label: "User Operations", icon: Users },
+      { to: "/owner-x9k2m7/content", label: "Content & Moderation", icon: FileText },
+      { to: "/owner-x9k2m7/groups", label: "Groups Network", icon: Flag },
+    ],
+  },
+  {
+    title: "المالية والتجارة",
+    items: [
+      { to: "/owner-x9k2m7/marketplace", label: "Commerce & Revenue", icon: ShoppingBag },
+      { to: "/owner-x9k2m7/finance", label: "Finance", icon: DollarSign },
+    ],
+  },
+  {
+    title: "النظام والأمان",
+    items: [
+      { to: "/owner-x9k2m7/features", label: "Feature Flags", icon: Power },
+      { to: "/owner-x9k2m7/security", label: "Security & RLS", icon: ShieldAlert },
+      { to: "/owner-x9k2m7/audit", label: "Audit Logs", icon: Activity },
+      { to: "/owner-x9k2m7/geography", label: "Geo & Language", icon: Globe },
+      { to: "/owner-x9k2m7/settings", label: "System Settings", icon: Settings },
+    ],
+  },
 ];
 
 function OwnerShell() {
