@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { OwnerShell, OwnerStat, OwnerCard } from "@/components/owner/OwnerShell";
-import { Users, FileText, ShoppingBag, MessageCircle, Globe, TrendingUp, Crown, Activity, Eye, DollarSign, Loader2 } from "lucide-react";
+import { Users, FileText, ShoppingBag, MessageCircle, Globe, TrendingUp, Crown, Activity, Eye, DollarSign, Loader2, BarChart3, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/_owner/owner-x9k2m7/")({
   component: MissionControl,
