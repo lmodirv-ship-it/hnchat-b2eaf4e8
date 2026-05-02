@@ -828,6 +828,30 @@ export type Database = {
           },
         ]
       }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          is_active: boolean
+          source: string | null
+          subscribed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          is_active?: boolean
+          source?: string | null
+          subscribed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          is_active?: boolean
+          source?: string | null
+          subscribed_at?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           actor_id: string | null
@@ -1107,6 +1131,7 @@ export type Database = {
           language_code: string | null
           locale_source: string | null
           posts_count: number
+          referral_code: string | null
           updated_at: string
           username: string
         }
@@ -1125,6 +1150,7 @@ export type Database = {
           language_code?: string | null
           locale_source?: string | null
           posts_count?: number
+          referral_code?: string | null
           updated_at?: string
           username: string
         }
@@ -1143,6 +1169,7 @@ export type Database = {
           language_code?: string | null
           locale_source?: string | null
           posts_count?: number
+          referral_code?: string | null
           updated_at?: string
           username?: string
         }
@@ -1187,6 +1214,36 @@ export type Database = {
           p256dh?: string | null
           user_agent?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          referral_code: string
+          referred_id: string | null
+          referrer_id: string
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          referral_code: string
+          referred_id?: string | null
+          referrer_id: string
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          referral_code?: string
+          referred_id?: string | null
+          referrer_id?: string
+          status?: string
         }
         Relationships: []
       }
