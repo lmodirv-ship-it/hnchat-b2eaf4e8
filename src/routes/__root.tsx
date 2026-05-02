@@ -137,6 +137,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
         <Toaster />
