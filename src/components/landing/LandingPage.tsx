@@ -304,6 +304,7 @@ export function LandingPage() {
           <span className="text-xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
             hnChat
           </span>
+          <VisitorCounter />
         </div>
         <div className="flex items-center gap-3">
           {/* Language Switcher */}
