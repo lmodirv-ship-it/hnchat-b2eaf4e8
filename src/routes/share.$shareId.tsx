@@ -73,7 +73,7 @@ function SharedChatPage() {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-6 space-y-4">
-        {chat.messages.map((m, i) => (
+        {chat.messages.map((m: { role: string; content: string }, i: number) => (
           <div key={i} className={`flex gap-3 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
             <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 border ${
               m.role === "user"

@@ -19,6 +19,7 @@ import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
@@ -126,6 +127,11 @@ const AdminRoute = AdminRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShareShareIdRoute = ShareShareIdRouteImport.update({
+  id: '/share/$shareId',
+  path: '/share/$shareId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostIdRoute = PostIdRouteImport.update({
@@ -499,6 +505,7 @@ export interface FileRoutesByFullPath {
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
+  '/share/$shareId': typeof ShareShareIdRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByTo {
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
+  '/share/$shareId': typeof ShareShareIdRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -643,6 +651,7 @@ export interface FileRoutesById {
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
+  '/share/$shareId': typeof ShareShareIdRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -715,6 +724,7 @@ export interface FileRouteTypes {
     | '/youtube'
     | '/live/$id'
     | '/post/$id'
+    | '/share/$shareId'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -785,6 +795,7 @@ export interface FileRouteTypes {
     | '/youtube'
     | '/live/$id'
     | '/post/$id'
+    | '/share/$shareId'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -858,6 +869,7 @@ export interface FileRouteTypes {
     | '/_authenticated/youtube'
     | '/live/$id'
     | '/post/$id'
+    | '/share/$shareId'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
@@ -896,6 +908,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   LiveIdRoute: typeof LiveIdRoute
   PostIdRoute: typeof PostIdRoute
+  ShareShareIdRoute: typeof ShareShareIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -968,6 +981,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/share/$shareId': {
+      id: '/share/$shareId'
+      path: '/share/$shareId'
+      fullPath: '/share/$shareId'
+      preLoaderRoute: typeof ShareShareIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/post/$id': {
@@ -1591,6 +1611,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   LiveIdRoute: LiveIdRoute,
   PostIdRoute: PostIdRoute,
+  ShareShareIdRoute: ShareShareIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
