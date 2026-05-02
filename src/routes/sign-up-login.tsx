@@ -22,7 +22,7 @@ const DEMOS = [
 
 function AuthPage() {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading, isOwner, isAdmin } = useAuth();
+  const { isAuthenticated, isLoading, isOwner, isAdmin, rolesLoaded } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +30,7 @@ function AuthPage() {
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
+    if (!isLoading && isAuthenticated && rolesLoaded) {
       if (isOwner) {
         navigate({ to: "/owner-x9k2m7" });
       } else if (isAdmin) {
@@ -39,7 +39,7 @@ function AuthPage() {
         navigate({ to: "/feed" });
       }
     }
-  }, [isAuthenticated, isLoading, isOwner, isAdmin, navigate]);
+  }, [isAuthenticated, isLoading, isOwner, isAdmin, rolesLoaded, navigate]);
 
   async function ensureDemo(em: string, pw: string, uname: string) {
     // Try sign in; if fails, sign up then sign in
