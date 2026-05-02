@@ -141,6 +141,7 @@ export function AiChat() {
           </Button>
         </div>
       )}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
             <Sparkles className="h-10 w-10 mx-auto mb-3 text-violet-glow" />
