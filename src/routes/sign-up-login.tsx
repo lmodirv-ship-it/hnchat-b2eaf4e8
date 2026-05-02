@@ -99,10 +99,10 @@ function AuthPage() {
         if (error) throw error;
         toast.success("Check your email to confirm your account");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back!");
-        navigate({ to: "/feed" });
+        // Redirect will be handled by useEffect after roles load
       }
     } catch (e: any) {
       toast.error(e.message ?? "Authentication failed");
