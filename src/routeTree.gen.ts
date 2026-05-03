@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignUpLoginRouteImport } from './routes/sign-up-login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -31,6 +32,7 @@ import { Route as AuthenticatedStoriesRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedShortVideosRouteImport } from './routes/_authenticated/short-videos'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
+import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
 import { Route as AuthenticatedReelsRouteImport } from './routes/_authenticated/reels'
 import { Route as AuthenticatedPushRouteImport } from './routes/_authenticated/push'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -105,6 +107,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -189,6 +196,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
 const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedReferralRoute = AuthenticatedReferralRouteImport.update({
+  id: '/referral',
+  path: '/referral',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedReelsRoute = AuthenticatedReelsRouteImport.update({
@@ -462,6 +474,7 @@ const AuthenticatedGroupsGroupIdManageRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
@@ -494,6 +507,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
+  '/referral': typeof AuthenticatedReferralRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
@@ -533,6 +547,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
@@ -565,6 +580,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
+  '/referral': typeof AuthenticatedReferralRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
@@ -608,6 +624,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_owner': typeof OwnerRouteWithChildren
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
@@ -640,6 +657,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/push': typeof AuthenticatedPushRoute
   '/_authenticated/reels': typeof AuthenticatedReelsRoute
+  '/_authenticated/referral': typeof AuthenticatedReferralRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/short-videos': typeof AuthenticatedShortVideosRoute
@@ -681,6 +699,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/blog'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
@@ -713,6 +732,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/push'
     | '/reels'
+    | '/referral'
     | '/search'
     | '/settings'
     | '/short-videos'
@@ -752,6 +772,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/blog'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
@@ -784,6 +805,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/push'
     | '/reels'
+    | '/referral'
     | '/search'
     | '/settings'
     | '/short-videos'
@@ -826,6 +848,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_owner'
     | '/about'
+    | '/blog'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
@@ -858,6 +881,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/push'
     | '/_authenticated/reels'
+    | '/_authenticated/referral'
     | '/_authenticated/search'
     | '/_authenticated/settings'
     | '/_authenticated/short-videos'
@@ -901,6 +925,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   OwnerRoute: typeof OwnerRouteWithChildren
   AboutRoute: typeof AboutRoute
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
   SignUpLoginRoute: typeof SignUpLoginRoute
@@ -946,6 +971,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1065,6 +1097,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/referral': {
+      id: '/_authenticated/referral'
+      path: '/referral'
+      fullPath: '/referral'
+      preLoaderRoute: typeof AuthenticatedReferralRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/reels': {
@@ -1506,6 +1545,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedPushRoute: typeof AuthenticatedPushRoute
   AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
+  AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedShortVideosRoute: typeof AuthenticatedShortVideosRoute
@@ -1547,6 +1587,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedPushRoute: AuthenticatedPushRoute,
   AuthenticatedReelsRoute: AuthenticatedReelsRoute,
+  AuthenticatedReferralRoute: AuthenticatedReferralRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedShortVideosRoute: AuthenticatedShortVideosRoute,
@@ -1604,6 +1645,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   OwnerRoute: OwnerRouteWithChildren,
   AboutRoute: AboutRoute,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
   SignUpLoginRoute: SignUpLoginRoute,
