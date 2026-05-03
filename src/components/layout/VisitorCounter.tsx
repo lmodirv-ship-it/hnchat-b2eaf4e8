@@ -69,7 +69,7 @@ export function VisitorCounter() {
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
         </span>
         <Users className="h-3 w-3" />
-        <span className="font-semibold tabular-nums">{online.toLocaleString()}</span>
+        <span className="font-semibold tabular-nums">{fmt(online)}</span>
       </div>
       <div
         className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400"
