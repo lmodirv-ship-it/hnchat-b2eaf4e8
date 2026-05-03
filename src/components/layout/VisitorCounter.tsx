@@ -55,6 +55,9 @@ export function VisitorCounter() {
   const online = data?.online ?? 0;
   const total = (data?.total ?? 0) + 10000;
 
+  // Use fixed locale to avoid SSR/client hydration mismatch
+  const fmt = (n: number) => n.toLocaleString("en-US");
+
   return (
     <div className="flex items-center gap-2 text-xs">
       <div
@@ -66,14 +69,14 @@ export function VisitorCounter() {
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
         </span>
         <Users className="h-3 w-3" />
-        <span className="font-semibold tabular-nums">{online.toLocaleString()}</span>
+        <span className="font-semibold tabular-nums">{fmt(online)}</span>
       </div>
       <div
         className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400"
         title="Total visitors"
       >
         <Eye className="h-3 w-3" />
-        <span className="font-semibold tabular-nums">{total.toLocaleString()}</span>
+        <span className="font-semibold tabular-nums">{fmt(total)}</span>
       </div>
     </div>
   );
