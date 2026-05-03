@@ -7,6 +7,7 @@ import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { PartnerStrip } from "@/components/landing/PartnerStrip";
 import { PhoneMockup } from "@/components/landing/PhoneMockup";
 import { AIDemoChat } from "@/components/landing/AIDemoChat";
+import { NewsletterPopup } from "@/components/landing/NewsletterPopup";
 import { useState, useEffect, useRef } from "react";
 import {
   MessageCircle, Bot, ShoppingBag, TrendingUp, Mic, Video,
