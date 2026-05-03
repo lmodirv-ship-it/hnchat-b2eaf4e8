@@ -55,8 +55,16 @@ export function VisitorCounter() {
   const online = data?.online ?? 0;
   const total = (data?.total ?? 0) + 10000;
 
-  // Use fixed locale to avoid SSR/client hydration mismatch
-  const fmt = (n: number) => n.toLocaleString("en-US");
+  // Manual formatter to avoid SSR/client hydration mismatch from locale differences
+  const fmt = (n: number) => {
+    const s = String(n);
+    let result = "";
+    for (let i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 === 0) result += ",";
+      result += s[i];
+    }
+    return result;
+  };
 
   return (
     <div className="flex items-center gap-2 text-xs">
