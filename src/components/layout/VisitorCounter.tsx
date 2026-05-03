@@ -76,7 +76,7 @@ export function VisitorCounter() {
         title="Total visitors"
       >
         <Eye className="h-3 w-3" />
-        <span className="font-semibold tabular-nums">{total.toLocaleString()}</span>
+        <span className="font-semibold tabular-nums">{fmt(total)}</span>
       </div>
     </div>
   );
