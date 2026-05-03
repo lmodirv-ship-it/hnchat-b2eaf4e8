@@ -734,8 +734,9 @@ export function LandingPage() {
             <HnLogo className="h-5 w-5 opacity-70" />
             <span className="text-xs font-semibold bg-gradient-to-r from-cyan-glow/70 to-violet-glow/70 bg-clip-text text-transparent">hnChat</span>
           </div>
-          <div className="flex items-center gap-5 text-xs text-muted-foreground/50">
+          <div className="flex items-center gap-5 text-xs text-muted-foreground/50 flex-wrap justify-center">
             <Link to="/about" className="hover:text-foreground/70 transition-colors">{l.about}</Link>
+            <Link to="/blog" className="hover:text-foreground/70 transition-colors">Blog</Link>
             <Link to="/contact" className="hover:text-foreground/70 transition-colors">{l.contact}</Link>
             <Link to="/privacy" className="hover:text-foreground/70 transition-colors">{l.privacy}</Link>
             <Link to="/terms" className="hover:text-foreground/70 transition-colors">{l.terms}</Link>
@@ -743,6 +744,9 @@ export function LandingPage() {
           <p className="text-[11px] text-muted-foreground/30 text-center tracking-wide">{l.copyright}</p>
         </div>
       </footer>
+
+      {/* Newsletter Popup */}
+      <NewsletterPopup />
     </div>
   );
 }
