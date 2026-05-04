@@ -9,17 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { HnLogo } from "@/components/HnLogo";
 import { toast } from "sonner";
-import { Sparkles, ShoppingBag, ShieldCheck, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/sign-up-login")({
   component: AuthPage,
 });
 
-const DEMOS = [
-  { label: "Creator", email: "creator@hnchat.demo", password: "Creator!2025", icon: Sparkles, color: "from-cyan-glow to-primary-glow" },
-  { label: "Shopper", email: "shopper@hnchat.demo", password: "Shopper!2025", icon: ShoppingBag, color: "from-violet-glow to-pink-glow" },
-  { label: "Admin",   email: "admin@hnchat.demo",   password: "Admin!2025",   icon: ShieldCheck, color: "from-pink-glow to-cyan-glow" },
-];
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -71,48 +66,6 @@ function AuthPage() {
     }
   }, [isAuthenticated, isLoading, isOwner, isAdmin, rolesLoaded, navigate]);
 
-  async function ensureDemo(em: string, pw: string, uname: string) {
-    // Try sign in; if fails, sign up then sign in
-    let { error } = await supabase.auth.signInWithPassword({ email: em, password: pw });
-    if (error) {
-      const { error: suErr } = await supabase.auth.signUp({
-        email: em, password: pw,
-        options: {
-          emailRedirectTo: `${window.location.origin}/feed`,
-          data: { username: uname, full_name: uname },
-        },
-      });
-      if (suErr && !suErr.message.includes("already")) throw suErr;
-      const r = await supabase.auth.signInWithPassword({ email: em, password: pw });
-      if (r.error) throw r.error;
-    }
-  }
-
-  async function handleDemo(d: typeof DEMOS[number]) {
-    setBusy(d.label);
-    try {
-      await ensureDemo(d.email, d.password, d.label.toLowerCase());
-      if (d.label === "Admin") {
-        // Promote to admin role
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase.from("user_roles").upsert({ user_id: user.id, role: "admin" }, { onConflict: "user_id,role" });
-        }
-      } else if (d.label === "Creator") {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) await supabase.from("user_roles").upsert({ user_id: user.id, role: "creator" }, { onConflict: "user_id,role" });
-      } else if (d.label === "Shopper") {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) await supabase.from("user_roles").upsert({ user_id: user.id, role: "shopper" }, { onConflict: "user_id,role" });
-      }
-      toast.success(`Welcome, ${d.label}!`);
-      navigate({ to: d.label === "Admin" ? "/admin" : "/feed" });
-    } catch (e: any) {
-      toast.error(e.message ?? "Demo login failed");
-    } finally {
-      setBusy(null);
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -232,31 +185,6 @@ function AuthPage() {
             المتابعة مع Google
           </Button>
 
-          <div className="my-4 flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">or try a demo</span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            {DEMOS.map((d) => {
-              const Icon = d.icon;
-              return (
-                <button
-                  key={d.label}
-                  onClick={() => handleDemo(d)}
-                  disabled={busy !== null}
-                  className={`group relative p-3 rounded-lg border border-ice-border bg-gradient-to-br ${d.color} bg-opacity-10 hover:scale-[1.03] transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  <div className="absolute inset-0 rounded-lg bg-background/60" />
-                  <div className="relative flex flex-col items-center gap-1.5">
-                    {busy === d.label ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
-                    <span className="text-xs font-medium">{d.label}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
         </Card>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
