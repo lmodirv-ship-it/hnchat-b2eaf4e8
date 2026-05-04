@@ -29,16 +29,19 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
-  const search = Route.useSearch();
-
   // Store UTM params for analytics
   useEffect(() => {
-    if (search.utm_source) {
-      sessionStorage.setItem("utm_source", search.utm_source);
-      if (search.utm_medium) sessionStorage.setItem("utm_medium", search.utm_medium);
-      if (search.utm_campaign) sessionStorage.setItem("utm_campaign", search.utm_campaign);
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const utm_source = params.get("utm_source");
+    const utm_medium = params.get("utm_medium");
+    const utm_campaign = params.get("utm_campaign");
+    if (utm_source) {
+      sessionStorage.setItem("utm_source", utm_source);
+      if (utm_medium) sessionStorage.setItem("utm_medium", utm_medium);
+      if (utm_campaign) sessionStorage.setItem("utm_campaign", utm_campaign);
     }
-  }, [search]);
+  }, []);
 
   async function handleGoogleSignIn() {
     setBusy("google");
