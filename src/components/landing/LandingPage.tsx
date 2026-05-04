@@ -642,16 +642,16 @@ export function LandingPage() {
       </section>
 
       {/* ═══ BENTO GRID — FEATURES ═══ */}
-      <section className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-        <motion.h2 className="text-3xl sm:text-4xl font-bold text-center mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
+      <section className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
+        <motion.h2 className="text-2xl sm:text-4xl font-bold text-center mb-3 sm:mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
           {l.allInOne} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.onePlace}</span>
         </motion.h2>
-        <motion.p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
+        <motion.p className="text-center text-muted-foreground mb-8 sm:mb-12 max-w-xl mx-auto text-sm sm:text-base" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
           {l.heroSub}
         </motion.p>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[180px]">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-[140px] sm:auto-rows-[180px]">
           {l.features.map((f, i) => {
             const Icon = featureIcons[i];
             const isLarge = i === 0 || i === 3;
