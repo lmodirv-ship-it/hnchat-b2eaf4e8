@@ -37,6 +37,15 @@ function AdminLayout() {
 
   return (
     <div className="min-h-screen relative">
+      {/* Admin is desktop-only */}
+      <div className="md:hidden flex flex-col items-center justify-center min-h-screen p-8 text-center">
+        <Shield className="h-12 w-12 text-pink-glow mb-4" />
+        <h1 className="text-xl font-bold mb-2">لوحة الإدارة</h1>
+        <p className="text-muted-foreground text-sm">لوحة الإدارة متاحة فقط من الحاسوب</p>
+        <Link to="/feed" className="mt-6 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm">
+          العودة للتطبيق
+        </Link>
+      </div>
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-pink-glow/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-cyan-glow/15 blur-3xl" />
