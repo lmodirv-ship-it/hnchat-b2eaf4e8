@@ -631,7 +631,7 @@ export function LandingPage() {
             >
               <span className="text-2xl">{s.icon}</span>
               <div>
-                <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.18_220/0.5)] transition-all duration-300">
+                <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.18_220/0.5)] transition-all duration-300">
                   {s.value}
                 </div>
                 <div className="text-xs text-muted-foreground/60">{s.label}</div>
