@@ -467,15 +467,15 @@ export function LandingPage() {
       <FloatingParticles />
 
       {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 flex items-center justify-between px-4 sm:px-6 py-4 max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
-          <HnLogo size={48} showText={false} />
-          <span className="text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
-          <VisitorCounter />
-        </div>
+      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Lang Switcher — Glass with dropdown */}
-          <div className="relative group">
+          <HnLogo size={40} showText={false} />
+          <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
+          <div className="hidden sm:block"><VisitorCounter /></div>
+        </div>
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          {/* Lang Switcher — hidden on very small screens */}
+          <div className="relative group hidden sm:block">
             <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 cursor-pointer">
               <Globe className="h-3.5 w-3.5 text-cyan-glow" />
               {langLabels[lang]}
@@ -489,12 +489,12 @@ export function LandingPage() {
             </div>
           </div>
           <Link to="/sign-up-login">
-            <button className="px-4 py-2 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer">
+            <button className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer">
               {l.signIn}
             </button>
           </Link>
           <Link to="/sign-up-login">
-            <button className="px-5 py-2 text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.97] cursor-pointer">
+            <button className="px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.95] cursor-pointer">
               {l.startFree}
             </button>
           </Link>
