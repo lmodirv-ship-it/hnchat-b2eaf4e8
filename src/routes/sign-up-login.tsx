@@ -12,6 +12,12 @@ import { toast } from "sonner";
 import { Sparkles, ShoppingBag, ShieldCheck, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/sign-up-login")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    utm_source: (search.utm_source as string) || undefined,
+    utm_medium: (search.utm_medium as string) || undefined,
+    utm_campaign: (search.utm_campaign as string) || undefined,
+    ref: (search.ref as string) || undefined,
+  }),
   component: AuthPage,
 });
 
