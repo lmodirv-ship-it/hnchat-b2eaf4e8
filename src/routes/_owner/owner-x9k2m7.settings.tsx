@@ -182,7 +182,7 @@ function GlobalConfigPage() {
             {[
               { label: "اسم المنصة", value: "hnChat", icon: Globe },
               { label: "الدومين", value: "www.hn-chat.com", icon: ExternalLink },
-              { label: "قاعدة البيانات", value: "Lovable Cloud", icon: Database },
+              { label: "قاعدة البيانات", value: "HN Cloud", icon: Database },
               { label: "الاستضافة", value: "Edge (Cloudflare)", icon: Server },
               { label: "الحماية", value: "RLS + Security Definer", icon: Shield },
             ].map((s) => {
