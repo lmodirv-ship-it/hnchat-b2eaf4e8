@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import { ExternalLinkGuard } from "@/components/system/ExternalLinkGuard";
 import { NavigationProgress } from "@/components/layout/NavigationProgress";
+import { NativeStatusBar } from "@/components/layout/NativeStatusBar";
+import { NetworkStatus } from "@/components/layout/NetworkStatus";
 import appCss from "../styles.css?url";
 
 declare global {
