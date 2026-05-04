@@ -37,43 +37,54 @@ function AdminLayout() {
 
   return (
     <div className="min-h-screen relative">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-pink-glow/15 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-cyan-glow/15 blur-3xl" />
+      {/* Admin is desktop-only */}
+      <div className="md:hidden flex flex-col items-center justify-center min-h-screen p-8 text-center">
+        <Shield className="h-12 w-12 text-pink-glow mb-4" />
+        <h1 className="text-xl font-bold mb-2">لوحة الإدارة</h1>
+        <p className="text-muted-foreground text-sm">لوحة الإدارة متاحة فقط من الحاسوب</p>
+        <Link to="/feed" className="mt-6 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm">
+          العودة للتطبيق
+        </Link>
       </div>
-
-      <header className="border-b border-ice-border bg-sidebar/40 backdrop-blur-xl sticky top-0 z-20">
-        <div className="container max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Link to="/feed" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> App
-          </Link>
-          <div className="h-5 w-px bg-border" />
-          <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-pink-glow" />
-            <span className="font-bold bg-gradient-to-r from-pink-glow to-violet-glow bg-clip-text text-transparent">Admin Console</span>
-          </div>
-          <nav className="ms-auto flex items-center gap-1">
-            {tabs.map((t) => {
-              const active = location.pathname === t.to;
-              return (
-                <Link
-                  key={t.to}
-                  to={t.to}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    active
-                      ? "bg-gradient-to-r from-pink-glow/25 to-violet-glow/20 text-foreground shadow-[inset_0_0_0_1px_oklch(0.65_0.25_295/0.4)]"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
-                  }`}
-                >
-                  {t.label}
-                </Link>
-              );
-            })}
-          </nav>
+      <div className="hidden md:block">
+        <div className="pointer-events-none fixed inset-0 -z-10">
+          <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-pink-glow/15 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-cyan-glow/15 blur-3xl" />
         </div>
-      </header>
 
-      <Outlet />
+        <header className="border-b border-ice-border bg-sidebar/40 backdrop-blur-xl sticky top-0 z-20">
+          <div className="container max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
+            <Link to="/feed" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" /> App
+            </Link>
+            <div className="h-5 w-px bg-border" />
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-pink-glow" />
+              <span className="font-bold bg-gradient-to-r from-pink-glow to-violet-glow bg-clip-text text-transparent">Admin Console</span>
+            </div>
+            <nav className="ms-auto flex items-center gap-1">
+              {tabs.map((t) => {
+                const active = location.pathname === t.to;
+                return (
+                  <Link
+                    key={t.to}
+                    to={t.to}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                      active
+                        ? "bg-gradient-to-r from-pink-glow/25 to-violet-glow/20 text-foreground shadow-[inset_0_0_0_1px_oklch(0.65_0.25_295/0.4)]"
+                        : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
+                    }`}
+                  >
+                    {t.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        </header>
+
+        <Outlet />
+      </div>
     </div>
   );
 }

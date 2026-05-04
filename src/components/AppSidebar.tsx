@@ -133,6 +133,7 @@ function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: stri
   );
   const [open, setOpen] = useState(hasActive);
 
+  // Sidebar is desktop-only (hidden on md:), so admin/owner links are naturally desktop-only
   return (
     <div className="mb-1">
       <button
