@@ -185,31 +185,6 @@ function AuthPage() {
             المتابعة مع Google
           </Button>
 
-          <div className="my-4 flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-xs text-muted-foreground">or try a demo</span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            {DEMOS.map((d) => {
-              const Icon = d.icon;
-              return (
-                <button
-                  key={d.label}
-                  onClick={() => handleDemo(d)}
-                  disabled={busy !== null}
-                  className={`group relative p-3 rounded-lg border border-ice-border bg-gradient-to-br ${d.color} bg-opacity-10 hover:scale-[1.03] transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  <div className="absolute inset-0 rounded-lg bg-background/60" />
-                  <div className="relative flex flex-col items-center gap-1.5">
-                    {busy === d.label ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
-                    <span className="text-xs font-medium">{d.label}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
         </Card>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
