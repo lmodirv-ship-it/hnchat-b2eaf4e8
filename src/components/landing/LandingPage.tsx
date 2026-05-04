@@ -621,8 +621,8 @@ export function LandingPage() {
       </section>
 
       {/* ═══ FLOATING STATS ═══ */}
-      <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-10">
+      <section className="relative z-10 max-w-5xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-4 sm:gap-10">
           {l.stats.map((s, i) => (
             <motion.div
               key={s.label}
