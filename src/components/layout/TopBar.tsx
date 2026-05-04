@@ -40,9 +40,9 @@ export function TopBar() {
     <header className="sticky top-0 z-30 border-b border-ice-border/20 bg-background/70 backdrop-blur-3xl backdrop-saturate-[1.8] shadow-[0_4px_30px_oklch(0_0_0/0.3)]">
       <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2">
         {/* Logo — always visible */}
-        <Link to="/" className="flex items-center gap-2 shrink-0 group">
+        <Link to="/" className="flex items-center gap-1.5 shrink-0 group">
           <HnLogo size={32} showText={false} />
-          <span className="hidden sm:inline font-extrabold text-base bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_oklch(0.78_0.18_60/0.3)] group-hover:drop-shadow-[0_0_14px_oklch(0.78_0.18_60/0.5)] transition-all duration-300">
+          <span className="font-extrabold text-sm sm:text-base bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_oklch(0.78_0.18_60/0.3)] group-hover:drop-shadow-[0_0_14px_oklch(0.78_0.18_60/0.5)] transition-all duration-300">
             hnChat
           </span>
         </Link>
