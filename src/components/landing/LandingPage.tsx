@@ -666,18 +666,18 @@ export function LandingPage() {
                 {/* Hover gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${featureColors[i]} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl`} />
                 {/* Content */}
-                <div className="relative h-full flex flex-col justify-between p-6">
+                <div className="relative h-full flex flex-col justify-between p-4 sm:p-6">
                   <div className="flex items-start justify-between">
-                    <div className="p-3 rounded-2xl bg-background/40 backdrop-blur-xl border border-ice-border/10 group-hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.15)] transition-all duration-500">
-                      <Icon className="h-6 w-6 text-foreground/80 group-hover:text-cyan-glow transition-colors duration-500" />
+                    <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-background/40 backdrop-blur-xl border border-ice-border/10 group-hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.15)] transition-all duration-500">
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/80 group-hover:text-cyan-glow transition-colors duration-500" />
                     </div>
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
-                      <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
+                    <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
+                      <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-cyan-glow" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold mb-1.5">{f.title}</h3>
-                    <p className="text-sm text-muted-foreground/70 leading-relaxed line-clamp-2">{f.desc}</p>
+                    <h3 className="text-sm sm:text-lg font-bold mb-0.5 sm:mb-1.5">{f.title}</h3>
+                    <p className="text-[11px] sm:text-sm text-muted-foreground/70 leading-relaxed line-clamp-2">{f.desc}</p>
                   </div>
                 </div>
               </motion.div>
