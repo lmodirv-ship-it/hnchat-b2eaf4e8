@@ -35,6 +35,32 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
+  const search = Route.useSearch();
+
+  // Store UTM params for analytics
+  useEffect(() => {
+    if (search.utm_source) {
+      sessionStorage.setItem("utm_source", search.utm_source);
+      if (search.utm_medium) sessionStorage.setItem("utm_medium", search.utm_medium);
+      if (search.utm_campaign) sessionStorage.setItem("utm_campaign", search.utm_campaign);
+    }
+  }, [search]);
+
+  async function handleGoogleSignIn() {
+    setBusy("google");
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw new Error(result.error.message || "Google sign-in failed");
+      if (result.redirected) return;
+      toast.success("مرحباً بك!");
+    } catch (e: any) {
+      toast.error(e.message ?? "Google sign-in failed");
+    } finally {
+      setBusy(null);
+    }
+  }
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && rolesLoaded) {
