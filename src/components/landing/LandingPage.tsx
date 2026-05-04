@@ -6,7 +6,7 @@ import { SocialProofToast } from "@/components/landing/SocialProofToast";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { PartnerStrip } from "@/components/landing/PartnerStrip";
 import { PhoneMockup } from "@/components/landing/PhoneMockup";
-import { AIDemoChat } from "@/components/landing/AIDemoChat";
+
 import { NewsletterPopup } from "@/components/landing/NewsletterPopup";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -686,18 +686,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ AI INTERACTIVE DEMO ═══ */}
-      <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-24">
-        <motion.h2 className="text-3xl sm:text-4xl font-bold text-center mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
-          {l.tryAI} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.aiWord}</span>
-        </motion.h2>
-        <motion.p className="text-center text-muted-foreground mb-10 max-w-lg mx-auto" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
-          {l.aiSub}
-        </motion.p>
-        <motion.div initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={2}>
-          <AIDemoChat lang={lang} />
-        </motion.div>
-      </section>
 
       {/* ═══ TRUST BAR ═══ */}
       <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pb-16">
