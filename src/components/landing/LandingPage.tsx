@@ -522,7 +522,7 @@ export function LandingPage() {
             </span>
           </motion.h1>
 
-          <motion.p className="text-lg sm:text-xl font-semibold mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
+          <motion.p className="text-base sm:text-xl font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
             {l.heroSub}
           </motion.p>
 
