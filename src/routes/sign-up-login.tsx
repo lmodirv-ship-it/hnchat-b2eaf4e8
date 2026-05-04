@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { HnLogo } from "@/components/HnLogo";
 import { toast } from "sonner";
-import { Sparkles, ShoppingBag, ShieldCheck, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/sign-up-login")({
   component: AuthPage,
