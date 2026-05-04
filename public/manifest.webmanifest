@@ -4,6 +4,7 @@
   "description": "منصة سوبر آب: تواصل، فيديو، رسائل، تسوّق، وذكاء اصطناعي في مكان واحد.",
   "start_url": "/feed",
   "scope": "/",
+  "id": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0815",
@@ -11,6 +12,14 @@
   "lang": "ar",
   "dir": "rtl",
   "categories": ["social", "communication", "entertainment"],
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.hnchat.app",
+      "id": "com.hnchat.app"
+    }
+  ],
   "icons": [
     {
       "src": "/icon-192.png",
@@ -25,9 +34,28 @@
       "purpose": "any maskable"
     }
   ],
+  "screenshots": [],
   "shortcuts": [
-    { "name": "Feed", "url": "/feed", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Reels", "url": "/reels", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Messages", "url": "/messages", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
-  ]
+    { "name": "الرئيسية", "short_name": "Feed", "url": "/feed", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "فيديو قصير", "short_name": "Reels", "url": "/reels", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "الرسائل", "short_name": "Messages", "url": "/messages", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "المتجر", "short_name": "Shop", "url": "/hnshop", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "الذكاء الاصطناعي", "short_name": "AI", "url": "/ai-hub", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "share_target": {
+    "action": "/feed",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "media",
+          "accept": ["image/*", "video/*"]
+        }
+      ]
+    }
+  }
 }
