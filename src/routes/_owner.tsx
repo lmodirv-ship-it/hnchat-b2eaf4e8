@@ -82,7 +82,17 @@ function OwnerShell() {
 
   return (
     <div className="min-h-screen flex w-full bg-[oklch(0.04_0.01_280)]">
-      {/* Distinct dark gold/red theme — clearly NOT the public app */}
+      {/* Owner console is desktop-only */}
+      <div className="md:hidden flex flex-col items-center justify-center min-h-screen p-8 text-center">
+        <Crown className="h-12 w-12 text-[oklch(0.75_0.18_50)] mb-4" />
+        <h1 className="text-xl font-bold mb-2">لوحة المالك</h1>
+        <p className="text-muted-foreground text-sm">لوحة التحكم متاحة فقط من الحاسوب</p>
+        <button onClick={() => navigate({ to: "/feed" })} className="mt-6 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm">
+          العودة للتطبيق
+        </button>
+      </div>
+      {/* Desktop owner console */}
+      <div className="hidden md:contents">
       <aside className="w-72 border-r border-[oklch(0.2_0.05_30)] bg-gradient-to-b from-[oklch(0.06_0.02_30)] to-[oklch(0.04_0.01_280)] sticky top-0 h-screen flex flex-col">
         <div className="p-5 border-b border-[oklch(0.2_0.05_30)]">
           <div className="flex items-center gap-2.5 mb-3">
