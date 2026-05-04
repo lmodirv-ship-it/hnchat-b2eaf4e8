@@ -164,6 +164,8 @@ function RootComponent() {
       <AuthProvider>
         <ScriptOnce children={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`} />
         <GaPageViewTracker />
+        <NativeStatusBar />
+        <NetworkStatus />
         <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
