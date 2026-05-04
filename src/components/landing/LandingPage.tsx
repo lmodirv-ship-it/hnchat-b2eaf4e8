@@ -536,7 +536,7 @@ export function LandingPage() {
               {/* Glassmorphism CTA with animated border + pulse */}
               <div className="group relative">
                 <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow opacity-70 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundSize: "200% 200%", animation: "borderRotate 4s linear infinite" }} />
-                <button className="relative px-10 py-5 text-lg font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground transition-all duration-300 hover:bg-background/60 cursor-pointer select-none" style={{ animation: "ctaPulse 3s ease-in-out infinite" }}>
+                <button className="relative px-8 sm:px-10 py-4 sm:py-5 text-base sm:text-lg font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground transition-all duration-300 hover:bg-background/60 active:scale-95 cursor-pointer select-none" style={{ animation: "ctaPulse 3s ease-in-out infinite" }}>
                   <span className="flex items-center gap-2">
                     {isRTL && <ArrowLeft className="h-5 w-5" />}
                     {l.joinNow}
