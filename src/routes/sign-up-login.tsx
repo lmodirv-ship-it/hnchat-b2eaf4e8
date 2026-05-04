@@ -15,11 +15,6 @@ export const Route = createFileRoute("/sign-up-login")({
   component: AuthPage,
 });
 
-const DEMOS = [
-  { label: "Creator", email: "creator@hnchat.demo", password: "Creator!2025", icon: Sparkles, color: "from-cyan-glow to-primary-glow" },
-  { label: "Shopper", email: "shopper@hnchat.demo", password: "Shopper!2025", icon: ShoppingBag, color: "from-violet-glow to-pink-glow" },
-  { label: "Admin",   email: "admin@hnchat.demo",   password: "Admin!2025",   icon: ShieldCheck, color: "from-pink-glow to-cyan-glow" },
-];
 
 function AuthPage() {
   const navigate = useNavigate();
