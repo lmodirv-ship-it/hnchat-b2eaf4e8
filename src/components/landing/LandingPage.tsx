@@ -512,7 +512,7 @@ export function LandingPage() {
             </span>
           </motion.div>
 
-          <motion.h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-5" initial={init} animate={enter} variants={fadeUp} custom={1}>
+          <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4 sm:mb-5" initial={init} animate={enter} variants={fadeUp} custom={1}>
             {l.heroTitle1}{" "}
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
