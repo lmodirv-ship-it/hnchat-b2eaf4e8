@@ -546,7 +546,7 @@ export function LandingPage() {
               </div>
             </Link>
             <Link to="/about">
-              <button className="px-8 py-4 text-base font-semibold rounded-2xl border-2 border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.97] cursor-pointer">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-2xl border-2 border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.95] cursor-pointer">
                 {l.discover}
               </button>
             </Link>
