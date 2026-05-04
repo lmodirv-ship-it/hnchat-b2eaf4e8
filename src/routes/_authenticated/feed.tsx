@@ -159,7 +159,7 @@ function FeedPage() {
       )}
 
       {/* Posts list */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {isLoading && (
           <div className="text-center py-12">
             <Loader2 className="h-8 w-8 animate-spin mx-auto text-cyan-glow" />
