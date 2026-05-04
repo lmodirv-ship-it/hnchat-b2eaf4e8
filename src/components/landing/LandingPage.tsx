@@ -502,9 +502,9 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12 flex flex-col lg:flex-row gap-10 items-center">
+      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12 flex flex-col lg:flex-row gap-8 sm:gap-10 items-center">
         {/* Left: Hero text */}
-        <div className="flex-1 text-center lg:text-start pt-4 max-w-2xl">
+        <div className="flex-1 text-center lg:text-start pt-2 sm:pt-4 max-w-2xl">
           <motion.div initial={init} animate={enter} variants={fadeUp} custom={0}>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground mb-6">
               <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
