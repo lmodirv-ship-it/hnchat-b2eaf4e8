@@ -155,6 +155,7 @@ function OwnerShell() {
         </div>
         <Outlet />
       </main>
+      </div>
     </div>
   );
 }
