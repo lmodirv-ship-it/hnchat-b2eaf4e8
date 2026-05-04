@@ -467,15 +467,15 @@ export function LandingPage() {
       <FloatingParticles />
 
       {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 flex items-center justify-between px-4 sm:px-6 py-4 max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
-          <HnLogo size={48} showText={false} />
-          <span className="text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
-          <VisitorCounter />
-        </div>
+      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Lang Switcher — Glass with dropdown */}
-          <div className="relative group">
+          <HnLogo size={40} showText={false} />
+          <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
+          <div className="hidden sm:block"><VisitorCounter /></div>
+        </div>
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          {/* Lang Switcher — hidden on very small screens */}
+          <div className="relative group hidden sm:block">
             <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 cursor-pointer">
               <Globe className="h-3.5 w-3.5 text-cyan-glow" />
               {langLabels[lang]}
@@ -489,12 +489,12 @@ export function LandingPage() {
             </div>
           </div>
           <Link to="/sign-up-login">
-            <button className="px-4 py-2 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer">
+            <button className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer">
               {l.signIn}
             </button>
           </Link>
           <Link to="/sign-up-login">
-            <button className="px-5 py-2 text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.97] cursor-pointer">
+            <button className="px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.95] cursor-pointer">
               {l.startFree}
             </button>
           </Link>
@@ -502,9 +502,9 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12 flex flex-col lg:flex-row gap-10 items-center">
+      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12 flex flex-col lg:flex-row gap-8 sm:gap-10 items-center">
         {/* Left: Hero text */}
-        <div className="flex-1 text-center lg:text-start pt-4 max-w-2xl">
+        <div className="flex-1 text-center lg:text-start pt-2 sm:pt-4 max-w-2xl">
           <motion.div initial={init} animate={enter} variants={fadeUp} custom={0}>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground mb-6">
               <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
@@ -512,7 +512,7 @@ export function LandingPage() {
             </span>
           </motion.div>
 
-          <motion.h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-5" initial={init} animate={enter} variants={fadeUp} custom={1}>
+          <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4 sm:mb-5" initial={init} animate={enter} variants={fadeUp} custom={1}>
             {l.heroTitle1}{" "}
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
@@ -522,11 +522,11 @@ export function LandingPage() {
             </span>
           </motion.h1>
 
-          <motion.p className="text-lg sm:text-xl font-semibold mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
+          <motion.p className="text-base sm:text-xl font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
             {l.heroSub}
           </motion.p>
 
-          <motion.p className="text-base text-muted-foreground max-w-lg mb-10 leading-relaxed" initial={init} animate={enter} variants={fadeUp} custom={2}>
+          <motion.p className="text-sm sm:text-base text-muted-foreground max-w-lg mb-8 sm:mb-10 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={2}>
             {l.heroDesc}
           </motion.p>
 
@@ -536,7 +536,7 @@ export function LandingPage() {
               {/* Glassmorphism CTA with animated border + pulse */}
               <div className="group relative">
                 <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow opacity-70 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundSize: "200% 200%", animation: "borderRotate 4s linear infinite" }} />
-                <button className="relative px-10 py-5 text-lg font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground transition-all duration-300 hover:bg-background/60 cursor-pointer select-none" style={{ animation: "ctaPulse 3s ease-in-out infinite" }}>
+                <button className="relative px-8 sm:px-10 py-4 sm:py-5 text-base sm:text-lg font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground transition-all duration-300 hover:bg-background/60 active:scale-95 cursor-pointer select-none" style={{ animation: "ctaPulse 3s ease-in-out infinite" }}>
                   <span className="flex items-center gap-2">
                     {isRTL && <ArrowLeft className="h-5 w-5" />}
                     {l.joinNow}
@@ -546,7 +546,7 @@ export function LandingPage() {
               </div>
             </Link>
             <Link to="/about">
-              <button className="px-8 py-4 text-base font-semibold rounded-2xl border-2 border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.97] cursor-pointer">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-2xl border-2 border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.95] cursor-pointer">
                 {l.discover}
               </button>
             </Link>
@@ -621,8 +621,8 @@ export function LandingPage() {
       </section>
 
       {/* ═══ FLOATING STATS ═══ */}
-      <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-10">
+      <section className="relative z-10 max-w-5xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-4 sm:gap-10">
           {l.stats.map((s, i) => (
             <motion.div
               key={s.label}
@@ -631,7 +631,7 @@ export function LandingPage() {
             >
               <span className="text-2xl">{s.icon}</span>
               <div>
-                <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.18_220/0.5)] transition-all duration-300">
+                <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.18_220/0.5)] transition-all duration-300">
                   {s.value}
                 </div>
                 <div className="text-xs text-muted-foreground/60">{s.label}</div>
@@ -642,16 +642,16 @@ export function LandingPage() {
       </section>
 
       {/* ═══ BENTO GRID — FEATURES ═══ */}
-      <section className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-        <motion.h2 className="text-3xl sm:text-4xl font-bold text-center mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
+      <section className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
+        <motion.h2 className="text-2xl sm:text-4xl font-bold text-center mb-3 sm:mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
           {l.allInOne} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.onePlace}</span>
         </motion.h2>
-        <motion.p className="text-center text-muted-foreground mb-12 max-w-xl mx-auto" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
+        <motion.p className="text-center text-muted-foreground mb-8 sm:mb-12 max-w-xl mx-auto text-sm sm:text-base" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
           {l.heroSub}
         </motion.p>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[180px]">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-[140px] sm:auto-rows-[180px]">
           {l.features.map((f, i) => {
             const Icon = featureIcons[i];
             const isLarge = i === 0 || i === 3;
@@ -666,18 +666,18 @@ export function LandingPage() {
                 {/* Hover gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${featureColors[i]} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl`} />
                 {/* Content */}
-                <div className="relative h-full flex flex-col justify-between p-6">
+                <div className="relative h-full flex flex-col justify-between p-4 sm:p-6">
                   <div className="flex items-start justify-between">
-                    <div className="p-3 rounded-2xl bg-background/40 backdrop-blur-xl border border-ice-border/10 group-hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.15)] transition-all duration-500">
-                      <Icon className="h-6 w-6 text-foreground/80 group-hover:text-cyan-glow transition-colors duration-500" />
+                    <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-background/40 backdrop-blur-xl border border-ice-border/10 group-hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.15)] transition-all duration-500">
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/80 group-hover:text-cyan-glow transition-colors duration-500" />
                     </div>
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
-                      <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
+                    <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
+                      <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-cyan-glow" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold mb-1.5">{f.title}</h3>
-                    <p className="text-sm text-muted-foreground/70 leading-relaxed line-clamp-2">{f.desc}</p>
+                    <h3 className="text-sm sm:text-lg font-bold mb-0.5 sm:mb-1.5">{f.title}</h3>
+                    <p className="text-[11px] sm:text-sm text-muted-foreground/70 leading-relaxed line-clamp-2">{f.desc}</p>
                   </div>
                 </div>
               </motion.div>

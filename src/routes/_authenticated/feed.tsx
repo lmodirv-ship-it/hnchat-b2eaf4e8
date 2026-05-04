@@ -110,9 +110,9 @@ function FeedPage() {
     <PageShell title="التغذية" subtitle="اكتشف ما يحدث في عالمك الآن">
       <StoriesRail />
       {/* Composer */}
-      <Card className="p-4 mb-6 bg-ice-card border-ice-border backdrop-blur-xl">
-        <div className="flex gap-3">
-          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-glow to-violet-glow flex items-center justify-center text-sm font-bold text-primary-foreground shrink-0">
+      <Card className="p-3 sm:p-4 mb-4 sm:mb-6 bg-ice-card/80 border-ice-border/40 backdrop-blur-xl rounded-2xl sm:rounded-xl">
+        <div className="flex gap-2.5 sm:gap-3">
+          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-cyan-glow to-violet-glow flex items-center justify-center text-sm font-bold text-primary-foreground shrink-0 ring-2 ring-background">
             {user?.email?.[0]?.toUpperCase() ?? "?"}
           </div>
           <div className="flex-1">
@@ -121,9 +121,9 @@ function FeedPage() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               maxLength={2000}
-              className="bg-transparent border-0 resize-none focus-visible:ring-0 min-h-[80px] p-0 text-base"
+              className="bg-transparent border-0 resize-none focus-visible:ring-0 min-h-[60px] sm:min-h-[80px] p-0 text-sm sm:text-base"
             />
-            <div className="flex justify-between items-center mt-2 pt-2 border-t border-ice-border">
+            <div className="flex justify-between items-center mt-2 pt-2 border-t border-ice-border/20">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
                 <span>{content.length}/2000</span>
@@ -132,13 +132,13 @@ function FeedPage() {
                 onClick={handlePost}
                 disabled={!content.trim() || posting}
                 size="sm"
-                className="bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                className="bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground hover:opacity-90 disabled:opacity-50 active:scale-95 transition-all h-8 sm:h-9"
               >
                 {posting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <>
-                    <Send className="h-3.5 w-3.5 me-1.5" /> نشر
+                    <Send className="h-3.5 w-3.5 me-1" /> نشر
                   </>
                 )}
               </Button>
@@ -159,7 +159,7 @@ function FeedPage() {
       )}
 
       {/* Posts list */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {isLoading && (
           <div className="text-center py-12">
             <Loader2 className="h-8 w-8 animate-spin mx-auto text-cyan-glow" />
