@@ -66,48 +66,6 @@ function AuthPage() {
     }
   }, [isAuthenticated, isLoading, isOwner, isAdmin, rolesLoaded, navigate]);
 
-  async function ensureDemo(em: string, pw: string, uname: string) {
-    // Try sign in; if fails, sign up then sign in
-    let { error } = await supabase.auth.signInWithPassword({ email: em, password: pw });
-    if (error) {
-      const { error: suErr } = await supabase.auth.signUp({
-        email: em, password: pw,
-        options: {
-          emailRedirectTo: `${window.location.origin}/feed`,
-          data: { username: uname, full_name: uname },
-        },
-      });
-      if (suErr && !suErr.message.includes("already")) throw suErr;
-      const r = await supabase.auth.signInWithPassword({ email: em, password: pw });
-      if (r.error) throw r.error;
-    }
-  }
-
-  async function handleDemo(d: typeof DEMOS[number]) {
-    setBusy(d.label);
-    try {
-      await ensureDemo(d.email, d.password, d.label.toLowerCase());
-      if (d.label === "Admin") {
-        // Promote to admin role
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase.from("user_roles").upsert({ user_id: user.id, role: "admin" }, { onConflict: "user_id,role" });
-        }
-      } else if (d.label === "Creator") {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) await supabase.from("user_roles").upsert({ user_id: user.id, role: "creator" }, { onConflict: "user_id,role" });
-      } else if (d.label === "Shopper") {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) await supabase.from("user_roles").upsert({ user_id: user.id, role: "shopper" }, { onConflict: "user_id,role" });
-      }
-      toast.success(`Welcome, ${d.label}!`);
-      navigate({ to: d.label === "Admin" ? "/admin" : "/feed" });
-    } catch (e: any) {
-      toast.error(e.message ?? "Demo login failed");
-    } finally {
-      setBusy(null);
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
