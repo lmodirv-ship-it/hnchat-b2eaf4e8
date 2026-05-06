@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Plus, Loader2, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -312,7 +313,12 @@ function StoryViewer({
 
         {/* Header */}
         <div className="absolute top-6 left-3 right-3 z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link
+            to="/profile/$username"
+            params={{ username: group.user.username }}
+            onClick={onClose}
+            className="flex items-center gap-2 hover:opacity-80 transition"
+          >
             <Avatar className="h-8 w-8 border border-white/40">
               <AvatarImage src={group.user.avatar_url || undefined} />
               <AvatarFallback className="text-xs bg-black/50 text-white">
@@ -320,7 +326,7 @@ function StoryViewer({
               </AvatarFallback>
             </Avatar>
             <span className="text-white text-sm font-medium">{group.user.username}</span>
-          </div>
+          </Link>
           <button
             onClick={onClose}
             className="text-white/80 hover:text-white p-1"
