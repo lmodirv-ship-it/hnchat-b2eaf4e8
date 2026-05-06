@@ -21,7 +21,8 @@ export function FloatingParticles() {
     if (!ctx) return;
 
     let animId: number;
-    let particles: Particle[] = [];
+    let lastTime = 0;
+    const FPS_INTERVAL = 1000 / 24; // Cap at 24fps — smooth enough, saves CPU
 
     function resize() {
       if (!canvas) return;
@@ -31,21 +32,29 @@ export function FloatingParticles() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Create particles
-    const count = Math.min(60, Math.floor(window.innerWidth / 25));
+    // Fewer particles — 20 max instead of 60
+    const count = Math.min(20, Math.floor(window.innerWidth / 60));
+    const particles: Particle[] = [];
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.3 - 0.1,
-        size: Math.random() * 2.5 + 0.5,
-        opacity: Math.random() * 0.4 + 0.1,
-        hue: Math.random() > 0.5 ? 195 : 270, // cyan or violet
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.2 - 0.08,
+        size: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.35 + 0.1,
+        hue: Math.random() > 0.5 ? 195 : 270,
       });
     }
 
-    function draw() {
+    function draw(now: number) {
+      animId = requestAnimationFrame(draw);
+
+      // Throttle to ~24fps
+      const delta = now - lastTime;
+      if (delta < FPS_INTERVAL) return;
+      lastTime = now - (delta % FPS_INTERVAL);
+
       if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -53,49 +62,27 @@ export function FloatingParticles() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Wrap around
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${p.hue}, 80%, 65%, ${p.opacity})`;
         ctx.fill();
 
-        // Draw glow
+        // Simpler glow — no radial gradient, just a larger circle
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-        grad.addColorStop(0, `hsla(${p.hue}, 80%, 65%, ${p.opacity * 0.3})`);
-        grad.addColorStop(1, `hsla(${p.hue}, 80%, 65%, 0)`);
-        ctx.fillStyle = grad;
+        ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 80%, 65%, ${p.opacity * 0.15})`;
         ctx.fill();
       }
 
-      // Draw connecting lines between nearby particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `hsla(195, 80%, 65%, ${0.08 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-
-      animId = requestAnimationFrame(draw);
+      // No connecting lines — was O(n²) and very expensive
     }
 
-    draw();
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
@@ -107,7 +94,7 @@ export function FloatingParticles() {
     <canvas
       ref={canvasRef}
       className="pointer-events-none fixed inset-0 z-[1]"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.5 }}
     />
   );
 }
