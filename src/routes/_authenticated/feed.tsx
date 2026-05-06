@@ -39,11 +39,25 @@ function AiComposer({ onPost }: { onPost: () => void }) {
   const [focused, setFocused] = useState(false);
 
   async function handlePost() {
-    if (!content.trim() || !user) return;
+    if (!content.trim() || !user) {
+      console.warn("[hnChat] handlePost blocked:", { hasContent: !!content.trim(), hasUser: !!user });
+      if (!user) toast.error("يجب تسجيل الدخول أولاً");
+      return;
+    }
     setPosting(true);
-    const { error } = await supabase.from("posts").insert({ user_id: user.id, content: content.trim(), type: "post" });
+    console.log("[hnChat] Creating post for user:", user.id);
+    const { data, error } = await supabase
+      .from("posts")
+      .insert({ user_id: user.id, content: content.trim(), type: "post" as const })
+      .select("id")
+      .single();
     setPosting(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      console.error("[hnChat] Post creation failed:", error);
+      toast.error(`فشل النشر: ${error.message}`);
+      return;
+    }
+    console.log("[hnChat] Post created successfully:", data?.id);
     setContent("");
     activityPulse();
     toast.success("تم النشر بنجاح ✨");
