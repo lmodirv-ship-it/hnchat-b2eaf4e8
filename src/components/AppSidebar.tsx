@@ -110,8 +110,9 @@ function Badge({ tone, text }: { tone: "new" | "ai" | "live" | "count"; text: st
   );
 }
 
-function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+function NavLink({ item, active, badgeOverride }: { item: NavItem; active: boolean; badgeOverride?: { text: string; tone: "new" | "ai" | "live" | "count" } | null }) {
   const Icon = item.icon;
+  const badge = badgeOverride !== undefined ? badgeOverride : item.badge;
   return (
     <Link
       to={item.to}
@@ -123,7 +124,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
     >
       <Icon className="h-4 w-4 shrink-0" />
       <span className="truncate">{item.label}</span>
-      {item.badge && <Badge tone={item.badge.tone} text={item.badge.text} />}
+      {badge && <Badge tone={badge.tone} text={badge.text} />}
     </Link>
   );
 }
