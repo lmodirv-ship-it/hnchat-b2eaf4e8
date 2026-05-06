@@ -163,6 +163,7 @@ function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: stri
 
 export function AppSidebar() {
   const { user, isAdmin, signOut, roles } = useAuth();
+  const { notifUnread, msgUnread, onlineCount } = useRealtime();
   const location = useLocation();
   const navigate = useNavigate();
 
