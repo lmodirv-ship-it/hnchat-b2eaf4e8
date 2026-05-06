@@ -227,7 +227,7 @@ function PublicPostPage() {
                   userInteractionCount: post.comments_count,
                 },
               ],
-            }),
+            }).replace(/<\/script>/gi, "<\\/script>"),
           }}
         />
       </main>

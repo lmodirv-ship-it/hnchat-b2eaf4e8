@@ -6,8 +6,36 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Simple in-memory per-IP rate limiter
+const ipHits = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 10; // max requests per window
+const WINDOW_MS = 60_000; // 1 minute
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = ipHits.get(ip);
+  if (!entry || now > entry.resetAt) {
+    ipHits.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  // Rate limit by IP
+  const clientIp =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("cf-connecting-ip") ||
+    "unknown";
+  if (isRateLimited(clientIp)) {
+    return new Response(JSON.stringify({ error: "Too many requests, please try again later." }), {
+      status: 429,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const { message } = await req.json();
