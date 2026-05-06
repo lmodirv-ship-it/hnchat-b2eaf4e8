@@ -1,5 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import { lovable } from "@/integrations/lovable/index";
+import { toast } from "sonner";
 import { HnLogo } from "@/components/HnLogo";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { SocialProofToast } from "@/components/landing/SocialProofToast";
