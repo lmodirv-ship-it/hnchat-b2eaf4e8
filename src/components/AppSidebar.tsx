@@ -241,8 +241,11 @@ export function AppSidebar() {
           <div className="min-w-0 flex-1">
             <div className="text-xs font-medium truncate">{user?.email}</div>
             <div className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
               {isAdmin ? "Admin" : roles[0] ?? "Online"}
+              {onlineCount > 0 && (
+                <span className="text-[9px] text-cyan-glow ml-1">• {onlineCount} متصل</span>
+              )}
             </div>
           </div>
         </div>
