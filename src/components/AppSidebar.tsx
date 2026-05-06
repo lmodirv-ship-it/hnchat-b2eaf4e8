@@ -129,13 +129,12 @@ function NavLink({ item, active, badgeOverride }: { item: NavItem; active: boole
   );
 }
 
-function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: string }) {
+function CollapsibleGroup({ group, pathname, badgeOverrides }: { group: NavGroup; pathname: string; badgeOverrides?: Record<string, { text: string; tone: "new" | "ai" | "live" | "count" } | null> }) {
   const hasActive = group.items.some(
     (i) => pathname === i.to || pathname.startsWith(i.to + "/")
   );
   const [open, setOpen] = useState(hasActive);
 
-  // Sidebar is desktop-only (hidden on md:), so admin/owner links are naturally desktop-only
   return (
     <div className="mb-1">
       <button
@@ -154,6 +153,7 @@ function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: stri
               key={item.to}
               item={item}
               active={pathname === item.to || pathname.startsWith(item.to + "/")}
+              badgeOverride={badgeOverrides?.[item.to]}
             />
           ))}
         </div>
