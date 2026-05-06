@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 import { useEnergy } from "@/hooks/useEnergySystem";
+import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
