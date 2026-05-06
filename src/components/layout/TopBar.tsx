@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
+import { EnergyModeSelector } from "@/components/layout/EnergyModeSelector";
 
 export function TopBar() {
   const { user } = useAuth();
@@ -74,6 +75,9 @@ export function TopBar() {
         )}
 
         <div className={`flex items-center gap-1 sm:gap-2 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+          <div className="hidden sm:block">
+            <EnergyModeSelector />
+          </div>
           <VisitorCounter />
           <Link
             to="/messages"
