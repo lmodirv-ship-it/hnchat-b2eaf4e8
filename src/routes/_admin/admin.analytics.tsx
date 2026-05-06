@@ -308,7 +308,7 @@ function AdminAnalyticsPage() {
         recentPosts: recentPostsRes.data ?? [],
       };
     },
-    refetchInterval: 30000,
+    refetchInterval: 200000,
   });
 
   // AI Insights
