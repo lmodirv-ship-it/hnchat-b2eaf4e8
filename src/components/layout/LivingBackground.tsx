@@ -42,7 +42,7 @@ export function LivingBackground() {
       <div
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, oklch(0.12 0.03 265 / 0.4) 100%)",
+          background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, oklch(0.28 0.05 265 / 0.3) 100%)",
         }}
       />
     </div>
