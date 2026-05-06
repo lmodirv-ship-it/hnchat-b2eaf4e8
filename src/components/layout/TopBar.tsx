@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
+import { EnergyModeSelector } from "@/components/layout/EnergyModeSelector";
 
 export function TopBar() {
   const { user } = useAuth();
