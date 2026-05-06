@@ -319,7 +319,7 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
                 return (
                   <div key={gi} className={cn("flex gap-2", mine ? "justify-end" : "justify-start")}>
                     {!mine && (
-                      <Link to="/user/$userId" params={{ userId: group.senderId }}>
+                      <Link to="/profile/$username" params={{ userId: group.senderId }}>
                         <Avatar className="h-8 w-8 mt-auto shrink-0 ring-1 ring-ice-border hover:ring-cyan-glow/50 transition-all">
                           <AvatarImage src={sender?.avatar_url || undefined} />
                           <AvatarFallback className="bg-cyan-glow/10 text-cyan-glow text-[10px]">
@@ -330,7 +330,7 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
                     )}
                     <div className={cn("flex flex-col gap-0.5 max-w-[75%]", mine ? "items-end" : "items-start")}>
                       {!mine && isGroup && (
-                        <Link to="/user/$userId" params={{ userId: group.senderId }} className="text-[11px] font-medium text-cyan-glow/90 px-1 hover:text-cyan-glow transition-colors">
+                        <Link to="/profile/$username" params={{ userId: group.senderId }} className="text-[11px] font-medium text-cyan-glow/90 px-1 hover:text-cyan-glow transition-colors">
                           {sender?.full_name || sender?.username || "عضو"}
                         </Link>
                       )}
