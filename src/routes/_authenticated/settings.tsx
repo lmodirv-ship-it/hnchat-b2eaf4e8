@@ -138,9 +138,10 @@ function PrivacySettingsSection({ userId }: { userId?: string }) {
 
   async function toggle(key: PrivacyKey, value: boolean) {
     if (!userId) return;
+    const updatePayload = { [key]: value } as any;
     const { error } = await supabase
       .from("profile_privacy_settings")
-      .update({ [key]: value })
+      .update(updatePayload)
       .eq("user_id", userId);
     if (error) {
       toast.error("فشل حفظ الإعدادات");
