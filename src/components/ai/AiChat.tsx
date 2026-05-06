@@ -102,6 +102,23 @@ export function AiChat() {
           }
         }
       }
+
+      // Log AI usage
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        if (authData?.user) {
+          const promptTokens = Math.ceil(text.length / 4);
+          const completionTokens = Math.ceil(assistantSoFar.length / 4);
+          await supabase.from("ai_usage").insert({
+            user_id: authData.user.id,
+            feature: "chat",
+            prompt_tokens: promptTokens,
+            completion_tokens: completionTokens,
+            total_tokens: promptTokens + completionTokens,
+            cost: 0,
+          });
+        }
+      } catch {}
     } catch (err) {
       console.error(err);
       toast.error("فشل الاتصال بـ AI");
