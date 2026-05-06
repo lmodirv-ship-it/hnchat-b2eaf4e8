@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback, type FormEvent } from "react";
+import { useAuth } from "@/lib/auth";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Card } from "@/components/ui/card";
