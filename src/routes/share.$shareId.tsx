@@ -112,7 +112,7 @@ function SharedChatPage() {
             author: { "@type": "Person", name: chat.author?.username ?? "HN-Chat User" },
             datePublished: chat.created_at,
             publisher: { "@type": "Organization", name: "HN-Chat", url: SITE_URL },
-          }),
+          }).replace(/<\/script>/gi, "<\\/script>"),
         }}
       />
     </div>

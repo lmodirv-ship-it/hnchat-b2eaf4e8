@@ -184,7 +184,7 @@ function PublicLivePage() {
                 interactionType: "https://schema.org/WatchAction",
                 userInteractionCount: stream.peak_viewers,
               },
-            }),
+            }).replace(/<\/script>/gi, "<\\/script>"),
           }}
         />
       </main>
