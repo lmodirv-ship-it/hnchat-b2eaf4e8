@@ -75,7 +75,7 @@ export function CommentsSection({ postId, onChange }: { postId: string; onChange
           <div key={c.id} className="flex gap-2 group">
             <Link
               to="/profile/$username"
-              params={{ userId: c.user_id }}
+              params={{ username: c.profile?.username ?? c.user_id }}
               className="h-7 w-7 rounded-full bg-gradient-to-br from-cyan-glow to-violet-glow flex items-center justify-center text-[10px] font-bold text-primary-foreground shrink-0 overflow-hidden active:scale-95 transition-transform"
             >
               {c.profile?.avatar_url ? (
@@ -88,7 +88,7 @@ export function CommentsSection({ postId, onChange }: { postId: string; onChange
               <div className="bg-ice-card rounded-2xl px-3 py-2 border border-ice-border">
                 <Link
                   to="/profile/$username"
-                  params={{ userId: c.user_id }}
+                  params={{ username: c.profile?.username ?? c.user_id }}
                   className="text-xs font-semibold mb-0.5 hover:text-[oklch(0.78_0.18_220)] transition-colors inline-block"
                 >
                   {c.profile?.full_name ?? c.profile?.username ?? "User"}
