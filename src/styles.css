@@ -250,6 +250,39 @@
   50% { box-shadow: 0 0 30px oklch(0.78 0.18 220 / 0.5), 0 0 60px oklch(0.65 0.25 295 / 0.3); transform: scale(1.02); }
 }
 
+/* ═══ hnChat Living System Animations ═══ */
+@keyframes neural-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes data-flow {
+  0% { transform: translateY(100%) scaleY(0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-100%) scaleY(0); opacity: 0; }
+}
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.02); filter: brightness(1.15); }
+}
+@keyframes energy-line {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes status-glow {
+  0%, 100% { box-shadow: 0 0 4px currentColor, 0 0 8px currentColor; }
+  50% { box-shadow: 0 0 8px currentColor, 0 0 20px currentColor, 0 0 32px currentColor; }
+}
+
+.animate-neural { animation: neural-pulse 3s ease-in-out infinite; }
+.animate-breathe { animation: breathe 4s ease-in-out infinite; }
+.animate-orbit { animation: orbit 20s linear infinite; }
+.animate-status-glow { animation: status-glow 2s ease-in-out infinite; }
+
 html, body {
   overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
