@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { useRealtime } from "@/components/providers/RealtimeProvider";
 import { HnLogo } from "@/components/HnLogo";
 import {
   Home, Video, MessageCircle, ShoppingBag, Users, Bell,
