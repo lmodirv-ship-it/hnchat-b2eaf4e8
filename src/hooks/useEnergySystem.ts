@@ -78,7 +78,7 @@ export function useEnergyProvider(): EnergyState {
 
   // Decay intensity over time
   useEffect(() => {
-    decayRef.current = setInterval(() => {
+    decayRef.current = setInterval((() => {
       setIntensity((prev) => Math.max(0.15, prev - 0.02));
     }, 2000);
     return () => clearInterval(decayRef.current);
