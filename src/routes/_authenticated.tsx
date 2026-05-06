@@ -44,17 +44,17 @@ function AuthenticatedLayout() {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <main className="flex-1 min-w-0 relative flex flex-col">
-          <LivingBackground />
+          <Suspense fallback={null}><LivingBackground /></Suspense>
           <OfflineBanner />
           <TopBar />
           <div className="flex-1 pb-16 md:pb-0 animate-in fade-in duration-200">
             <Outlet />
           </div>
           <SiteFooter />
-          <FloatingComposeButton />
+          <Suspense fallback={null}><FloatingComposeButton /></Suspense>
           <MobileBottomNav />
-          <InstallPrompt />
-          <AiPresenceOrb />
+          <Suspense fallback={null}><InstallPrompt /></Suspense>
+          <Suspense fallback={null}><AiPresenceOrb /></Suspense>
         </main>
       </div>
     </EnergyProvider>
