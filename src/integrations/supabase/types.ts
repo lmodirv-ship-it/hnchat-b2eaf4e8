@@ -151,6 +151,39 @@ export type Database = {
           },
         ]
       }
+      ai_usage: {
+        Row: {
+          completion_tokens: number
+          cost: number
+          created_at: string
+          feature: string
+          id: string
+          prompt_tokens: number
+          total_tokens: number
+          user_id: string
+        }
+        Insert: {
+          completion_tokens?: number
+          cost?: number
+          created_at?: string
+          feature: string
+          id?: string
+          prompt_tokens?: number
+          total_tokens?: number
+          user_id: string
+        }
+        Update: {
+          completion_tokens?: number
+          cost?: number
+          created_at?: string
+          feature?: string
+          id?: string
+          prompt_tokens?: number
+          total_tokens?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       app_settings: {
         Row: {
           created_at: string
@@ -1031,6 +1064,39 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_settings: {
+        Row: {
+          ai_enabled: boolean
+          created_at: string
+          id: string
+          maintenance_mode: boolean
+          owner_id: string
+          platform_name: string
+          registration_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          ai_enabled?: boolean
+          created_at?: string
+          id?: string
+          maintenance_mode?: boolean
+          owner_id: string
+          platform_name?: string
+          registration_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          ai_enabled?: boolean
+          created_at?: string
+          id?: string
+          maintenance_mode?: boolean
+          owner_id?: string
+          platform_name?: string
+          registration_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           comments_count: number
@@ -1132,6 +1198,7 @@ export type Database = {
           locale_source: string | null
           posts_count: number
           referral_code: string | null
+          status: string
           updated_at: string
           username: string
         }
@@ -1151,6 +1218,7 @@ export type Database = {
           locale_source?: string | null
           posts_count?: number
           referral_code?: string | null
+          status?: string
           updated_at?: string
           username: string
         }
@@ -1170,6 +1238,7 @@ export type Database = {
           locale_source?: string | null
           posts_count?: number
           referral_code?: string | null
+          status?: string
           updated_at?: string
           username?: string
         }
@@ -1244,6 +1313,42 @@ export type Database = {
           referred_id?: string | null
           referrer_id?: string
           status?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          target_id?: string
+          target_type?: string
         }
         Relationships: []
       }
@@ -1328,6 +1433,45 @@ export type Database = {
           media_url?: string
           user_id?: string
           views_count?: number
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          plan: string
+          started_at: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan?: string
+          started_at?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          plan?: string
+          started_at?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1651,6 +1795,7 @@ export type Database = {
         Args: { _group_id: string; _user_id: string }
         Returns: boolean
       }
+      is_moderator: { Args: { _user_id: string }; Returns: boolean }
       is_owner: { Args: { _user_id: string }; Returns: boolean }
       write_owner_audit: {
         Args: {
@@ -1672,6 +1817,7 @@ export type Database = {
         | "user"
         | "owner"
         | "group_admin"
+        | "moderator"
       catalog_item_type:
         | "app"
         | "game"
@@ -1834,7 +1980,15 @@ export const Constants = {
     Enums: {
       ad_status: ["draft", "active", "paused", "ended"],
       ad_type: ["video", "banner", "story", "product", "sponsored_post"],
-      app_role: ["admin", "creator", "shopper", "user", "owner", "group_admin"],
+      app_role: [
+        "admin",
+        "creator",
+        "shopper",
+        "user",
+        "owner",
+        "group_admin",
+        "moderator",
+      ],
       catalog_item_type: [
         "app",
         "game",
