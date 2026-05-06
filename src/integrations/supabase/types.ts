@@ -1501,6 +1501,71 @@ export type Database = {
           },
         ]
       }
+      profile_privacy_settings: {
+        Row: {
+          created_at: string
+          id: string
+          show_bio: boolean
+          show_follow_button: boolean
+          show_followers_count: boolean
+          show_following_count: boolean
+          show_groups: boolean
+          show_join_date: boolean
+          show_last_active: boolean
+          show_media: boolean
+          show_message_button: boolean
+          show_online_status: boolean
+          show_posts: boolean
+          show_posts_count: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          show_bio?: boolean
+          show_follow_button?: boolean
+          show_followers_count?: boolean
+          show_following_count?: boolean
+          show_groups?: boolean
+          show_join_date?: boolean
+          show_last_active?: boolean
+          show_media?: boolean
+          show_message_button?: boolean
+          show_online_status?: boolean
+          show_posts?: boolean
+          show_posts_count?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          show_bio?: boolean
+          show_follow_button?: boolean
+          show_followers_count?: boolean
+          show_following_count?: boolean
+          show_groups?: boolean
+          show_join_date?: boolean
+          show_last_active?: boolean
+          show_media?: boolean
+          show_message_button?: boolean
+          show_online_status?: boolean
+          show_posts?: boolean
+          show_posts_count?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_privacy_settings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
