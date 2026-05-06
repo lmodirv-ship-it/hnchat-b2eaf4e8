@@ -251,7 +251,7 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
 
       {/* Header */}
       <div className="relative flex items-center gap-3 p-4 border-b border-ice-border/70 backdrop-blur-xl bg-ice-card/60">
-        <div className="relative">
+        <Link to={otherUser ? "/user/$userId" : "#"} params={otherUser ? { userId: otherUser.id } : undefined as any} className="relative">
           <Avatar className="h-11 w-11 ring-2 ring-cyan-glow/40 ring-offset-2 ring-offset-ice-card">
             <AvatarImage src={otherUser?.avatar_url || undefined} />
             <AvatarFallback className="bg-gradient-to-br from-cyan-glow/30 to-violet-500/30 text-cyan-glow font-bold">
@@ -261,10 +261,10 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
           {!isGroup && otherUser?.is_online && (
             <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-ice-card animate-pulse" />
           )}
-        </div>
+        </Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <p className="font-semibold truncate text-base">{headerTitle}</p>
+            <Link to={otherUser ? "/user/$userId" : "#"} params={otherUser ? { userId: otherUser.id } : undefined as any} className="font-semibold truncate text-base hover:text-cyan-glow transition-colors">{headerTitle}</Link>
             {otherUser?.is_verified && <ShieldCheck className="h-4 w-4 text-cyan-glow shrink-0" />}
           </div>
           <p className="text-xs text-muted-foreground truncate flex items-center gap-1.5">
