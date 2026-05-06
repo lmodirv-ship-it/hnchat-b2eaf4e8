@@ -184,7 +184,7 @@ function FeedPage() {
   });
 
   function loadNewPosts() {
-    setNewPostsCount(0);
+    clearNewPosts();
     refetch();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
