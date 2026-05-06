@@ -77,6 +77,7 @@ import { Route as OwnerOwnerX9k2m7ApiUsageRouteImport } from './routes/_owner/ow
 import { Route as AuthenticatedWatchIdRouteImport } from './routes/_authenticated/watch.$id'
 import { Route as AuthenticatedWatchYtVideoIdRouteImport } from './routes/_authenticated/watch-yt.$videoId'
 import { Route as AuthenticatedUserUserIdRouteImport } from './routes/_authenticated/user.$userId'
+import { Route as AuthenticatedProfileUsernameRouteImport } from './routes/_authenticated/profile.$username'
 import { Route as AuthenticatedMessagesConversationIdRouteImport } from './routes/_authenticated/messages.$conversationId'
 import { Route as AuthenticatedGroupsGroupIdRouteImport } from './routes/_authenticated/groups.$groupId'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
@@ -438,6 +439,12 @@ const AuthenticatedUserUserIdRoute = AuthenticatedUserUserIdRouteImport.update({
   path: '/user/$userId',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedProfileUsernameRoute =
+  AuthenticatedProfileUsernameRouteImport.update({
+    id: '/$username',
+    path: '/$username',
+    getParentRoute: () => AuthenticatedProfileRoute,
+  } as any)
 const AuthenticatedMessagesConversationIdRoute =
   AuthenticatedMessagesConversationIdRouteImport.update({
     id: '/$conversationId',
@@ -510,7 +517,7 @@ export interface FileRoutesByFullPath {
   '/pages-groups': typeof AuthenticatedPagesGroupsRoute
   '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
-  '/profile': typeof AuthenticatedProfileRoute
+  '/profile': typeof AuthenticatedProfileRouteWithChildren
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
   '/referral': typeof AuthenticatedReferralRoute
@@ -532,6 +539,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/profile/$username': typeof AuthenticatedProfileUsernameRoute
   '/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
@@ -584,7 +592,7 @@ export interface FileRoutesByTo {
   '/pages-groups': typeof AuthenticatedPagesGroupsRoute
   '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
-  '/profile': typeof AuthenticatedProfileRoute
+  '/profile': typeof AuthenticatedProfileRouteWithChildren
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
   '/referral': typeof AuthenticatedReferralRoute
@@ -606,6 +614,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/profile/$username': typeof AuthenticatedProfileUsernameRoute
   '/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
@@ -662,7 +671,7 @@ export interface FileRoutesById {
   '/_authenticated/pages-groups': typeof AuthenticatedPagesGroupsRoute
   '/_authenticated/preferences': typeof AuthenticatedPreferencesRoute
   '/_authenticated/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRouteWithChildren
   '/_authenticated/push': typeof AuthenticatedPushRoute
   '/_authenticated/reels': typeof AuthenticatedReelsRoute
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
@@ -684,6 +693,7 @@ export interface FileRoutesById {
   '/_admin/admin/users': typeof AdminAdminUsersRoute
   '/_authenticated/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/_authenticated/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/_authenticated/profile/$username': typeof AuthenticatedProfileUsernameRoute
   '/_authenticated/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/_authenticated/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/_authenticated/watch/$id': typeof AuthenticatedWatchIdRoute
@@ -760,6 +770,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/groups/$groupId'
     | '/messages/$conversationId'
+    | '/profile/$username'
     | '/user/$userId'
     | '/watch-yt/$videoId'
     | '/watch/$id'
@@ -834,6 +845,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/groups/$groupId'
     | '/messages/$conversationId'
+    | '/profile/$username'
     | '/user/$userId'
     | '/watch-yt/$videoId'
     | '/watch/$id'
@@ -911,6 +923,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/users'
     | '/_authenticated/groups/$groupId'
     | '/_authenticated/messages/$conversationId'
+    | '/_authenticated/profile/$username'
     | '/_authenticated/user/$userId'
     | '/_authenticated/watch-yt/$videoId'
     | '/_authenticated/watch/$id'
@@ -1426,6 +1439,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUserUserIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile/$username': {
+      id: '/_authenticated/profile/$username'
+      path: '/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof AuthenticatedProfileUsernameRouteImport
+      parentRoute: typeof AuthenticatedProfileRoute
+    }
     '/_authenticated/messages/$conversationId': {
       id: '/_authenticated/messages/$conversationId'
       path: '/$conversationId'
@@ -1536,6 +1556,17 @@ const AuthenticatedMessagesRouteWithChildren =
     AuthenticatedMessagesRouteChildren,
   )
 
+interface AuthenticatedProfileRouteChildren {
+  AuthenticatedProfileUsernameRoute: typeof AuthenticatedProfileUsernameRoute
+}
+
+const AuthenticatedProfileRouteChildren: AuthenticatedProfileRouteChildren = {
+  AuthenticatedProfileUsernameRoute: AuthenticatedProfileUsernameRoute,
+}
+
+const AuthenticatedProfileRouteWithChildren =
+  AuthenticatedProfileRoute._addFileChildren(AuthenticatedProfileRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAdsManagerRoute: typeof AuthenticatedAdsManagerRoute
   AuthenticatedAdsPromoRoute: typeof AuthenticatedAdsPromoRoute
@@ -1561,7 +1592,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPagesGroupsRoute: typeof AuthenticatedPagesGroupsRoute
   AuthenticatedPreferencesRoute: typeof AuthenticatedPreferencesRoute
   AuthenticatedPrivacyPolicyRoute: typeof AuthenticatedPrivacyPolicyRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRouteWithChildren
   AuthenticatedPushRoute: typeof AuthenticatedPushRoute
   AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
   AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
@@ -1604,7 +1635,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPagesGroupsRoute: AuthenticatedPagesGroupsRoute,
   AuthenticatedPreferencesRoute: AuthenticatedPreferencesRoute,
   AuthenticatedPrivacyPolicyRoute: AuthenticatedPrivacyPolicyRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRouteWithChildren,
   AuthenticatedPushRoute: AuthenticatedPushRoute,
   AuthenticatedReelsRoute: AuthenticatedReelsRoute,
   AuthenticatedReferralRoute: AuthenticatedReferralRoute,
