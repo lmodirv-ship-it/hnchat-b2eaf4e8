@@ -40,10 +40,25 @@ function decode(s: string) {
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n, 10)));
 }
 
+const ALLOWED_YT_HOSTS = ["youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be", "www.youtu.be"];
+
+function isAllowedYoutubeUrl(href: string): boolean {
+  try {
+    const u = new URL(href);
+    if (u.protocol !== "https:" && u.protocol !== "http:") return false;
+    return ALLOWED_YT_HOSTS.some((h) => u.hostname === h);
+  } catch {
+    return false;
+  }
+}
+
 async function resolveChannelIdFromUrl(input: string): Promise<{ channelId: string; html: string } | null> {
   let url = input.trim();
   if (!url) return null;
   if (!/^https?:\/\//i.test(url)) url = "https://" + url.replace(/^\/+/, "");
+
+  // Block non-YouTube URLs to prevent SSRF
+  if (!isAllowedYoutubeUrl(url)) return null;
 
   // Direct channel id
   const m = url.match(/youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})/);
