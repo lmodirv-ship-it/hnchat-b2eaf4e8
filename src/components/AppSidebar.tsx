@@ -166,12 +166,17 @@ export function AppSidebar() {
   const navigate = useNavigate();
 
   return (
-    <aside className="hidden md:flex w-64 flex-col border-l border-ice-border/30 bg-background/50 backdrop-blur-2xl backdrop-saturate-150 sticky top-0 h-screen shadow-[4px_0_30px_oklch(0_0_0/0.2)]">
-      <div className="p-4 border-b border-ice-border flex items-center gap-2">
+    <aside className="hidden md:flex w-64 flex-col border-l border-[oklch(1_0_0/0.04)] bg-[oklch(0.03_0.01_260/0.7)] backdrop-blur-3xl sticky top-0 h-screen shadow-[4px_0_40px_oklch(0_0_0/0.3)] relative overflow-hidden">
+      {/* Subtle sidebar ambient glow */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[oklch(0.78_0.18_220/0.03)] blur-[80px]" />
+        <div className="absolute bottom-20 right-0 w-32 h-32 rounded-full bg-[oklch(0.65_0.25_295/0.03)] blur-[60px]" />
+      </div>
+      <div className="p-4 border-b border-[oklch(1_0_0/0.05)] flex items-center gap-2">
         <HnLogo size={38} showText={false} />
         <div className="min-w-0">
           <div className="font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">hnChat</div>
-          <div className="text-[9px] uppercase tracking-widest text-muted-foreground">Super App</div>
+          <div className="text-[9px] uppercase tracking-[0.25em] text-[oklch(0.45_0.03_250)]">AI Ecosystem</div>
         </div>
       </div>
 
