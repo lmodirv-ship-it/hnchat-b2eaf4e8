@@ -178,6 +178,8 @@ function FeedPage() {
         liked_by_me: likedSet.has(p.id),
       })) as FeedPost[];
     },
+    staleTime: 30_000, // 30s cache — realtime handles new posts
+    gcTime: 5 * 60_000, // 5min garbage collection
   });
 
   // Realtime
