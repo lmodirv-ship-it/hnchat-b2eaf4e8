@@ -283,6 +283,35 @@
 .animate-orbit { animation: orbit 20s linear infinite; }
 .animate-status-glow { animation: status-glow 2s ease-in-out infinite; }
 
+/* ═══ Energy Mode Transitions ═══ */
+:root {
+  --energy-hue: 220;
+  --energy-glow: 0.06;
+  --energy-speed: 1.5s;
+}
+
+/* Smooth transition for all energy-mode changes */
+.energy-transition * {
+  transition: background-color 2s ease, box-shadow 2s ease, border-color 2s ease;
+}
+
+/* Parallax depth on scroll */
+@supports (animation-timeline: scroll()) {
+  .parallax-slow {
+    animation: parallax-shift linear both;
+    animation-timeline: scroll();
+  }
+}
+@keyframes parallax-shift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-30px); }
+}
+
+/* Spatial depth layers */
+.depth-1 { transform: translateZ(0); }
+.depth-2 { transform: translateZ(10px) scale(1.01); }
+.depth-3 { transform: translateZ(20px) scale(1.02); }
+
 html, body {
   overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
