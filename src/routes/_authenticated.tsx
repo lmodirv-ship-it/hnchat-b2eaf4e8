@@ -1,16 +1,18 @@
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useAuth } from "@/lib/auth";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
-import { FloatingComposeButton } from "@/components/composer/FloatingComposeButton";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { InstallPrompt } from "@/components/layout/InstallPrompt";
-import { LivingBackground } from "@/components/layout/LivingBackground";
-import { AiPresenceOrb } from "@/components/ai/AiPresenceOrb";
 import { EnergyProvider } from "@/hooks/useEnergySystem";
+
+// Lazy load heavy, non-critical components
+const FloatingComposeButton = lazy(() => import("@/components/composer/FloatingComposeButton").then(m => ({ default: m.FloatingComposeButton })));
+const InstallPrompt = lazy(() => import("@/components/layout/InstallPrompt").then(m => ({ default: m.InstallPrompt })));
+const LivingBackground = lazy(() => import("@/components/layout/LivingBackground").then(m => ({ default: m.LivingBackground })));
+const AiPresenceOrb = lazy(() => import("@/components/ai/AiPresenceOrb").then(m => ({ default: m.AiPresenceOrb })));
 
 import { Loader2 } from "lucide-react";
 
@@ -42,17 +44,17 @@ function AuthenticatedLayout() {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <main className="flex-1 min-w-0 relative flex flex-col">
-          <LivingBackground />
+          <Suspense fallback={null}><LivingBackground /></Suspense>
           <OfflineBanner />
           <TopBar />
           <div className="flex-1 pb-16 md:pb-0 animate-in fade-in duration-200">
             <Outlet />
           </div>
           <SiteFooter />
-          <FloatingComposeButton />
+          <Suspense fallback={null}><FloatingComposeButton /></Suspense>
           <MobileBottomNav />
-          <InstallPrompt />
-          <AiPresenceOrb />
+          <Suspense fallback={null}><InstallPrompt /></Suspense>
+          <Suspense fallback={null}><AiPresenceOrb /></Suspense>
         </main>
       </div>
     </EnergyProvider>

@@ -63,6 +63,8 @@ function NotificationsPage() {
       return (data ?? []) as NotificationRow[];
     },
     enabled: !!user?.id,
+    staleTime: 15_000,
+    gcTime: 5 * 60_000,
   });
 
   useEffect(() => {

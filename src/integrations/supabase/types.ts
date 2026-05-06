@@ -1127,6 +1127,7 @@ export type Database = {
           id: string
           is_read: boolean
           link: string | null
+          title: string | null
           type: Database["public"]["Enums"]["notification_type"]
           user_id: string
         }
@@ -1137,6 +1138,7 @@ export type Database = {
           id?: string
           is_read?: boolean
           link?: string | null
+          title?: string | null
           type: Database["public"]["Enums"]["notification_type"]
           user_id: string
         }
@@ -1147,6 +1149,7 @@ export type Database = {
           id?: string
           is_read?: boolean
           link?: string | null
+          title?: string | null
           type?: Database["public"]["Enums"]["notification_type"]
           user_id?: string
         }
@@ -2161,6 +2164,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_notification: {
+        Args: {
+          _actor_id: string
+          _content: string
+          _link?: string
+          _type: Database["public"]["Enums"]["notification_type"]
+          _user_id: string
+        }
+        Returns: undefined
+      }
       get_stream_ingest_url: { Args: { _stream_id: string }; Returns: string }
       get_visitor_stats: {
         Args: never
