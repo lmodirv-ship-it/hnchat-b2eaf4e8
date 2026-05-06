@@ -53,10 +53,8 @@ function AuthenticatedLayout() {
               <Outlet />
             </div>
             <SiteFooter />
-            <Suspense fallback={null}><FloatingComposeButton /></Suspense>
             <MobileBottomNav />
             <Suspense fallback={null}><InstallPrompt /></Suspense>
-            <Suspense fallback={null}><AiPresenceOrb /></Suspense>
           </main>
         </div>
       </RealtimeProvider>
