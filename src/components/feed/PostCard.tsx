@@ -117,7 +117,8 @@ export function PostCard({ post, onChange }: { post: FeedPost; onChange: () => v
         {/* Header */}
         <div className="flex items-start gap-3 mb-3">
           <Link
-            to="/profile"
+            to="/user/$userId"
+            params={{ userId: post.user_id }}
             className="relative h-10 w-10 rounded-full bg-gradient-to-br from-[oklch(0.78_0.18_220)] to-[oklch(0.65_0.25_295)] flex items-center justify-center text-sm font-bold text-[oklch(0.04_0.01_280)] overflow-hidden shrink-0 active:scale-95 transition-all ring-2 ring-[oklch(0.06_0.015_260)] group-hover:ring-[oklch(0.78_0.18_220/0.3)] group-hover:shadow-[0_0_16px_oklch(0.78_0.18_220/0.2)]"
           >
             {post.profile?.avatar_url ? (
@@ -128,16 +129,24 @@ export function PostCard({ post, onChange }: { post: FeedPost; onChange: () => v
           </Link>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="font-semibold text-sm text-[oklch(0.9_0.03_250)] truncate">
+              <Link
+                to="/user/$userId"
+                params={{ userId: post.user_id }}
+                className="font-semibold text-sm text-[oklch(0.9_0.03_250)] truncate hover:text-[oklch(0.78_0.18_220)] transition-colors"
+              >
                 {post.profile?.full_name ?? post.profile?.username ?? "User"}
-              </span>
+              </Link>
               {post.profile?.is_verified && (
                 <span className="text-[oklch(0.78_0.18_220)] text-[10px] bg-[oklch(0.78_0.18_220/0.1)] px-1 py-0.5 rounded-full font-bold">✓</span>
               )}
             </div>
-            <div className="text-[10px] text-[oklch(0.45_0.03_250)]">
+            <Link
+              to="/user/$userId"
+              params={{ userId: post.user_id }}
+              className="text-[10px] text-[oklch(0.45_0.03_250)] hover:text-[oklch(0.6_0.03_250)] transition-colors"
+            >
               @{post.profile?.username} · {formatDistanceToNow(new Date(post.created_at), { locale: ar, addSuffix: true })}
-            </div>
+            </Link>
           </div>
           {isMine && (
             <DropdownMenu>
