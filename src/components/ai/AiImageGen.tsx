@@ -25,6 +25,20 @@ export function AiImageGen() {
       if (!data?.image) throw new Error("لم يتم استلام أي صورة");
       setHistory((h) => [{ prompt: p, url: data.image }, ...h]);
       setPrompt("");
+      // Log AI usage
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        if (authData?.user) {
+          await supabase.from("ai_usage").insert({
+            user_id: authData.user.id,
+            feature: "image_gen",
+            prompt_tokens: Math.ceil(p.length / 4),
+            completion_tokens: 0,
+            total_tokens: Math.ceil(p.length / 4),
+            cost: 0,
+          });
+        }
+      } catch {}
     } catch (err: any) {
       toast.error(err?.message || "فشل توليد الصورة");
     } finally {
