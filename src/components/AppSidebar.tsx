@@ -185,7 +185,14 @@ export function AppSidebar() {
 
       <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
         {GROUPS.map((group) => (
-          <CollapsibleGroup key={group.label} group={group} pathname={location.pathname} />
+          <CollapsibleGroup
+            key={group.label}
+            group={group}
+            pathname={location.pathname}
+            badgeOverrides={{
+              "/messages": msgUnread > 0 ? { text: String(msgUnread), tone: "count" } : null,
+            }}
+          />
         ))}
 
         <div className="mt-3 mb-1 px-3 text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -196,6 +203,13 @@ export function AppSidebar() {
             key={item.to}
             item={item}
             active={location.pathname === item.to || location.pathname.startsWith(item.to + "/")}
+            badgeOverride={
+              item.to === "/notifications" && notifUnread > 0
+                ? { text: String(notifUnread), tone: "count" }
+                : item.to === "/notifications"
+                ? null
+                : undefined
+            }
           />
         ))}
 
