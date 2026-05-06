@@ -9,12 +9,12 @@ export function LivingBackground() {
 
   // Generate stable particle positions
   const particles = useMemo(() =>
-    Array.from({ length: 18 }, (_, i) => ({
-      left: `${(i * 17 + 7) % 100}%`,
-      delay: `${(i * 2.3) % 12}s`,
-      duration: `${12 + (i % 5) * 4}s`,
+    Array.from({ length: 8 }, (_, i) => ({
+      left: `${(i * 25 + 7) % 100}%`,
+      delay: `${(i * 3) % 12}s`,
+      duration: `${14 + (i % 4) * 5}s`,
       size: i % 3 === 0 ? 3 : 2,
-      opacity: 0.3 + (i % 4) * 0.1,
+      opacity: 0.25 + (i % 3) * 0.1,
     })),
   []);
 
