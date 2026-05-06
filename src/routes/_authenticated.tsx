@@ -7,6 +7,7 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { EnergyProvider } from "@/hooks/useEnergySystem";
+import { RealtimeProvider } from "@/components/providers/RealtimeProvider";
 
 // Lazy load heavy, non-critical components
 const FloatingComposeButton = lazy(() => import("@/components/composer/FloatingComposeButton").then(m => ({ default: m.FloatingComposeButton })));
@@ -41,22 +42,24 @@ function AuthenticatedLayout() {
 
   return (
     <EnergyProvider>
-      <div className="min-h-screen flex w-full">
-        <AppSidebar />
-        <main className="flex-1 min-w-0 relative flex flex-col">
-          <Suspense fallback={null}><LivingBackground /></Suspense>
-          <OfflineBanner />
-          <TopBar />
-          <div className="flex-1 pb-16 md:pb-0 animate-in fade-in duration-200">
-            <Outlet />
-          </div>
-          <SiteFooter />
-          <Suspense fallback={null}><FloatingComposeButton /></Suspense>
-          <MobileBottomNav />
-          <Suspense fallback={null}><InstallPrompt /></Suspense>
-          <Suspense fallback={null}><AiPresenceOrb /></Suspense>
-        </main>
-      </div>
+      <RealtimeProvider>
+        <div className="min-h-screen flex w-full">
+          <AppSidebar />
+          <main className="flex-1 min-w-0 relative flex flex-col">
+            <Suspense fallback={null}><LivingBackground /></Suspense>
+            <OfflineBanner />
+            <TopBar />
+            <div className="flex-1 pb-16 md:pb-0 animate-in fade-in duration-200">
+              <Outlet />
+            </div>
+            <SiteFooter />
+            <Suspense fallback={null}><FloatingComposeButton /></Suspense>
+            <MobileBottomNav />
+            <Suspense fallback={null}><InstallPrompt /></Suspense>
+            <Suspense fallback={null}><AiPresenceOrb /></Suspense>
+          </main>
+        </div>
+      </RealtimeProvider>
     </EnergyProvider>
   );
 }

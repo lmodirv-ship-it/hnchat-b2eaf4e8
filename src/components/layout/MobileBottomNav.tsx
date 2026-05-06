@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home, Film, PlusSquare, MessageCircle, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRealtime } from "@/components/providers/RealtimeProvider";
 
 const items = [
   { to: "/feed", label: "الرئيسية", icon: Home },
@@ -12,6 +13,8 @@ const items = [
 
 export function MobileBottomNav() {
   const loc = useLocation();
+  const { msgUnread, notifUnread } = useRealtime();
+
   return (
     <nav
       aria-label="Bottom navigation"
@@ -22,6 +25,9 @@ export function MobileBottomNav() {
         {items.map((it, idx) => {
           const Icon = it.icon;
           const active = loc.pathname === it.to;
+          // Live badge count
+          const badgeCount = it.to === "/messages" ? msgUnread : 0;
+
           if ("primary" in it && it.primary) {
             return (
               <li key={idx} className="flex justify-center -mt-6">
@@ -55,6 +61,11 @@ export function MobileBottomNav() {
                   <Icon className={cn("h-5 w-5", active && "drop-shadow-[0_0_8px_currentColor]")} strokeWidth={active ? 2.5 : 1.8} />
                   {active && (
                     <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-cyan-glow" />
+                  )}
+                  {badgeCount > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-pink-glow text-[9px] font-bold text-white flex items-center justify-center shadow-[0_0_8px_oklch(0.72_0.22_340/0.5)]">
+                      {badgeCount > 99 ? "99+" : badgeCount}
+                    </span>
                   )}
                 </div>
                 <span className="leading-none">{it.label}</span>

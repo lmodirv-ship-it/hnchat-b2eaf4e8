@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 import { useEnergy } from "@/hooks/useEnergySystem";
+import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
@@ -147,7 +148,7 @@ function FeedInsights({ postsCount }: { postsCount: number }) {
 function FeedPage() {
   const { user } = useAuth();
   const { activityPulse } = useEnergy();
-  const [newPostsCount, setNewPostsCount] = useState(0);
+  const { newPostsCount, clearNewPosts } = useRealtimeFeed();
 
   const { data: posts, refetch, isLoading } = useQuery({
     queryKey: ["feed-posts", user?.id],
@@ -178,27 +179,12 @@ function FeedPage() {
         liked_by_me: likedSet.has(p.id),
       })) as FeedPost[];
     },
-    staleTime: 30_000, // 30s cache — realtime handles new posts
-    gcTime: 5 * 60_000, // 5min garbage collection
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
   });
 
-  // Realtime
-  useEffect(() => {
-    const channel = supabase
-      .channel("feed-realtime")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "posts" }, (payload) => {
-        const newPost = payload.new as { user_id: string } | null;
-        if (newPost && newPost.user_id !== user?.id) {
-          setNewPostsCount((n) => n + 1);
-          activityPulse();
-        }
-      })
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, [user?.id, activityPulse]);
-
   function loadNewPosts() {
-    setNewPostsCount(0);
+    clearNewPosts();
     refetch();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }

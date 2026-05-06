@@ -1515,6 +1515,7 @@ export type Database = {
           is_online: boolean
           is_verified: boolean
           language_code: string | null
+          last_seen: string | null
           locale_source: string | null
           posts_count: number
           referral_code: string | null
@@ -1535,6 +1536,7 @@ export type Database = {
           is_online?: boolean
           is_verified?: boolean
           language_code?: string | null
+          last_seen?: string | null
           locale_source?: string | null
           posts_count?: number
           referral_code?: string | null
@@ -1555,6 +1557,7 @@ export type Database = {
           is_online?: boolean
           is_verified?: boolean
           language_code?: string | null
+          last_seen?: string | null
           locale_source?: string | null
           posts_count?: number
           referral_code?: string | null

@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { useRealtime } from "@/components/providers/RealtimeProvider";
 import { HnLogo } from "@/components/HnLogo";
 import {
   Home, Video, MessageCircle, ShoppingBag, Users, Bell,
@@ -109,8 +110,9 @@ function Badge({ tone, text }: { tone: "new" | "ai" | "live" | "count"; text: st
   );
 }
 
-function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+function NavLink({ item, active, badgeOverride }: { item: NavItem; active: boolean; badgeOverride?: { text: string; tone: "new" | "ai" | "live" | "count" } | null }) {
   const Icon = item.icon;
+  const badge = badgeOverride !== undefined ? badgeOverride : item.badge;
   return (
     <Link
       to={item.to}
@@ -122,18 +124,17 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
     >
       <Icon className="h-4 w-4 shrink-0" />
       <span className="truncate">{item.label}</span>
-      {item.badge && <Badge tone={item.badge.tone} text={item.badge.text} />}
+      {badge && <Badge tone={badge.tone} text={badge.text} />}
     </Link>
   );
 }
 
-function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: string }) {
+function CollapsibleGroup({ group, pathname, badgeOverrides }: { group: NavGroup; pathname: string; badgeOverrides?: Record<string, { text: string; tone: "new" | "ai" | "live" | "count" } | null> }) {
   const hasActive = group.items.some(
     (i) => pathname === i.to || pathname.startsWith(i.to + "/")
   );
   const [open, setOpen] = useState(hasActive);
 
-  // Sidebar is desktop-only (hidden on md:), so admin/owner links are naturally desktop-only
   return (
     <div className="mb-1">
       <button
@@ -152,6 +153,7 @@ function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: stri
               key={item.to}
               item={item}
               active={pathname === item.to || pathname.startsWith(item.to + "/")}
+              badgeOverride={badgeOverrides?.[item.to]}
             />
           ))}
         </div>
@@ -162,6 +164,7 @@ function CollapsibleGroup({ group, pathname }: { group: NavGroup; pathname: stri
 
 export function AppSidebar() {
   const { user, isAdmin, signOut, roles } = useAuth();
+  const { notifUnread, msgUnread, onlineCount } = useRealtime();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -182,7 +185,14 @@ export function AppSidebar() {
 
       <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
         {GROUPS.map((group) => (
-          <CollapsibleGroup key={group.label} group={group} pathname={location.pathname} />
+          <CollapsibleGroup
+            key={group.label}
+            group={group}
+            pathname={location.pathname}
+            badgeOverrides={{
+              "/messages": msgUnread > 0 ? { text: String(msgUnread), tone: "count" } : null,
+            }}
+          />
         ))}
 
         <div className="mt-3 mb-1 px-3 text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -193,6 +203,13 @@ export function AppSidebar() {
             key={item.to}
             item={item}
             active={location.pathname === item.to || location.pathname.startsWith(item.to + "/")}
+            badgeOverride={
+              item.to === "/notifications" && notifUnread > 0
+                ? { text: String(notifUnread), tone: "count" }
+                : item.to === "/notifications"
+                ? null
+                : undefined
+            }
           />
         ))}
 
@@ -224,8 +241,11 @@ export function AppSidebar() {
           <div className="min-w-0 flex-1">
             <div className="text-xs font-medium truncate">{user?.email}</div>
             <div className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
               {isAdmin ? "Admin" : roles[0] ?? "Online"}
+              {onlineCount > 0 && (
+                <span className="text-[9px] text-cyan-glow ml-1">• {onlineCount} متصل</span>
+              )}
             </div>
           </div>
         </div>
