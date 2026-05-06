@@ -75,6 +75,9 @@ export function TopBar() {
         )}
 
         <div className={`flex items-center gap-1 sm:gap-2 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+          <div className="hidden sm:block">
+            <EnergyModeSelector />
+          </div>
           <VisitorCounter />
           <Link
             to="/messages"
