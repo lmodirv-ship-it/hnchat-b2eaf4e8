@@ -516,11 +516,12 @@ export function LandingPage() {
               onClick={async () => {
                 try {
                   const result = await lovable.auth.signInWithOAuth("google", {
-                    redirect_uri: window.location.origin,
+                    redirect_uri: window.location.origin + "/feed",
                   });
                   if (result.error) throw new Error(result.error.message || "Google sign-in failed");
                   if (result.redirected) return;
                   toast.success("مرحباً بك!");
+                  window.location.href = "/feed";
                 } catch (e: any) {
                   toast.error(e.message ?? "Google sign-in failed");
                 }
