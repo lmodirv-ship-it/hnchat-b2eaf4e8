@@ -1672,6 +1672,7 @@ export type Database = {
         | "user"
         | "owner"
         | "group_admin"
+        | "moderator"
       catalog_item_type:
         | "app"
         | "game"
@@ -1834,7 +1835,15 @@ export const Constants = {
     Enums: {
       ad_status: ["draft", "active", "paused", "ended"],
       ad_type: ["video", "banner", "story", "product", "sponsored_post"],
-      app_role: ["admin", "creator", "shopper", "user", "owner", "group_admin"],
+      app_role: [
+        "admin",
+        "creator",
+        "shopper",
+        "user",
+        "owner",
+        "group_admin",
+        "moderator",
+      ],
       catalog_item_type: [
         "app",
         "game",
