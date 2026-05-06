@@ -147,7 +147,7 @@
     z-index: -1;
   }
 
-  /* Fog / atmosphere overlay */
+  /* Static fog overlay — no animation for perf */
   body::after {
     content: "";
     position: fixed;
@@ -157,7 +157,6 @@
       radial-gradient(circle 800px at 20% 80%, oklch(0.65 0.25 295 / 0.04), transparent),
       radial-gradient(circle 600px at 80% 20%, oklch(0.78 0.18 220 / 0.04), transparent);
     z-index: -1;
-    animation: fog-drift 30s ease-in-out infinite alternate;
   }
 
   ::selection {
