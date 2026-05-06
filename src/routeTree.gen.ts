@@ -84,6 +84,7 @@ import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users
 import { Route as AdminAdminMarketplaceRouteImport } from './routes/_admin/admin.marketplace'
 import { Route as AdminAdminContentRouteImport } from './routes/_admin/admin.content'
 import { Route as AdminAdminAnalyticsRouteImport } from './routes/_admin/admin.analytics'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as AuthenticatedGroupsGroupIdManageRouteImport } from './routes/_authenticated/groups.$groupId.manage'
 
 const TermsRoute = TermsRouteImport.update({
@@ -477,6 +478,12 @@ const AdminAdminAnalyticsRoute = AdminAdminAnalyticsRouteImport.update({
   path: '/admin/analytics',
   getParentRoute: () => AdminRoute,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedGroupsGroupIdManageRoute =
   AuthenticatedGroupsGroupIdManageRouteImport.update({
     id: '/manage',
@@ -558,6 +565,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminAdminIndexRoute
   '/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -633,6 +641,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminAdminIndexRoute
   '/owner-x9k2m7': typeof OwnerOwnerX9k2m7IndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -712,6 +721,7 @@ export interface FileRoutesById {
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_owner/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
   '/_authenticated/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -789,6 +799,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/owner-x9k2m7/'
     | '/groups/$groupId/manage'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -864,6 +875,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/owner-x9k2m7'
     | '/groups/$groupId/manage'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -942,6 +954,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/'
     | '/_owner/owner-x9k2m7/'
     | '/_authenticated/groups/$groupId/manage'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -959,6 +972,7 @@ export interface RootRouteChildren {
   LiveIdRoute: typeof LiveIdRoute
   PostIdRoute: typeof PostIdRoute
   ShareShareIdRoute: typeof ShareShareIdRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1488,6 +1502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminAnalyticsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/groups/$groupId/manage': {
       id: '/_authenticated/groups/$groupId/manage'
       path: '/manage'
@@ -1706,6 +1727,7 @@ const rootRouteChildren: RootRouteChildren = {
   LiveIdRoute: LiveIdRoute,
   PostIdRoute: PostIdRoute,
   ShareShareIdRoute: ShareShareIdRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
