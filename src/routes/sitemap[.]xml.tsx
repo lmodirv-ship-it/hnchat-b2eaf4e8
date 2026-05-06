@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { fetchSitemapData } from "@/server/public-pages.functions";
+import { fetchSitemapData } from "@/utils/public-pages.functions";
 
 const SITE_URL = "https://www.hn-chat.com";
 
