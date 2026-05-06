@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -72,18 +73,26 @@ export function CommentsSection({ postId, onChange }: { postId: string; onChange
       <div className="space-y-2 max-h-72 overflow-y-auto">
         {comments?.map((c) => (
           <div key={c.id} className="flex gap-2 group">
-            <div className="h-7 w-7 rounded-full bg-gradient-to-br from-cyan-glow to-violet-glow flex items-center justify-center text-[10px] font-bold text-primary-foreground shrink-0 overflow-hidden">
+            <Link
+              to="/user/$userId"
+              params={{ userId: c.user_id }}
+              className="h-7 w-7 rounded-full bg-gradient-to-br from-cyan-glow to-violet-glow flex items-center justify-center text-[10px] font-bold text-primary-foreground shrink-0 overflow-hidden active:scale-95 transition-transform"
+            >
               {c.profile?.avatar_url ? (
                 <img src={c.profile.avatar_url} alt="" className="h-full w-full object-cover" />
               ) : (
                 c.profile?.username?.[0]?.toUpperCase() ?? "?"
               )}
-            </div>
+            </Link>
             <div className="flex-1 min-w-0">
               <div className="bg-ice-card rounded-2xl px-3 py-2 border border-ice-border">
-                <div className="text-xs font-semibold mb-0.5">
+                <Link
+                  to="/user/$userId"
+                  params={{ userId: c.user_id }}
+                  className="text-xs font-semibold mb-0.5 hover:text-[oklch(0.78_0.18_220)] transition-colors inline-block"
+                >
                   {c.profile?.full_name ?? c.profile?.username ?? "User"}
-                </div>
+                </Link>
                 <p className="text-sm whitespace-pre-wrap break-words">{c.content}</p>
               </div>
               <div className="flex items-center gap-2 mt-1 px-3">

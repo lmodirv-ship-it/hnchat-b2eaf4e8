@@ -76,6 +76,7 @@ import { Route as OwnerOwnerX9k2m7AuditRouteImport } from './routes/_owner/owner
 import { Route as OwnerOwnerX9k2m7ApiUsageRouteImport } from './routes/_owner/owner-x9k2m7.api-usage'
 import { Route as AuthenticatedWatchIdRouteImport } from './routes/_authenticated/watch.$id'
 import { Route as AuthenticatedWatchYtVideoIdRouteImport } from './routes/_authenticated/watch-yt.$videoId'
+import { Route as AuthenticatedUserUserIdRouteImport } from './routes/_authenticated/user.$userId'
 import { Route as AuthenticatedMessagesConversationIdRouteImport } from './routes/_authenticated/messages.$conversationId'
 import { Route as AuthenticatedGroupsGroupIdRouteImport } from './routes/_authenticated/groups.$groupId'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
@@ -432,6 +433,11 @@ const AuthenticatedWatchYtVideoIdRoute =
     path: '/watch-yt/$videoId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedUserUserIdRoute = AuthenticatedUserUserIdRouteImport.update({
+  id: '/user/$userId',
+  path: '/user/$userId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedMessagesConversationIdRoute =
   AuthenticatedMessagesConversationIdRouteImport.update({
     id: '/$conversationId',
@@ -526,6 +532,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
   '/owner-x9k2m7/api-usage': typeof OwnerOwnerX9k2m7ApiUsageRoute
@@ -599,6 +606,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminAdminUsersRoute
   '/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
   '/owner-x9k2m7/api-usage': typeof OwnerOwnerX9k2m7ApiUsageRoute
@@ -676,6 +684,7 @@ export interface FileRoutesById {
   '/_admin/admin/users': typeof AdminAdminUsersRoute
   '/_authenticated/groups/$groupId': typeof AuthenticatedGroupsGroupIdRouteWithChildren
   '/_authenticated/messages/$conversationId': typeof AuthenticatedMessagesConversationIdRoute
+  '/_authenticated/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/_authenticated/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/_authenticated/watch/$id': typeof AuthenticatedWatchIdRoute
   '/_owner/owner-x9k2m7/api-usage': typeof OwnerOwnerX9k2m7ApiUsageRoute
@@ -751,6 +760,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/groups/$groupId'
     | '/messages/$conversationId'
+    | '/user/$userId'
     | '/watch-yt/$videoId'
     | '/watch/$id'
     | '/owner-x9k2m7/api-usage'
@@ -824,6 +834,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/groups/$groupId'
     | '/messages/$conversationId'
+    | '/user/$userId'
     | '/watch-yt/$videoId'
     | '/watch/$id'
     | '/owner-x9k2m7/api-usage'
@@ -900,6 +911,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/users'
     | '/_authenticated/groups/$groupId'
     | '/_authenticated/messages/$conversationId'
+    | '/_authenticated/user/$userId'
     | '/_authenticated/watch-yt/$videoId'
     | '/_authenticated/watch/$id'
     | '/_owner/owner-x9k2m7/api-usage'
@@ -1407,6 +1419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWatchYtVideoIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/user/$userId': {
+      id: '/_authenticated/user/$userId'
+      path: '/user/$userId'
+      fullPath: '/user/$userId'
+      preLoaderRoute: typeof AuthenticatedUserUserIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/messages/$conversationId': {
       id: '/_authenticated/messages/$conversationId'
       path: '/$conversationId'
@@ -1555,6 +1574,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
   AuthenticatedVoiceRoute: typeof AuthenticatedVoiceRoute
   AuthenticatedYoutubeRoute: typeof AuthenticatedYoutubeRoute
+  AuthenticatedUserUserIdRoute: typeof AuthenticatedUserUserIdRoute
   AuthenticatedWatchYtVideoIdRoute: typeof AuthenticatedWatchYtVideoIdRoute
   AuthenticatedWatchIdRoute: typeof AuthenticatedWatchIdRoute
 }
@@ -1597,6 +1617,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
   AuthenticatedVoiceRoute: AuthenticatedVoiceRoute,
   AuthenticatedYoutubeRoute: AuthenticatedYoutubeRoute,
+  AuthenticatedUserUserIdRoute: AuthenticatedUserUserIdRoute,
   AuthenticatedWatchYtVideoIdRoute: AuthenticatedWatchYtVideoIdRoute,
   AuthenticatedWatchIdRoute: AuthenticatedWatchIdRoute,
 }
