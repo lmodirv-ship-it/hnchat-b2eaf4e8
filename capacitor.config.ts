@@ -3,23 +3,16 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "com.hnchat.app",
   appName: "hnChat",
-  webDir: "dist",
-  backgroundColor: "#0a0815",
+  webDir: ".output/public",
 
-  // For dev, uncomment to live-reload against the published site:
-  // server: {
-  //   url: "https://www.hn-chat.com",
-  //   cleartext: false,
-  // },
+  backgroundColor: "#0a0815",
 
   android: {
     allowMixedContent: false,
-    // Deep links / App Links
     appendUrlToPath: false,
   },
   ios: {
     contentInset: "always",
-    // Universal Links
     scheme: "hnchat",
   },
 
@@ -62,7 +55,6 @@ const config: CapacitorConfig = {
     ScreenOrientation: {},
   },
 
-  // Associate your custom domain for deep links
   server: {
     hostname: "www.hn-chat.com",
     androidScheme: "https",
