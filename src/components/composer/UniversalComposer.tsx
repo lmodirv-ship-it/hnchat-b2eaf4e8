@@ -48,26 +48,33 @@ export function UniversalComposer({ open, onOpenChange, defaultTab = "post" }: P
   };
 
   const submitPost = async (type: "post" | "video" | "short") => {
-    if (!user) return;
+    if (!user) {
+      console.warn("[hnChat] submitPost: no user");
+      toast.error("يجب تسجيل الدخول أولاً");
+      return;
+    }
     if (!content.trim() && !file) {
       toast.error("أضف نصاً أو وسائط");
       return;
     }
     setBusy(true);
     try {
+      console.log("[hnChat] Composer: creating post for user:", user.id, "type:", type);
       const url = file ? await uploadMedia("videos") : null;
-      const { error } = await supabase.from("posts").insert({
+      const { data, error } = await supabase.from("posts").insert({
         user_id: user.id,
         content: content.trim() || null,
         media_urls: url ? [url] : [],
         type,
-      });
+      }).select("id").single();
       if (error) throw error;
+      console.log("[hnChat] Composer: post created:", data?.id);
       toast.success("تم النشر!");
       reset();
       onOpenChange(false);
     } catch (e: any) {
-      toast.error(e.message ?? "فشل النشر");
+      console.error("[hnChat] Composer: post failed:", e);
+      toast.error(`فشل النشر: ${e.message ?? "خطأ غير معروف"}`);
     } finally {
       setBusy(false);
     }
