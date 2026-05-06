@@ -7,6 +7,7 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { EnergyProvider } from "@/hooks/useEnergySystem";
+import { RealtimeProvider } from "@/components/providers/RealtimeProvider";
 
 // Lazy load heavy, non-critical components
 const FloatingComposeButton = lazy(() => import("@/components/composer/FloatingComposeButton").then(m => ({ default: m.FloatingComposeButton })));
