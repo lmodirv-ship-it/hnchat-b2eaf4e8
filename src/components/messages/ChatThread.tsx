@@ -319,18 +319,20 @@ export function ChatThread({ conversationId }: { conversationId: string }) {
                 return (
                   <div key={gi} className={cn("flex gap-2", mine ? "justify-end" : "justify-start")}>
                     {!mine && (
-                      <Avatar className="h-8 w-8 mt-auto shrink-0 ring-1 ring-ice-border">
-                        <AvatarImage src={sender?.avatar_url || undefined} />
-                        <AvatarFallback className="bg-cyan-glow/10 text-cyan-glow text-[10px]">
-                          {(sender?.username || "??").slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
+                      <Link to="/user/$userId" params={{ userId: group.senderId }}>
+                        <Avatar className="h-8 w-8 mt-auto shrink-0 ring-1 ring-ice-border hover:ring-cyan-glow/50 transition-all">
+                          <AvatarImage src={sender?.avatar_url || undefined} />
+                          <AvatarFallback className="bg-cyan-glow/10 text-cyan-glow text-[10px]">
+                            {(sender?.username || "??").slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
                     )}
                     <div className={cn("flex flex-col gap-0.5 max-w-[75%]", mine ? "items-end" : "items-start")}>
                       {!mine && isGroup && (
-                        <span className="text-[11px] font-medium text-cyan-glow/90 px-1">
+                        <Link to="/user/$userId" params={{ userId: group.senderId }} className="text-[11px] font-medium text-cyan-glow/90 px-1 hover:text-cyan-glow transition-colors">
                           {sender?.full_name || sender?.username || "عضو"}
-                        </span>
+                        </Link>
                       )}
                       {group.items.map((m, idx) => {
                         const isFirst = idx === 0;
