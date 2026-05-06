@@ -67,7 +67,8 @@ function BlogPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="group relative rounded-2xl border border-ice-border/10 bg-ice-card/30 backdrop-blur-sm overflow-hidden hover:border-cyan-glow/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-glow/5"
+              className="group relative rounded-2xl border border-violet-glow/15 backdrop-blur-xl overflow-hidden hover:border-violet-glow/40 transition-all duration-300 hover:shadow-[0_0_30px_oklch(0.65_0.25_295/0.12)]"
+              style={{ background: "linear-gradient(135deg, oklch(0.16 0.07 280 / 0.6) 0%, oklch(0.12 0.05 265 / 0.4) 100%)" }}
             >
               <div className="aspect-video overflow-hidden">
                 <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
