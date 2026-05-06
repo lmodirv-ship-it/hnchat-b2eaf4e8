@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth";
@@ -96,12 +97,15 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4 py-10">
-      {/* Ambient diamond glows */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-cyan-glow/20 blur-3xl" />
-        <div className="absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-violet-glow/20 blur-3xl" />
-        <div className="absolute -bottom-24 left-1/3 h-96 w-96 rounded-full bg-pink-glow/15 blur-3xl" />
+      {/* Cosmic atmospheric background */}
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <div className="absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, oklch(0.78 0.18 220 / 0.18) 0%, transparent 70%)", animation: "meshFloat1 25s ease-in-out infinite" }} />
+        <div className="absolute top-1/3 -right-24 h-[450px] w-[450px] rounded-full blur-[120px]" style={{ background: "radial-gradient(circle, oklch(0.65 0.25 295 / 0.16) 0%, transparent 70%)", animation: "meshFloat2 30s ease-in-out infinite" }} />
+        <div className="absolute -bottom-24 left-1/4 h-[400px] w-[400px] rounded-full blur-[130px]" style={{ background: "radial-gradient(circle, oklch(0.55 0.2 270 / 0.12) 0%, transparent 70%)", animation: "meshFloat3 20s ease-in-out infinite" }} />
+        <svg className="absolute inset-0 w-full h-full opacity-[0.03]"><defs><pattern id="auth-grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="oklch(0.78 0.18 220)" strokeWidth="0.5" /></pattern></defs><rect width="100%" height="100%" fill="url(#auth-grid)" /></svg>
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, oklch(0.06 0.04 272 / 0.6) 100%)" }} />
       </div>
+      <FloatingParticles />
 
       <div className="relative w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
