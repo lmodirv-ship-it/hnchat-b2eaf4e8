@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { fetchPublicStream } from "@/server/public-pages.functions";
+import { fetchPublicStream } from "@/utils/public-pages.functions";
 
 const SITE_URL = "https://www.hnchat.net";
 

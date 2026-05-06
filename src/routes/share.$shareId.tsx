@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { fetchSharedChat } from "@/server/shared-chats.functions";
+import { fetchSharedChat } from "@/utils/shared-chats.functions";
 import { Sparkles, User as UserIcon, ArrowLeft } from "lucide-react";
 
 const SITE_URL = "https://www.hn-chat.com";
