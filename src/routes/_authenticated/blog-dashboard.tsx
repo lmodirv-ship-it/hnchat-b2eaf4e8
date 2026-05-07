@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { useMyArticles, useDeleteArticle } from "@/hooks/useBlog";
-import { PageShell } from "@/components/PageShell";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, FileText, Eye, Edit, Trash2, Clock, Calendar, ExternalLink, Heart, Search, BarChart3 } from "lucide-react";
