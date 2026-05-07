@@ -548,7 +548,7 @@ export function LandingPage() {
                   toast.error(e.message ?? "Google sign-in failed");
                 }
               }}
-              className="group relative flex items-center gap-3 px-10 sm:px-14 py-5 sm:py-6 rounded-2xl font-extrabold text-lg sm:text-xl cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
+              className="group relative flex items-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-extrabold text-base sm:text-lg cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
             >
               <svg className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/>
