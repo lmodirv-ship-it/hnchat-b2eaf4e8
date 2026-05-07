@@ -74,23 +74,17 @@ export function usePublishedArticles(options?: { category?: string; limit?: numb
     queryFn: async () => {
       let q = supabase
         .from("articles")
-        .select("*, profiles(username, full_name, avatar_url), article_categories(*)")
+        .select("*, profiles!articles_author_id_fkey(username, full_name, avatar_url), article_categories(*)")
         .eq("status", "published")
         .order("published_at", { ascending: false });
 
-      if (options?.category && options.category !== "all") {
-        q = q.eq("article_categories.slug", options.category);
-      }
       if (options?.limit) {
         q = q.limit(options.limit);
-      }
-      if (options?.language) {
-        q = q.eq("language", options.language);
       }
 
       const { data, error } = await q;
       if (error) throw error;
-      return data as Article[];
+      return (data ?? []) as any as Article[];
     },
   });
 }
