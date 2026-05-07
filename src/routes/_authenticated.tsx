@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
@@ -7,6 +7,7 @@ import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { EnergyProvider } from "@/hooks/useEnergySystem";
 import { RealtimeProvider } from "@/components/providers/RealtimeProvider";
+import { LayoutContext } from "@/hooks/useLayoutStore";
 
 import { Loader2 } from "lucide-react";
 
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthenticatedLayout() {
   const { isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) navigate({ to: "/sign-up-login" });
@@ -36,17 +39,19 @@ function AuthenticatedLayout() {
   return (
     <EnergyProvider>
       <RealtimeProvider>
-        <div className="min-h-screen flex w-full bg-[oklch(0.14_0.025_258)]">
-          <AppSidebar />
-          <main className="flex-1 min-w-0 relative flex flex-col">
-            <OfflineBanner />
-            <TopBar />
-            <div className="flex-1 animate-in fade-in duration-200">
-              <Outlet />
-            </div>
-            <MobileBottomNav />
-          </main>
-        </div>
+        <LayoutContext.Provider value={{ sidebarCollapsed, setSidebarCollapsed, mobileSidebarOpen, setMobileSidebarOpen }}>
+          <div className="min-h-screen flex w-full bg-[oklch(0.14_0.025_258)]">
+            <AppSidebar />
+            <main className="flex-1 min-w-0 relative flex flex-col transition-all duration-300">
+              <OfflineBanner />
+              <TopBar />
+              <div className="flex-1 animate-in fade-in duration-200">
+                <Outlet />
+              </div>
+              <MobileBottomNav />
+            </main>
+          </div>
+        </LayoutContext.Provider>
       </RealtimeProvider>
     </EnergyProvider>
   );
