@@ -12,6 +12,11 @@ export const Route = createFileRoute("/_owner")({
     if (!session) {
       throw redirect({ to: "/sign-up-login", search: { from: location.pathname } as any });
     }
+
+    const { data: isOwner } = await supabase.rpc("is_owner", { _user_id: session.user.id });
+    if (!isOwner) {
+      throw redirect({ to: "/feed" });
+    }
   },
   component: OwnerShell,
 });
