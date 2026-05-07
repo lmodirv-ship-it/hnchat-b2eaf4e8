@@ -127,7 +127,7 @@
 
   html,
   body {
-    background: linear-gradient(165deg, oklch(0.30 0.06 272) 0%, oklch(0.32 0.05 265) 30%, oklch(0.31 0.055 280) 60%, oklch(0.30 0.05 255) 100%);
+    background: linear-gradient(165deg, oklch(0.10 0.04 265) 0%, oklch(0.12 0.04 260) 30%, oklch(0.11 0.04 270) 60%, oklch(0.10 0.035 255) 100%);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
