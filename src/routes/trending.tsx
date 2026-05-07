@@ -181,5 +181,3 @@ function TrendingPage() {
     </PublicPageShell>
   );
 }
-
-import { Star } from "lucide-react";
