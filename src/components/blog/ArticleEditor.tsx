@@ -232,7 +232,7 @@ export function ArticleEditor({ article }: Props) {
       </div>
 
       {/* Featured Image */}
-      <div className="mb-8 rounded-2xl overflow-hidden border border-ice-border/10 bg-[oklch(0.15_0.02_250)]">
+      <div className="mb-8 rounded-2xl overflow-hidden border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] backdrop-blur-xl shadow-[0_4px_30px_oklch(0_0_0/0.2)]">
         {featuredImage ? (
           <div className="relative h-64 sm:h-80 group">
             <img src={featuredImage} alt="" className="w-full h-full object-cover" />
