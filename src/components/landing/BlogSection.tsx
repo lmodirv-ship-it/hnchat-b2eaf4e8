@@ -104,7 +104,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
   const viewAll = isRTL ? "عرض جميع المقالات" : isEn ? "View all articles" : "Voir tous les articles";
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
+    <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pb-16 sm:pb-20 pt-4 sm:pt-6">
       {/* Header */}
       <motion.div
         className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8"
@@ -117,7 +117,10 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold">{sectionTitle}</h2>
           </div>
-          <p className="text-sm text-muted-foreground/60 max-w-lg">{sectionSub}</p>
+          <p className="text-sm text-muted-foreground/60 max-w-lg flex items-center gap-2">
+            <span className="text-cyan-glow/40 text-xs">✦⋮⋮</span>
+            {sectionSub}
+          </p>
         </div>
         <Link to="/blog" className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-cyan-glow hover:text-cyan-glow/80 transition-colors group">
           {viewAll}
@@ -154,7 +157,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.8 + 2}
           >
             {/* Image */}
-            <div className="relative h-44 overflow-hidden">
+            <div className="relative h-48 sm:h-44 lg:h-48 overflow-hidden rounded-t-2xl">
               <img
                 src={article.image}
                 alt={getTitle(article)}
