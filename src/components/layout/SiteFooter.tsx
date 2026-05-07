@@ -28,6 +28,7 @@ const moreLinks = [
 const legalLinks = [
   { to: "/terms", label: "شروط الاستخدام" },
   { to: "/privacy", label: "سياسة الخصوصية" },
+  { to: "/community-guidelines", label: "إرشادات المجتمع" },
   { to: "/about", label: "حول" },
   { to: "/contact", label: "تواصل معنا" },
 ] as const;
