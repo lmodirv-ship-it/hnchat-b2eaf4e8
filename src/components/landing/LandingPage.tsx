@@ -531,7 +531,7 @@ export function LandingPage() {
 
           {/* Google Sign-In Button */}
           <motion.div
-            className="flex justify-center lg:justify-start mb-4"
+            className="flex justify-center lg:justify-start mb-3"
             initial={init} animate={enter} variants={fadeUp} custom={1.5}
           >
             <button
