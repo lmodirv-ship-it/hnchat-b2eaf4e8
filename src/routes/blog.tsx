@@ -1,25 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { Calendar, Clock, Eye, ArrowRight, FileText, User } from "lucide-react";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
-
-const blogPosts = [
-  { id: "what-is-super-app", title: "What is a Super App? And Why hnChat Leads the Way", titleAr: "ما هو التطبيق الفائق؟ ولماذا hnChat يتصدر الطريق", excerpt: "Super Apps combine messaging, social media, payments, and more into one platform. Learn how hnChat is redefining the concept with AI-powered features.", date: "2026-04-28", readTime: "5 min", category: "Technology", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" },
-  { id: "ai-chat-future", title: "How AI Chat is Changing Communication Forever", titleAr: "كيف يغير الذكاء الاصطناعي التواصل إلى الأبد", excerpt: "From GPT-5 to Gemini, AI assistants are becoming essential. Here's how hnChat integrates the best AI models for seamless conversations.", date: "2026-04-20", readTime: "4 min", category: "AI", image: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80" },
-  { id: "crypto-trading-beginners", title: "Crypto Trading for Beginners: Start with hnChat", titleAr: "تداول العملات الرقمية للمبتدئين: ابدأ مع hnChat", excerpt: "New to crypto? Our built-in trading tools make it easy to buy, sell, and track cryptocurrencies without leaving the app.", date: "2026-04-15", readTime: "6 min", category: "Crypto", image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80" },
-  { id: "privacy-first-messaging", title: "Why Privacy-First Messaging Matters in 2026", titleAr: "لماذا تهم الخصوصية أولاً في المراسلة عام 2026", excerpt: "End-to-end encryption, zero data selling. Learn why hnChat puts your privacy above everything else.", date: "2026-04-10", readTime: "3 min", category: "Security", image: "https://images.unsplash.com/photo-1563986768609-322da13575f2?w=800&q=80" },
-  { id: "marketplace-sell-online", title: "Sell Your Products Online Using hnChat Marketplace", titleAr: "بع منتجاتك عبر الإنترنت باستخدام سوق hnChat", excerpt: "No need for a separate store. hnChat Marketplace lets you list, sell, and manage products directly within the platform.", date: "2026-04-05", readTime: "5 min", category: "Business", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" },
-  { id: "voice-rooms-community", title: "Building Communities with Voice Rooms", titleAr: "بناء المجتمعات عبر غرف الصوت", excerpt: "Voice rooms bring real-time audio conversations to your community. Discover how to host events, discussions, and live sessions on hnChat.", date: "2026-03-28", readTime: "4 min", category: "Community", image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80" },
-];
-
-const categoryColors: Record<string, string> = {
-  Technology: "from-cyan-glow to-blue-500",
-  AI: "from-violet-glow to-purple-500",
-  Crypto: "from-amber-400 to-orange-500",
-  Security: "from-emerald-400 to-green-500",
-  Business: "from-pink-glow to-rose-500",
-  Community: "from-cyan-glow to-violet-glow",
-};
+import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -36,61 +20,135 @@ export const Route = createFileRoute("/blog")({
 });
 
 function BlogPage() {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const { data: articles = [], isLoading } = usePublishedArticles();
+  const { data: categories = [] } = useCategories();
+
+  const filtered = activeCategory === "all"
+    ? articles
+    : articles.filter((a) => (a.article_categories as any)?.slug === activeCategory);
+
   return (
     <PublicPageShell dir="ltr">
       {/* Hero */}
-      <section className="relative py-20 px-6 text-center overflow-hidden">
+      <section className="relative py-16 px-6 text-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-glow/5 via-transparent to-transparent" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative z-10 max-w-3xl mx-auto"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 max-w-3xl mx-auto">
           <span className="inline-block px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full border border-cyan-glow/30 text-cyan-glow mb-4">
             Blog
           </span>
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-            Insights & <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">Updates</span>
+          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+            Articles &{" "}
+            <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">Blog</span>
           </h1>
-          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Explore the latest in AI, crypto, privacy, and super app technology from the hnChat team.
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Discover articles on AI, technology, crypto, and more from our community.
           </p>
         </motion.div>
       </section>
 
-      {/* Blog Grid */}
-      <section className="max-w-6xl mx-auto px-6 pb-20">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.map((post, i) => (
-            <motion.article
-              key={post.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="group relative rounded-2xl border border-violet-glow/15 backdrop-blur-xl overflow-hidden hover:border-violet-glow/40 transition-all duration-300 hover:shadow-[0_0_30px_oklch(0.65_0.25_295/0.12)]"
-              style={{ background: "linear-gradient(135deg, oklch(0.16 0.07 280 / 0.6) 0%, oklch(0.12 0.05 265 / 0.4) 100%)" }}
+      {/* Categories */}
+      <div className="max-w-6xl mx-auto px-6 mb-8">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all border ${
+              activeCategory === "all"
+                ? "bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground border-transparent"
+                : "border-ice-border/20 bg-ice-card/5 text-muted-foreground hover:text-foreground hover:border-cyan-glow/30"
+            }`}
+          >
+            All
+          </button>
+          {categories.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setActiveCategory(c.slug)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all border ${
+                activeCategory === c.slug
+                  ? "bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground border-transparent"
+                  : "border-ice-border/20 bg-ice-card/5 text-muted-foreground hover:text-foreground hover:border-cyan-glow/30"
+              }`}
             >
-              <div className="aspect-video overflow-hidden">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gradient-to-r ${categoryColors[post.category] || "from-cyan-glow to-violet-glow"} text-white`}>
-                    {post.category}
-                  </span>
-                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground/60"><Calendar className="w-3 h-3" /> {post.date}</span>
-                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground/60"><Clock className="w-3 h-3" /> {post.readTime}</span>
-                </div>
-                <h2 className="text-base font-bold leading-snug mb-2 group-hover:text-cyan-glow transition-colors">{post.title}</h2>
-                <p className="text-xs text-muted-foreground/70 leading-relaxed line-clamp-3">{post.excerpt}</p>
-                <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-cyan-glow opacity-0 group-hover:opacity-100 transition-opacity">
-                  Read more <ArrowRight className="w-3 h-3" />
-                </div>
-              </div>
-            </motion.article>
+              {c.name}
+            </button>
           ))}
         </div>
-      </section>
+      </div>
+
+      {/* Articles Grid */}
+      <div className="max-w-6xl mx-auto px-6 pb-20">
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-80 rounded-2xl bg-ice-card/10 animate-pulse" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20">
+            <FileText className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+            <p className="text-muted-foreground">No articles found in this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((article, i) => (
+              <motion.div
+                key={article.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+              >
+                <Link to={`/blog/${article.slug}` as any} className="group block">
+                  <article className="rounded-2xl overflow-hidden border border-ice-border/15 bg-ice-card/5 hover:border-cyan-glow/30 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.1)] transition-all duration-500">
+                    {/* Image */}
+                    <div className="relative h-48 overflow-hidden">
+                      {article.featured_image ? (
+                        <img src={article.featured_image} alt={article.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center">
+                          <FileText className="h-10 w-10 text-muted-foreground/20" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                      {(article.article_categories as any) && (
+                        <span className="absolute bottom-3 left-3 px-3 py-1 text-[10px] font-bold rounded-full bg-gradient-to-r from-cyan-glow/80 to-violet-glow/80 text-white">
+                          {(article.article_categories as any).name}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-5">
+                      <h3 className="font-bold text-base leading-snug mb-2 line-clamp-2 group-hover:text-cyan-glow transition-colors">
+                        {article.title}
+                      </h3>
+                      {article.short_description && (
+                        <p className="text-sm text-muted-foreground/60 line-clamp-2 mb-3">{article.short_description}</p>
+                      )}
+
+                      {/* Author & Meta */}
+                      <div className="flex items-center justify-between text-xs text-muted-foreground/50">
+                        <div className="flex items-center gap-2">
+                          {(article.profiles as any)?.avatar_url ? (
+                            <img src={(article.profiles as any).avatar_url} alt="" className="h-5 w-5 rounded-full" />
+                          ) : (
+                            <User className="h-4 w-4" />
+                          )}
+                          <span>{(article.profiles as any)?.full_name ?? (article.profiles as any)?.username}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{article.published_at ? new Date(article.published_at).toLocaleDateString() : ""}</span>
+                          <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{article.views_count}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
     </PublicPageShell>
   );
 }

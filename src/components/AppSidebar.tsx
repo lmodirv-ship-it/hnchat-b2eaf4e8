@@ -9,7 +9,7 @@ import {
   TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
   Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
   Settings, Cpu, Bookmark, FileText, ScrollText, Youtube, Inbox,
-  ChevronDown,
+  ChevronDown, PenSquare,
 } from "lucide-react";
 
 type NavItem = {
@@ -60,6 +60,13 @@ const GROUPS: readonly NavGroup[] = [
     items: [
       { to: "/ai-hub", label: "hn AI Hub", icon: Bot, badge: { text: "AI", tone: "ai" } },
       { to: "/ai-assistant", label: "AI Assistant", icon: Cpu },
+    ],
+  },
+  {
+    label: "المدونة",
+    items: [
+      { to: "/blog-dashboard", label: "مقالاتي", icon: FileText },
+      { to: "/blog-editor", label: "إنشاء مقال", icon: PenSquare, badge: { text: "NEW", tone: "new" as const } },
     ],
   },
   {

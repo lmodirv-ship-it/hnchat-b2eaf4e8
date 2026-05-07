@@ -24,6 +24,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
@@ -56,6 +57,8 @@ import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/f
 import { Route as AuthenticatedExploreRouteImport } from './routes/_authenticated/explore'
 import { Route as AuthenticatedEmailDashboardRouteImport } from './routes/_authenticated/email-dashboard'
 import { Route as AuthenticatedBookmarksRouteImport } from './routes/_authenticated/bookmarks'
+import { Route as AuthenticatedBlogEditorRouteImport } from './routes/_authenticated/blog-editor'
+import { Route as AuthenticatedBlogDashboardRouteImport } from './routes/_authenticated/blog-dashboard'
 import { Route as AuthenticatedAppStoreRouteImport } from './routes/_authenticated/app-store'
 import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/ai-hub'
 import { Route as AuthenticatedAiAssistantRouteImport } from './routes/_authenticated/ai-assistant'
@@ -63,6 +66,7 @@ import { Route as AuthenticatedAdsPromoRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAdsManagerRouteImport } from './routes/_authenticated/ads-manager'
 import { Route as OwnerOwnerX9k2m7IndexRouteImport } from './routes/_owner/owner-x9k2m7.index'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
+import { Route as BlogAuthorUsernameRouteImport } from './routes/blog.author.$username'
 import { Route as OwnerOwnerX9k2m7UsersRouteImport } from './routes/_owner/owner-x9k2m7.users'
 import { Route as OwnerOwnerX9k2m7TicketsRouteImport } from './routes/_owner/owner-x9k2m7.tickets'
 import { Route as OwnerOwnerX9k2m7SettingsRouteImport } from './routes/_owner/owner-x9k2m7.settings'
@@ -159,6 +163,11 @@ const LiveIdRoute = LiveIdRouteImport.update({
   id: '/live/$id',
   path: '/live/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
   id: '/youtube',
@@ -328,6 +337,17 @@ const AuthenticatedBookmarksRoute = AuthenticatedBookmarksRouteImport.update({
   path: '/bookmarks',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedBlogEditorRoute = AuthenticatedBlogEditorRouteImport.update({
+  id: '/blog-editor',
+  path: '/blog-editor',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBlogDashboardRoute =
+  AuthenticatedBlogDashboardRouteImport.update({
+    id: '/blog-dashboard',
+    path: '/blog-dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppStoreRoute = AuthenticatedAppStoreRouteImport.update({
   id: '/app-store',
   path: '/app-store',
@@ -363,6 +383,11 @@ const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => AdminRoute,
+} as any)
+const BlogAuthorUsernameRoute = BlogAuthorUsernameRouteImport.update({
+  id: '/author/$username',
+  path: '/author/$username',
+  getParentRoute: () => BlogRoute,
 } as any)
 const OwnerOwnerX9k2m7UsersRoute = OwnerOwnerX9k2m7UsersRouteImport.update({
   id: '/owner-x9k2m7/users',
@@ -500,7 +525,7 @@ const AuthenticatedGroupsGroupIdManageRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -512,6 +537,8 @@ export interface FileRoutesByFullPath {
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
   '/ai-hub': typeof AuthenticatedAiHubRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
+  '/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
+  '/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/bookmarks': typeof AuthenticatedBookmarksRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
@@ -544,6 +571,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
@@ -569,6 +597,7 @@ export interface FileRoutesByFullPath {
   '/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
   '/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
   '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin/': typeof AdminAdminIndexRoute
   '/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
@@ -577,7 +606,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -589,6 +618,8 @@ export interface FileRoutesByTo {
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
   '/ai-hub': typeof AuthenticatedAiHubRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
+  '/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
+  '/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/bookmarks': typeof AuthenticatedBookmarksRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
@@ -621,6 +652,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
@@ -646,6 +678,7 @@ export interface FileRoutesByTo {
   '/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
   '/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
   '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin': typeof AdminAdminIndexRoute
   '/owner-x9k2m7': typeof OwnerOwnerX9k2m7IndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
@@ -658,7 +691,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_owner': typeof OwnerRouteWithChildren
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -670,6 +703,8 @@ export interface FileRoutesById {
   '/_authenticated/ai-assistant': typeof AuthenticatedAiAssistantRoute
   '/_authenticated/ai-hub': typeof AuthenticatedAiHubRoute
   '/_authenticated/app-store': typeof AuthenticatedAppStoreRoute
+  '/_authenticated/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
+  '/_authenticated/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/_authenticated/bookmarks': typeof AuthenticatedBookmarksRoute
   '/_authenticated/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/_authenticated/explore': typeof AuthenticatedExploreRoute
@@ -702,6 +737,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
@@ -727,6 +763,7 @@ export interface FileRoutesById {
   '/_owner/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
   '/_owner/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
   '/_owner/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_owner/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
   '/_authenticated/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
@@ -749,6 +786,8 @@ export interface FileRouteTypes {
     | '/ai-assistant'
     | '/ai-hub'
     | '/app-store'
+    | '/blog-dashboard'
+    | '/blog-editor'
     | '/bookmarks'
     | '/email-dashboard'
     | '/explore'
@@ -781,6 +820,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/blog/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
@@ -806,6 +846,7 @@ export interface FileRouteTypes {
     | '/owner-x9k2m7/settings'
     | '/owner-x9k2m7/tickets'
     | '/owner-x9k2m7/users'
+    | '/blog/author/$username'
     | '/admin/'
     | '/owner-x9k2m7/'
     | '/groups/$groupId/manage'
@@ -826,6 +867,8 @@ export interface FileRouteTypes {
     | '/ai-assistant'
     | '/ai-hub'
     | '/app-store'
+    | '/blog-dashboard'
+    | '/blog-editor'
     | '/bookmarks'
     | '/email-dashboard'
     | '/explore'
@@ -858,6 +901,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/blog/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
@@ -883,6 +927,7 @@ export interface FileRouteTypes {
     | '/owner-x9k2m7/settings'
     | '/owner-x9k2m7/tickets'
     | '/owner-x9k2m7/users'
+    | '/blog/author/$username'
     | '/admin'
     | '/owner-x9k2m7'
     | '/groups/$groupId/manage'
@@ -906,6 +951,8 @@ export interface FileRouteTypes {
     | '/_authenticated/ai-assistant'
     | '/_authenticated/ai-hub'
     | '/_authenticated/app-store'
+    | '/_authenticated/blog-dashboard'
+    | '/_authenticated/blog-editor'
     | '/_authenticated/bookmarks'
     | '/_authenticated/email-dashboard'
     | '/_authenticated/explore'
@@ -938,6 +985,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
+    | '/blog/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
@@ -963,6 +1011,7 @@ export interface FileRouteTypes {
     | '/_owner/owner-x9k2m7/settings'
     | '/_owner/owner-x9k2m7/tickets'
     | '/_owner/owner-x9k2m7/users'
+    | '/blog/author/$username'
     | '/_admin/admin/'
     | '/_owner/owner-x9k2m7/'
     | '/_authenticated/groups/$groupId/manage'
@@ -975,7 +1024,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   OwnerRoute: typeof OwnerRouteWithChildren
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -1094,6 +1143,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/live/$id'
       preLoaderRoute: typeof LiveIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_authenticated/youtube': {
       id: '/_authenticated/youtube'
@@ -1319,6 +1375,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBookmarksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/blog-editor': {
+      id: '/_authenticated/blog-editor'
+      path: '/blog-editor'
+      fullPath: '/blog-editor'
+      preLoaderRoute: typeof AuthenticatedBlogEditorRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/blog-dashboard': {
+      id: '/_authenticated/blog-dashboard'
+      path: '/blog-dashboard'
+      fullPath: '/blog-dashboard'
+      preLoaderRoute: typeof AuthenticatedBlogDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/app-store': {
       id: '/_authenticated/app-store'
       path: '/app-store'
@@ -1367,6 +1437,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminAdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/blog/author/$username': {
+      id: '/blog/author/$username'
+      path: '/author/$username'
+      fullPath: '/blog/author/$username'
+      preLoaderRoute: typeof BlogAuthorUsernameRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_owner/owner-x9k2m7/users': {
       id: '/_owner/owner-x9k2m7/users'
@@ -1614,6 +1691,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAiAssistantRoute: typeof AuthenticatedAiAssistantRoute
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
   AuthenticatedAppStoreRoute: typeof AuthenticatedAppStoreRoute
+  AuthenticatedBlogDashboardRoute: typeof AuthenticatedBlogDashboardRoute
+  AuthenticatedBlogEditorRoute: typeof AuthenticatedBlogEditorRoute
   AuthenticatedBookmarksRoute: typeof AuthenticatedBookmarksRoute
   AuthenticatedEmailDashboardRoute: typeof AuthenticatedEmailDashboardRoute
   AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
@@ -1657,6 +1736,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAiAssistantRoute: AuthenticatedAiAssistantRoute,
   AuthenticatedAiHubRoute: AuthenticatedAiHubRoute,
   AuthenticatedAppStoreRoute: AuthenticatedAppStoreRoute,
+  AuthenticatedBlogDashboardRoute: AuthenticatedBlogDashboardRoute,
+  AuthenticatedBlogEditorRoute: AuthenticatedBlogEditorRoute,
   AuthenticatedBookmarksRoute: AuthenticatedBookmarksRoute,
   AuthenticatedEmailDashboardRoute: AuthenticatedEmailDashboardRoute,
   AuthenticatedExploreRoute: AuthenticatedExploreRoute,
@@ -1732,13 +1813,25 @@ const OwnerRouteChildren: OwnerRouteChildren = {
 
 const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogAuthorUsernameRoute: typeof BlogAuthorUsernameRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+  BlogAuthorUsernameRoute: BlogAuthorUsernameRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   OwnerRoute: OwnerRouteWithChildren,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   CommunityGuidelinesRoute: CommunityGuidelinesRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
