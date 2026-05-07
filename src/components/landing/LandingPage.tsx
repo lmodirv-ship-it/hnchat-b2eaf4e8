@@ -470,7 +470,7 @@ export function LandingPage() {
       <FloatingParticles />
 
       {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 max-w-7xl mx-auto">
+      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 sm:gap-3">
           <HnLogo size={40} showText={false} />
           <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
@@ -505,11 +505,11 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12 flex flex-col lg:flex-row gap-8 sm:gap-10 items-center">
+      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-1 sm:pt-2 pb-2 sm:pb-4 flex flex-col lg:flex-row gap-4 sm:gap-6 items-center">
         {/* Left: Hero text */}
-        <div className="flex-1 text-center lg:text-start pt-2 sm:pt-4 max-w-2xl">
+        <div className="flex-1 text-center lg:text-start pt-0 max-w-2xl">
           {/* Title */}
-          <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4 sm:mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
+          <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-3 sm:mb-4" initial={init} animate={enter} variants={fadeUp} custom={0}>
             {l.heroTitle1}{" "}
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
@@ -520,18 +520,18 @@ export function LandingPage() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p className="text-base sm:text-xl font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+          <motion.p className="text-sm sm:text-lg font-semibold mb-1.5 sm:mb-2 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
             {l.heroSub}
           </motion.p>
 
           {/* Description */}
-          <motion.p className="text-sm sm:text-base text-muted-foreground max-w-lg mb-8 sm:mb-10 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+          <motion.p className="text-xs sm:text-sm text-muted-foreground max-w-lg mb-4 sm:mb-5 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
             {l.heroDesc}
           </motion.p>
 
           {/* Google Sign-In Button */}
           <motion.div
-            className="flex justify-center lg:justify-start mb-6"
+            className="flex justify-center lg:justify-start mb-3"
             initial={init} animate={enter} variants={fadeUp} custom={1.5}
           >
             <button
@@ -548,7 +548,7 @@ export function LandingPage() {
                   toast.error(e.message ?? "Google sign-in failed");
                 }
               }}
-              className="group relative flex items-center gap-3 px-10 sm:px-14 py-5 sm:py-6 rounded-2xl font-extrabold text-lg sm:text-xl cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
+              className="group relative flex items-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-extrabold text-base sm:text-lg cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
             >
               <svg className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/>
@@ -572,7 +572,7 @@ export function LandingPage() {
         </div>
 
         {/* Right: Phone + Chat widget */}
-        <div className="w-full lg:w-[400px] shrink-0 flex flex-col gap-6 items-center">
+        <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-4 items-center">
           {/* 3D Phone */}
           <motion.div
             initial={mounted ? { opacity: 0, y: 30 } : undefined}
@@ -603,7 +603,7 @@ export function LandingPage() {
                 <span className="text-[10px] text-muted-foreground/60">{l.online}</span>
               </div>
               {/* Messages */}
-              <div ref={chatRef} className="h-56 overflow-y-auto px-3 py-3 flex flex-col gap-2.5" style={{ scrollbarWidth: "none" }}>
+              <div ref={chatRef} className="h-40 overflow-y-auto px-3 py-3 flex flex-col gap-2.5" style={{ scrollbarWidth: "none" }}>
                 <AnimatePresence initial={false}>
                   {chatMessages.map((m, i) => (
                     <motion.div
