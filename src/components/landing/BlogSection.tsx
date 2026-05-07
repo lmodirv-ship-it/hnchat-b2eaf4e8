@@ -205,6 +205,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
           <ArrowRight className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} />
         </Link>
       </div>
+      </div>
     </section>
   );
 }
