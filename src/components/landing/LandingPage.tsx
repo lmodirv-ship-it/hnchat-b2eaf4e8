@@ -522,7 +522,7 @@ export function LandingPage() {
             </motion.h1>
 
             {/* Subtitle */}
-            <motion.p className="text-sm sm:text-lg lg:text-xl font-medium mb-3 lg:mb-4 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+            <motion.p className="text-xs sm:text-base lg:text-lg font-medium mb-1.5 lg:mb-2 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
               {l.heroSub}
             </motion.p>
 
