@@ -304,7 +304,7 @@ function GrowthPage() {
       };
     },
     enabled: !!user?.id,
-    refetchInterval: 30000,
+    refetchInterval: false,
   });
 
   // AI Insights generation

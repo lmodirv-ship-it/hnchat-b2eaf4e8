@@ -112,7 +112,7 @@ function AnalyticsOverviewCard() {
         topSources,
       };
     },
-    refetchInterval: 30_000,
+    refetchInterval: false,
   });
 
   const todayGrowth = liveStats && liveStats.yesterdayVisitors > 0

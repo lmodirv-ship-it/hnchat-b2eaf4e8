@@ -20,7 +20,7 @@ function TradePage() {
       if (!res.ok) return [];
       return res.json();
     },
-    refetchInterval: 30000,
+    refetchInterval: false,
   });
 
   return (
