@@ -618,8 +618,8 @@ export function LandingPage() {
                   </div>
                 </div>
                 {/* Input */}
-                <div className="px-3 py-2 border-t border-ice-border/15">
-                  <Link to="/sign-up-login" className="flex items-center justify-between rounded-2xl bg-ice-card/10 backdrop-blur-xl px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
+                <div className="px-3 py-1.5 border-t border-ice-border/15">
+                  <Link to="/sign-up-login" className="flex items-center justify-between rounded-2xl bg-ice-card/10 backdrop-blur-xl px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
                     <span className="flex items-center gap-2">
                       <span className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px]">👤</span>
                       {lang === "ar" ? "اكتب رسالتك..." : lang === "fr" ? "Écrivez votre message..." : "Type your message..."}
