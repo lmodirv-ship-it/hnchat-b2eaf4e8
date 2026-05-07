@@ -1,9 +1,21 @@
-import { createFileRoute, Outlet, useNavigate, Link, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate, Link, useLocation, redirect } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Shield, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/_admin")({
+  beforeLoad: async ({ location }) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({ to: "/sign-up-login", search: { from: location.pathname } as any });
+    }
+
+    const { data: isAdmin } = await supabase.rpc("is_admin", { _user_id: session.user.id });
+    if (!isAdmin) {
+      throw redirect({ to: "/feed" });
+    }
+  },
   component: AdminLayout,
 });
 
