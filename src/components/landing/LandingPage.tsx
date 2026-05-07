@@ -470,7 +470,7 @@ export function LandingPage() {
       <FloatingParticles />
 
       {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-1.5 sm:py-2 max-w-7xl mx-auto">
+      <nav className="relative z-20 h-[70px] flex items-center justify-between px-3 sm:px-6 max-w-[1280px] mx-auto">
         <div className="flex items-center gap-2 sm:gap-3">
           <HnLogo size={40} showText={false} />
           <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
@@ -505,12 +505,12 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-0 lg:pt-1 pb-0 overflow-visible">
-        <div className="flex flex-col lg:flex-row gap-3 lg:gap-8 items-start relative">
+      <section className="relative z-10 h-[360px] md:h-[360px] lg:h-[390px] xl:h-[430px] 2xl:h-[520px] max-h-[520px] overflow-visible">
+        <div className="max-w-[1280px] mx-auto h-full px-4 sm:px-8 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] gap-6 items-start relative">
           {/* Left: Hero text */}
-          <div className="flex-1 text-center lg:text-start pt-0 lg:pt-2 max-w-2xl lg:max-w-[55%]">
+          <div className="text-center md:text-start pt-0 md:pt-2 max-w-2xl">
             {/* Title */}
-            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.08] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
               {l.heroTitle1}{" "}
               <br className="hidden lg:block" />
               <span className="relative inline-block">
@@ -527,13 +527,13 @@ export function LandingPage() {
             </motion.p>
 
             {/* Description */}
-            <motion.p className="text-xs sm:text-sm text-muted-foreground/60 max-w-lg mb-3 lg:mb-4 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+            <motion.p className="text-xs sm:text-sm text-muted-foreground/60 max-w-lg mb-3 lg:mb-4 leading-relaxed mx-auto md:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
               {l.heroDesc}
             </motion.p>
 
             {/* Google Sign-In Button */}
             <motion.div
-              className="flex justify-center lg:justify-start mb-2 lg:mb-3"
+              className="flex justify-center md:justify-start mb-2 lg:mb-3"
               initial={init} animate={enter} variants={fadeUp} custom={1.5}
             >
               <button
@@ -574,20 +574,20 @@ export function LandingPage() {
           </div>
 
           {/* Right: Phone + Chat widget */}
-          <div className="hidden lg:block absolute right-0 top-0 w-[380px] xl:w-[420px]">
+          <div className="hidden md:block relative h-[310px] lg:h-[340px] xl:h-[380px]">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="hidden lg:block lg:scale-[0.55] xl:scale-[0.6] origin-top"
+              className="absolute right-0 top-0 scale-[0.52] lg:scale-[0.58] xl:scale-[0.66] origin-top-right"
             >
               <PhoneMockup />
             </motion.div>
 
             {/* Chat Widget */}
             <motion.div
-              className="w-full max-w-sm mt-2 relative z-10"
+              className="absolute right-0 top-[170px] lg:top-[190px] xl:top-[220px] z-10 w-[340px] lg:w-[380px] xl:w-[420px] max-w-full"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
