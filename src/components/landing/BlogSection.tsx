@@ -117,7 +117,10 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold">{sectionTitle}</h2>
           </div>
-          <p className="text-sm text-muted-foreground/60 max-w-lg">{sectionSub}</p>
+          <p className="text-sm text-muted-foreground/60 max-w-lg flex items-center gap-2">
+            <span className="text-cyan-glow/40 text-xs">✦⋮⋮</span>
+            {sectionSub}
+          </p>
         </div>
         <Link to="/blog" className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-cyan-glow hover:text-cyan-glow/80 transition-colors group">
           {viewAll}
