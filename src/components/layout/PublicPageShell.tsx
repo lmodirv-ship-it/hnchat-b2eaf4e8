@@ -128,6 +128,7 @@ export function PublicPageShell({
             <Link to="/contact" className="hover:text-violet-glow transition-colors">تواصل</Link>
             <Link to="/privacy" className="hover:text-violet-glow transition-colors">الخصوصية</Link>
             <Link to="/terms" className="hover:text-violet-glow transition-colors">الشروط</Link>
+            <Link to="/community-guidelines" className="hover:text-violet-glow transition-colors">إرشادات المجتمع</Link>
           </div>
           <p className="text-[11px] text-muted-foreground/30 text-center tracking-wide">
             جميع الحقوق محفوظة لمجموعة HN © 2024 - تصميم مولاي إسماعيل الحسني
