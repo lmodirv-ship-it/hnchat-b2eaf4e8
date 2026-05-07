@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { TrendingUp, Eye, Heart, Sparkles } from "lucide-react";
+import { TrendingUp, Eye, Heart, Sparkles, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
