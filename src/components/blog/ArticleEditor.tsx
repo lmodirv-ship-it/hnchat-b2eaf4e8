@@ -184,7 +184,7 @@ export function ArticleEditor({ article }: Props) {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-8 py-6 min-h-screen bg-gradient-to-b from-[oklch(0.14_0.03_250)] via-[oklch(0.12_0.025_245)] to-[oklch(0.13_0.028_255)]" dir="rtl">
       {/* Top Bar */}
-      <div className="flex items-center justify-between mb-8 sticky top-0 z-30 py-3 -mx-4 px-4 bg-background/80 backdrop-blur-xl border-b border-ice-border/10">
+      <div className="flex items-center justify-between mb-8 sticky top-0 z-30 py-3 -mx-4 px-4 bg-[oklch(0.14_0.03_250)]/90 backdrop-blur-xl border-b border-ice-border/10">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate({ to: "/blog-dashboard" as any })}
             className="p-2 rounded-xl hover:bg-ice-card/10 text-muted-foreground hover:text-foreground transition">
