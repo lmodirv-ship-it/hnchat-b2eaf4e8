@@ -525,7 +525,7 @@ export function LandingPage() {
 
       {/* ═══ HERO SECTION ═══ */}
       <section className="relative z-10 overflow-visible">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-4 lg:py-6 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px] gap-4 items-center relative">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px] gap-4 items-center relative">
           {/* Left: Hero text */}
           <div className="text-center md:text-start max-w-2xl">
             {/* Badge */}
@@ -575,14 +575,14 @@ export function LandingPage() {
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="scale-[0.55] lg:scale-[0.62] xl:scale-[0.7] origin-top shrink-0"
+              className="scale-[0.45] lg:scale-[0.55] xl:scale-[0.65] origin-top shrink-0"
             >
               <PhoneMockup />
             </motion.div>
 
             {/* Chat Widget */}
             <motion.div
-              className="w-[220px] lg:w-[250px] xl:w-[280px] mt-4 lg:mt-6 shrink-0"
+              className="w-[220px] lg:w-[250px] xl:w-[280px] mt-1 shrink-0"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
