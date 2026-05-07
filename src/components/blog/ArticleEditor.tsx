@@ -259,7 +259,7 @@ export function ArticleEditor({ article }: Props) {
       </div>
 
       {/* Formatting Toolbar */}
-      <div className="sticky top-[72px] z-20 flex items-center gap-0.5 flex-wrap p-2 mb-4 rounded-xl border border-ice-border/10 bg-[oklch(0.15_0.02_250)]/90 backdrop-blur-xl">
+      <div className="sticky top-[72px] z-20 flex items-center gap-0.5 flex-wrap p-2.5 mb-4 rounded-2xl border border-ice-border/10 bg-gradient-to-r from-[oklch(0.16_0.025_250)] to-[oklch(0.15_0.02_250)] backdrop-blur-xl shadow-[0_4px_20px_oklch(0_0_0/0.15)]">
         {[
           { icon: Heading1, action: () => insertFormat("# ", "\n"), tip: "عنوان رئيسي" },
           { icon: Heading2, action: () => insertFormat("## ", "\n"), tip: "عنوان فرعي" },
