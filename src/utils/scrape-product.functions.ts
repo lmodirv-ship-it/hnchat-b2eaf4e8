@@ -412,7 +412,7 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
               "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
             Accept: "application/json",
           },
-          redirect: "follow",
+          redirect: "error",
         });
         if (shopifyRes.ok) {
           const json: any = await shopifyRes.json();
@@ -507,6 +507,9 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
         const targetUrl = data.site.startsWith("http")
           ? data.site
           : `${origin}${data.site.includes("/") ? "/" + data.site.split("/").slice(1).join("/") : ""}`;
+        if (!isPublicHttpUrl(targetUrl)) {
+          throw new Error("Invalid scrape target");
+        }
 
         try {
           const fcRes = await fetch("https://api.firecrawl.dev/v2/scrape", {
@@ -574,7 +577,7 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
                 ? fcJson.data.links
                 : [];
               const productLinks = links.filter((l) =>
-                /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
+                isPublicHttpUrl(l) && /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
               );
               for (const l of productLinks.slice(0, 24)) {
                 if (seen.has(l)) continue;
