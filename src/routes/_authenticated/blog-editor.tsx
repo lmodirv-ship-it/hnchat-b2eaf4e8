@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArticleEditor } from "@/components/blog/ArticleEditor";
 import { useArticleById } from "@/hooks/useBlog";
-import { PageShell } from "@/components/PageShell";
+import { useEffect } from "react";
 
 type SearchParams = { id?: string };
 
@@ -16,19 +16,19 @@ function BlogEditorPage() {
   const { id } = Route.useSearch();
   const { data: article, isLoading } = useArticleById(id ?? "");
 
+  // Hide sidebar and footer in focus mode
+  useEffect(() => {
+    document.body.classList.add("blog-editor-focus");
+    return () => document.body.classList.remove("blog-editor-focus");
+  }, []);
+
   if (id && isLoading) {
     return (
-      <PageShell title="تحميل...">
-        <div className="flex items-center justify-center py-20">
-          <div className="h-8 w-8 border-2 border-cyan-glow border-t-transparent rounded-full animate-spin" />
-        </div>
-      </PageShell>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="h-10 w-10 border-2 border-cyan-glow border-t-transparent rounded-full animate-spin" />
+      </div>
     );
   }
 
-  return (
-    <PageShell title={id ? "تعديل المقال" : "إنشاء مقال جديد"}>
-      <ArticleEditor article={article} />
-    </PageShell>
-  );
+  return <ArticleEditor article={article} />;
 }
