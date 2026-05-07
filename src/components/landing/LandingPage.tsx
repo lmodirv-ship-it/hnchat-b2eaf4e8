@@ -594,7 +594,7 @@ export function LandingPage() {
             >
               <div className="rounded-2xl border border-ice-border/30 bg-ice-card/8 backdrop-blur-2xl shadow-[0_8px_40px_oklch(0_0_0/0.4),0_0_60px_oklch(0.78_0.18_220/0.06)] overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-ice-border/20 bg-ice-card/10">
+                <div className="flex items-center justify-between px-3 py-1.5 border-b border-ice-border/20 bg-ice-card/10">
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <MessageCircle className="h-4 w-4 text-cyan-glow" />
