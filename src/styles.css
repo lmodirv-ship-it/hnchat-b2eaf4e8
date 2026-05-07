@@ -546,3 +546,15 @@ html, body {
   0%, 100% { transform: translate(0, 0); opacity: 0.25; }
   50% { transform: translate(-8px, -12px); opacity: 0.65; }
 }
+
+/* Blog Editor Focus Mode — hide sidebar, footer, topbar for distraction-free writing */
+.blog-editor-focus [data-sidebar],
+.blog-editor-focus [data-topbar],
+.blog-editor-focus footer,
+.blog-editor-focus [data-mobile-nav] {
+  display: none !important;
+}
+.blog-editor-focus main {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
