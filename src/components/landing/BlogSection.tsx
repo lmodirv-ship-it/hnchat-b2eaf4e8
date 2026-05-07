@@ -104,10 +104,11 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
   const viewAll = isRTL ? "عرض جميع المقالات" : isEn ? "View all articles" : "Voir tous les articles";
 
   return (
-    <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pb-16 sm:pb-20 pt-2">
+    <section className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-8 pt-0 pb-10">
+      <div className="rounded-[28px] border border-ice-border/20 bg-ice-card/10 backdrop-blur-2xl shadow-[0_12px_70px_oklch(0_0_0/0.35),0_0_80px_oklch(0.78_0.18_220/0.08)] px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
       <motion.div
-        className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8"
+        className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5"
         initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}
       >
         <div>
@@ -130,7 +131,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
 
       {/* Category Tabs */}
       <motion.div
-        className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none"
+        className="flex items-center gap-2 mb-5 overflow-x-auto pb-2 scrollbar-none"
         initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}
       >
         {categories.map((c) => (
@@ -153,7 +154,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
         {filtered.map((article, i) => (
           <motion.article
             key={article.id}
-            className="group relative rounded-2xl overflow-hidden border border-ice-border/15 bg-ice-card/5 backdrop-blur-xl transition-all duration-500 hover:border-cyan-glow/30 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.1)] hover:scale-[1.02]"
+            className="group relative h-full min-h-[330px] rounded-2xl overflow-hidden border border-ice-border/15 bg-ice-card/5 backdrop-blur-xl transition-all duration-500 hover:border-cyan-glow/30 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.1)] hover:scale-[1.02]"
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.8 + 2}
           >
             {/* Image */}
