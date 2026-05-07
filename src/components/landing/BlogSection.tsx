@@ -132,7 +132,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
       {/* Category Tabs */}
       <motion.div
         className="flex items-center gap-2 mb-5 overflow-x-auto pb-2 scrollbar-none"
-        initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}
+        initial={{ opacity: 1, y: 0 }} animate={{ opacity: 1, y: 0 }}
       >
         {categories.map((c) => (
           <button
