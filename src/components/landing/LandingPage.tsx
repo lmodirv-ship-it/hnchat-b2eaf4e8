@@ -505,10 +505,10 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-2 lg:pt-6 pb-6 lg:pb-10">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
+      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-0 lg:pt-1 pb-2 lg:pb-3">
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-8 items-start">
           {/* Left: Hero text */}
-          <div className="flex-1 text-center lg:text-start pt-2 lg:pt-6 max-w-2xl">
+          <div className="flex-1 text-center lg:text-start pt-0 lg:pt-2 max-w-2xl">
             {/* Title */}
             <motion.h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.08] mb-4 lg:mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
               {l.heroTitle1}{" "}
