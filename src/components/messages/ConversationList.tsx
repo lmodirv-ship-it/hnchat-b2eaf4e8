@@ -29,7 +29,7 @@ export interface ConversationItem {
   unread_count?: number;
 }
 
-export function ConversationList({ activeId }: { activeId?: string }) {
+export function ConversationList({ activeId, onSelect }: { activeId?: string; onSelect?: (id: string) => void }) {
   const { user } = useAuth();
   const [items, setItems] = useState<ConversationItem[]>([]);
   const [loading, setLoading] = useState(true);
