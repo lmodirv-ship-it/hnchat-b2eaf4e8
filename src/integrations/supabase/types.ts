@@ -181,6 +181,113 @@ export type Database = {
           },
         ]
       }
+      ai_tool_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      ai_tools: {
+        Row: {
+          category_id: string | null
+          category_slug: string | null
+          cons: string[] | null
+          created_at: string
+          description: string | null
+          features: Json | null
+          id: string
+          is_featured: boolean | null
+          is_free: boolean | null
+          logo_url: string | null
+          long_description: string | null
+          name: string
+          pricing_info: string | null
+          pros: string[] | null
+          rating: number | null
+          slug: string
+          tags: string[] | null
+          updated_at: string
+          views_count: number | null
+          website_url: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          category_slug?: string | null
+          cons?: string[] | null
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          logo_url?: string | null
+          long_description?: string | null
+          name: string
+          pricing_info?: string | null
+          pros?: string[] | null
+          rating?: number | null
+          slug: string
+          tags?: string[] | null
+          updated_at?: string
+          views_count?: number | null
+          website_url?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          category_slug?: string | null
+          cons?: string[] | null
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          logo_url?: string | null
+          long_description?: string | null
+          name?: string
+          pricing_info?: string | null
+          pros?: string[] | null
+          rating?: number | null
+          slug?: string
+          tags?: string[] | null
+          updated_at?: string
+          views_count?: number | null
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_tools_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "ai_tool_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_usage: {
         Row: {
           completion_tokens: number
