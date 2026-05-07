@@ -157,7 +157,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.8 + 2}
           >
             {/* Image */}
-            <div className="relative h-44 overflow-hidden">
+            <div className="relative h-48 sm:h-44 lg:h-48 overflow-hidden rounded-t-2xl">
               <img
                 src={article.image}
                 alt={getTitle(article)}
