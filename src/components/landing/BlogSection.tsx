@@ -155,7 +155,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
           <motion.article
             key={article.id}
             className="group relative h-full min-h-[330px] rounded-2xl overflow-hidden border border-ice-border/15 bg-ice-card/5 backdrop-blur-xl transition-all duration-500 hover:border-cyan-glow/30 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.1)] hover:scale-[1.02]"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.8 + 2}
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }}
           >
             {/* Image */}
             <div className="relative h-48 sm:h-44 lg:h-48 overflow-hidden rounded-t-2xl">
