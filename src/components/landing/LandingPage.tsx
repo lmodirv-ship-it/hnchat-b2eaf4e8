@@ -510,7 +510,7 @@ export function LandingPage() {
           {/* Left: Hero text */}
           <div className="text-center md:text-start pt-0 md:pt-2 max-w-2xl">
             {/* Title */}
-            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.08] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
               {l.heroTitle1}{" "}
               <br className="hidden lg:block" />
               <span className="relative inline-block">
@@ -527,13 +527,13 @@ export function LandingPage() {
             </motion.p>
 
             {/* Description */}
-            <motion.p className="text-xs sm:text-sm text-muted-foreground/60 max-w-lg mb-3 lg:mb-4 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+            <motion.p className="text-xs sm:text-sm text-muted-foreground/60 max-w-lg mb-3 lg:mb-4 leading-relaxed mx-auto md:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
               {l.heroDesc}
             </motion.p>
 
             {/* Google Sign-In Button */}
             <motion.div
-              className="flex justify-center lg:justify-start mb-2 lg:mb-3"
+              className="flex justify-center md:justify-start mb-2 lg:mb-3"
               initial={init} animate={enter} variants={fadeUp} custom={1.5}
             >
               <button
