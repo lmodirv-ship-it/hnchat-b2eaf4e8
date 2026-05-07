@@ -63,7 +63,7 @@ export function useMyArticles() {
         .eq("author_id", user!.id)
         .order("updated_at", { ascending: false });
       if (error) throw error;
-      return data as Article[];
+      return data as any as Article[];
     },
   });
 }
@@ -145,7 +145,7 @@ export function useAuthorArticles(username: string) {
         .order("published_at", { ascending: false });
       if (error) throw error;
 
-      return { profile, articles: articles as Article[] };
+      return { profile, articles: articles as any as Article[] };
     },
   });
 }
