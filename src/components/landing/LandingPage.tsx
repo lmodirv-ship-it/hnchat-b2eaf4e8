@@ -525,7 +525,7 @@ export function LandingPage() {
           </motion.p>
 
           {/* Description */}
-          <motion.p className="text-xs sm:text-sm text-muted-foreground max-w-lg mb-4 sm:mb-5 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+          <motion.p className="text-xs sm:text-base text-muted-foreground max-w-lg mb-5 sm:mb-6 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
             {l.heroDesc}
           </motion.p>
 
