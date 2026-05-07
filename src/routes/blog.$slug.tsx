@@ -129,8 +129,8 @@ function ArticlePage() {
             </div>
           )}
 
-          {/* Content */}
-          <div className="mb-12" style={{ fontSize: '1.15rem', lineHeight: '2', letterSpacing: '0.01em' }}>
+          {/* Content — magazine typography */}
+          <div className="mb-14" style={{ fontSize: '1.2rem', lineHeight: '2.1', letterSpacing: '0.01em' }}>
             <ArticleContent content={article.content ?? ""} />
           </div>
 
