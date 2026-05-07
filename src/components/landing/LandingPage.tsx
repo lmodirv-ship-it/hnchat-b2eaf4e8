@@ -580,7 +580,7 @@ export function LandingPage() {
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="hidden lg:block lg:scale-[0.85] xl:scale-90 origin-top"
+              className="hidden lg:block lg:scale-[0.7] xl:scale-[0.75] origin-top"
             >
               <PhoneMockup />
             </motion.div>
