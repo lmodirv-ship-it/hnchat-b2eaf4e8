@@ -470,7 +470,7 @@ export function LandingPage() {
       <FloatingParticles />
 
       {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 max-w-7xl mx-auto">
+      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-1.5 sm:py-2 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 sm:gap-3">
           <HnLogo size={40} showText={false} />
           <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
@@ -505,12 +505,12 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-2 lg:pt-6 pb-6 lg:pb-10">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
+      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-0 lg:pt-1 pb-0 overflow-visible">
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-8 items-start relative">
           {/* Left: Hero text */}
-          <div className="flex-1 text-center lg:text-start pt-2 lg:pt-6 max-w-2xl">
+          <div className="flex-1 text-center lg:text-start pt-0 lg:pt-2 max-w-2xl lg:max-w-[55%]">
             {/* Title */}
-            <motion.h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.08] mb-4 lg:mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.08] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
               {l.heroTitle1}{" "}
               <br className="hidden lg:block" />
               <span className="relative inline-block">
@@ -522,18 +522,18 @@ export function LandingPage() {
             </motion.h1>
 
             {/* Subtitle */}
-            <motion.p className="text-sm sm:text-lg lg:text-xl font-medium mb-3 lg:mb-4 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+            <motion.p className="text-xs sm:text-base lg:text-lg font-medium mb-1.5 lg:mb-2 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
               {l.heroSub}
             </motion.p>
 
             {/* Description */}
-            <motion.p className="text-xs sm:text-sm lg:text-base text-muted-foreground/60 max-w-lg mb-6 lg:mb-8 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+            <motion.p className="text-xs sm:text-sm text-muted-foreground/60 max-w-lg mb-3 lg:mb-4 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
               {l.heroDesc}
             </motion.p>
 
             {/* Google Sign-In Button */}
             <motion.div
-              className="flex justify-center lg:justify-start mb-4 lg:mb-5"
+              className="flex justify-center lg:justify-start mb-2 lg:mb-3"
               initial={init} animate={enter} variants={fadeUp} custom={1.5}
             >
               <button
@@ -550,9 +550,9 @@ export function LandingPage() {
                     toast.error(e.message ?? "Google sign-in failed");
                   }
                 }}
-                className="group relative flex items-center gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-extrabold text-base sm:text-lg cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
+                className="group relative flex items-center gap-3 px-6 sm:px-10 py-3 sm:py-4 rounded-2xl font-extrabold text-sm sm:text-base cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
               >
-                <svg className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
+                <svg className="h-6 w-6 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff9"/>
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff7"/>
@@ -574,27 +574,27 @@ export function LandingPage() {
           </div>
 
           {/* Right: Phone + Chat widget */}
-          <div className="w-full lg:w-[420px] xl:w-[460px] shrink-0 flex flex-col items-center lg:items-end relative">
+          <div className="hidden lg:block absolute right-0 top-0 w-[380px] xl:w-[420px]">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="hidden lg:block lg:scale-[0.85] xl:scale-90 origin-top"
+              className="hidden lg:block lg:scale-[0.55] xl:scale-[0.6] origin-top"
             >
               <PhoneMockup />
             </motion.div>
 
             {/* Chat Widget */}
             <motion.div
-              className="w-full max-w-sm lg:-mt-6 relative z-10 lg:mr-[-20px]"
+              className="w-full max-w-sm mt-2 relative z-10"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
             >
               <div className="rounded-2xl border border-ice-border/30 bg-ice-card/8 backdrop-blur-2xl shadow-[0_8px_40px_oklch(0_0_0/0.4),0_0_60px_oklch(0.78_0.18_220/0.06)] overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-ice-border/20 bg-ice-card/10">
+                <div className="flex items-center justify-between px-3 py-1.5 border-b border-ice-border/20 bg-ice-card/10">
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <MessageCircle className="h-4 w-4 text-cyan-glow" />
@@ -608,7 +608,7 @@ export function LandingPage() {
                   </span>
                 </div>
                 {/* Messages — show 1 visible message like reference */}
-                <div ref={chatRef} className="px-3 py-3 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
+                <div ref={chatRef} className="px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
                   <div className="flex items-start gap-2">
                     <div className="flex-1 rounded-2xl rounded-tl-sm bg-gradient-to-br from-cyan-glow/15 to-violet-glow/8 backdrop-blur-xl px-3.5 py-2.5 border border-ice-border/15">
                       <p className="text-xs text-foreground/80 leading-relaxed">
@@ -618,8 +618,8 @@ export function LandingPage() {
                   </div>
                 </div>
                 {/* Input */}
-                <div className="px-3 py-2 border-t border-ice-border/15">
-                  <Link to="/sign-up-login" className="flex items-center justify-between rounded-2xl bg-ice-card/10 backdrop-blur-xl px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
+                <div className="px-3 py-1.5 border-t border-ice-border/15">
+                  <Link to="/sign-up-login" className="flex items-center justify-between rounded-2xl bg-ice-card/10 backdrop-blur-xl px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
                     <span className="flex items-center gap-2">
                       <span className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px]">👤</span>
                       {lang === "ar" ? "اكتب رسالتك..." : lang === "fr" ? "Écrivez votre message..." : "Type your message..."}
