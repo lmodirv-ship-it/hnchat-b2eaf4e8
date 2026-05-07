@@ -62,7 +62,7 @@ function ArticlePage() {
       )}
 
       <div className="max-w-4xl mx-auto px-6">
-        <article className={`${article.featured_image ? "-mt-28" : "mt-10"} relative z-10`}>
+        <article className="mt-8 relative z-10">
           {/* Back */}
           <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-6">
             <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} /> {isRTL ? "العودة للمدونة" : "Back to Blog"}
