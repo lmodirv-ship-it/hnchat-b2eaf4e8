@@ -21,6 +21,7 @@ import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
@@ -148,6 +149,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
 } as any)
 const ShareShareIdRoute = ShareShareIdRouteImport.update({
   id: '/share/$shareId',
@@ -575,6 +581,7 @@ export interface FileRoutesByFullPath {
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
+  '/blog/': typeof BlogIndexRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -606,7 +613,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -656,6 +662,7 @@ export interface FileRoutesByTo {
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
+  '/blog': typeof BlogIndexRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -741,6 +748,7 @@ export interface FileRoutesById {
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
+  '/blog/': typeof BlogIndexRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -824,6 +832,7 @@ export interface FileRouteTypes {
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
+    | '/blog/'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -855,7 +864,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/blog'
     | '/community-guidelines'
     | '/contact'
     | '/privacy'
@@ -905,6 +913,7 @@ export interface FileRouteTypes {
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
+    | '/blog'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -989,6 +998,7 @@ export interface FileRouteTypes {
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
+    | '/blog/'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
@@ -1122,6 +1132,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/share/$shareId': {
       id: '/share/$shareId'
@@ -1815,11 +1832,13 @@ const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   BlogAuthorUsernameRoute: typeof BlogAuthorUsernameRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   BlogAuthorUsernameRoute: BlogAuthorUsernameRoute,
 }
 
@@ -1846,3 +1865,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
