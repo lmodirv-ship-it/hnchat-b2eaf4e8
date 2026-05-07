@@ -63,6 +63,13 @@ const GROUPS: readonly NavGroup[] = [
     ],
   },
   {
+    label: "المدونة",
+    items: [
+      { to: "/blog-dashboard", label: "مقالاتي", icon: FileText },
+      { to: "/blog-editor", label: "إنشاء مقال", icon: PenSquare, badge: { text: "NEW", tone: "new" as const } },
+    ],
+  },
+  {
     label: "أدوات النمو",
     items: [
       { to: "/ads-manager", label: "Ads Manager", icon: Megaphone },
