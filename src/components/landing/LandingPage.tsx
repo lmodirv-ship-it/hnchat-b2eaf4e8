@@ -638,6 +638,9 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* ═══ BLOG SECTION ═══ */}
+      <BlogSection lang={lang} />
+
       {/* ═══ FLOATING STATS ═══ */}
       <section className="relative z-10 max-w-5xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
         <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-4 sm:gap-10">
