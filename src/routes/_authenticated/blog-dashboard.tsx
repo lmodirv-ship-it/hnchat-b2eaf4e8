@@ -127,62 +127,70 @@ function BlogDashboard() {
           </div>
         ) : (
           <div className="space-y-4">
-            {filtered.map((article) => (
-              <div key={article.id}
-                className="flex items-center gap-5 p-5 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl hover:border-cyan-glow/15 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.04)] transition-all duration-500 group">
-                {/* Large Thumbnail */}
-                {article.featured_image ? (
-                  <img src={article.featured_image} alt="" className="w-40 h-28 rounded-xl object-cover shrink-0 group-hover:scale-[1.02] transition-transform duration-500" />
-                ) : (
-                  <div className="w-40 h-28 rounded-xl bg-gradient-to-br from-cyan-glow/8 to-violet-glow/8 flex items-center justify-center shrink-0">
-                    <FileText className="h-8 w-8 text-muted-foreground/15" />
-                  </div>
-                )}
+            {filtered.map((article) => {
+              const cardHref = article.status === "published"
+                ? `/blog/${article.slug}`
+                : `/blog-editor?id=${article.id}`;
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wide ${
-                      article.status === "published"
-                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/15"
-                        : "bg-amber-500/10 text-amber-400 border border-amber-500/15"
-                    }`}>
-                      {article.status === "published" ? "منشور" : "مسودة"}
-                    </span>
-                    {article.article_categories && (
-                      <span className="text-xs text-cyan-glow/60">{(article.article_categories as any).name_ar ?? (article.article_categories as any).name}</span>
-                    )}
-                  </div>
-                  <h3 className="font-bold text-base mb-2 truncate group-hover:text-cyan-glow transition-colors duration-300">{article.title}</h3>
-                  <div className="flex items-center gap-5 text-[11px] text-muted-foreground/40">
-                    <span className="flex items-center gap-1.5"><Eye className="h-3.5 w-3.5" />{article.views_count}</span>
-                    <span className="flex items-center gap-1.5"><Heart className="h-3.5 w-3.5" />{article.likes_count}</span>
-                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{article.reading_time} د</span>
-                    <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{new Date(article.updated_at).toLocaleDateString("ar")}</span>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {article.status === "published" && (
-                    <a href={`/blog/${article.slug}`} target="_blank" rel="noopener noreferrer">
-                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground/40 hover:text-cyan-glow">
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </a>
+              return (
+                <div key={article.id}
+                  className="relative flex items-center gap-5 p-5 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl hover:border-cyan-glow/15 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.04)] transition-all duration-500 group cursor-pointer"
+                  onClick={() => window.location.href = cardHref}>
+                  {/* Large Thumbnail */}
+                  {article.featured_image ? (
+                    <img src={article.featured_image} alt="" className="w-40 h-28 rounded-xl object-cover shrink-0 group-hover:scale-[1.02] transition-transform duration-500" />
+                  ) : (
+                    <div className="w-40 h-28 rounded-xl bg-gradient-to-br from-cyan-glow/8 to-violet-glow/8 flex items-center justify-center shrink-0">
+                      <FileText className="h-8 w-8 text-muted-foreground/15" />
+                    </div>
                   )}
-                  <Link to="/blog-editor" search={{ id: article.id } as any}>
-                    <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground/40 hover:text-cyan-glow">
-                      <Edit className="h-4 w-4" />
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wide ${
+                        article.status === "published"
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/15"
+                          : "bg-amber-500/10 text-amber-400 border border-amber-500/15"
+                      }`}>
+                        {article.status === "published" ? "منشور" : "مسودة"}
+                      </span>
+                      {article.article_categories && (
+                        <span className="text-xs text-cyan-glow/60">{(article.article_categories as any).name_ar ?? (article.article_categories as any).name}</span>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-base mb-2 truncate group-hover:text-cyan-glow transition-colors duration-300">{article.title}</h3>
+                    <div className="flex items-center gap-5 text-[11px] text-muted-foreground/40">
+                      <span className="flex items-center gap-1.5"><Eye className="h-3.5 w-3.5" />{article.views_count}</span>
+                      <span className="flex items-center gap-1.5"><Heart className="h-3.5 w-3.5" />{article.likes_count}</span>
+                      <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{article.reading_time} د</span>
+                      <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{new Date(article.updated_at).toLocaleDateString("ar")}</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="relative z-10 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    onClick={(e) => e.stopPropagation()}>
+                    {article.status === "published" && (
+                      <a href={`/blog/${article.slug}`} target="_blank" rel="noopener noreferrer">
+                        <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground/40 hover:text-cyan-glow">
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </a>
+                    )}
+                    <Link to="/blog-editor" search={{ id: article.id } as any}>
+                      <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground/40 hover:text-cyan-glow">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground/40 hover:text-destructive"
+                      onClick={() => { if (confirm("هل تريد حذف هذا المقال؟")) deleteArticle.mutate(article.id); }}>
+                      <Trash2 className="h-4 w-4" />
                     </Button>
-                  </Link>
-                  <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground/40 hover:text-destructive"
-                    onClick={() => { if (confirm("هل تريد حذف هذا المقال؟")) deleteArticle.mutate(article.id); }}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
     </div>
