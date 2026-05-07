@@ -316,7 +316,7 @@ export function ArticleEditor({ article }: Props) {
       </div>
 
       {/* Collapsible: Article Settings */}
-      <div className="rounded-2xl border border-ice-border/10 bg-[oklch(0.15_0.02_250)] mb-6 overflow-hidden">
+      <div className="rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] backdrop-blur-xl shadow-[0_4px_30px_oklch(0_0_0/0.2)] mb-6 overflow-hidden">
         <button onClick={() => setShowSettings(!showSettings)}
           className="w-full flex items-center justify-between p-5 text-sm font-semibold text-muted-foreground/70 hover:text-foreground transition">
           <span className="flex items-center gap-2"><Settings2 className="h-4 w-4" /> إعدادات المقال</span>
@@ -389,7 +389,7 @@ export function ArticleEditor({ article }: Props) {
       </div>
 
       {/* Collapsible: SEO */}
-      <div className="rounded-2xl border border-ice-border/10 bg-[oklch(0.15_0.02_250)] mb-8 overflow-hidden">
+      <div className="rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] backdrop-blur-xl shadow-[0_4px_30px_oklch(0_0_0/0.2)] mb-8 overflow-hidden">
         <button onClick={() => setShowSeo(!showSeo)}
           className="w-full flex items-center justify-between p-5 text-sm font-semibold text-muted-foreground/70 hover:text-foreground transition">
           <span className="flex items-center gap-2"><SearchIcon className="h-4 w-4" /> تحسين محركات البحث (SEO)</span>
