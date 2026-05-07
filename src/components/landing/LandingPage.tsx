@@ -627,7 +627,7 @@ export function LandingPage() {
                 </AnimatePresence>
               </div>
               {/* Input */}
-              <div className="px-3 py-2.5 border-t border-ice-border/15">
+              <div className="px-3 py-2 border-t border-ice-border/15">
                 <Link to="/sign-up-login" className="flex items-center gap-2 rounded-2xl bg-ice-card/10 backdrop-blur-xl px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
                   <Send className="h-3.5 w-3.5 text-cyan-glow" />
                   {lang === "ar" ? "سجّل للمشاركة..." : lang === "fr" ? "Inscrivez-vous..." : "Sign up to chat..."}
