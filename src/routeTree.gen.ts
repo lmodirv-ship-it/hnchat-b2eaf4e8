@@ -66,6 +66,7 @@ import { Route as AuthenticatedAdsPromoRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAdsManagerRouteImport } from './routes/_authenticated/ads-manager'
 import { Route as OwnerOwnerX9k2m7IndexRouteImport } from './routes/_owner/owner-x9k2m7.index'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
+import { Route as BlogAuthorUsernameRouteImport } from './routes/blog.author.$username'
 import { Route as OwnerOwnerX9k2m7UsersRouteImport } from './routes/_owner/owner-x9k2m7.users'
 import { Route as OwnerOwnerX9k2m7TicketsRouteImport } from './routes/_owner/owner-x9k2m7.tickets'
 import { Route as OwnerOwnerX9k2m7SettingsRouteImport } from './routes/_owner/owner-x9k2m7.settings'
@@ -383,6 +384,11 @@ const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AdminRoute,
 } as any)
+const BlogAuthorUsernameRoute = BlogAuthorUsernameRouteImport.update({
+  id: '/author/$username',
+  path: '/author/$username',
+  getParentRoute: () => BlogRoute,
+} as any)
 const OwnerOwnerX9k2m7UsersRoute = OwnerOwnerX9k2m7UsersRouteImport.update({
   id: '/owner-x9k2m7/users',
   path: '/owner-x9k2m7/users',
@@ -591,6 +597,7 @@ export interface FileRoutesByFullPath {
   '/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
   '/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
   '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin/': typeof AdminAdminIndexRoute
   '/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
@@ -671,6 +678,7 @@ export interface FileRoutesByTo {
   '/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
   '/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
   '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin': typeof AdminAdminIndexRoute
   '/owner-x9k2m7': typeof OwnerOwnerX9k2m7IndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
@@ -755,6 +763,7 @@ export interface FileRoutesById {
   '/_owner/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
   '/_owner/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
   '/_owner/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_owner/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
   '/_authenticated/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
@@ -837,6 +846,7 @@ export interface FileRouteTypes {
     | '/owner-x9k2m7/settings'
     | '/owner-x9k2m7/tickets'
     | '/owner-x9k2m7/users'
+    | '/blog/author/$username'
     | '/admin/'
     | '/owner-x9k2m7/'
     | '/groups/$groupId/manage'
@@ -917,6 +927,7 @@ export interface FileRouteTypes {
     | '/owner-x9k2m7/settings'
     | '/owner-x9k2m7/tickets'
     | '/owner-x9k2m7/users'
+    | '/blog/author/$username'
     | '/admin'
     | '/owner-x9k2m7'
     | '/groups/$groupId/manage'
@@ -1000,6 +1011,7 @@ export interface FileRouteTypes {
     | '/_owner/owner-x9k2m7/settings'
     | '/_owner/owner-x9k2m7/tickets'
     | '/_owner/owner-x9k2m7/users'
+    | '/blog/author/$username'
     | '/_admin/admin/'
     | '/_owner/owner-x9k2m7/'
     | '/_authenticated/groups/$groupId/manage'
@@ -1426,6 +1438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/blog/author/$username': {
+      id: '/blog/author/$username'
+      path: '/author/$username'
+      fullPath: '/blog/author/$username'
+      preLoaderRoute: typeof BlogAuthorUsernameRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/_owner/owner-x9k2m7/users': {
       id: '/_owner/owner-x9k2m7/users'
       path: '/owner-x9k2m7/users'
@@ -1796,10 +1815,12 @@ const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
+  BlogAuthorUsernameRoute: typeof BlogAuthorUsernameRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
+  BlogAuthorUsernameRoute: BlogAuthorUsernameRoute,
 }
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
