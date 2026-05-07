@@ -587,7 +587,7 @@ export function LandingPage() {
 
             {/* Chat Widget */}
             <motion.div
-              className="w-full max-w-sm lg:-mt-6 relative z-10 lg:mr-[-20px]"
+              className="w-full max-w-sm lg:-mt-16 relative z-10 lg:mr-[-20px]"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
