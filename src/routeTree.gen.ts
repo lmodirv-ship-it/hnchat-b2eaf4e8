@@ -9,22 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrendingRouteImport } from './routes/trending'
+import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignUpLoginRouteImport } from './routes/sign-up-login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommunityGuidelinesRouteImport } from './routes/community-guidelines'
+import { Route as CategoryRouteImport } from './routes/category'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as OwnerRouteImport } from './routes/_owner'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
+import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
@@ -93,6 +99,16 @@ import { Route as AdminAdminAnalyticsRouteImport } from './routes/_admin/admin.a
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as AuthenticatedGroupsGroupIdManageRouteImport } from './routes/_authenticated/groups.$groupId.manage'
 
+const TrendingRoute = TrendingRouteImport.update({
+  id: '/trending',
+  path: '/trending',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -123,6 +139,11 @@ const CommunityGuidelinesRoute = CommunityGuidelinesRouteImport.update({
   path: '/community-guidelines',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoryRoute = CategoryRouteImport.update({
+  id: '/category',
+  path: '/category',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -150,10 +171,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ToolsRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => BlogRoute,
+} as any)
+const ToolsSlugRoute = ToolsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ToolsRoute,
 } as any)
 const ShareShareIdRoute = ShareShareIdRouteImport.update({
   id: '/share/$shareId',
@@ -169,6 +200,11 @@ const LiveIdRoute = LiveIdRouteImport.update({
   id: '/live/$id',
   path: '/live/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CategorySlugRoute = CategorySlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CategoryRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
@@ -532,12 +568,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
+  '/category': typeof CategoryRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/tools': typeof ToolsRouteWithChildren
+  '/trending': typeof TrendingRoute
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -578,10 +617,13 @@ export interface FileRoutesByFullPath {
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -613,12 +655,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/category': typeof CategoryRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/trending': typeof TrendingRoute
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -659,10 +703,13 @@ export interface FileRoutesByTo {
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/tools': typeof ToolsIndexRoute
   '/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/admin/content': typeof AdminAdminContentRoute
   '/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -699,12 +746,15 @@ export interface FileRoutesById {
   '/_owner': typeof OwnerRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
+  '/category': typeof CategoryRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/tools': typeof ToolsRouteWithChildren
+  '/trending': typeof TrendingRoute
   '/_authenticated/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/_authenticated/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/_authenticated/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -745,10 +795,13 @@ export interface FileRoutesById {
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/_admin/admin/analytics': typeof AdminAdminAnalyticsRoute
   '/_admin/admin/content': typeof AdminAdminContentRoute
   '/_admin/admin/marketplace': typeof AdminAdminMarketplaceRoute
@@ -783,12 +836,15 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/blog'
+    | '/category'
     | '/community-guidelines'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
     | '/sitemap.xml'
     | '/terms'
+    | '/tools'
+    | '/trending'
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
@@ -829,10 +885,13 @@ export interface FileRouteTypes {
     | '/voice'
     | '/youtube'
     | '/blog/$slug'
+    | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
+    | '/tools/$slug'
     | '/blog/'
+    | '/tools/'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -864,12 +923,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/category'
     | '/community-guidelines'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
     | '/sitemap.xml'
     | '/terms'
+    | '/trending'
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
@@ -910,10 +971,13 @@ export interface FileRouteTypes {
     | '/voice'
     | '/youtube'
     | '/blog/$slug'
+    | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
+    | '/tools/$slug'
     | '/blog'
+    | '/tools'
     | '/admin/analytics'
     | '/admin/content'
     | '/admin/marketplace'
@@ -949,12 +1013,15 @@ export interface FileRouteTypes {
     | '/_owner'
     | '/about'
     | '/blog'
+    | '/category'
     | '/community-guidelines'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
     | '/sitemap.xml'
     | '/terms'
+    | '/tools'
+    | '/trending'
     | '/_authenticated/ads-manager'
     | '/_authenticated/ads-promo'
     | '/_authenticated/ai-assistant'
@@ -995,10 +1062,13 @@ export interface FileRouteTypes {
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
     | '/blog/$slug'
+    | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
+    | '/tools/$slug'
     | '/blog/'
+    | '/tools/'
     | '/_admin/admin/analytics'
     | '/_admin/admin/content'
     | '/_admin/admin/marketplace'
@@ -1035,12 +1105,15 @@ export interface RootRouteChildren {
   OwnerRoute: typeof OwnerRouteWithChildren
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRouteWithChildren
+  CategoryRoute: typeof CategoryRouteWithChildren
   CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
   SignUpLoginRoute: typeof SignUpLoginRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  ToolsRoute: typeof ToolsRouteWithChildren
+  TrendingRoute: typeof TrendingRoute
   LiveIdRoute: typeof LiveIdRoute
   PostIdRoute: typeof PostIdRoute
   ShareShareIdRoute: typeof ShareShareIdRoute
@@ -1049,6 +1122,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trending': {
+      id: '/trending'
+      path: '/trending'
+      fullPath: '/trending'
+      preLoaderRoute: typeof TrendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -1089,6 +1176,13 @@ declare module '@tanstack/react-router' {
       path: '/community-guidelines'
       fullPath: '/community-guidelines'
       preLoaderRoute: typeof CommunityGuidelinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/category': {
+      id: '/category'
+      path: '/category'
+      fullPath: '/category'
+      preLoaderRoute: typeof CategoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -1133,12 +1227,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/': {
+      id: '/tools/'
+      path: '/'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof ToolsRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/'
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof BlogRoute
+    }
+    '/tools/$slug': {
+      id: '/tools/$slug'
+      path: '/$slug'
+      fullPath: '/tools/$slug'
+      preLoaderRoute: typeof ToolsSlugRouteImport
+      parentRoute: typeof ToolsRoute
     }
     '/share/$shareId': {
       id: '/share/$shareId'
@@ -1160,6 +1268,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/live/$id'
       preLoaderRoute: typeof LiveIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/category/$slug': {
+      id: '/category/$slug'
+      path: '/$slug'
+      fullPath: '/category/$slug'
+      preLoaderRoute: typeof CategorySlugRouteImport
+      parentRoute: typeof CategoryRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -1844,6 +1959,30 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
+interface CategoryRouteChildren {
+  CategorySlugRoute: typeof CategorySlugRoute
+}
+
+const CategoryRouteChildren: CategoryRouteChildren = {
+  CategorySlugRoute: CategorySlugRoute,
+}
+
+const CategoryRouteWithChildren = CategoryRoute._addFileChildren(
+  CategoryRouteChildren,
+)
+
+interface ToolsRouteChildren {
+  ToolsSlugRoute: typeof ToolsSlugRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
+}
+
+const ToolsRouteChildren: ToolsRouteChildren = {
+  ToolsSlugRoute: ToolsSlugRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
+}
+
+const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
@@ -1851,12 +1990,15 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerRoute: OwnerRouteWithChildren,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRouteWithChildren,
+  CategoryRoute: CategoryRouteWithChildren,
   CommunityGuidelinesRoute: CommunityGuidelinesRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
   SignUpLoginRoute: SignUpLoginRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  ToolsRoute: ToolsRouteWithChildren,
+  TrendingRoute: TrendingRoute,
   LiveIdRoute: LiveIdRoute,
   PostIdRoute: PostIdRoute,
   ShareShareIdRoute: ShareShareIdRoute,
