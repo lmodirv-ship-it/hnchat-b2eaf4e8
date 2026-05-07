@@ -234,8 +234,8 @@ export function ArticleEditor({ article }: Props) {
       {/* Featured Image */}
       <div className="mb-8 rounded-2xl overflow-hidden border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] backdrop-blur-xl shadow-[0_4px_30px_oklch(0_0_0/0.2)]">
         {featuredImage ? (
-          <div className="relative h-64 sm:h-80 group">
-            <img src={featuredImage} alt="" className="w-full h-full object-cover" />
+          <div className="relative h-72 sm:h-96 group bg-[oklch(0.12_0.02_250)]">
+            <img src={featuredImage} alt="" className="w-full h-full object-contain" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <label className="cursor-pointer px-4 py-2 text-xs font-medium rounded-xl bg-background/90 backdrop-blur border border-ice-border/20 hover:bg-ice-card/30 transition">
