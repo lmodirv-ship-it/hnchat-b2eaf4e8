@@ -9,7 +9,7 @@ import {
   TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
   Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
   Settings, Cpu, Bookmark, FileText, ScrollText, Youtube, Inbox,
-  ChevronDown,
+  ChevronDown, PenSquare,
 } from "lucide-react";
 
 type NavItem = {
