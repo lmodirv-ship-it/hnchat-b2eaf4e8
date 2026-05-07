@@ -152,48 +152,62 @@ export function ConversationList({ activeId, onSelect }: { activeId?: string; on
 
   if (items.length === 0) {
     return (
-      <Card className="p-12 bg-card border-border text-center">
-        <MessageCircle className="h-12 w-12 mx-auto mb-3 text-primary" />
-        <p className="text-muted-foreground">لا توجد محادثات بعد. ابدأ محادثة جديدة!</p>
-      </Card>
+      <div className="p-8 text-center">
+        <MessageCircle className="h-10 w-10 mx-auto mb-3 text-[oklch(0.45_0.10_230)]" />
+        <p className="text-[oklch(0.55_0.02_250)] text-sm">لا توجد محادثات بعد. ابدأ محادثة جديدة!</p>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-0.5">
       {items.map((c) => {
         const title = c.is_group
           ? c.name || "Group"
           : c.other_user?.full_name || c.other_user?.username || "User";
         const avatar = c.other_user?.avatar_url || undefined;
         const initial = title.slice(0, 2).toUpperCase();
+        const isActive = activeId === c.id;
         const inner = (
           <>
-            <Avatar className="h-12 w-12 border border-border">
-              <AvatarImage src={avatar} />
-              <AvatarFallback className="bg-primary/10 text-primary">
-                {initial}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <Avatar className="h-12 w-12">
+                <AvatarImage src={avatar} />
+                <AvatarFallback className="bg-[oklch(0.25_0.05_255)] text-[oklch(0.70_0.02_250)] text-sm font-medium">
+                  {initial}
+                </AvatarFallback>
+              </Avatar>
+              {/* Online indicator */}
+              <span className="absolute bottom-0 left-0 h-3 w-3 rounded-full bg-green-500 ring-2 ring-[oklch(0.13_0.025_255)]" />
+            </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <p className="font-medium truncate">{title}</p>
-                <span className="text-[10px] text-muted-foreground shrink-0">
+                <p className={cn("font-semibold truncate text-sm", isActive ? "text-white" : "text-[oklch(0.88_0.01_250)]")}>{title}</p>
+                <span className="text-[10px] text-[oklch(0.50_0.02_250)] shrink-0">
                   {formatDistanceToNow(new Date(c.last_message_at), {
-                    addSuffix: true,
+                    addSuffix: false,
                     locale: ar,
                   })}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground truncate">
-                {c.last_message?.content || "لا توجد رسائل بعد"}
-              </p>
+              <div className="flex items-center justify-between gap-2 mt-0.5">
+                <p className="text-xs text-[oklch(0.50_0.02_250)] truncate">
+                  {c.last_message?.content || "لا توجد رسائل بعد"}
+                </p>
+                {c.unread_count && c.unread_count > 0 && (
+                  <span className="bg-[oklch(0.45_0.15_260)] text-white text-[10px] font-bold min-w-[20px] h-5 flex items-center justify-center rounded-full px-1.5 shrink-0">
+                    {c.unread_count}
+                  </span>
+                )}
+              </div>
             </div>
           </>
         );
         const cls = cn(
-          "flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-card/70 transition cursor-pointer",
-          activeId === c.id && "ring-1 ring-primary/60 bg-primary/5",
+          "flex items-center gap-3 p-3 rounded-xl transition-all duration-150 cursor-pointer",
+          isActive
+            ? "bg-[oklch(0.22_0.04_255)] shadow-[0_0_15px_oklch(0.35_0.08_230/0.1)]"
+            : "hover:bg-[oklch(0.18_0.03_255)]",
         );
         if (onSelect) {
           return (
