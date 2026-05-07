@@ -54,14 +54,15 @@ function ArticlePage() {
     <PublicPageShell dir={isRTL ? "rtl" : "ltr"}>
       {/* Hero Cover */}
       {article.featured_image && (
-        <div className="relative w-full h-[55vh] max-h-[550px] overflow-hidden">
-          <img src={article.featured_image} alt={article.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/10" />
+        <div className="relative w-full max-w-5xl mx-auto px-6 mt-6">
+          <div className="rounded-3xl overflow-hidden border border-ice-border/10 bg-[oklch(0.12_0.02_250)]">
+            <img src={article.featured_image} alt={article.title} className="w-full h-auto max-h-[600px] object-contain mx-auto" />
+          </div>
         </div>
       )}
 
       <div className="max-w-4xl mx-auto px-6">
-        <article className={`${article.featured_image ? "-mt-28" : "mt-10"} relative z-10`}>
+        <article className="mt-8 relative z-10">
           {/* Back */}
           <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-6">
             <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} /> {isRTL ? "العودة للمدونة" : "Back to Blog"}
@@ -79,7 +80,7 @@ function ArticlePage() {
 
           {/* Author & Meta */}
           <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground/50 mb-8 pb-8 border-b border-ice-border/10">
-            <Link to={`/blog/author/${(article.profiles as any)?.username}` as any} className="flex items-center gap-3 hover:text-cyan-glow transition">
+            <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }} className="flex items-center gap-3 hover:text-cyan-glow transition">
               {(article.profiles as any)?.avatar_url ? (
                 <img src={(article.profiles as any).avatar_url} alt="" className="h-11 w-11 rounded-full ring-2 ring-cyan-glow/15" />
               ) : (
@@ -140,10 +141,10 @@ function ArticlePage() {
               )}
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
-                  <Link to={`/blog/author/${(article.profiles as any).username}` as any} className="font-bold text-lg hover:text-cyan-glow transition">
+                  <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }} className="font-bold text-lg hover:text-cyan-glow transition">
                     {(article.profiles as any).full_name ?? (article.profiles as any).username}
                   </Link>
-                  <Link to={`/blog/author/${(article.profiles as any).username}` as any}>
+                  <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }}>
                     <Button variant="outline" size="sm" className="border-cyan-glow/20 text-cyan-glow hover:bg-cyan-glow/10 text-xs">
                       {isRTL ? "جميع المقالات" : "All Articles"} →
                     </Button>
@@ -310,7 +311,7 @@ function RelatedArticles({ currentSlug }: { currentSlug: string }) {
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {related.map((a) => (
-          <Link key={a.id} to={`/blog/${a.slug}` as any} className="group block">
+          <Link key={a.id} to="/blog/$slug" params={{ slug: a.slug }} className="group block">
             <article className="rounded-2xl overflow-hidden border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/20 transition-all duration-500">
               <div className="relative h-40 overflow-hidden">
                 {a.featured_image ? (

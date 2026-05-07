@@ -102,7 +102,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }}
               className="group relative h-full min-h-[330px] rounded-2xl overflow-hidden border border-ice-border/15 bg-ice-card/5 backdrop-blur-xl transition-all duration-500 hover:border-cyan-glow/30 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.1)] hover:scale-[1.02]"
             >
-              <Link to={`/blog/${article.slug}` as any} className="block h-full">
+              <Link to="/blog/$slug" params={{ slug: article.slug }} className="block h-full">
                 <div className="relative h-48 sm:h-44 lg:h-48 overflow-hidden rounded-t-2xl">
                   {article.featured_image ? (
                     <img src={article.featured_image} alt={article.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />

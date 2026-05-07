@@ -35,7 +35,7 @@ function BlogDashboard() {
 
   return (
     <PageShell title="المدونة">
-      <div className="max-w-6xl mx-auto" dir="rtl">
+      <div className="w-full" dir="rtl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 p-6 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
           <div>
