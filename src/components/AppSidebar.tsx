@@ -7,7 +7,7 @@ import {
   Home, MessageCircle, Users, Bell, LogOut,
   Shield, Settings, Star, Hash,
   FileText, Cpu, BookOpen, Newspaper, GitCompare,
-  ChevronsRight, ChevronsLeft, X, Sparkles, ChevronUp,
+  ChevronsRight, ChevronsLeft, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
