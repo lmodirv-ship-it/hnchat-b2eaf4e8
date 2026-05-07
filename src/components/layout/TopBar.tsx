@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, MessageCircle, Search } from "lucide-react";
+import { Bell, MessageCircle, Search, Moon, Command } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
+import { useRealtime } from "@/components/providers/RealtimeProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
-import { VisitorCounter } from "@/components/layout/VisitorCounter";
-import { EnergyModeSelector } from "@/components/layout/EnergyModeSelector";
 
 export function TopBar() {
   const { user } = useAuth();
+  const { notifUnread } = useRealtime();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -22,7 +22,7 @@ export function TopBar() {
     queryFn: async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("username, avatar_url")
+        .select("username, avatar_url, full_name")
         .eq("id", user!.id)
         .maybeSingle();
       return data;
@@ -37,29 +37,33 @@ export function TopBar() {
     }
   };
 
+  const displayName = profile?.full_name || profile?.username || user?.email?.split("@")[0] || "User";
+
   return (
-    <header className="sticky top-0 z-30 border-b border-ice-border/20 bg-background/70 backdrop-blur-3xl backdrop-saturate-[1.8] shadow-[0_4px_30px_oklch(0_0_0/0.3)]">
-      <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2">
-        {/* Logo — always visible */}
-        <Link to="/" className="flex items-center gap-1.5 shrink-0 group">
-          <HnLogo size={32} showText={false} />
-          <span className="font-extrabold text-sm sm:text-base bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_oklch(0.78_0.18_60/0.3)] group-hover:drop-shadow-[0_0_14px_oklch(0.78_0.18_60/0.5)] transition-all duration-300">
-            hnChat
-          </span>
+    <header className="sticky top-0 z-30 h-14 border-b border-[oklch(0.25_0.03_250/0.25)] bg-[oklch(0.13_0.025_255/0.9)] backdrop-blur-xl">
+      <div className="flex items-center h-full px-4 gap-3">
+        {/* Logo - mobile only */}
+        <Link to="/" className="flex items-center gap-2 shrink-0 md:hidden">
+          <HnLogo size={28} showText={false} />
+          <span className="font-bold text-sm text-white">hnChat</span>
         </Link>
 
-        {/* Search — desktop: always shown; mobile: toggle */}
-        <form onSubmit={submit} className={`flex-1 max-w-2xl mx-auto transition-all duration-200 ${searchOpen ? 'block' : 'hidden sm:block'}`}>
+        {/* Search bar */}
+        <form onSubmit={submit} className={`flex-1 max-w-xl mx-auto transition-all ${searchOpen ? 'block' : 'hidden sm:block'}`}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[oklch(0.50_0.02_250)]" />
             <Input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="ابحث في كل شيء..."
-              className="pl-9 bg-muted/40 border-border/30 rounded-full h-9 text-sm focus:bg-muted/60"
+              placeholder="ابحث في hnChat"
+              className="pr-9 pl-12 bg-[oklch(0.18_0.025_255)] border-[oklch(0.25_0.03_250/0.3)] rounded-xl h-9 text-sm text-white placeholder:text-[oklch(0.45_0.02_250)] focus:bg-[oklch(0.20_0.03_255)] focus:border-[oklch(0.40_0.08_230/0.5)] transition-colors"
               onBlur={() => { if (!q) setSearchOpen(false); }}
               autoFocus={searchOpen}
             />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[oklch(0.45_0.02_250)]">
+              <Command className="h-3 w-3" />
+              <span className="text-[10px] font-medium">K</span>
+            </div>
           </div>
         </form>
 
@@ -67,43 +71,43 @@ export function TopBar() {
         {!searchOpen && (
           <button
             onClick={() => setSearchOpen(true)}
-            className="sm:hidden p-2 rounded-full hover:bg-muted/40 transition active:scale-95"
+            className="sm:hidden p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition"
             aria-label="بحث"
           >
-            <Search className="h-5 w-5 text-muted-foreground" />
+            <Search className="h-5 w-5 text-[oklch(0.65_0.02_250)]" />
           </button>
         )}
 
-        <div className={`flex items-center gap-1 sm:gap-2 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
-          <div className="hidden sm:block">
-            <EnergyModeSelector />
-          </div>
-          <VisitorCounter />
-          <Link
-            to="/messages"
-            className="p-2 rounded-full hover:bg-muted/40 transition active:scale-95 relative"
-            aria-label="Messages"
-          >
-            <MessageCircle className="h-5 w-5" />
-          </Link>
+        <div className={`flex items-center gap-1.5 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+          {/* Notifications */}
           <Link
             to="/notifications"
-            className="p-2 rounded-full hover:bg-muted/40 transition active:scale-95 relative"
-            aria-label="Notifications"
+            className="relative p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition"
+            aria-label="الإشعارات"
           >
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-pink-500 ring-2 ring-background" />
+            <Bell className="h-5 w-5 text-[oklch(0.70_0.02_250)]" />
+            {notifUnread > 0 && (
+              <span className="absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold px-1">
+                {notifUnread > 9 ? "9+" : notifUnread}
+              </span>
+            )}
           </Link>
-          {user && (
-            <Link to="/profile" className="ml-0.5">
-              <Avatar className="h-8 w-8 ring-2 ring-cyan-glow/30 active:scale-95 transition">
-                <AvatarImage src={profile?.avatar_url ?? undefined} />
-                <AvatarFallback className="text-xs bg-gradient-to-br from-cyan-glow/20 to-violet-glow/20">
-                  {(profile?.username ?? user.email ?? "U").slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
-          )}
+
+          {/* Dark mode icon (decorative) */}
+          <button className="p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition" aria-label="الوضع الليلي">
+            <Moon className="h-5 w-5 text-[oklch(0.70_0.02_250)]" />
+          </button>
+
+          {/* Profile */}
+          <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition">
+            <span className="text-sm font-medium text-white hidden lg:block">{displayName}</span>
+            <Avatar className="h-8 w-8 ring-2 ring-[oklch(0.35_0.08_230/0.4)]">
+              <AvatarImage src={profile?.avatar_url ?? undefined} />
+              <AvatarFallback className="text-xs bg-[oklch(0.25_0.05_255)] text-white">
+                {displayName.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
         </div>
       </div>
     </header>

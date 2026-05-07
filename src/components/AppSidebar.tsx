@@ -1,266 +1,146 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useRealtime } from "@/components/providers/RealtimeProvider";
 import { HnLogo } from "@/components/HnLogo";
 import {
-  Home, Video, MessageCircle, ShoppingBag, Users, Bell,
-  User, LogOut, Shield, Sparkles, Radio, Mic, BookOpen, Gift,
-  TrendingUp, Globe, Bot, ShoppingCart, Film, Megaphone, Zap,
-  Search, Store, Gamepad2, BarChart3, Send, Mail, Activity,
-  Settings, Cpu, Bookmark, FileText, ScrollText, Youtube, Inbox,
-  ChevronDown, PenSquare,
+  Home, MessageCircle, Users, Bell, LogOut,
+  Shield, Sparkles, Settings, Star, Hash,
+  FileText, Cpu, BookOpen, Newspaper, GitCompare,
+  Menu,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-type NavItem = {
+interface SidebarItem {
   to: string;
   label: string;
   icon: any;
-  badge?: { text: string; tone: "new" | "ai" | "live" | "count" };
-};
-
-type NavGroup = {
-  label: string;
-  items: readonly NavItem[];
-};
-
-const GROUPS: readonly NavGroup[] = [
-  {
-    label: "التواصل",
-    items: [
-      { to: "/feed", label: "Home Feed", icon: Home },
-      { to: "/messages", label: "Messages", icon: MessageCircle, badge: { text: "12", tone: "count" } },
-      { to: "/mail", label: "البريد", icon: Inbox, badge: { text: "NEW", tone: "new" } },
-      { to: "/voice", label: "Voice Rooms", icon: Mic, badge: { text: "2", tone: "count" } },
-      { to: "/pages-groups", label: "Pages & Groups", icon: Users },
-      { to: "/stories", label: "Stories", icon: BookOpen },
-    ],
-  },
-  {
-    label: "الفيديو والبث",
-    items: [
-      { to: "/reels", label: "Reels", icon: Film, badge: { text: "HOT", tone: "live" } },
-      { to: "/videos", label: "Videos & Live", icon: Video, badge: { text: "3", tone: "count" } },
-      { to: "/youtube", label: "YouTube قنوات", icon: Youtube, badge: { text: "NEW", tone: "new" } },
-      { to: "/live", label: "Live Stream", icon: Radio, badge: { text: "LIVE", tone: "live" } },
-      { to: "/short-videos", label: "Short Videos", icon: Film },
-    ],
-  },
-  {
-    label: "التجارة",
-    items: [
-      { to: "/hnshop", label: "hnShop", icon: ShoppingCart, badge: { text: "NEW", tone: "new" } },
-      { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
-      { to: "/trade", label: "hnTrade Crypto", icon: TrendingUp },
-      { to: "/invite", label: "Invite & Earn", icon: Gift },
-    ],
-  },
-  {
-    label: "الذكاء الاصطناعي",
-    items: [
-      { to: "/ai-hub", label: "hn AI Hub", icon: Bot, badge: { text: "AI", tone: "ai" } },
-      { to: "/ai-assistant", label: "AI Assistant", icon: Cpu },
-    ],
-  },
-  {
-    label: "المدونة",
-    items: [
-      { to: "/blog-dashboard", label: "مقالاتي", icon: FileText },
-      { to: "/blog-editor", label: "إنشاء مقال", icon: PenSquare, badge: { text: "NEW", tone: "new" as const } },
-    ],
-  },
-  {
-    label: "أدوات النمو",
-    items: [
-      { to: "/ads-manager", label: "Ads Manager", icon: Megaphone },
-      { to: "/ads-promo", label: "Ads & Promo", icon: Zap },
-      { to: "/growth", label: "Growth Analytics", icon: BarChart3 },
-      { to: "/push", label: "Push Strategy", icon: Send },
-      { to: "/email-dashboard", label: "Email Dashboard", icon: Mail },
-      { to: "/monitoring", label: "Monitoring Pro", icon: Activity },
-    ],
-  },
-  {
-    label: "استكشاف",
-    items: [
-      { to: "/search", label: "Search", icon: Search },
-      { to: "/geo", label: "GeoContent", icon: Globe },
-      { to: "/app-store", label: "App Store", icon: Store },
-      { to: "/games", label: "Games Hub", icon: Gamepad2 },
-    ],
-  },
-] as const;
-
-const MORE: readonly NavItem[] = [
-  { to: "/notifications", label: "Notifications", icon: Bell, badge: { text: "5", tone: "count" } },
-  { to: "/bookmarks", label: "Bookmarks", icon: Bookmark },
-  { to: "/settings", label: "Settings", icon: Settings },
-  { to: "/preferences", label: "Preferences", icon: Settings },
-  { to: "/profile", label: "Profile", icon: User },
-  { to: "/privacy-policy", label: "Privacy Policy", icon: FileText },
-  { to: "/terms-of-service", label: "Terms of Service", icon: ScrollText },
-] as const;
-
-function Badge({ tone, text }: { tone: "new" | "ai" | "live" | "count"; text: string }) {
-  const cls =
-    tone === "new"
-      ? "bg-cyan-glow/20 text-cyan-glow border-cyan-glow/40"
-      : tone === "ai"
-      ? "bg-violet-glow/20 text-violet-glow border-violet-glow/40"
-      : tone === "live"
-      ? "bg-red-500/20 text-red-400 border-red-500/40 animate-pulse"
-      : "bg-pink-glow/20 text-pink-glow border-pink-glow/40";
-  return (
-    <span className={`ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded border ${cls}`}>
-      {text}
-    </span>
-  );
+  badge?: number | string;
 }
 
-function NavLink({ item, active, badgeOverride }: { item: NavItem; active: boolean; badgeOverride?: { text: string; tone: "new" | "ai" | "live" | "count" } | null }) {
+const NAV_ITEMS: SidebarItem[] = [
+  { to: "/feed", label: "الرئيسية", icon: Home },
+  { to: "/blog", label: "المقالات", icon: FileText },
+  { to: "/tools", label: "أدوات الذكاء الاصطناعي", icon: Cpu },
+  { to: "/ai-hub", label: "تعلم الذكاء الاصطناعي", icon: BookOpen },
+  { to: "/trending", label: "الأخبار", icon: Newspaper },
+  { to: "/explore", label: "المقارنات", icon: GitCompare },
+  { to: "/pages-groups", label: "القنوات", icon: Hash },
+  { to: "/bookmarks", label: "المفضلة", icon: Star },
+];
+
+const BOTTOM_ITEMS: SidebarItem[] = [
+  { to: "/messages", label: "المحادثات", icon: MessageCircle },
+  { to: "/groups", label: "المجموعات", icon: Users },
+  { to: "/notifications", label: "الإشعارات", icon: Bell },
+  { to: "/settings", label: "الإعدادات", icon: Settings },
+];
+
+function SidebarLink({ item, active, badge }: { item: SidebarItem; active: boolean; badge?: number | string }) {
   const Icon = item.icon;
-  const badge = badgeOverride !== undefined ? badgeOverride : item.badge;
+  const displayBadge = badge ?? item.badge;
   return (
     <Link
       to={item.to}
-      className={`flex items-center gap-3 px-3 py-1.5 rounded-lg text-sm transition-all ${
+      className={cn(
+        "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
         active
-          ? "bg-gradient-to-r from-cyan-glow/15 to-violet-glow/10 text-foreground shadow-[inset_0_0_0_1px_oklch(0.78_0.18_220/0.3)]"
-          : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
-      }`}
-    >
-      <Icon className="h-4 w-4 shrink-0" />
-      <span className="truncate">{item.label}</span>
-      {badge && <Badge tone={badge.tone} text={badge.text} />}
-    </Link>
-  );
-}
-
-function CollapsibleGroup({ group, pathname, badgeOverrides }: { group: NavGroup; pathname: string; badgeOverrides?: Record<string, { text: string; tone: "new" | "ai" | "live" | "count" } | null> }) {
-  const hasActive = group.items.some(
-    (i) => pathname === i.to || pathname.startsWith(i.to + "/")
-  );
-  const [open, setOpen] = useState(hasActive);
-
-  return (
-    <div className="mb-1">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <span>{group.label}</span>
-        <ChevronDown
-          className={`h-3 w-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      {open && (
-        <div className="space-y-0.5 mt-0.5">
-          {group.items.map((item) => (
-            <NavLink
-              key={item.to}
-              item={item}
-              active={pathname === item.to || pathname.startsWith(item.to + "/")}
-              badgeOverride={badgeOverrides?.[item.to]}
-            />
-          ))}
-        </div>
+          ? "bg-[oklch(0.35_0.08_230/0.5)] text-white shadow-[0_0_20px_oklch(0.45_0.12_230/0.15)]"
+          : "text-[oklch(0.65_0.02_250)] hover:bg-[oklch(0.20_0.03_250/0.5)] hover:text-[oklch(0.85_0.01_250)]"
       )}
-    </div>
+    >
+      <Icon className="h-[18px] w-[18px] shrink-0" />
+      <span className="truncate">{item.label}</span>
+      {displayBadge && (
+        <span className="mr-auto bg-[oklch(0.45_0.15_260)] text-white text-[10px] font-bold min-w-[20px] h-5 flex items-center justify-center rounded-full px-1.5">
+          {displayBadge}
+        </span>
+      )}
+    </Link>
   );
 }
 
 export function AppSidebar() {
   const { user, isAdmin, signOut, roles } = useAuth();
-  const { notifUnread, msgUnread, onlineCount } = useRealtime();
+  const { notifUnread, msgUnread } = useRealtime();
   const location = useLocation();
   const navigate = useNavigate();
+  const pathname = location.pathname;
+
+  const isActive = (to: string) => pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <aside className="hidden md:flex w-64 flex-col border-l border-[oklch(1_0_0/0.04)] bg-[oklch(0.03_0.01_260/0.7)] backdrop-blur-3xl sticky top-0 h-screen shadow-[4px_0_40px_oklch(0_0_0/0.3)] relative overflow-hidden">
-      {/* Subtle sidebar ambient glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[oklch(0.78_0.18_220/0.03)] blur-[80px]" />
-        <div className="absolute bottom-20 right-0 w-32 h-32 rounded-full bg-[oklch(0.65_0.25_295/0.03)] blur-[60px]" />
-      </div>
-      <div className="p-4 border-b border-[oklch(1_0_0/0.05)] flex items-center gap-2">
-        <HnLogo size={38} showText={false} />
-        <div className="min-w-0">
-          <div className="font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">hnChat</div>
-          <div className="text-[9px] uppercase tracking-[0.25em] text-[oklch(0.45_0.03_250)]">AI Ecosystem</div>
+    <aside className="hidden md:flex w-60 flex-col bg-[oklch(0.12_0.025_255)] border-l border-[oklch(0.25_0.03_250/0.3)] sticky top-0 h-screen">
+      {/* Logo */}
+      <div className="px-5 py-4 flex items-center gap-2.5">
+        <HnLogo size={34} showText={false} />
+        <div>
+          <span className="font-bold text-base text-white tracking-tight">hnChat</span>
+          <span className="inline-flex items-center mr-2 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[oklch(0.45_0.15_260)] text-white">AI+</span>
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
-        {GROUPS.map((group) => (
-          <CollapsibleGroup
-            key={group.label}
-            group={group}
-            pathname={location.pathname}
-            badgeOverrides={{
-              "/messages": msgUnread > 0 ? { text: String(msgUnread), tone: "count" } : null,
-            }}
-          />
+      {/* Main nav */}
+      <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
+        {NAV_ITEMS.map((item) => (
+          <SidebarLink key={item.to} item={item} active={isActive(item.to)} />
         ))}
 
-        <div className="mt-3 mb-1 px-3 text-[10px] uppercase tracking-wider text-muted-foreground">
-          المزيد
-        </div>
-        {MORE.map((item) => (
-          <NavLink
+        <div className="h-px bg-[oklch(0.25_0.03_250/0.2)] my-3" />
+
+        {BOTTOM_ITEMS.map((item) => (
+          <SidebarLink
             key={item.to}
             item={item}
-            active={location.pathname === item.to || location.pathname.startsWith(item.to + "/")}
-            badgeOverride={
-              item.to === "/notifications" && notifUnread > 0
-                ? { text: String(notifUnread), tone: "count" }
-                : item.to === "/notifications"
-                ? null
-                : undefined
+            active={isActive(item.to)}
+            badge={
+              item.to === "/messages" && msgUnread > 0 ? msgUnread :
+              item.to === "/notifications" && notifUnread > 0 ? notifUnread :
+              undefined
             }
           />
         ))}
 
         {isAdmin && (
           <>
-            <div className="mt-3 mb-1 px-3 text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-              <Shield className="h-3 w-3" /> Admin
-            </div>
+            <div className="h-px bg-[oklch(0.25_0.03_250/0.2)] my-3" />
             <Link
               to="/admin"
-              className={`flex items-center gap-3 px-3 py-1.5 rounded-lg text-sm transition-all ${
-                location.pathname.startsWith("/admin")
-                  ? "bg-gradient-to-r from-pink-glow/20 to-violet-glow/15 text-foreground shadow-[inset_0_0_0_1px_oklch(0.65_0.25_295/0.4)]"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent"
-              }`}
+              className={cn(
+                "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                isActive("/admin")
+                  ? "bg-[oklch(0.35_0.15_295/0.3)] text-white"
+                  : "text-[oklch(0.65_0.02_250)] hover:bg-[oklch(0.20_0.03_250/0.5)] hover:text-white"
+              )}
             >
-              <Sparkles className="h-4 w-4" />
-              <span>Admin Dashboard</span>
+              <Shield className="h-[18px] w-[18px]" />
+              <span>لوحة التحكم</span>
             </Link>
           </>
         )}
       </nav>
 
-      <div className="p-3 border-t border-ice-border">
-        <div className="flex items-center gap-2 mb-2 px-2">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-glow to-violet-glow flex items-center justify-center text-xs font-bold text-primary-foreground">
-            {user?.email?.[0]?.toUpperCase() ?? "U"}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-medium truncate">{user?.email}</div>
-            <div className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-              {isAdmin ? "Admin" : roles[0] ?? "Online"}
-              {onlineCount > 0 && (
-                <span className="text-[9px] text-cyan-glow ml-1">• {onlineCount} متصل</span>
-              )}
-            </div>
-          </div>
+      {/* Pro upgrade card */}
+      <div className="mx-3 mb-3 p-4 rounded-2xl bg-gradient-to-br from-[oklch(0.18_0.04_255)] to-[oklch(0.15_0.05_270)] border border-[oklch(0.30_0.05_260/0.3)]">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="font-bold text-sm text-white">hnChat Pro</span>
+          <span className="text-lg">🔥</span>
         </div>
+        <p className="text-[11px] text-[oklch(0.60_0.02_250)] mb-3 leading-relaxed">
+          احصل على تجربة أفضل ومميزات حصرية
+        </p>
+        <button className="w-full py-2 rounded-xl bg-[oklch(0.45_0.15_260)] hover:bg-[oklch(0.50_0.15_260)] text-white text-xs font-bold transition-colors">
+          ترقية الآن
+        </button>
+      </div>
+
+      {/* User footer */}
+      <div className="p-3 border-t border-[oklch(0.25_0.03_250/0.2)]">
         <button
-          onClick={async () => { await signOut(); navigate({ to: "/sign-up-login" }); }}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+          onClick={async () => { await signOut(); navigate({ to: "/" }); }}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-[oklch(0.55_0.02_250)] hover:bg-[oklch(0.20_0.03_250/0.5)] hover:text-red-400 transition-colors"
         >
-          <LogOut className="h-3.5 w-3.5" /> Sign out
+          <LogOut className="h-4 w-4" />
+          <span>تسجيل الخروج</span>
         </button>
       </div>
     </aside>
