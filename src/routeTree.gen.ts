@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignUpLoginRouteImport } from './routes/sign-up-login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunityGuidelinesRouteImport } from './routes/community-guidelines'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as OwnerRouteImport } from './routes/_owner'
@@ -110,6 +111,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityGuidelinesRoute = CommunityGuidelinesRouteImport.update({
+  id: '/community-guidelines',
+  path: '/community-guidelines',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -495,6 +501,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
+  '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
@@ -571,6 +578,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
+  '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
@@ -651,6 +659,7 @@ export interface FileRoutesById {
   '/_owner': typeof OwnerRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
+  '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sign-up-login': typeof SignUpLoginRoute
@@ -729,6 +738,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/blog'
+    | '/community-guidelines'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
@@ -805,6 +815,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/blog'
+    | '/community-guidelines'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
@@ -884,6 +895,7 @@ export interface FileRouteTypes {
     | '/_owner'
     | '/about'
     | '/blog'
+    | '/community-guidelines'
     | '/contact'
     | '/privacy'
     | '/sign-up-login'
@@ -964,6 +976,7 @@ export interface RootRouteChildren {
   OwnerRoute: typeof OwnerRouteWithChildren
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
+  CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
   SignUpLoginRoute: typeof SignUpLoginRoute
@@ -1010,6 +1023,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community-guidelines': {
+      id: '/community-guidelines'
+      path: '/community-guidelines'
+      fullPath: '/community-guidelines'
+      preLoaderRoute: typeof CommunityGuidelinesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -1719,6 +1739,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerRoute: OwnerRouteWithChildren,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
+  CommunityGuidelinesRoute: CommunityGuidelinesRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
   SignUpLoginRoute: SignUpLoginRoute,
