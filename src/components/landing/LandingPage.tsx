@@ -505,136 +505,131 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-1 sm:pt-2 pb-2 sm:pb-4 flex flex-col lg:flex-row gap-4 sm:gap-6 items-start">
-        {/* Left: Hero text */}
-        <div className="flex-1 text-center lg:text-start pt-0 max-w-2xl">
-          {/* Title */}
-          <motion.h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-3 sm:mb-4" initial={init} animate={enter} variants={fadeUp} custom={0}>
-            {l.heroTitle1}{" "}
-            <span className="relative inline-block">
-              <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
-                {l.heroTitle2}
+      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-2 lg:pt-6 pb-6 lg:pb-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
+          {/* Left: Hero text */}
+          <div className="flex-1 text-center lg:text-start pt-2 lg:pt-6 max-w-2xl">
+            {/* Title */}
+            <motion.h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.08] mb-4 lg:mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
+              {l.heroTitle1}{" "}
+              <br className="hidden lg:block" />
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
+                  {l.heroTitle2}
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-cyan-glow/30 to-violet-glow/20 blur-3xl rounded-full animate-pulse" />
               </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-cyan-glow/30 to-violet-glow/20 blur-3xl rounded-full animate-pulse" />
-            </span>
-          </motion.h1>
+            </motion.h1>
 
-          {/* Subtitle */}
-          <motion.p className="text-sm sm:text-lg font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
-            {l.heroSub}
-          </motion.p>
+            {/* Subtitle */}
+            <motion.p className="text-sm sm:text-lg lg:text-xl font-medium mb-3 lg:mb-4 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+              {l.heroSub}
+            </motion.p>
 
-          {/* Description */}
-          <motion.p className="text-xs sm:text-base text-muted-foreground max-w-lg mb-5 sm:mb-6 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
-            {l.heroDesc}
-          </motion.p>
+            {/* Description */}
+            <motion.p className="text-xs sm:text-sm lg:text-base text-muted-foreground/60 max-w-lg mb-6 lg:mb-8 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+              {l.heroDesc}
+            </motion.p>
 
-          {/* Google Sign-In Button */}
-          <motion.div
-            className="flex justify-center lg:justify-start mb-3"
-            initial={init} animate={enter} variants={fadeUp} custom={1.5}
-          >
-            <button
-              onClick={async () => {
-                try {
-                  const result = await lovable.auth.signInWithOAuth("google", {
-                    redirect_uri: window.location.origin + "/feed",
-                  });
-                  if (result.error) throw new Error(result.error.message || "Google sign-in failed");
-                  if (result.redirected) return;
-                  toast.success("مرحباً بك!");
-                  window.location.href = "/feed";
-                } catch (e: any) {
-                  toast.error(e.message ?? "Google sign-in failed");
-                }
-              }}
-              className="group relative flex items-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-extrabold text-base sm:text-lg cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
+            {/* Google Sign-In Button */}
+            <motion.div
+              className="flex justify-center lg:justify-start mb-4 lg:mb-5"
+              initial={init} animate={enter} variants={fadeUp} custom={1.5}
             >
-              <svg className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff9"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff7"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fffc"/>
-              </svg>
-              <span className="drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
-                Sign in with Google
+              <button
+                onClick={async () => {
+                  try {
+                    const result = await lovable.auth.signInWithOAuth("google", {
+                      redirect_uri: window.location.origin + "/feed",
+                    });
+                    if (result.error) throw new Error(result.error.message || "Google sign-in failed");
+                    if (result.redirected) return;
+                    toast.success("مرحباً بك!");
+                    window.location.href = "/feed";
+                  } catch (e: any) {
+                    toast.error(e.message ?? "Google sign-in failed");
+                  }
+                }}
+                className="group relative flex items-center gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-extrabold text-base sm:text-lg cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
+              >
+                <svg className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff9"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff7"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fffc"/>
+                </svg>
+                <span className="drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+                  Sign in with Google
+                </span>
+              </button>
+            </motion.div>
+
+            {/* Badge */}
+            <motion.div initial={init} animate={enter} variants={fadeUp} custom={2}>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
+                <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
+                {l.badge}
               </span>
-            </button>
-          </motion.div>
+            </motion.div>
+          </div>
 
-          {/* Badge */}
-          <motion.div initial={init} animate={enter} variants={fadeUp} custom={2}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
-              <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
-              {l.badge}
-            </span>
-          </motion.div>
-        </div>
+          {/* Right: Phone + Chat widget */}
+          <div className="w-full lg:w-[420px] xl:w-[460px] shrink-0 flex flex-col items-center lg:items-end relative">
+            {/* 3D Phone */}
+            <motion.div
+              initial={mounted ? { opacity: 0, y: 30 } : undefined}
+              animate={mounted ? { opacity: 1, y: 0 } : undefined}
+              transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
+              className="hidden lg:block"
+            >
+              <PhoneMockup />
+            </motion.div>
 
-        {/* Right: Phone + Chat widget */}
-        <div className="w-full lg:w-[380px] shrink-0 flex flex-col items-center relative">
-          {/* 3D Phone */}
-          <motion.div
-            initial={mounted ? { opacity: 0, y: 30 } : undefined}
-            animate={mounted ? { opacity: 1, y: 0 } : undefined}
-            transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-            className="hidden lg:block"
-          >
-            <PhoneMockup />
-          </motion.div>
-
-          {/* Chat Widget — Floating, rounded, gradient bubbles */}
-          <motion.div
-            className="w-full max-w-sm lg:-mt-8 relative z-10"
-            initial={mounted ? { opacity: 0, x: 30 } : undefined}
-            animate={mounted ? { opacity: 1, x: 0 } : undefined}
-            transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
-          >
-            <div className="rounded-3xl border border-ice-border/30 bg-ice-card/8 backdrop-blur-2xl shadow-[0_8px_40px_oklch(0_0_0/0.4),0_0_60px_oklch(0.78_0.18_220/0.06)] overflow-hidden">
-              {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3 border-b border-ice-border/20 bg-ice-card/10">
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <MessageCircle className="h-4 w-4 text-cyan-glow" />
-                    <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+            {/* Chat Widget */}
+            <motion.div
+              className="w-full max-w-sm lg:-mt-6 relative z-10 lg:mr-[-20px]"
+              initial={mounted ? { opacity: 0, x: 30 } : undefined}
+              animate={mounted ? { opacity: 1, x: 0 } : undefined}
+              transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
+            >
+              <div className="rounded-2xl border border-ice-border/30 bg-ice-card/8 backdrop-blur-2xl shadow-[0_8px_40px_oklch(0_0_0/0.4),0_0_60px_oklch(0.78_0.18_220/0.06)] overflow-hidden">
+                {/* Header */}
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-ice-border/20 bg-ice-card/10">
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <MessageCircle className="h-4 w-4 text-cyan-glow" />
+                      <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                    </div>
+                    <span className="text-sm font-semibold">{l.liveChat}</span>
                   </div>
-                  <span className="text-sm font-semibold">{l.liveChat}</span>
+                  <span className="flex items-center gap-1.5 text-[10px] text-green-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                    {l.online}
+                  </span>
                 </div>
-                <span className="text-[10px] text-muted-foreground/60">{l.online}</span>
+                {/* Messages — show 1 visible message like reference */}
+                <div ref={chatRef} className="px-3 py-3 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
+                  <div className="flex items-start gap-2">
+                    <div className="flex-1 rounded-2xl rounded-tl-sm bg-gradient-to-br from-cyan-glow/15 to-violet-glow/8 backdrop-blur-xl px-3.5 py-2.5 border border-ice-border/15">
+                      <p className="text-xs text-foreground/80 leading-relaxed">
+                        {lang === "ar" ? "مرحباً! كيف يمكنني مساعدتك؟" : lang === "fr" ? "Bonjour ! Comment puis-je vous aider ?" : "Hello! How can I help you?"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                {/* Input */}
+                <div className="px-3 py-2 border-t border-ice-border/15">
+                  <Link to="/sign-up-login" className="flex items-center justify-between rounded-2xl bg-ice-card/10 backdrop-blur-xl px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
+                    <span className="flex items-center gap-2">
+                      <span className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px]">👤</span>
+                      {lang === "ar" ? "اكتب رسالتك..." : lang === "fr" ? "Écrivez votre message..." : "Type your message..."}
+                    </span>
+                    <Send className="h-4 w-4 text-cyan-glow" />
+                  </Link>
+                </div>
               </div>
-              {/* Messages */}
-              <div ref={chatRef} className="h-16 overflow-y-auto px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
-                <AnimatePresence initial={false}>
-                  {chatMessages.map((m, i) => (
-                    <motion.div
-                      key={`${m.user}-${i}-${chatMessages.length}`}
-                      initial={{ opacity: 0, y: 16, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                      transition={{ duration: 0.35, ease: "easeOut" as const }}
-                      className="flex items-start gap-2"
-                    >
-                      <span className="text-lg shrink-0 mt-0.5">{m.avatar}</span>
-                      <div className={`flex-1 rounded-2xl rounded-tl-sm bg-gradient-to-br ${bubbleGradients[i % bubbleGradients.length]} backdrop-blur-xl px-3.5 py-2 border border-ice-border/15`}>
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-[11px] font-semibold text-cyan-glow">{m.user}</span>
-                          <span className="text-[9px] text-muted-foreground/40">{m.time}</span>
-                        </div>
-                        <p className="text-xs text-foreground/80 leading-relaxed">{m.msg}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-              {/* Input */}
-              <div className="px-3 py-2 border-t border-ice-border/15">
-                <Link to="/sign-up-login" className="flex items-center gap-2 rounded-2xl bg-ice-card/10 backdrop-blur-xl px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
-                  <Send className="h-3.5 w-3.5 text-cyan-glow" />
-                  {lang === "ar" ? "سجّل للمشاركة..." : lang === "fr" ? "Inscrivez-vous..." : "Sign up to chat..."}
-                </Link>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
