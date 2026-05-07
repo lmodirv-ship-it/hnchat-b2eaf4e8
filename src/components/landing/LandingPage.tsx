@@ -491,11 +491,30 @@ export function LandingPage() {
               ))}
             </div>
           </div>
-          <Link to="/sign-up-login">
-            <button className="hidden sm:inline-flex px-4 py-2 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer">
-              {l.signIn}
-            </button>
-          </Link>
+          <button
+            onClick={async () => {
+              try {
+                const result = await lovable.auth.signInWithOAuth("google", {
+                  redirect_uri: window.location.origin + "/feed",
+                });
+                if (result.error) throw new Error(result.error.message || "Google sign-in failed");
+                if (result.redirected) return;
+                toast.success("مرحباً بك!");
+                window.location.href = "/feed";
+              } catch (e: any) {
+                toast.error(e.message ?? "Google sign-in failed");
+              }
+            }}
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-white text-gray-800 shadow-[0_0_15px_rgba(66,133,244,0.3)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(66,133,244,0.5)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+          >
+            <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            {l.signIn}
+          </button>
           <Link to="/sign-up-login">
             <button className="px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.95] cursor-pointer">
               {l.startFree}
@@ -505,12 +524,20 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 h-[360px] md:h-[360px] lg:h-[390px] xl:h-[430px] 2xl:h-[520px] max-h-[520px] overflow-visible">
-        <div className="max-w-[1280px] mx-auto h-full px-4 sm:px-8 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] gap-6 items-start relative">
+      <section className="relative z-10 h-[300px] md:h-[300px] lg:h-[320px] xl:h-[360px] 2xl:h-[400px] max-h-[400px] overflow-visible">
+        <div className="max-w-[1280px] mx-auto h-full px-4 sm:px-8 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] gap-6 items-center relative">
           {/* Left: Hero text */}
-          <div className="text-center md:text-start pt-0 md:pt-2 max-w-2xl">
+          <div className="text-center md:text-start max-w-2xl">
+            {/* Badge */}
+            <motion.div className="mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
+                <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
+                {l.badge}
+              </span>
+            </motion.div>
+
             {/* Title */}
-            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-3" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
               {l.heroTitle1}{" "}
               <br className="hidden lg:block" />
               <span className="relative inline-block">
@@ -522,59 +549,27 @@ export function LandingPage() {
             </motion.h1>
 
             {/* Subtitle */}
-            <motion.p className="text-xs sm:text-base lg:text-lg font-medium mb-1.5 lg:mb-2 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+            <motion.p className="text-sm sm:text-base lg:text-lg font-medium mb-4 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={1}>
               {l.heroSub}
             </motion.p>
 
-            {/* Description */}
-            <motion.p className="text-xs sm:text-sm text-muted-foreground/60 max-w-lg mb-3 lg:mb-4 leading-relaxed mx-auto md:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
-              {l.heroDesc}
-            </motion.p>
-
-            {/* Google Sign-In Button */}
-            <motion.div
-              className="flex justify-center md:justify-start mb-2 lg:mb-3"
-              initial={init} animate={enter} variants={fadeUp} custom={1.5}
-            >
-              <button
-                onClick={async () => {
-                  try {
-                    const result = await lovable.auth.signInWithOAuth("google", {
-                      redirect_uri: window.location.origin + "/feed",
-                    });
-                    if (result.error) throw new Error(result.error.message || "Google sign-in failed");
-                    if (result.redirected) return;
-                    toast.success("مرحباً بك!");
-                    window.location.href = "/feed";
-                  } catch (e: any) {
-                    toast.error(e.message ?? "Google sign-in failed");
-                  }
-                }}
-                className="group relative flex items-center gap-3 px-6 sm:px-10 py-3 sm:py-4 rounded-2xl font-extrabold text-sm sm:text-base cursor-pointer transition-all duration-300 hover:scale-[1.05] active:scale-[0.96] bg-gradient-to-r from-[#4285F4] via-[#34A853] to-[#FBBC05] text-white shadow-[0_0_30px_rgba(66,133,244,0.5),0_0_60px_rgba(52,168,83,0.3)] hover:shadow-[0_0_50px_rgba(66,133,244,0.7),0_0_90px_rgba(52,168,83,0.5)] animate-[googleGlow_2.5s_ease-in-out_infinite]"
-              >
-                <svg className="h-6 w-6 shrink-0 drop-shadow-lg" viewBox="0 0 24 24">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff9"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff7"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fffc"/>
-                </svg>
-                <span className="drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
-                  Sign in with Google
-                </span>
-              </button>
-            </motion.div>
-
-            {/* Badge */}
-            <motion.div initial={init} animate={enter} variants={fadeUp} custom={2}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
-                {l.badge}
-              </span>
+            {/* CTA Buttons */}
+            <motion.div className="flex items-center gap-3 justify-center md:justify-start" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
+              <Link to="/sign-up-login">
+                <button className="px-6 py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.95] cursor-pointer">
+                  {l.joinNow}
+                </button>
+              </Link>
+              <Link to="/blog">
+                <button className="px-6 py-2.5 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 cursor-pointer">
+                  {l.discover}
+                </button>
+              </Link>
             </motion.div>
           </div>
 
           {/* Right: Phone + Chat widget */}
-          <div className="hidden md:block relative h-[310px] lg:h-[340px] xl:h-[380px]">
+          <div className="hidden md:block relative h-[260px] lg:h-[280px] xl:h-[320px]">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
@@ -587,7 +582,7 @@ export function LandingPage() {
 
             {/* Chat Widget */}
             <motion.div
-              className="absolute right-0 top-[170px] lg:top-[190px] xl:top-[220px] z-10 w-[340px] lg:w-[380px] xl:w-[420px] max-w-full"
+              className="absolute right-0 top-[140px] lg:top-[155px] xl:top-[180px] z-10 w-[340px] lg:w-[380px] xl:w-[420px] max-w-full"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
