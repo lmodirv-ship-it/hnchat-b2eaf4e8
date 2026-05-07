@@ -524,12 +524,12 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 h-[300px] md:h-[300px] lg:h-[320px] xl:h-[360px] 2xl:h-[400px] max-h-[400px] overflow-visible">
-        <div className="max-w-[1280px] mx-auto h-full px-4 sm:px-8 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px] gap-6 items-center relative">
+      <section className="relative z-10 overflow-visible">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-4 lg:py-6 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px] gap-4 items-center relative">
           {/* Left: Hero text */}
           <div className="text-center md:text-start max-w-2xl">
             {/* Badge */}
-            <motion.div className="mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            <motion.div className="mb-1.5" initial={init} animate={enter} variants={fadeUp} custom={0}>
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
                 <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
                 {l.badge}
@@ -537,7 +537,7 @@ export function LandingPage() {
             </motion.div>
 
             {/* Title */}
-            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-3" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-2" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
               {l.heroTitle1}{" "}
               <br className="hidden lg:block" />
               <span className="relative inline-block">
@@ -549,7 +549,7 @@ export function LandingPage() {
             </motion.h1>
 
             {/* Subtitle */}
-            <motion.p className="text-sm sm:text-base lg:text-lg font-medium mb-4 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={1}>
+            <motion.p className="text-sm sm:text-base lg:text-lg font-medium mb-3 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={1}>
               {l.heroSub}
             </motion.p>
 
@@ -568,21 +568,21 @@ export function LandingPage() {
             </motion.div>
           </div>
 
-          {/* Right: Phone + Chat widget — unified block */}
-          <div className="hidden md:flex flex-col items-end gap-0 relative">
+          {/* Right: Phone + Chat widget — side by side unified block */}
+          <div className="hidden md:flex items-start gap-3 relative justify-end">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="scale-[0.52] lg:scale-[0.58] xl:scale-[0.66] origin-top-right -mb-[60px] lg:-mb-[65px] xl:-mb-[70px]"
+              className="scale-[0.55] lg:scale-[0.62] xl:scale-[0.7] origin-top shrink-0"
             >
               <PhoneMockup />
             </motion.div>
 
             {/* Chat Widget */}
             <motion.div
-              className="w-[340px] lg:w-[380px] xl:w-[420px] max-w-full -mt-[20px] lg:-mt-[25px] xl:-mt-[30px]"
+              className="w-[220px] lg:w-[250px] xl:w-[280px] mt-4 lg:mt-6 shrink-0"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
@@ -602,7 +602,7 @@ export function LandingPage() {
                     {l.online}
                   </span>
                 </div>
-                {/* Messages — show 1 visible message like reference */}
+                {/* Messages */}
                 <div ref={chatRef} className="px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
                   <div className="flex items-start gap-2">
                     <div className="flex-1 rounded-2xl rounded-tl-sm bg-gradient-to-br from-cyan-glow/15 to-violet-glow/8 backdrop-blur-xl px-3.5 py-2.5 border border-ice-border/15">
