@@ -575,7 +575,7 @@ export function LandingPage() {
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="scale-[0.55] lg:scale-[0.62] xl:scale-[0.7] origin-top shrink-0"
+              className="scale-[0.45] lg:scale-[0.55] xl:scale-[0.65] origin-top shrink-0"
             >
               <PhoneMockup />
             </motion.div>
