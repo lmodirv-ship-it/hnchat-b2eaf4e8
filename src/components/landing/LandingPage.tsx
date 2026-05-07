@@ -574,20 +574,20 @@ export function LandingPage() {
           </div>
 
           {/* Right: Phone + Chat widget */}
-          <div className="hidden lg:block absolute right-0 top-0 w-[380px] xl:w-[420px]">
+          <div className="hidden md:block relative h-[310px] lg:h-[340px] xl:h-[380px]">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="hidden lg:block lg:scale-[0.55] xl:scale-[0.6] origin-top"
+              className="absolute right-0 top-0 scale-[0.52] lg:scale-[0.58] xl:scale-[0.66] origin-top-right"
             >
               <PhoneMockup />
             </motion.div>
 
             {/* Chat Widget */}
             <motion.div
-              className="w-full max-w-sm mt-2 relative z-10"
+              className="absolute right-0 top-[170px] lg:top-[190px] xl:top-[220px] z-10 w-[340px] lg:w-[380px] xl:w-[420px] max-w-full"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
