@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, MessageCircle, Search, Moon, Command } from "lucide-react";
+import { Bell, Search, Moon, Command, Menu } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
 import { useRealtime } from "@/components/providers/RealtimeProvider";
+import { useLayout } from "@/hooks/useLayoutStore";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
 
 export function TopBar() {
   const { user } = useAuth();
   const { notifUnread } = useRealtime();
+  const { setMobileSidebarOpen } = useLayout();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -42,10 +44,20 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-30 h-14 border-b border-[oklch(0.25_0.03_250/0.25)] bg-[oklch(0.13_0.025_255/0.9)] backdrop-blur-xl">
       <div className="flex items-center h-full px-4 gap-3">
+        {/* Hamburger - mobile */}
+        <button
+          onClick={() => setMobileSidebarOpen(true)}
+          className="md:hidden p-2 -mr-1 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition"
+          aria-label="القائمة"
+        >
+          <Menu className="h-5 w-5 text-[oklch(0.75_0.02_250)]" />
+        </button>
+
         {/* Logo - mobile only */}
         <Link to="/" className="flex items-center gap-2 shrink-0 md:hidden">
           <HnLogo size={28} showText={false} />
           <span className="font-bold text-sm text-white">hnChat</span>
+          <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[oklch(0.45_0.15_260)] text-white">AI+</span>
         </Link>
 
         {/* Search bar */}
@@ -93,7 +105,7 @@ export function TopBar() {
             )}
           </Link>
 
-          {/* Dark mode icon (decorative) */}
+          {/* Dark mode icon */}
           <button className="p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition" aria-label="الوضع الليلي">
             <Moon className="h-5 w-5 text-[oklch(0.70_0.02_250)]" />
           </button>
