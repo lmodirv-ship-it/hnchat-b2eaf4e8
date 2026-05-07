@@ -181,6 +181,113 @@ export type Database = {
           },
         ]
       }
+      ai_tool_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      ai_tools: {
+        Row: {
+          category_id: string | null
+          category_slug: string | null
+          cons: string[] | null
+          created_at: string
+          description: string | null
+          features: Json | null
+          id: string
+          is_featured: boolean | null
+          is_free: boolean | null
+          logo_url: string | null
+          long_description: string | null
+          name: string
+          pricing_info: string | null
+          pros: string[] | null
+          rating: number | null
+          slug: string
+          tags: string[] | null
+          updated_at: string
+          views_count: number | null
+          website_url: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          category_slug?: string | null
+          cons?: string[] | null
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          logo_url?: string | null
+          long_description?: string | null
+          name: string
+          pricing_info?: string | null
+          pros?: string[] | null
+          rating?: number | null
+          slug: string
+          tags?: string[] | null
+          updated_at?: string
+          views_count?: number | null
+          website_url?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          category_slug?: string | null
+          cons?: string[] | null
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          logo_url?: string | null
+          long_description?: string | null
+          name?: string
+          pricing_info?: string | null
+          pros?: string[] | null
+          rating?: number | null
+          slug?: string
+          tags?: string[] | null
+          updated_at?: string
+          views_count?: number | null
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_tools_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "ai_tool_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_usage: {
         Row: {
           completion_tokens: number
@@ -248,6 +355,35 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      article_bookmarks: {
+        Row: {
+          article_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_bookmarks_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       article_categories: {
         Row: {
@@ -347,6 +483,7 @@ export type Database = {
         Row: {
           author_id: string
           category_id: string | null
+          category_slug: string | null
           content: string | null
           created_at: string
           featured_image: string | null
@@ -369,6 +506,7 @@ export type Database = {
         Insert: {
           author_id: string
           category_id?: string | null
+          category_slug?: string | null
           content?: string | null
           created_at?: string
           featured_image?: string | null
@@ -391,6 +529,7 @@ export type Database = {
         Update: {
           author_id?: string
           category_id?: string | null
+          category_slug?: string | null
           content?: string | null
           created_at?: string
           featured_image?: string | null
@@ -582,6 +721,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      content_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number | null
+        }
+        Relationships: []
       }
       conversation_participants: {
         Row: {
@@ -2558,6 +2727,7 @@ export type Database = {
         Args: { _article_id: string }
         Returns: undefined
       }
+      increment_tool_views: { Args: { _tool_id: string }; Returns: undefined }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_conversation_participant: {
         Args: { _conversation_id: string; _user_id: string }
