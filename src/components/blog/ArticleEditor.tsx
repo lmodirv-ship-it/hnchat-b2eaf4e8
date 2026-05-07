@@ -182,7 +182,7 @@ export function ArticleEditor({ article }: Props) {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6" dir="rtl">
+    <div className="max-w-5xl mx-auto px-4 sm:px-8 py-6" dir="rtl">
       {/* Top Bar */}
       <div className="flex items-center justify-between mb-8 sticky top-0 z-30 py-3 -mx-4 px-4 bg-background/80 backdrop-blur-xl border-b border-ice-border/10">
         <div className="flex items-center gap-4">
