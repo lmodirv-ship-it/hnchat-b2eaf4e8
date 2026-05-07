@@ -43,18 +43,15 @@ function AuthenticatedLayout() {
   return (
     <EnergyProvider>
       <RealtimeProvider>
-        <div className="min-h-screen flex w-full">
+        <div className="min-h-screen flex w-full bg-[oklch(0.14_0.025_258)]">
           <AppSidebar />
           <main className="flex-1 min-w-0 relative flex flex-col">
-            <Suspense fallback={null}><LivingBackground /></Suspense>
             <OfflineBanner />
             <TopBar />
-            <div className="flex-1 pb-16 md:pb-0 animate-in fade-in duration-200">
+            <div className="flex-1 animate-in fade-in duration-200">
               <Outlet />
             </div>
-            <SiteFooter />
             <MobileBottomNav />
-            <Suspense fallback={null}><InstallPrompt /></Suspense>
           </main>
         </div>
       </RealtimeProvider>
