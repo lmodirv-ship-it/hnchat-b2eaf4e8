@@ -726,8 +726,6 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ═══ BLOG SECTION ═══ */}
-      <BlogSection lang={lang} />
 
       {/* ═══ PARTNER STRIP ═══ */}
       <PartnerStrip />
