@@ -56,6 +56,7 @@ import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/f
 import { Route as AuthenticatedExploreRouteImport } from './routes/_authenticated/explore'
 import { Route as AuthenticatedEmailDashboardRouteImport } from './routes/_authenticated/email-dashboard'
 import { Route as AuthenticatedBookmarksRouteImport } from './routes/_authenticated/bookmarks'
+import { Route as AuthenticatedBlogEditorRouteImport } from './routes/_authenticated/blog-editor'
 import { Route as AuthenticatedBlogDashboardRouteImport } from './routes/_authenticated/blog-dashboard'
 import { Route as AuthenticatedAppStoreRouteImport } from './routes/_authenticated/app-store'
 import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/ai-hub'
@@ -329,6 +330,11 @@ const AuthenticatedBookmarksRoute = AuthenticatedBookmarksRouteImport.update({
   path: '/bookmarks',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedBlogEditorRoute = AuthenticatedBlogEditorRouteImport.update({
+  id: '/blog-editor',
+  path: '/blog-editor',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedBlogDashboardRoute =
   AuthenticatedBlogDashboardRouteImport.update({
     id: '/blog-dashboard',
@@ -520,6 +526,7 @@ export interface FileRoutesByFullPath {
   '/ai-hub': typeof AuthenticatedAiHubRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
   '/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
+  '/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/bookmarks': typeof AuthenticatedBookmarksRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
@@ -598,6 +605,7 @@ export interface FileRoutesByTo {
   '/ai-hub': typeof AuthenticatedAiHubRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
   '/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
+  '/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/bookmarks': typeof AuthenticatedBookmarksRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
@@ -680,6 +688,7 @@ export interface FileRoutesById {
   '/_authenticated/ai-hub': typeof AuthenticatedAiHubRoute
   '/_authenticated/app-store': typeof AuthenticatedAppStoreRoute
   '/_authenticated/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
+  '/_authenticated/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/_authenticated/bookmarks': typeof AuthenticatedBookmarksRoute
   '/_authenticated/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/_authenticated/explore': typeof AuthenticatedExploreRoute
@@ -760,6 +769,7 @@ export interface FileRouteTypes {
     | '/ai-hub'
     | '/app-store'
     | '/blog-dashboard'
+    | '/blog-editor'
     | '/bookmarks'
     | '/email-dashboard'
     | '/explore'
@@ -838,6 +848,7 @@ export interface FileRouteTypes {
     | '/ai-hub'
     | '/app-store'
     | '/blog-dashboard'
+    | '/blog-editor'
     | '/bookmarks'
     | '/email-dashboard'
     | '/explore'
@@ -919,6 +930,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai-hub'
     | '/_authenticated/app-store'
     | '/_authenticated/blog-dashboard'
+    | '/_authenticated/blog-editor'
     | '/_authenticated/bookmarks'
     | '/_authenticated/email-dashboard'
     | '/_authenticated/explore'
@@ -1332,6 +1344,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBookmarksRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/blog-editor': {
+      id: '/_authenticated/blog-editor'
+      path: '/blog-editor'
+      fullPath: '/blog-editor'
+      preLoaderRoute: typeof AuthenticatedBlogEditorRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/blog-dashboard': {
       id: '/_authenticated/blog-dashboard'
       path: '/blog-dashboard'
@@ -1635,6 +1654,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
   AuthenticatedAppStoreRoute: typeof AuthenticatedAppStoreRoute
   AuthenticatedBlogDashboardRoute: typeof AuthenticatedBlogDashboardRoute
+  AuthenticatedBlogEditorRoute: typeof AuthenticatedBlogEditorRoute
   AuthenticatedBookmarksRoute: typeof AuthenticatedBookmarksRoute
   AuthenticatedEmailDashboardRoute: typeof AuthenticatedEmailDashboardRoute
   AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
@@ -1679,6 +1699,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAiHubRoute: AuthenticatedAiHubRoute,
   AuthenticatedAppStoreRoute: AuthenticatedAppStoreRoute,
   AuthenticatedBlogDashboardRoute: AuthenticatedBlogDashboardRoute,
+  AuthenticatedBlogEditorRoute: AuthenticatedBlogEditorRoute,
   AuthenticatedBookmarksRoute: AuthenticatedBookmarksRoute,
   AuthenticatedEmailDashboardRoute: AuthenticatedEmailDashboardRoute,
   AuthenticatedExploreRoute: AuthenticatedExploreRoute,
