@@ -79,7 +79,7 @@ function ArticlePage() {
 
           {/* Author & Meta */}
           <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground/50 mb-8 pb-8 border-b border-ice-border/10">
-            <Link to={`/blog/author/${(article.profiles as any)?.username}` as any} className="flex items-center gap-3 hover:text-cyan-glow transition">
+            <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }} className="flex items-center gap-3 hover:text-cyan-glow transition">
               {(article.profiles as any)?.avatar_url ? (
                 <img src={(article.profiles as any).avatar_url} alt="" className="h-11 w-11 rounded-full ring-2 ring-cyan-glow/15" />
               ) : (
@@ -140,10 +140,10 @@ function ArticlePage() {
               )}
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
-                  <Link to={`/blog/author/${(article.profiles as any).username}` as any} className="font-bold text-lg hover:text-cyan-glow transition">
+                  <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }} className="font-bold text-lg hover:text-cyan-glow transition">
                     {(article.profiles as any).full_name ?? (article.profiles as any).username}
                   </Link>
-                  <Link to={`/blog/author/${(article.profiles as any).username}` as any}>
+                  <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }}>
                     <Button variant="outline" size="sm" className="border-cyan-glow/20 text-cyan-glow hover:bg-cyan-glow/10 text-xs">
                       {isRTL ? "جميع المقالات" : "All Articles"} →
                     </Button>
