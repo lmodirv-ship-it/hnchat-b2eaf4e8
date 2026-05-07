@@ -78,7 +78,7 @@ export function AppSidebar() {
   const { sidebarCollapsed, setSidebarCollapsed, mobileSidebarOpen, setMobileSidebarOpen } = useLayout();
   const pathname = location.pathname;
   const collapsed = sidebarCollapsed;
-  const [proMinimized, setProMinimized] = useState(false);
+  
 
   const isActive = (to: string) => pathname === to || pathname.startsWith(to + "/");
 
