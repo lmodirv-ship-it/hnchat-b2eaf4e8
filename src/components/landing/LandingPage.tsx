@@ -505,11 +505,11 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-1 sm:pt-2 pb-2 sm:pb-4 flex flex-col lg:flex-row gap-4 sm:gap-6 items-center">
+      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-1 sm:pt-2 pb-2 sm:pb-4 flex flex-col lg:flex-row gap-4 sm:gap-6 items-start">
         {/* Left: Hero text */}
         <div className="flex-1 text-center lg:text-start pt-0 max-w-2xl">
           {/* Title */}
-          <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-3 sm:mb-4" initial={init} animate={enter} variants={fadeUp} custom={0}>
+          <motion.h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-3 sm:mb-4" initial={init} animate={enter} variants={fadeUp} custom={0}>
             {l.heroTitle1}{" "}
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
@@ -520,12 +520,12 @@ export function LandingPage() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p className="text-sm sm:text-lg font-semibold mb-1.5 sm:mb-2 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+          <motion.p className="text-sm sm:text-lg font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
             {l.heroSub}
           </motion.p>
 
           {/* Description */}
-          <motion.p className="text-xs sm:text-sm text-muted-foreground max-w-lg mb-4 sm:mb-5 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+          <motion.p className="text-xs sm:text-base text-muted-foreground max-w-lg mb-5 sm:mb-6 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
             {l.heroDesc}
           </motion.p>
 
@@ -572,7 +572,7 @@ export function LandingPage() {
         </div>
 
         {/* Right: Phone + Chat widget */}
-        <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-4 items-center">
+        <div className="w-full lg:w-[380px] shrink-0 flex flex-col items-center relative">
           {/* 3D Phone */}
           <motion.div
             initial={mounted ? { opacity: 0, y: 30 } : undefined}
@@ -585,7 +585,7 @@ export function LandingPage() {
 
           {/* Chat Widget — Floating, rounded, gradient bubbles */}
           <motion.div
-            className="w-full max-w-sm"
+            className="w-full max-w-sm lg:-mt-8 relative z-10"
             initial={mounted ? { opacity: 0, x: 30 } : undefined}
             animate={mounted ? { opacity: 1, x: 0 } : undefined}
             transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
@@ -603,7 +603,7 @@ export function LandingPage() {
                 <span className="text-[10px] text-muted-foreground/60">{l.online}</span>
               </div>
               {/* Messages */}
-              <div ref={chatRef} className="h-40 overflow-y-auto px-3 py-3 flex flex-col gap-2.5" style={{ scrollbarWidth: "none" }}>
+              <div ref={chatRef} className="h-16 overflow-y-auto px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
                 <AnimatePresence initial={false}>
                   {chatMessages.map((m, i) => (
                     <motion.div
@@ -627,7 +627,7 @@ export function LandingPage() {
                 </AnimatePresence>
               </div>
               {/* Input */}
-              <div className="px-3 py-2.5 border-t border-ice-border/15">
+              <div className="px-3 py-2 border-t border-ice-border/15">
                 <Link to="/sign-up-login" className="flex items-center gap-2 rounded-2xl bg-ice-card/10 backdrop-blur-xl px-4 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
                   <Send className="h-3.5 w-3.5 text-cyan-glow" />
                   {lang === "ar" ? "سجّل للمشاركة..." : lang === "fr" ? "Inscrivez-vous..." : "Sign up to chat..."}
