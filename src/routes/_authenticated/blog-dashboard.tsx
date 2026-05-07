@@ -17,7 +17,7 @@ function BlogDashboard() {
   const drafts = articles.filter((a) => a.status === "draft");
 
   return (
-    <PageShell title="المدونة" icon={<FileText className="h-5 w-5 text-cyan-glow" />}>
+    <PageShell title="المدونة">
       <div className="max-w-5xl mx-auto" dir="rtl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
