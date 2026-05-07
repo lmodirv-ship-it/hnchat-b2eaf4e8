@@ -27,7 +27,7 @@ function AuthenticatedLayout() {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center bg-[oklch(0.10_0.025_258)]">
         <div className="relative">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
           <div className="absolute inset-0 rounded-full bg-primary/20 blur-xl animate-breathe" />
@@ -40,16 +40,18 @@ function AuthenticatedLayout() {
     <EnergyProvider>
       <RealtimeProvider>
         <LayoutContext.Provider value={{ sidebarCollapsed, setSidebarCollapsed, mobileSidebarOpen, setMobileSidebarOpen }}>
-          <div className="min-h-screen flex w-full bg-[oklch(0.14_0.025_258)]">
+          {/* App shell — fixed viewport, no outer scroll like Discord/Telegram */}
+          <div className="h-screen w-screen overflow-hidden flex bg-[oklch(0.10_0.02_258)]">
             <AppSidebar />
-            <main className="flex-1 min-w-0 relative flex flex-col transition-all duration-300">
+            <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
               <OfflineBanner />
               <TopBar />
-              <div className="flex-1 animate-in fade-in duration-200">
+              {/* Content area scrolls internally */}
+              <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
                 <Outlet />
-              </div>
+              </main>
               <MobileBottomNav />
-            </main>
+            </div>
           </div>
         </LayoutContext.Provider>
       </RealtimeProvider>
