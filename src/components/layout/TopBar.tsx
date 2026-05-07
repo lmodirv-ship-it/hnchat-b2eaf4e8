@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Search, Moon, Command, Menu } from "lucide-react";
+import { Bell, Search, Moon, Command, Menu, ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
@@ -42,39 +42,39 @@ export function TopBar() {
   const displayName = profile?.full_name || profile?.username || user?.email?.split("@")[0] || "User";
 
   return (
-    <header className="sticky top-0 z-30 h-14 border-b border-[oklch(0.25_0.03_250/0.25)] bg-[oklch(0.13_0.025_255/0.9)] backdrop-blur-xl">
-      <div className="flex items-center h-full px-4 gap-3">
-        {/* Hamburger - mobile */}
+    <header className="shrink-0 h-12 flex items-center border-b border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)] backdrop-blur-xl z-30">
+      <div className="flex items-center w-full px-3 gap-2">
+        {/* Hamburger — mobile */}
         <button
           onClick={() => setMobileSidebarOpen(true)}
-          className="md:hidden p-2 -mr-1 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition"
+          className="md:hidden p-1.5 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition"
           aria-label="القائمة"
         >
-          <Menu className="h-5 w-5 text-[oklch(0.75_0.02_250)]" />
+          <Menu className="h-5 w-5 text-[oklch(0.70_0.02_250)]" />
         </button>
 
-        {/* Logo - mobile only */}
-        <Link to="/" className="flex items-center gap-2 shrink-0 md:hidden">
-          <HnLogo size={28} showText={false} />
+        {/* Logo — mobile only */}
+        <Link to="/" className="flex items-center gap-1.5 shrink-0 md:hidden">
+          <HnLogo size={24} showText={false} />
           <span className="font-bold text-sm text-white">hnChat</span>
-          <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[oklch(0.45_0.15_260)] text-white">AI+</span>
+          <span className="px-1 py-px rounded text-[7px] font-bold bg-[oklch(0.50_0.18_260)] text-white leading-none">AI+</span>
         </Link>
 
-        {/* Search bar */}
-        <form onSubmit={submit} className={`flex-1 max-w-xl mx-auto transition-all ${searchOpen ? 'block' : 'hidden sm:block'}`}>
+        {/* Search — centered */}
+        <form onSubmit={submit} className={`flex-1 max-w-lg mx-auto transition-all ${searchOpen ? 'block' : 'hidden sm:block'}`}>
           <div className="relative">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[oklch(0.50_0.02_250)]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[oklch(0.45_0.02_250)]" />
             <Input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="ابحث في hnChat"
-              className="pr-9 pl-12 bg-[oklch(0.18_0.025_255)] border-[oklch(0.25_0.03_250/0.3)] rounded-xl h-9 text-sm text-white placeholder:text-[oklch(0.45_0.02_250)] focus:bg-[oklch(0.20_0.03_255)] focus:border-[oklch(0.40_0.08_230/0.5)] transition-colors"
+              className="pr-8 pl-12 h-8 bg-[oklch(0.14_0.02_258)] border-[oklch(1_0_0/0.08)] rounded-lg text-[13px] text-white placeholder:text-[oklch(0.40_0.02_250)] focus:bg-[oklch(0.16_0.02_258)] focus:border-[oklch(0.40_0.08_230/0.4)] transition-colors"
               onBlur={() => { if (!q) setSearchOpen(false); }}
               autoFocus={searchOpen}
             />
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[oklch(0.45_0.02_250)]">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[oklch(0.40_0.02_250)]">
               <Command className="h-3 w-3" />
-              <span className="text-[10px] font-medium">K</span>
+              <span className="text-[10px]">K</span>
             </div>
           </div>
         </form>
@@ -83,42 +83,43 @@ export function TopBar() {
         {!searchOpen && (
           <button
             onClick={() => setSearchOpen(true)}
-            className="sm:hidden p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition"
+            className="sm:hidden p-1.5 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition"
             aria-label="بحث"
           >
-            <Search className="h-5 w-5 text-[oklch(0.65_0.02_250)]" />
+            <Search className="h-4.5 w-4.5 text-[oklch(0.60_0.02_250)]" />
           </button>
         )}
 
-        <div className={`flex items-center gap-1.5 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+        <div className={`flex items-center gap-0.5 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
           {/* Notifications */}
           <Link
             to="/notifications"
-            className="relative p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition"
+            className="relative p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition"
             aria-label="الإشعارات"
           >
-            <Bell className="h-5 w-5 text-[oklch(0.70_0.02_250)]" />
+            <Bell className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
             {notifUnread > 0 && (
-              <span className="absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold px-1">
+              <span className="absolute top-0.5 left-0.5 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-red-500 text-white text-[9px] font-bold px-1">
                 {notifUnread > 9 ? "9+" : notifUnread}
               </span>
             )}
           </Link>
 
-          {/* Dark mode icon */}
-          <button className="p-2 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition" aria-label="الوضع الليلي">
-            <Moon className="h-5 w-5 text-[oklch(0.70_0.02_250)]" />
+          {/* Dark mode */}
+          <button className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition" aria-label="الوضع الليلي">
+            <Moon className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
           </button>
 
-          {/* Profile */}
-          <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-xl hover:bg-[oklch(0.20_0.03_250/0.5)] transition">
-            <span className="text-sm font-medium text-white hidden lg:block">{displayName}</span>
-            <Avatar className="h-8 w-8 ring-2 ring-[oklch(0.35_0.08_230/0.4)]">
+          {/* User profile chip */}
+          <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition mr-1">
+            <span className="text-[13px] font-medium text-white hidden lg:block">{displayName}</span>
+            <Avatar className="h-7 w-7 ring-1 ring-[oklch(1_0_0/0.1)]">
               <AvatarImage src={profile?.avatar_url ?? undefined} />
-              <AvatarFallback className="text-xs bg-[oklch(0.25_0.05_255)] text-white">
+              <AvatarFallback className="text-[10px] bg-[oklch(0.20_0.04_255)] text-[oklch(0.70_0.02_250)]">
                 {displayName.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
+            <ChevronDown className="h-3 w-3 text-[oklch(0.50_0.02_250)] hidden lg:block" />
           </Link>
         </div>
       </div>
