@@ -13,6 +13,17 @@ function blockPrivateNetworks(urlStr: string): void {
   }
 }
 
+function isPublicHttpUrl(urlStr: string): boolean {
+  try {
+    const u = new URL(urlStr);
+    if (!["http:", "https:"].includes(u.protocol)) return false;
+    blockPrivateNetworks(u.toString());
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export type ScrapedProduct = {
   url: string;
   title: string;
@@ -119,7 +130,7 @@ export const scrapeProductUrl = createServerFn({ method: "POST" })
           "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
       },
-      redirect: "follow",
+      redirect: "error",
     });
     if (!res.ok) throw new Error(`Failed to fetch (${res.status})`);
     const html = await res.text();
@@ -288,7 +299,7 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
         "User-Agent": "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
       },
-      redirect: "follow",
+      redirect: "error",
     });
     if (!res.ok) throw new Error(`Failed to fetch (${res.status})`);
     const html = await res.text();
@@ -366,7 +377,7 @@ async function fetchHtml(url: string): Promise<string | null> {
           "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
       },
-      redirect: "follow",
+      redirect: "error",
     });
     if (!res.ok) return null;
     return await res.text();
@@ -401,7 +412,7 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
               "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
             Accept: "application/json",
           },
-          redirect: "follow",
+          redirect: "error",
         });
         if (shopifyRes.ok) {
           const json: any = await shopifyRes.json();
@@ -496,6 +507,9 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
         const targetUrl = data.site.startsWith("http")
           ? data.site
           : `${origin}${data.site.includes("/") ? "/" + data.site.split("/").slice(1).join("/") : ""}`;
+        if (!isPublicHttpUrl(targetUrl)) {
+          throw new Error("Invalid scrape target");
+        }
 
         try {
           const fcRes = await fetch("https://api.firecrawl.dev/v2/scrape", {
@@ -563,7 +577,7 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
                 ? fcJson.data.links
                 : [];
               const productLinks = links.filter((l) =>
-                /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
+                isPublicHttpUrl(l) && /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
               );
               for (const l of productLinks.slice(0, 24)) {
                 if (seen.has(l)) continue;

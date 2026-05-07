@@ -7,6 +7,27 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+type ChatMessage = { role: "user" | "assistant" | "system"; content: string };
+
+function validateMessages(messages: unknown): ChatMessage[] {
+  if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
+    throw new Error("Invalid message count");
+  }
+
+  let totalLength = 0;
+  return messages.map((message) => {
+    if (!message || typeof message !== "object") throw new Error("Invalid message format");
+    const candidate = message as Partial<ChatMessage>;
+    if (!["user", "assistant", "system"].includes(candidate.role ?? "")) throw new Error("Invalid message role");
+    if (typeof candidate.content !== "string" || candidate.content.length === 0 || candidate.content.length > 4000) {
+      throw new Error("Message too long");
+    }
+    totalLength += candidate.content.length;
+    if (totalLength > 24000) throw new Error("Conversation too long");
+    return { role: candidate.role as ChatMessage["role"], content: candidate.content };
+  });
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -33,7 +54,8 @@ serve(async (req) => {
       });
     }
 
-    const { messages } = await req.json();
+    const { messages: rawMessages } = await req.json();
+    const messages = validateMessages(rawMessages);
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
