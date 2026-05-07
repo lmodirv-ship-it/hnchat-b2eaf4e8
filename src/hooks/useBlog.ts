@@ -104,7 +104,7 @@ export function useArticleBySlug(slug: string) {
       if (data?.id) {
         await supabase.rpc("increment_article_views", { _article_id: data.id });
       }
-      return data as Article;
+      return data as any as Article;
     },
   });
 }
