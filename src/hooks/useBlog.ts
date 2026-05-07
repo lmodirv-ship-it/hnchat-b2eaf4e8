@@ -19,6 +19,7 @@ export type Article = {
   seo_description: string | null;
   status: string;
   views_count: number;
+  likes_count: number;
   reading_time: number | null;
   published_at: string | null;
   created_at: string;
@@ -35,6 +36,15 @@ export type ArticleCategory = {
   slug: string;
   color: string | null;
   sort_order: number | null;
+};
+
+export type ArticleComment = {
+  id: string;
+  article_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  profiles?: { username: string; full_name: string | null; avatar_url: string | null };
 };
 
 export function useCategories() {
@@ -78,9 +88,7 @@ export function usePublishedArticles(options?: { category?: string; limit?: numb
         .eq("status", "published")
         .order("published_at", { ascending: false });
 
-      if (options?.limit) {
-        q = q.limit(options.limit);
-      }
+      if (options?.limit) q = q.limit(options.limit);
 
       const { data, error } = await q;
       if (error) throw error;
@@ -100,7 +108,6 @@ export function useArticleBySlug(slug: string) {
         .eq("slug", slug)
         .single();
       if (error) throw error;
-      // Increment views
       if (data?.id) {
         await supabase.rpc("increment_article_views", { _article_id: data.id });
       }
@@ -204,6 +211,91 @@ export function useDeleteArticle() {
       toast.success("تم حذف المقال");
     },
   });
+}
+
+// Article Comments
+export function useArticleComments(articleId: string) {
+  return useQuery({
+    queryKey: ["article-comments", articleId],
+    enabled: !!articleId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("article_comments")
+        .select("*, profiles(username, full_name, avatar_url)")
+        .eq("article_id", articleId)
+        .order("created_at", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as any as ArticleComment[];
+    },
+  });
+}
+
+export function useAddArticleComment() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async ({ articleId, content }: { articleId: string; content: string }) => {
+      const { error } = await supabase
+        .from("article_comments")
+        .insert({ article_id: articleId, user_id: user!.id, content } as any);
+      if (error) throw error;
+    },
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["article-comments", vars.articleId] });
+    },
+  });
+}
+
+export function useDeleteArticleComment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, articleId }: { id: string; articleId: string }) => {
+      const { error } = await supabase.from("article_comments").delete().eq("id", id);
+      if (error) throw error;
+      return articleId;
+    },
+    onSuccess: (articleId) => {
+      qc.invalidateQueries({ queryKey: ["article-comments", articleId] });
+    },
+  });
+}
+
+// Article Likes
+export function useArticleLike(articleId: string) {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+
+  const { data: liked = false } = useQuery({
+    queryKey: ["article-liked", articleId, user?.id],
+    enabled: !!articleId && !!user?.id,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("article_likes")
+        .select("id")
+        .eq("article_id", articleId)
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return !!data;
+    },
+  });
+
+  const toggle = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error("Login required");
+      if (liked) {
+        await supabase.from("article_likes").delete().eq("article_id", articleId).eq("user_id", user.id);
+      } else {
+        await supabase.from("article_likes").insert({ article_id: articleId, user_id: user.id } as any);
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["article-liked", articleId] });
+      qc.invalidateQueries({ queryKey: ["article", articleId] });
+      qc.invalidateQueries({ queryKey: ["published-articles"] });
+    },
+  });
+
+  return { liked, toggle: toggle.mutate, isPending: toggle.isPending };
 }
 
 export async function uploadBlogImage(file: File, userId: string): Promise<string> {
