@@ -156,26 +156,28 @@ export function useSaveArticle() {
 
   return useMutation({
     mutationFn: async (article: Partial<Article> & { id?: string }) => {
+      const { profiles, article_categories, ...rest } = article as any;
       const payload = {
-        ...article,
+        ...rest,
         author_id: user!.id,
-        reading_time: article.content ? Math.max(1, Math.ceil((article.content.split(/\s+/).length) / 200)) : 1,
-        ...(article.status === "published" && !article.published_at ? { published_at: new Date().toISOString() } : {}),
+        reading_time: rest.content ? Math.max(1, Math.ceil((rest.content.split(/\s+/).length) / 200)) : 1,
+        ...(rest.status === "published" && !rest.published_at ? { published_at: new Date().toISOString() } : {}),
       };
 
-      if (article.id) {
+      if (rest.id) {
         const { data, error } = await supabase
           .from("articles")
-          .update(payload)
-          .eq("id", article.id)
+          .update(payload as any)
+          .eq("id", rest.id)
           .select()
           .single();
         if (error) throw error;
         return data;
       } else {
+        const { id: _id, ...insertPayload } = payload;
         const { data, error } = await supabase
           .from("articles")
-          .insert(payload)
+          .insert(insertPayload as any)
           .select()
           .single();
         if (error) throw error;
