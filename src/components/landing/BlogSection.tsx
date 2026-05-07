@@ -104,7 +104,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
   const viewAll = isRTL ? "عرض جميع المقالات" : isEn ? "View all articles" : "Voir tous les articles";
 
   return (
-    <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pb-16 sm:pb-20 pt-0 -mt-20 sm:-mt-24 lg:-mt-16">
+    <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pb-16 sm:pb-20 pt-0 -mt-44 sm:-mt-52 lg:-mt-40">
       {/* Header */}
       <motion.div
         className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8"
