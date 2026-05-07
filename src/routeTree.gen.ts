@@ -24,6 +24,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
@@ -161,6 +162,11 @@ const LiveIdRoute = LiveIdRouteImport.update({
   id: '/live/$id',
   path: '/live/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
   id: '/youtube',
@@ -513,7 +519,7 @@ const AuthenticatedGroupsGroupIdManageRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -559,6 +565,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
@@ -592,7 +599,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -638,6 +645,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
@@ -675,7 +683,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_owner': typeof OwnerRouteWithChildren
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/community-guidelines': typeof CommunityGuidelinesRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
@@ -721,6 +729,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
   '/share/$shareId': typeof ShareShareIdRoute
@@ -802,6 +811,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/blog/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
@@ -881,6 +891,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
+    | '/blog/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
@@ -963,6 +974,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
+    | '/blog/$slug'
     | '/live/$id'
     | '/post/$id'
     | '/share/$shareId'
@@ -1000,7 +1012,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   OwnerRoute: typeof OwnerRouteWithChildren
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -1119,6 +1131,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/live/$id'
       preLoaderRoute: typeof LiveIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/_authenticated/youtube': {
       id: '/_authenticated/youtube'
@@ -1775,13 +1794,23 @@ const OwnerRouteChildren: OwnerRouteChildren = {
 
 const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   OwnerRoute: OwnerRouteWithChildren,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   CommunityGuidelinesRoute: CommunityGuidelinesRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
