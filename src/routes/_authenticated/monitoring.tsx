@@ -20,7 +20,7 @@ function MonitoringPage() {
       const ms = Math.round(performance.now() - start);
       return { ok: !error, latencyMs: ms };
     },
-    refetchInterval: 30_000,
+    refetchInterval: false,
   });
 
   const services = [

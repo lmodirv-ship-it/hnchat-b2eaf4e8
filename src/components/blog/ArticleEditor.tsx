@@ -69,27 +69,7 @@ export function ArticleEditor({ article }: Props) {
     setIsDirty(true);
   };
 
-  // Auto-save drafts every 30s
-  useEffect(() => {
-    if (!isDirty || !title.trim()) return;
-    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
-    autoSaveTimer.current = setTimeout(async () => {
-      if (status === "published") return; // don't auto-save published
-      try {
-        await saveArticle.mutateAsync({
-          ...(article?.id ? { id: article.id } : {}),
-          title, slug, category_id: categoryId || null, language,
-          featured_image: featuredImage || null, video_url: videoUrl || null,
-          short_description: shortDesc || null, content: content || null,
-          tags, seo_title: seoTitle || null, seo_description: seoDesc || null,
-          status: "draft",
-        });
-        setLastSaved(new Date());
-        setIsDirty(false);
-      } catch {}
-    }, 30000);
-    return () => { if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current); };
-  }, [isDirty, title, content, slug, categoryId, language, featuredImage, videoUrl, shortDesc, tags, seoTitle, seoDesc]);
+  // Auto-save disabled — user saves manually via buttons
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

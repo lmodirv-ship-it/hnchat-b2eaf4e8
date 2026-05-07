@@ -42,14 +42,12 @@ export function VisitorCounter() {
         total: Number(row?.total_count ?? 0),
       };
     },
-    refetchInterval: 30_000,
-    staleTime: 15_000,
+    refetchInterval: false,
+    staleTime: 60_000,
   });
 
   useEffect(() => {
     trackVisit();
-    const interval = setInterval(trackVisit, 60_000); // heartbeat every minute
-    return () => clearInterval(interval);
   }, []);
 
   const online = data?.online ?? 0;
