@@ -570,3 +570,15 @@ html, body {
 .blog-editor-focus .group.peer {
   display: none !important;
 }
+
+/* App-native thin scrollbars (Discord / Slack style) */
+.scrollbar-thin::-webkit-scrollbar { width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: oklch(0.30 0.02 250 / 0.4); border-radius: 3px; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: oklch(0.40 0.02 250 / 0.5); }
+
+/* Global thin scrollbars for authenticated app */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(0.25 0.02 250 / 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(0.35 0.02 250 / 0.5); }
