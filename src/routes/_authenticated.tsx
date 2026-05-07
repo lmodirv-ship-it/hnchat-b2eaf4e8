@@ -1,19 +1,12 @@
 import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopBar } from "@/components/layout/TopBar";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { EnergyProvider } from "@/hooks/useEnergySystem";
 import { RealtimeProvider } from "@/components/providers/RealtimeProvider";
-
-// Lazy load heavy, non-critical components
-const FloatingComposeButton = lazy(() => import("@/components/composer/FloatingComposeButton").then(m => ({ default: m.FloatingComposeButton })));
-const InstallPrompt = lazy(() => import("@/components/layout/InstallPrompt").then(m => ({ default: m.InstallPrompt })));
-const LivingBackground = lazy(() => import("@/components/layout/LivingBackground").then(m => ({ default: m.LivingBackground })));
-const AiPresenceOrb = lazy(() => import("@/components/ai/AiPresenceOrb").then(m => ({ default: m.AiPresenceOrb })));
 
 import { Loader2 } from "lucide-react";
 
