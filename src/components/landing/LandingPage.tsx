@@ -568,21 +568,21 @@ export function LandingPage() {
             </motion.div>
           </div>
 
-          {/* Right: Phone + Chat widget */}
-          <div className="hidden md:block relative h-[260px] lg:h-[280px] xl:h-[320px]">
+          {/* Right: Phone + Chat widget — unified block */}
+          <div className="hidden md:flex flex-col items-end gap-0 relative">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
               animate={mounted ? { opacity: 1, y: 0 } : undefined}
               transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="absolute right-0 top-0 scale-[0.52] lg:scale-[0.58] xl:scale-[0.66] origin-top-right"
+              className="scale-[0.52] lg:scale-[0.58] xl:scale-[0.66] origin-top-right -mb-[60px] lg:-mb-[65px] xl:-mb-[70px]"
             >
               <PhoneMockup />
             </motion.div>
 
             {/* Chat Widget */}
             <motion.div
-              className="absolute right-0 top-[140px] lg:top-[155px] xl:top-[180px] z-10 w-[340px] lg:w-[380px] xl:w-[420px] max-w-full"
+              className="w-[340px] lg:w-[380px] xl:w-[420px] max-w-full -mt-[20px] lg:-mt-[25px] xl:-mt-[30px]"
               initial={mounted ? { opacity: 0, x: 30 } : undefined}
               animate={mounted ? { opacity: 1, x: 0 } : undefined}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
