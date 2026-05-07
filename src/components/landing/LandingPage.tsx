@@ -608,7 +608,7 @@ export function LandingPage() {
                   </span>
                 </div>
                 {/* Messages — show 1 visible message like reference */}
-                <div ref={chatRef} className="px-3 py-3 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
+                <div ref={chatRef} className="px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
                   <div className="flex items-start gap-2">
                     <div className="flex-1 rounded-2xl rounded-tl-sm bg-gradient-to-br from-cyan-glow/15 to-violet-glow/8 backdrop-blur-xl px-3.5 py-2.5 border border-ice-border/15">
                       <p className="text-xs text-foreground/80 leading-relaxed">
