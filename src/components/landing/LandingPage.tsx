@@ -470,7 +470,7 @@ export function LandingPage() {
       <FloatingParticles />
 
       {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 max-w-7xl mx-auto">
+      <nav className="relative z-20 flex items-center justify-between px-3 sm:px-6 py-1.5 sm:py-2 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 sm:gap-3">
           <HnLogo size={40} showText={false} />
           <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
