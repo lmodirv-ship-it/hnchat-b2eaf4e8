@@ -34,8 +34,11 @@ function BlogDashboard() {
   const totalLikes = articles.reduce((s, a) => s + a.likes_count, 0);
 
   return (
-    <PageShell title="المدونة">
-      <div className="w-full" dir="rtl">
+    <div className="w-full px-3 sm:px-6 py-4 sm:py-6 pb-20 md:pb-6" dir="rtl">
+      {/* Page Header */}
+      <header className="mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-foreground to-cyan-glow bg-clip-text text-transparent">المدونة</h1>
+      </header>
         {/* Header */}
         <div className="flex items-center justify-between mb-8 p-6 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
           <div>
