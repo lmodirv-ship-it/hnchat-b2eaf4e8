@@ -52,46 +52,61 @@ function ArticlePage() {
 
   return (
     <PublicPageShell dir={isRTL ? "rtl" : "ltr"}>
-      {/* Hero Cover */}
+      {/* Hero Cover — full width, uncropped */}
       {article.featured_image && (
-        <div className="relative w-full max-w-5xl mx-auto px-6 mt-6">
-          <div className="rounded-3xl overflow-hidden border border-ice-border/10 bg-[oklch(0.12_0.02_250)]">
-            <img src={article.featured_image} alt={article.title} className="w-full h-auto max-h-[600px] object-contain mx-auto" />
+        <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-8 mt-8">
+          <div className="rounded-3xl overflow-hidden border border-ice-border/10 bg-[oklch(0.10_0.02_250)] shadow-[0_20px_80px_oklch(0_0_0/0.4)]">
+            <img
+              src={article.featured_image}
+              alt={article.title}
+              className="w-full h-auto max-h-[620px] object-contain mx-auto"
+            />
           </div>
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto px-6">
-        <article className="mt-8 relative z-10">
+      {/* Article Body — wide magazine layout */}
+      <div className="max-w-[820px] mx-auto px-5 sm:px-8">
+        <article className="mt-10 relative z-10">
           {/* Back */}
-          <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-6">
+          <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-8">
             <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} /> {isRTL ? "العودة للمدونة" : "Back to Blog"}
           </Link>
 
           {/* Category */}
           {(article.article_categories as any) && (
-            <span className="inline-block px-4 py-1.5 text-[11px] font-bold rounded-full bg-gradient-to-r from-cyan-glow to-violet-glow text-white mb-5 tracking-wider uppercase">
+            <span className="inline-block px-4 py-1.5 text-[11px] font-bold rounded-full bg-gradient-to-r from-cyan-glow to-violet-glow text-white mb-6 tracking-wider uppercase">
               {isRTL ? (article.article_categories as any).name_ar : (article.article_categories as any).name}
             </span>
           )}
 
-          {/* Title */}
-          <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-bold mb-8 leading-[1.15] tracking-tight">{article.title}</h1>
+          {/* Title — large, editorial */}
+          <h1 className="text-3xl sm:text-[2.75rem] lg:text-[3.25rem] font-extrabold mb-8 leading-[1.15] tracking-tight">
+            {article.title}
+          </h1>
 
-          {/* Author & Meta */}
-          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground/50 mb-8 pb-8 border-b border-ice-border/10">
+          {/* Short description */}
+          {article.short_description && (
+            <p className="text-lg sm:text-xl text-muted-foreground/55 leading-relaxed mb-8 font-medium">
+              {article.short_description}
+            </p>
+          )}
+
+          {/* Author & Meta — premium card */}
+          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground/50 mb-10 pb-8 border-b border-ice-border/10">
             <Link to="/blog/author/$username" params={{ username: (article.profiles as any)?.username ?? '' }} className="flex items-center gap-3 hover:text-cyan-glow transition">
               {(article.profiles as any)?.avatar_url ? (
-                <img src={(article.profiles as any).avatar_url} alt="" className="h-11 w-11 rounded-full ring-2 ring-cyan-glow/15" />
+                <img src={(article.profiles as any).avatar_url} alt="" className="h-12 w-12 rounded-full ring-2 ring-cyan-glow/15" />
               ) : (
-                <div className="h-11 w-11 rounded-full bg-[oklch(0.18_0.02_250)] flex items-center justify-center ring-2 ring-ice-border/15"><User className="h-5 w-5" /></div>
+                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[oklch(0.20_0.04_250)] to-[oklch(0.16_0.02_250)] flex items-center justify-center ring-2 ring-ice-border/15"><User className="h-5 w-5" /></div>
               )}
               <div>
-                <span className="font-semibold text-foreground/80 block text-base">{(article.profiles as any)?.full_name ?? (article.profiles as any)?.username}</span>
+                <span className="font-bold text-foreground/85 block text-base">{(article.profiles as any)?.full_name ?? (article.profiles as any)?.username}</span>
                 <span className="text-xs text-muted-foreground/40">@{(article.profiles as any)?.username}</span>
               </div>
             </Link>
-            <div className="flex items-center gap-4 text-xs">
+            <div className="h-8 w-px bg-ice-border/10 hidden sm:block" />
+            <div className="flex items-center gap-5 text-xs text-muted-foreground/45">
               <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4" />{article.published_at ? new Date(article.published_at).toLocaleDateString(isRTL ? "ar" : "en", { year: 'numeric', month: 'long', day: 'numeric' }) : ""}</span>
               <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" />{article.reading_time} {isRTL ? "دقائق" : "min read"}</span>
               <span className="flex items-center gap-1.5"><Eye className="h-4 w-4" />{article.views_count}</span>
@@ -114,8 +129,8 @@ function ArticlePage() {
             </div>
           )}
 
-          {/* Content */}
-          <div className="mb-12" style={{ fontSize: '1.15rem', lineHeight: '2', letterSpacing: '0.01em' }}>
+          {/* Content — magazine typography */}
+          <div className="mb-14" style={{ fontSize: '1.2rem', lineHeight: '2.1', letterSpacing: '0.01em' }}>
             <ArticleContent content={article.content ?? ""} />
           </div>
 
@@ -170,20 +185,20 @@ function ArticlePage() {
 
 function ArticleContent({ content }: { content: string }) {
   const html = content
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-8 mb-4 text-foreground">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-10 mb-5 text-foreground">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-bold mt-12 mb-6 text-foreground">$1</h1>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-10 mb-4 text-foreground/95">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-12 mb-5 text-foreground">$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-14 mb-6 text-foreground">$1</h1>')
     .replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/```([\s\S]*?)```/gm, '<pre class="p-5 rounded-xl bg-[oklch(0.12_0.02_250)] border border-ice-border/10 overflow-x-auto my-5"><code class="text-sm font-mono text-cyan-glow/80">$1</code></pre>')
-    .replace(/`(.+?)`/g, '<code class="px-2 py-1 rounded-lg bg-[oklch(0.15_0.02_250)] text-cyan-glow text-sm font-mono border border-ice-border/10">$1</code>')
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-cyan-glow/25 pl-6 italic text-muted-foreground/60 my-6 text-lg">$1</blockquote>')
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-cyan-glow underline underline-offset-4 hover:text-cyan-glow/80 transition" target="_blank" rel="noopener">$1</a>')
-    .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-2 text-muted-foreground/70">$1</li>')
-    .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-2 text-muted-foreground/70">$1</li>')
-    .replace(/\n\n/g, '</p><p class="mb-5 text-muted-foreground/70 leading-relaxed">')
+    .replace(/```([\s\S]*?)```/gm, '<pre class="p-6 rounded-2xl bg-[oklch(0.10_0.015_250)] border border-ice-border/8 overflow-x-auto my-8 shadow-[inset_0_2px_10px_oklch(0_0_0/0.2)]"><code class="text-sm font-mono text-cyan-glow/80 leading-relaxed">$1</code></pre>')
+    .replace(/`(.+?)`/g, '<code class="px-2 py-1 rounded-lg bg-[oklch(0.15_0.02_250)] text-cyan-glow text-[0.9em] font-mono border border-ice-border/10">$1</code>')
+    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-cyan-glow/30 pl-6 italic text-muted-foreground/65 my-8 text-lg leading-relaxed">$1</blockquote>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-cyan-glow underline underline-offset-4 decoration-cyan-glow/30 hover:decoration-cyan-glow/60 transition" target="_blank" rel="noopener">$1</a>')
+    .replace(/^- (.+)$/gm, '<li class="ml-6 list-disc mb-2.5 text-muted-foreground/75">$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li class="ml-6 list-decimal mb-2.5 text-muted-foreground/75">$1</li>')
+    .replace(/\n\n/g, '</p><p class="mb-6 text-muted-foreground/75 leading-[2]">')
     .replace(/\n/g, '<br/>');
-  return <div className="text-muted-foreground/70" dangerouslySetInnerHTML={{ __html: `<p class="mb-5 leading-relaxed">${html}</p>` }} />;
+  return <div className="text-muted-foreground/75 leading-[2]" dangerouslySetInnerHTML={{ __html: `<p class="mb-6 leading-[2]">${html}</p>` }} />;
 }
 
 function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {

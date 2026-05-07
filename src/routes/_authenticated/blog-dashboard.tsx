@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { useMyArticles, useDeleteArticle } from "@/hooks/useBlog";
-import { PageShell } from "@/components/PageShell";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, FileText, Eye, Edit, Trash2, Clock, Calendar, ExternalLink, Heart, Search, BarChart3 } from "lucide-react";
@@ -34,10 +34,13 @@ function BlogDashboard() {
   const totalLikes = articles.reduce((s, a) => s + a.likes_count, 0);
 
   return (
-    <PageShell title="المدونة">
-      <div className="w-full" dir="rtl">
+    <div className="w-full px-3 sm:px-6 py-4 sm:py-6 pb-20 md:pb-6" dir="rtl">
+      {/* Page Header */}
+      <header className="mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-foreground to-cyan-glow bg-clip-text text-transparent">المدونة</h1>
+      </header>
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 p-6 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
+        <div className="flex items-center justify-between mb-8 p-6 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl">
           <div>
             <h1 className="text-2xl font-bold mb-2">مقالاتي</h1>
             <div className="flex items-center gap-5 text-sm text-muted-foreground/50">
@@ -65,7 +68,7 @@ function BlogDashboard() {
               { label: "المشاهدات", value: totalViews, icon: Eye, color: "violet-glow" },
               { label: "الإعجابات", value: totalLikes, icon: Heart, color: "red-400" },
             ].map((stat) => (
-              <div key={stat.label} className="p-4 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
+              <div key={stat.label} className="p-4 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <stat.icon className={`h-4 w-4 text-${stat.color}`} />
                   <span className="text-xs text-muted-foreground/40">{stat.label}</span>
@@ -78,7 +81,7 @@ function BlogDashboard() {
 
         {/* Tabs & Search */}
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[oklch(0.14_0.02_250)] border border-ice-border/10">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl border border-ice-border/10">
             {([
               { key: "all" as const, label: "الكل", count: articles.length },
               { key: "published" as const, label: "منشور", count: published.length },
@@ -98,16 +101,16 @@ function BlogDashboard() {
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/30" />
             <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="بحث في المقالات..."
-              className="bg-[oklch(0.14_0.02_250)] border-ice-border/10 pr-10 h-10 text-sm" />
+              className="bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl border-ice-border/10 pr-10 h-10 text-sm" />
           </div>
         </div>
 
         {isLoading ? (
           <div className="space-y-4">
-            {[1, 2, 3].map((i) => <div key={i} className="h-32 rounded-2xl bg-[oklch(0.14_0.02_250)] animate-pulse" />)}
+            {[1, 2, 3].map((i) => <div key={i} className="h-32 rounded-2xl bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl animate-pulse" />)}
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-28 rounded-3xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
+          <div className="text-center py-28 rounded-3xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl">
             <FileText className="h-16 w-16 text-muted-foreground/10 mx-auto mb-6" />
             <h3 className="text-xl font-bold mb-2">لا توجد مقالات بعد</h3>
             <p className="text-sm text-muted-foreground/40 mb-7">ابدأ بكتابة أول مقال لك وشاركه مع العالم</p>
@@ -118,7 +121,7 @@ function BlogDashboard() {
             </Link>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
+          <div className="text-center py-16 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl">
             <Search className="h-10 w-10 text-muted-foreground/15 mx-auto mb-4" />
             <p className="text-muted-foreground/40">لا توجد نتائج</p>
           </div>
@@ -126,7 +129,7 @@ function BlogDashboard() {
           <div className="space-y-4">
             {filtered.map((article) => (
               <div key={article.id}
-                className="flex items-center gap-5 p-5 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/15 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.04)] transition-all duration-500 group">
+                className="flex items-center gap-5 p-5 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.15_0.025_250)] to-[oklch(0.12_0.02_250)] backdrop-blur-xl hover:border-cyan-glow/15 hover:shadow-[0_8px_40px_oklch(0.78_0.18_220/0.04)] transition-all duration-500 group">
                 {/* Large Thumbnail */}
                 {article.featured_image ? (
                   <img src={article.featured_image} alt="" className="w-40 h-28 rounded-xl object-cover shrink-0 group-hover:scale-[1.02] transition-transform duration-500" />
@@ -182,7 +185,6 @@ function BlogDashboard() {
             ))}
           </div>
         )}
-      </div>
-    </PageShell>
+    </div>
   );
 }

@@ -290,7 +290,7 @@ export function ArticleEditor({ article }: Props) {
 
       {/* Content Editor / Preview */}
       {showPreview ? (
-        <div className="p-8 sm:p-12 rounded-2xl border border-ice-border/10 bg-[oklch(0.15_0.02_250)] min-h-[500px] mb-8">
+        <div className="p-8 sm:p-12 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.13_0.02_250)] min-h-[500px] mb-8 shadow-[0_4px_30px_oklch(0_0_0/0.2)]">
           <div className="max-w-3xl mx-auto prose prose-invert prose-lg"
             style={{ fontSize: '1.125rem', lineHeight: '2' }}
             dangerouslySetInnerHTML={{ __html: `<p class="mb-5 leading-relaxed">${renderPreview(content)}</p>` }} />
@@ -306,7 +306,7 @@ export function ArticleEditor({ article }: Props) {
       )}
 
       {/* Video URL */}
-      <div className="p-5 rounded-2xl border border-ice-border/10 bg-[oklch(0.15_0.02_250)] mb-6">
+      <div className="p-5 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] backdrop-blur-xl shadow-[0_4px_30px_oklch(0_0_0/0.2)] mb-6">
         <label className="text-sm font-semibold text-muted-foreground/70 mb-3 block flex items-center gap-2">
           <Video className="h-4 w-4" /> فيديو (اختياري)
         </label>

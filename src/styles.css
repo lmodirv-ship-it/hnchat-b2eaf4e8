@@ -548,6 +548,7 @@ html, body {
 }
 
 /* Blog Editor Focus Mode — hide sidebar, footer, nav for distraction-free writing */
+.blog-editor-focus aside,
 .blog-editor-focus [data-sidebar="sidebar"],
 .blog-editor-focus [data-sidebar="rail"],
 .blog-editor-focus [data-sidebar="trigger"],
@@ -555,10 +556,10 @@ html, body {
 .blog-editor-focus .md\:hidden.fixed.bottom-0 {
   display: none !important;
 }
-.blog-editor-focus .peer ~ main,
 .blog-editor-focus main {
   margin-left: 0 !important;
   padding-left: 0 !important;
+  max-width: 100% !important;
 }
 .blog-editor-focus .group.peer {
   display: none !important;
