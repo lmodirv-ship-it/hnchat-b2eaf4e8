@@ -130,7 +130,7 @@ function ArticlePage() {
           )}
 
           {/* Content — magazine typography */}
-          <div className="mb-14" style={{ fontSize: '1.2rem', lineHeight: '2.1', letterSpacing: '0.01em' }}>
+          <div className="mb-14" style={{ fontSize: '1.15rem', lineHeight: '1.9', letterSpacing: '0.005em' }}>
             <ArticleContent content={article.content ?? ""} />
           </div>
 
@@ -184,21 +184,27 @@ function ArticlePage() {
 }
 
 function ArticleContent({ content }: { content: string }) {
-  const html = content
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-10 mb-4 text-foreground/95">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-12 mb-5 text-foreground">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-14 mb-6 text-foreground">$1</h1>')
+  // Clean stray separators like "..." or "…" on their own line
+  const cleaned = content
+    .replace(/^\s*\.{2,}\s*$/gm, '')
+    .replace(/^\s*…+\s*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n');
+
+  const html = cleaned
+    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-8 mb-3 text-foreground/95">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-9 mb-3 text-foreground">$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-10 mb-4 text-foreground">$1</h1>')
     .replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/```([\s\S]*?)```/gm, '<pre class="p-6 rounded-2xl bg-[oklch(0.10_0.015_250)] border border-ice-border/8 overflow-x-auto my-8 shadow-[inset_0_2px_10px_oklch(0_0_0/0.2)]"><code class="text-sm font-mono text-cyan-glow/80 leading-relaxed">$1</code></pre>')
-    .replace(/`(.+?)`/g, '<code class="px-2 py-1 rounded-lg bg-[oklch(0.15_0.02_250)] text-cyan-glow text-[0.9em] font-mono border border-ice-border/10">$1</code>')
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-cyan-glow/30 pl-6 italic text-muted-foreground/65 my-8 text-lg leading-relaxed">$1</blockquote>')
+    .replace(/```([\s\S]*?)```/gm, '<pre class="p-5 rounded-xl bg-[oklch(0.13_0.02_255)] border border-ice-border/8 overflow-x-auto my-6"><code class="text-sm font-mono text-cyan-glow/80 leading-relaxed">$1</code></pre>')
+    .replace(/`(.+?)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-[oklch(0.18_0.02_255)] text-cyan-glow text-[0.9em] font-mono border border-ice-border/10">$1</code>')
+    .replace(/^> (.+)$/gm, '<blockquote class="border-l-3 border-cyan-glow/25 pl-5 italic text-muted-foreground/60 my-5 text-base leading-relaxed">$1</blockquote>')
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-cyan-glow underline underline-offset-4 decoration-cyan-glow/30 hover:decoration-cyan-glow/60 transition" target="_blank" rel="noopener">$1</a>')
-    .replace(/^- (.+)$/gm, '<li class="ml-6 list-disc mb-2.5 text-muted-foreground/75">$1</li>')
-    .replace(/^\d+\. (.+)$/gm, '<li class="ml-6 list-decimal mb-2.5 text-muted-foreground/75">$1</li>')
-    .replace(/\n\n/g, '</p><p class="mb-6 text-muted-foreground/75 leading-[2]">')
+    .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-1.5 text-muted-foreground/70">$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-1.5 text-muted-foreground/70">$1</li>')
+    .replace(/\n\n/g, '</p><p class="mb-4 text-muted-foreground/70 leading-[1.85]">')
     .replace(/\n/g, '<br/>');
-  return <div className="text-muted-foreground/75 leading-[2]" dangerouslySetInnerHTML={{ __html: `<p class="mb-6 leading-[2]">${html}</p>` }} />;
+  return <div className="text-muted-foreground/70 leading-[1.85]" dangerouslySetInnerHTML={{ __html: `<p class="mb-4 leading-[1.85]">${html}</p>` }} />;
 }
 
 function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {
