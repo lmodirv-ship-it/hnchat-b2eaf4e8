@@ -66,6 +66,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
     setSession(null);
     setRoles([]);
+    // Redirect to landing page
+    window.location.href = "/";
   };
 
   const value: AuthContextValue = {
