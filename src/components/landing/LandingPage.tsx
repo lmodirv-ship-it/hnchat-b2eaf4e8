@@ -8,6 +8,7 @@ import { SocialProofToast } from "@/components/landing/SocialProofToast";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { PartnerStrip } from "@/components/landing/PartnerStrip";
 import { PhoneMockup } from "@/components/landing/PhoneMockup";
+import { BlogSection } from "@/components/landing/BlogSection";
 
 
 import { useState, useEffect, useRef } from "react";
