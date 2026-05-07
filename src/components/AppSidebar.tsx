@@ -136,17 +136,46 @@ export function AppSidebar() {
         )}
       </nav>
 
-      {/* Pro card — only when expanded */}
-      {(!collapsed || isMobileDrawer) && (
-        <div className="mx-2 mb-2 p-3 rounded-xl bg-[oklch(0.15_0.03_260/0.8)] border border-[oklch(1_0_0/0.06)]">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <span className="font-bold text-xs text-white">hnChat Pro</span>
-            <span className="text-sm">🔥</span>
+      {/* Pro card — compact, collapsible */}
+      {collapsed && !isMobileDrawer ? (
+        /* Collapsed sidebar: just an icon button */
+        <div className="flex justify-center px-1.5 mb-1">
+          <button
+            className="p-2 rounded-lg bg-[oklch(0.15_0.03_260/0.6)] border border-[oklch(1_0_0/0.06)] hover:bg-[oklch(0.20_0.04_260/0.6)] transition-colors"
+            title="hnChat Pro — ترقية"
+          >
+            <Sparkles className="h-4 w-4 text-[oklch(0.65_0.18_260)]" />
+          </button>
+        </div>
+      ) : proMinimized ? (
+        /* Minimized: single-line bar */
+        <button
+          onClick={() => setProMinimized(false)}
+          className="mx-2 mb-1.5 flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-[oklch(0.13_0.025_260/0.7)] border border-[oklch(1_0_0/0.05)] hover:bg-[oklch(0.16_0.03_260/0.7)] transition-colors"
+        >
+          <div className="flex items-center gap-1.5">
+            <Sparkles className="h-3 w-3 text-[oklch(0.65_0.18_260)]" />
+            <span className="text-[10px] font-semibold text-[oklch(0.65_0.18_260)]">hnChat Pro</span>
           </div>
-          <p className="text-[10px] text-[oklch(0.55_0.02_250)] mb-2 leading-relaxed">
-            احصل على تجربة أفضل ومميزات حصرية
-          </p>
-          <button className="w-full py-1.5 rounded-lg bg-[oklch(0.50_0.18_260)] hover:bg-[oklch(0.55_0.18_260)] text-white text-[11px] font-bold transition-colors">
+          <ChevronUp className="h-3 w-3 text-[oklch(0.45_0.02_250)] rotate-180" />
+        </button>
+      ) : (
+        /* Expanded: compact card */
+        <div className="mx-2 mb-1.5 px-2.5 py-2 rounded-lg bg-[oklch(0.13_0.025_260/0.7)] border border-[oklch(1_0_0/0.05)]">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1">
+              <Sparkles className="h-3 w-3 text-[oklch(0.65_0.18_260)]" />
+              <span className="font-bold text-[10px] text-white">hnChat Pro</span>
+            </div>
+            <button
+              onClick={() => setProMinimized(true)}
+              className="p-0.5 rounded hover:bg-[oklch(1_0_0/0.06)] transition-colors"
+              title="تصغير"
+            >
+              <ChevronUp className="h-3 w-3 text-[oklch(0.45_0.02_250)]" />
+            </button>
+          </div>
+          <button className="w-full py-1 rounded-md bg-[oklch(0.50_0.18_260)] hover:bg-[oklch(0.55_0.18_260)] text-white text-[10px] font-bold transition-colors">
             ترقية الآن
           </button>
         </div>
