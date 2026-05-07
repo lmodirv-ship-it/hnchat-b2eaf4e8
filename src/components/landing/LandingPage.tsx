@@ -505,7 +505,7 @@ export function LandingPage() {
       </nav>
 
       {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-2 sm:pt-4 pb-4 sm:pb-6 flex flex-col lg:flex-row gap-6 sm:gap-8 items-center">
+      <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-1 sm:pt-2 pb-2 sm:pb-4 flex flex-col lg:flex-row gap-4 sm:gap-6 items-center">
         {/* Left: Hero text */}
         <div className="flex-1 text-center lg:text-start pt-0 sm:pt-2 max-w-2xl">
           {/* Title */}
