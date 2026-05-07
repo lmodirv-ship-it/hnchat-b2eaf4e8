@@ -603,7 +603,7 @@ export function LandingPage() {
                 <span className="text-[10px] text-muted-foreground/60">{l.online}</span>
               </div>
               {/* Messages */}
-              <div ref={chatRef} className="h-40 overflow-y-auto px-3 py-3 flex flex-col gap-2.5" style={{ scrollbarWidth: "none" }}>
+              <div ref={chatRef} className="h-16 overflow-y-auto px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
                 <AnimatePresence initial={false}>
                   {chatMessages.map((m, i) => (
                     <motion.div
