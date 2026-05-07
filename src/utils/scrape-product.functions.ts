@@ -13,6 +13,17 @@ function blockPrivateNetworks(urlStr: string): void {
   }
 }
 
+function isPublicHttpUrl(urlStr: string): boolean {
+  try {
+    const u = new URL(urlStr);
+    if (!["http:", "https:"].includes(u.protocol)) return false;
+    blockPrivateNetworks(u.toString());
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export type ScrapedProduct = {
   url: string;
   title: string;
@@ -119,7 +130,7 @@ export const scrapeProductUrl = createServerFn({ method: "POST" })
           "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
       },
-      redirect: "follow",
+      redirect: "error",
     });
     if (!res.ok) throw new Error(`Failed to fetch (${res.status})`);
     const html = await res.text();
@@ -288,7 +299,7 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
         "User-Agent": "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
       },
-      redirect: "follow",
+      redirect: "error",
     });
     if (!res.ok) throw new Error(`Failed to fetch (${res.status})`);
     const html = await res.text();
@@ -366,7 +377,7 @@ async function fetchHtml(url: string): Promise<string | null> {
           "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
       },
-      redirect: "follow",
+      redirect: "error",
     });
     if (!res.ok) return null;
     return await res.text();
