@@ -29,7 +29,7 @@ export interface ConversationItem {
   unread_count?: number;
 }
 
-export function ConversationList({ activeId }: { activeId?: string }) {
+export function ConversationList({ activeId, onSelect }: { activeId?: string; onSelect?: (id: string) => void }) {
   const { user } = useAuth();
   const [items, setItems] = useState<ConversationItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -152,8 +152,8 @@ export function ConversationList({ activeId }: { activeId?: string }) {
 
   if (items.length === 0) {
     return (
-      <Card className="p-12 bg-ice-card border-ice-border text-center">
-        <MessageCircle className="h-12 w-12 mx-auto mb-3 text-cyan-glow" />
+      <Card className="p-12 bg-card border-border text-center">
+        <MessageCircle className="h-12 w-12 mx-auto mb-3 text-primary" />
         <p className="text-muted-foreground">لا توجد محادثات بعد. ابدأ محادثة جديدة!</p>
       </Card>
     );
@@ -167,19 +167,11 @@ export function ConversationList({ activeId }: { activeId?: string }) {
           : c.other_user?.full_name || c.other_user?.username || "User";
         const avatar = c.other_user?.avatar_url || undefined;
         const initial = title.slice(0, 2).toUpperCase();
-        return (
-          <Link
-            key={c.id}
-            to="/messages/$conversationId"
-            params={{ conversationId: c.id }}
-            className={cn(
-              "flex items-center gap-3 p-3 rounded-lg border border-ice-border bg-ice-card hover:bg-ice-card/70 transition",
-              activeId === c.id && "ring-1 ring-cyan-glow/60",
-            )}
-          >
-            <Avatar className="h-12 w-12 border border-ice-border">
+        const inner = (
+          <>
+            <Avatar className="h-12 w-12 border border-border">
               <AvatarImage src={avatar} />
-              <AvatarFallback className="bg-cyan-glow/10 text-cyan-glow">
+              <AvatarFallback className="bg-primary/10 text-primary">
                 {initial}
               </AvatarFallback>
             </Avatar>
@@ -197,6 +189,22 @@ export function ConversationList({ activeId }: { activeId?: string }) {
                 {c.last_message?.content || "لا توجد رسائل بعد"}
               </p>
             </div>
+          </>
+        );
+        const cls = cn(
+          "flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-card/70 transition cursor-pointer",
+          activeId === c.id && "ring-1 ring-primary/60 bg-primary/5",
+        );
+        if (onSelect) {
+          return (
+            <button key={c.id} onClick={() => onSelect(c.id)} className={cn(cls, "w-full text-right")}>
+              {inner}
+            </button>
+          );
+        }
+        return (
+          <Link key={c.id} to="/messages/$conversationId" params={{ conversationId: c.id }} className={cls}>
+            {inner}
           </Link>
         );
       })}
