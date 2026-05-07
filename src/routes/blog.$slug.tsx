@@ -191,20 +191,20 @@ function ArticleContent({ content }: { content: string }) {
     .replace(/\n{3,}/g, '\n\n');
 
   const html = cleaned
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-8 mb-3 text-foreground/95">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-9 mb-3 text-foreground">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-10 mb-4 text-foreground">$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground font-semibold">$1</strong>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-8 mb-3" style="color:oklch(0.82 0.08 70)">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-9 mb-3" style="color:oklch(0.85 0.09 65)">$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-10 mb-4" style="color:oklch(0.88 0.10 65)">$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:oklch(0.93 0.005 250);font-weight:600">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/```([\s\S]*?)```/gm, '<pre class="p-5 rounded-xl bg-[oklch(0.13_0.02_255)] border border-ice-border/8 overflow-x-auto my-6"><code class="text-sm font-mono text-cyan-glow/80 leading-relaxed">$1</code></pre>')
-    .replace(/`(.+?)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-[oklch(0.18_0.02_255)] text-cyan-glow text-[0.9em] font-mono border border-ice-border/10">$1</code>')
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-3 border-cyan-glow/25 pl-5 italic text-muted-foreground/60 my-5 text-base leading-relaxed">$1</blockquote>')
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-cyan-glow underline underline-offset-4 decoration-cyan-glow/30 hover:decoration-cyan-glow/60 transition" target="_blank" rel="noopener">$1</a>')
-    .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-1.5 text-muted-foreground/70">$1</li>')
-    .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-1.5 text-muted-foreground/70">$1</li>')
-    .replace(/\n\n/g, '</p><p class="mb-4 text-muted-foreground/70 leading-[1.85]">')
+    .replace(/```([\s\S]*?)```/gm, '<pre class="p-5 rounded-xl overflow-x-auto my-6" style="background:oklch(0.11 0.02 255);border:1px solid oklch(0.3 0.03 255/0.15)"><code class="text-sm font-mono leading-relaxed" style="color:oklch(0.80 0.005 250)">$1</code></pre>')
+    .replace(/`(.+?)`/g, '<code class="px-1.5 py-0.5 rounded-md text-[0.9em] font-mono" style="background:oklch(0.16 0.02 255);color:oklch(0.82 0.005 250);border:1px solid oklch(0.3 0.03 255/0.12)">$1</code>')
+    .replace(/^> (.+)$/gm, '<blockquote class="pl-5 italic my-5 text-base leading-relaxed" style="border-left:3px solid oklch(0.75 0.08 65/0.4);color:oklch(0.75 0.005 250)">$1</blockquote>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="underline underline-offset-4 transition" style="color:oklch(0.70 0.08 220);text-decoration-color:oklch(0.70 0.08 220/0.3)" target="_blank" rel="noopener">$1</a>')
+    .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-1.5" style="color:oklch(0.85 0.005 250)">$1</li>')
+    .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-1.5" style="color:oklch(0.85 0.005 250)">$1</li>')
+    .replace(/\n\n/g, '</p><p class="mb-4 leading-[1.85]" style="color:oklch(0.88 0.005 250)">')
     .replace(/\n/g, '<br/>');
-  return <div className="text-muted-foreground/70 leading-[1.85]" dangerouslySetInnerHTML={{ __html: `<p class="mb-4 leading-[1.85]">${html}</p>` }} />;
+  return <div className="leading-[1.85]" style={{ color: 'oklch(0.88 0.005 250)' }} dangerouslySetInnerHTML={{ __html: `<p class="mb-4 leading-[1.85]">${html}</p>` }} />;
 }
 
 function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {
