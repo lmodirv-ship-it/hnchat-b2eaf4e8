@@ -508,10 +508,31 @@ export function LandingPage() {
       <section className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-12 flex flex-col lg:flex-row gap-8 sm:gap-10 items-center">
         {/* Left: Hero text */}
         <div className="flex-1 text-center lg:text-start pt-2 sm:pt-4 max-w-2xl">
-          {/* Google Sign-In Button — top of hero */}
+          {/* Title */}
+          <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4 sm:mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            {l.heroTitle1}{" "}
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
+                {l.heroTitle2}
+              </span>
+              <span className="absolute inset-0 bg-gradient-to-r from-cyan-glow/30 to-violet-glow/20 blur-3xl rounded-full animate-pulse" />
+            </span>
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p className="text-base sm:text-xl font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
+            {l.heroSub}
+          </motion.p>
+
+          {/* Description */}
+          <motion.p className="text-sm sm:text-base text-muted-foreground max-w-lg mb-8 sm:mb-10 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={1}>
+            {l.heroDesc}
+          </motion.p>
+
+          {/* Google Sign-In Button */}
           <motion.div
             className="flex justify-center lg:justify-start mb-6"
-            initial={init} animate={enter} variants={fadeUp} custom={0}
+            initial={init} animate={enter} variants={fadeUp} custom={1.5}
           >
             <button
               onClick={async () => {
@@ -541,51 +562,12 @@ export function LandingPage() {
             </button>
           </motion.div>
 
-          <motion.div initial={init} animate={enter} variants={fadeUp} custom={0.5}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground mb-6">
+          {/* Badge */}
+          <motion.div initial={init} animate={enter} variants={fadeUp} custom={2}>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
               {l.badge}
             </span>
-          </motion.div>
-
-          <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4 sm:mb-5" initial={init} animate={enter} variants={fadeUp} custom={1}>
-            {l.heroTitle1}{" "}
-            <span className="relative inline-block">
-              <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
-                {l.heroTitle2}
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-cyan-glow/30 to-violet-glow/20 blur-3xl rounded-full animate-pulse" />
-            </span>
-          </motion.h1>
-
-          <motion.p className="text-base sm:text-xl font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
-            {l.heroSub}
-          </motion.p>
-
-          <motion.p className="text-sm sm:text-base text-muted-foreground max-w-lg mb-8 sm:mb-10 leading-relaxed mx-auto lg:mx-0" initial={init} animate={enter} variants={fadeUp} custom={2}>
-            {l.heroDesc}
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start" initial={init} animate={enter} variants={fadeUp} custom={3}>
-            <Link to="/sign-up-login">
-              {/* Glassmorphism CTA with animated border + pulse */}
-              <div className="group relative">
-                <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow opacity-70 group-hover:opacity-100 transition-opacity duration-500" style={{ backgroundSize: "200% 200%", animation: "borderRotate 4s linear infinite" }} />
-                <button className="relative px-8 sm:px-10 py-4 sm:py-5 text-base sm:text-lg font-bold rounded-2xl bg-background/80 backdrop-blur-2xl text-foreground transition-all duration-300 hover:bg-background/60 active:scale-95 cursor-pointer select-none" style={{ animation: "ctaPulse 3s ease-in-out infinite" }}>
-                  <span className="flex items-center gap-2">
-                    {isRTL && <ArrowLeft className="h-5 w-5" />}
-                    {l.joinNow}
-                    {!isRTL && <ArrowLeft className="h-5 w-5 rotate-180" />}
-                  </span>
-                </button>
-              </div>
-            </Link>
-            <Link to="/about">
-              <button className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-2xl border-2 border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] active:scale-[0.95] cursor-pointer">
-                {l.discover}
-              </button>
-            </Link>
           </motion.div>
         </div>
 
