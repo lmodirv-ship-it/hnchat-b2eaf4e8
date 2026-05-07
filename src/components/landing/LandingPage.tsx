@@ -574,7 +574,7 @@ export function LandingPage() {
           </div>
 
           {/* Right: Phone + Chat widget */}
-          <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 relative" style={{ height: "clamp(160px, 30vh, 280px)" }}>
+          <div className="hidden lg:block absolute right-0 top-0 w-[380px] xl:w-[420px]">
             {/* 3D Phone */}
             <motion.div
               initial={mounted ? { opacity: 0, y: 30 } : undefined}
