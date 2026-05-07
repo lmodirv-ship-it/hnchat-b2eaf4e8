@@ -510,7 +510,7 @@ export function LandingPage() {
           {/* Left: Hero text */}
           <div className="flex-1 text-center lg:text-start pt-0 lg:pt-2 max-w-2xl">
             {/* Title */}
-            <motion.h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold leading-[1.08] mb-4 lg:mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
+            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.08] mb-2 lg:mb-3" initial={init} animate={enter} variants={fadeUp} custom={0}>
               {l.heroTitle1}{" "}
               <br className="hidden lg:block" />
               <span className="relative inline-block">
