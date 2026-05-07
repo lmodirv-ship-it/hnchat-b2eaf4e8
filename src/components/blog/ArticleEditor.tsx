@@ -217,17 +217,17 @@ export function ArticleEditor({ article }: Props) {
       </div>
 
       {/* Title - Large & Clean */}
-      <div className="mb-8">
+      <div className="mb-8 p-6 sm:p-8 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] backdrop-blur-xl shadow-[0_4px_30px_oklch(0_0_0/0.2)]">
         <input
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
           placeholder="عنوان المقال..."
           className="w-full bg-transparent text-3xl sm:text-4xl font-bold border-0 outline-none placeholder:text-muted-foreground/20 leading-tight"
         />
-        <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground/40">
+        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-ice-border/8 text-xs text-muted-foreground/40">
           <span>hn-chat.com/blog/</span>
           <input value={slug} onChange={(e) => { setSlug(e.target.value); setIsDirty(true); }} dir="ltr"
-            className="bg-ice-card/10 border border-ice-border/15 rounded-lg px-2 py-1 text-xs w-52 outline-none focus:border-cyan-glow/30 transition" />
+            className="bg-ice-card/10 border border-ice-border/15 rounded-lg px-3 py-1.5 text-xs w-52 outline-none focus:border-cyan-glow/30 transition" />
         </div>
       </div>
 
