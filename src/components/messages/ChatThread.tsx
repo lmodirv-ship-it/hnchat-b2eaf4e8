@@ -130,7 +130,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
       .eq("conversation_id", conversationId)
       .order("created_at", { ascending: true })
       .limit(200);
-    setMessages((data || []) as Message[]);
+    setMessages((data || []) as unknown as Message[]);
     setLoading(false);
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "auto" }), 50);
   }
