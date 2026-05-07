@@ -54,9 +54,10 @@ function ArticlePage() {
     <PublicPageShell dir={isRTL ? "rtl" : "ltr"}>
       {/* Hero Cover */}
       {article.featured_image && (
-        <div className="relative w-full h-[55vh] max-h-[550px] overflow-hidden">
-          <img src={article.featured_image} alt={article.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/10" />
+        <div className="relative w-full max-w-5xl mx-auto px-6 mt-6">
+          <div className="rounded-3xl overflow-hidden border border-ice-border/10 bg-[oklch(0.12_0.02_250)]">
+            <img src={article.featured_image} alt={article.title} className="w-full h-auto max-h-[600px] object-contain mx-auto" />
+          </div>
         </div>
       )}
 
