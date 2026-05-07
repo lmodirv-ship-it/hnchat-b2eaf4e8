@@ -525,7 +525,7 @@ export function LandingPage() {
 
       {/* ═══ HERO SECTION ═══ */}
       <section className="relative z-10 overflow-visible">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-4 lg:py-6 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px] gap-4 items-center relative">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px] gap-4 items-center relative">
           {/* Left: Hero text */}
           <div className="text-center md:text-start max-w-2xl">
             {/* Badge */}
