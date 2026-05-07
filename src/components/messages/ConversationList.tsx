@@ -152,8 +152,8 @@ export function ConversationList({ activeId, onSelect }: { activeId?: string; on
 
   if (items.length === 0) {
     return (
-      <Card className="p-12 bg-ice-card border-ice-border text-center">
-        <MessageCircle className="h-12 w-12 mx-auto mb-3 text-cyan-glow" />
+      <Card className="p-12 bg-card border-border text-center">
+        <MessageCircle className="h-12 w-12 mx-auto mb-3 text-primary" />
         <p className="text-muted-foreground">لا توجد محادثات بعد. ابدأ محادثة جديدة!</p>
       </Card>
     );
