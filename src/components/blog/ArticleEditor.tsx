@@ -301,7 +301,7 @@ export function ArticleEditor({ article }: Props) {
           value={content}
           onChange={(e) => handleContentChange(e.target.value)}
           placeholder="ابدأ الكتابة هنا..."
-          className="w-full bg-[oklch(0.15_0.02_250)] border border-ice-border/10 min-h-[500px] rounded-2xl p-8 sm:p-12 text-lg leading-[2] font-normal text-foreground/90 placeholder:text-muted-foreground/20 outline-none focus:border-cyan-glow/20 transition resize-none mb-8"
+          className="w-full bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.14_0.02_250)] border border-ice-border/10 min-h-[500px] rounded-2xl p-8 sm:p-12 text-lg leading-[2] font-normal text-foreground/90 placeholder:text-muted-foreground/20 outline-none focus:border-cyan-glow/20 transition resize-none mb-8 shadow-[0_4px_30px_oklch(0_0_0/0.2)]"
         />
       )}
 
