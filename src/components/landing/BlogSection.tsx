@@ -105,7 +105,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
 
   return (
     <section className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-8 pt-0 pb-10">
-      <div className="rounded-[28px] border border-ice-border/20 bg-ice-card/10 backdrop-blur-2xl shadow-[0_12px_70px_oklch(0_0_0/0.35),0_0_80px_oklch(0.78_0.18_220/0.08)] px-4 sm:px-6 lg:px-8 py-10">
+      <div className="rounded-[28px] border border-ice-border/20 bg-ice-card/10 backdrop-blur-2xl shadow-[0_12px_70px_oklch(0_0_0/0.35),0_0_80px_oklch(0.78_0.18_220/0.08)] px-4 sm:px-6 lg:px-8 pt-6 pb-8">
       {/* Header */}
       <motion.div
         className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5"
