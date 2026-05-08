@@ -241,17 +241,47 @@ function PublicChatPage() {
       {/* ── Chat area ── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="shrink-0 px-4 py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-[oklch(0.25_0.12_220/0.3)]">
-            <Globe className="h-5 w-5 text-[oklch(0.70_0.15_220)]" />
+        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2.5 sm:gap-3 bg-[oklch(0.10_0.02_258/0.95)] backdrop-blur-md">
+          <div className="p-1.5 sm:p-2 rounded-xl bg-[oklch(0.25_0.12_220/0.3)] shrink-0">
+            <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-[oklch(0.70_0.15_220)]" />
           </div>
-          <div>
-            <h1 className="text-base font-bold text-white">المحادثات العامة</h1>
-            <p className="text-[11px] text-[oklch(0.55_0.02_250)]">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-sm sm:text-base font-bold text-white truncate">المحادثات العامة</h1>
+            <p className="text-[10px] sm:text-[11px] text-[oklch(0.55_0.02_250)] flex items-center gap-1">
+              <Circle className="h-1.5 w-1.5 fill-green-500 text-green-500" />
               {onlineUsers.length} متصل الآن
             </p>
           </div>
         </div>
+
+        {/* Mobile online users strip */}
+        {onlineUsers.length > 0 && (
+          <div className="lg:hidden shrink-0 border-b border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
+            <div className="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-thin">
+              {onlineUsers.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => user && u.id !== user.id && sendInvite(u.id)}
+                  className="flex flex-col items-center gap-1 shrink-0 w-14 group"
+                  title={u.username}
+                >
+                  <div className="relative">
+                    <Avatar className="h-10 w-10 ring-2 ring-[oklch(0.30_0.12_220/0.4)] group-hover:ring-[oklch(0.50_0.15_220)] transition">
+                      <AvatarImage src={u.avatar_url || undefined} />
+                      <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
+                        {u.username?.[0]?.toUpperCase() || "?"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 fill-green-500 text-green-500" />
+                  </div>
+                  <span className="text-[9px] text-[oklch(0.65_0.02_250)] truncate w-full text-center">
+                    {u.username}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Invitations bar */}
         {invitations.length > 0 && (
