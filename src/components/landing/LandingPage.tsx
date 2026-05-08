@@ -16,6 +16,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   MessageCircle, Bot, ShoppingBag, TrendingUp, Mic, Video,
   Sparkles, Shield, Globe, Zap, ArrowLeft, Send,
+  Search, Moon, Bell, Star, Users, Users2, Settings, Heart, FileText, Rocket, Code2, Mountain,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
