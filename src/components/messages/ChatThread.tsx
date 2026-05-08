@@ -402,7 +402,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="relative flex-1 overflow-y-auto px-3 sm:px-5 py-4 space-y-4 scroll-smooth"
+        className="relative z-10 flex-1 overflow-y-auto px-3 sm:px-5 py-4 space-y-4 scroll-smooth chat-scroll"
       >
         {loading ? (
           <div className="flex justify-center py-12">
