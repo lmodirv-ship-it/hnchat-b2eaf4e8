@@ -56,11 +56,15 @@ function SidebarSection({
         {group.items.map((item) => {
           const ItemIcon = item.icon;
           const active = pathname === item.to || pathname.startsWith(item.to + "/");
+          const activeBtnStyle: React.CSSProperties | undefined = active
+            ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
+            : undefined;
           return (
             <Link
               key={item.to}
               to={item.to}
               title={item.label}
+              style={activeBtnStyle}
               className={cn(
                 "group relative flex items-center justify-center rounded-lg w-10 h-10 transition-all duration-150",
                 active
