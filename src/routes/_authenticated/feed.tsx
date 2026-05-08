@@ -349,7 +349,7 @@ function FeedPage() {
             الأزرار
             <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: btnColor || "#5ec4ff" }} />
           </button>
-          <input ref={btnRef} type="color" value={btnColor || "#5ec4ff"} onChange={(e) => setBtnColor(e.target.value)} className="sr-only" />
+          <input ref={btnRef} type="color" value={btnColor || "#5ec4ff"} onChange={(e) => handleBtnChange(e.target.value)} className="sr-only" />
         </div>
       </div>
 
