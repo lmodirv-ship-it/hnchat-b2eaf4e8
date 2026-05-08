@@ -6,9 +6,11 @@ import { FloatingParticles } from "@/components/landing/FloatingParticles";
 export function PublicPageShell({
   children,
   dir = "rtl",
+  headerActions,
 }: {
   children: ReactNode;
   dir?: "rtl" | "ltr";
+  headerActions?: ReactNode;
 }) {
   return (
     <div className="min-h-screen relative overflow-hidden text-foreground" dir={dir}>
