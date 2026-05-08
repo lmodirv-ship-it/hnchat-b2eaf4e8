@@ -453,11 +453,11 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                           <div
                             key={m.id}
                             className={cn(
-                              "group/msg relative px-4 py-2 text-sm break-words backdrop-blur-sm transition-all",
-                              "border shadow-sm hover:shadow-md",
+                              "group/msg relative px-3.5 py-2 text-sm break-words transition-all duration-200",
+                              "shadow-sm hover:shadow-lg animate-in fade-in slide-in-from-bottom-1",
                               mine
-                                ? "bg-primary/15 border-primary/30 text-foreground"
-                                : "bg-background/70 border-border text-foreground",
+                                ? "bg-gradient-to-br from-[oklch(0.55_0.20_260)] to-[oklch(0.45_0.22_270)] text-white shadow-[oklch(0.50_0.20_260)]/20"
+                                : "bg-[oklch(0.16_0.025_258)] border border-[oklch(1_0_0/0.06)] text-[oklch(0.95_0.01_250)]",
                               mine
                                 ? cn(
                                     "rounded-2xl rounded-br-md",
