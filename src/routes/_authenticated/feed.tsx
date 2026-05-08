@@ -269,7 +269,7 @@ function FeedPage() {
   }, [user]);
 
   // Save colors to DB when changed (debounced)
-  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const saveColors = useCallback((bg: string, text: string, btn: string) => {
     if (!user || !colorsLoaded) return;
     clearTimeout(saveTimerRef.current);
