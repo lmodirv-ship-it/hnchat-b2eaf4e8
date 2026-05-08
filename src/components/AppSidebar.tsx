@@ -447,8 +447,9 @@ export function AppSidebar() {
     <>
       {/* Desktop sidebar */}
       <aside
+        style={{ backgroundColor: "var(--theme-bg, oklch(0.09 0.02 258))" }}
         className={cn(
-          "hidden md:block shrink-0 bg-[oklch(0.09_0.02_258)] border-l border-[oklch(1_0_0/0.07)] h-full transition-[width] duration-300 ease-in-out",
+          "hidden md:block shrink-0 border-l border-[oklch(1_0_0/0.07)] h-full transition-[width] duration-300 ease-in-out",
           collapsed ? "w-[56px]" : "w-[240px]",
         )}
       >
