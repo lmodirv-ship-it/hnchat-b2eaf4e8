@@ -419,7 +419,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           grouped.map((day) => (
             <div key={day.date} className="space-y-3">
               <div className="flex items-center justify-center sticky top-0 z-10">
-                <div className="px-3 py-1 rounded-full text-[11px] font-medium bg-background/80 backdrop-blur-md border border-border text-muted-foreground">
+                <div className="px-3 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-[oklch(0.10_0.02_258/0.80)] backdrop-blur-md border border-[oklch(1_0_0/0.06)] text-[oklch(0.60_0.02_250)] uppercase">
                   {day.label}
                 </div>
               </div>
