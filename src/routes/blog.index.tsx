@@ -326,6 +326,11 @@ function BlogPage() {
           </div>
         </div>
       </section>
+
+      {/* Ad Unit */}
+      <section className="max-w-5xl mx-auto px-6 pb-10">
+        <AdSenseUnit className="rounded-2xl overflow-hidden" />
+      </section>
     </PublicPageShell>
   );
 }

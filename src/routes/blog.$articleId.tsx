@@ -201,12 +201,22 @@ function ArticlePage() {
             </div>
           )}
 
+          {/* Ad before content */}
+          <div className="mb-10">
+            <AdSenseUnit className="rounded-xl overflow-hidden" />
+          </div>
+
           {/* Content — magazine typography */}
           <div
             className="mb-14"
             style={{ fontSize: "1.15rem", lineHeight: "1.9", letterSpacing: "0.005em" }}
           >
             <ArticleContent content={article.content ?? ""} />
+          </div>
+
+          {/* Ad after content */}
+          <div className="mb-10">
+            <AdSenseUnit className="rounded-xl overflow-hidden" />
           </div>
 
           {/* Tags */}
