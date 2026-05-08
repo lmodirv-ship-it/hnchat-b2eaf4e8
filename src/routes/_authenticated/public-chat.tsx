@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { UserProfileDialog } from "@/components/profile/UserProfileDialog";
 
 export const Route = createFileRoute("/_authenticated/public-chat")({
   component: PublicChatPage,
@@ -53,6 +54,7 @@ function PublicChatPage() {
   const [newMsg, setNewMsg] = useState("");
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [profileUserId, setProfileUserId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -302,7 +304,7 @@ function PublicChatPage() {
               {onlineUsers.map((u) => (
                 <button
                   key={u.id}
-                  onClick={() => user && u.id !== user.id && sendInvite(u.id)}
+                  onClick={() => setProfileUserId(u.id)}
                   className="flex flex-col items-center gap-1 shrink-0 w-14 group"
                   title={u.username}
                 >
@@ -394,12 +396,14 @@ function PublicChatPage() {
               >
                 <div className="w-7 sm:w-8 shrink-0">
                   {!grouped && (
-                    <Avatar className="h-7 w-7 sm:h-8 sm:w-8 mt-0.5 ring-1 ring-[oklch(1_0_0/0.06)]">
-                      <AvatarImage src={msg.profile?.avatar_url || undefined} />
-                      <AvatarFallback className="text-[10px] bg-gradient-to-br from-[oklch(0.28_0.08_230)] to-[oklch(0.22_0.06_245)] text-white">
-                        {msg.profile?.username?.[0]?.toUpperCase() || "?"}
-                      </AvatarFallback>
-                    </Avatar>
+                    <button type="button" onClick={() => setProfileUserId(msg.user_id)}>
+                      <Avatar className="h-7 w-7 sm:h-8 sm:w-8 mt-0.5 ring-1 ring-[oklch(1_0_0/0.06)] hover:ring-[oklch(0.50_0.15_220)] transition">
+                        <AvatarImage src={msg.profile?.avatar_url || undefined} />
+                        <AvatarFallback className="text-[10px] bg-gradient-to-br from-[oklch(0.28_0.08_230)] to-[oklch(0.22_0.06_245)] text-white">
+                          {msg.profile?.username?.[0]?.toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </button>
                   )}
                 </div>
                 <div className="min-w-0 flex flex-col">
@@ -543,7 +547,8 @@ function PublicChatPage() {
           {onlineUsers.map((u) => (
             <div
               key={u.id}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group"
+              onClick={() => setProfileUserId(u.id)}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
             >
               <div className="relative">
                 <Avatar className="h-8 w-8">
@@ -580,6 +585,11 @@ function PublicChatPage() {
           )}
         </div>
       </div>
+      <UserProfileDialog
+        userId={profileUserId}
+        open={!!profileUserId}
+        onOpenChange={(o) => !o && setProfileUserId(null)}
+      />
     </div>
   );
 }

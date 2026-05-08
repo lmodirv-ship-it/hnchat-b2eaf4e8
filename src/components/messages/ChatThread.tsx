@@ -10,6 +10,7 @@ import { format, isToday, isYesterday } from "date-fns";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/haptics";
+import { UserProfileDialog } from "@/components/profile/UserProfileDialog";
 
 interface Attachment {
   url: string;
@@ -76,6 +77,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [profileUserId, setProfileUserId] = useState<string | null>(null);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [showEmojis, setShowEmojis] = useState(false);
   const [showJump, setShowJump] = useState(false);
@@ -342,8 +344,13 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
     )}>
       {/* Header */}
       <div className="relative flex items-center gap-3 p-4 border-b border-border/70 backdrop-blur-xl bg-card/60">
-        <Link to={otherUser ? "/user/$userId" : "#"} params={otherUser ? { userId: otherUser.id } : undefined as any} className="relative">
-          <Avatar className="h-11 w-11 ring-2 ring-primary/40 ring-offset-2 ring-offset-card">
+        <button
+          type="button"
+          onClick={() => otherUser && setProfileUserId(otherUser.id)}
+          className="relative"
+          disabled={!otherUser}
+        >
+          <Avatar className="h-11 w-11 ring-2 ring-primary/40 ring-offset-2 ring-offset-card hover:ring-primary transition">
             <AvatarImage src={otherUser?.avatar_url || undefined} />
             <AvatarFallback className="bg-primary/10 text-primary font-bold">
               {isGroup ? <Users className="h-5 w-5" /> : headerTitle.slice(0, 2).toUpperCase()}
@@ -352,10 +359,17 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           {!isGroup && otherUser?.is_online && (
             <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-card animate-pulse" />
           )}
-        </Link>
+        </button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <Link to={otherUser ? "/user/$userId" : "#"} params={otherUser ? { userId: otherUser.id } : undefined as any} className="font-semibold truncate text-base hover:text-primary transition-colors">{headerTitle}</Link>
+            <button
+              type="button"
+              onClick={() => otherUser && setProfileUserId(otherUser.id)}
+              className="font-semibold truncate text-base hover:text-primary transition-colors text-right"
+              disabled={!otherUser}
+            >
+              {headerTitle}
+            </button>
             {otherUser?.is_verified && <ShieldCheck className="h-4 w-4 text-primary shrink-0" />}
           </div>
           <p className="text-xs text-muted-foreground truncate flex items-center gap-1.5">
@@ -409,20 +423,20 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                 return (
                   <div key={gi} className={cn("flex gap-2", mine ? "justify-end" : "justify-start")}>
                     {!mine && (
-                      <Link to="/profile/$username" params={{ username: members[group.senderId]?.username ?? group.senderId }}>
+                      <button type="button" onClick={() => setProfileUserId(group.senderId)}>
                         <Avatar className="h-8 w-8 mt-auto shrink-0 ring-1 ring-border hover:ring-primary/50 transition-all">
                           <AvatarImage src={sender?.avatar_url || undefined} />
                           <AvatarFallback className="bg-primary/10 text-primary text-[10px]">
                             {(sender?.username || "??").slice(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                      </Link>
+                      </button>
                     )}
                     <div className={cn("flex flex-col gap-0.5 max-w-[75%]", mine ? "items-end" : "items-start")}>
                       {!mine && isGroup && (
-                        <Link to="/profile/$username" params={{ username: members[group.senderId]?.username ?? group.senderId }} className="text-[11px] font-medium text-primary/90 px-1 hover:text-primary transition-colors">
+                        <button type="button" onClick={() => setProfileUserId(group.senderId)} className="text-[11px] font-medium text-primary/90 px-1 hover:text-primary transition-colors">
                           {sender?.full_name || sender?.username || "عضو"}
-                        </Link>
+                        </button>
                       )}
                       {group.items.map((m, idx) => {
                         const isFirst = idx === 0;
@@ -605,6 +619,11 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           {sending || uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </Button>
       </form>
+      <UserProfileDialog
+        userId={profileUserId}
+        open={!!profileUserId}
+        onOpenChange={(o) => !o && setProfileUserId(null)}
+      />
     </Card>
   );
 }
