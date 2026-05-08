@@ -73,7 +73,7 @@ function AuthPage() {
     setBusy("form");
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { error, data } = await supabase.auth.signUp({
           email, password,
           options: {
             emailRedirectTo: `${window.location.origin}/feed`,
@@ -81,8 +81,13 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("مرحباً بك! جاري تحويلك...");
-        navigate({ to: "/feed" });
+        const confirmed = !!(data.user?.email_confirmed_at || data.user?.confirmed_at);
+        if (confirmed) {
+          toast.success("مرحباً بك! جاري تحويلك...");
+          navigate({ to: "/feed" });
+        } else {
+          toast.success("تم إنشاء الحساب. الرجاء تأكيد بريدك الإلكتروني للمتابعة.");
+        }
       } else {
         const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
