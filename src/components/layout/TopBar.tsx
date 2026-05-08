@@ -18,6 +18,10 @@ export function TopBar() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const { bgColor, textColor, btnColor, setBg, setText, setBtn } = useThemeColors();
+  const bgRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLInputElement>(null);
+  const btnRef = useRef<HTMLInputElement>(null);
 
   const { data: profile } = useQuery({
     queryKey: ["topbar-profile", user?.id],
