@@ -439,7 +439,7 @@ function useFakeChat() {
 /* ═══════════════════════════════════════════════════════════
    COMPONENT — Redesigned to match HN-Chat reference
    ═══════════════════════════════════════════════════════════ */
-import { Search, Moon, Bell, Star, Users, Users2, Settings, Heart, FileText, Rocket, Code2, Mountain } from "lucide-react";
+// (icons imported at top)
 
 const navLabels: Record<Lang, { home: string; articles: string; chat: string; members: string; reels: string; aiTools: string; more: string }> = {
   ar: { home: "الرئيسية", articles: "المقالات", chat: "الدردشة", members: "الأعضاء", reels: "Reels", aiTools: "أدوات AI", more: "المزيد" },
