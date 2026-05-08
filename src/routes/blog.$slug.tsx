@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useArticleBySlug, useArticleComments, useAddArticleComment, useDeleteArticleComment, useArticleLike, usePublishedArticles } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
