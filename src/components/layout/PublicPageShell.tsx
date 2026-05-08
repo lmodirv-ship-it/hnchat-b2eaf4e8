@@ -1,7 +1,9 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { HnLogo } from "@/components/HnLogo";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
+import { Palette, Type, MousePointerClick } from "lucide-react";
+import { useThemeColors } from "@/hooks/useThemeColors";
 
 export function PublicPageShell({
   children,
@@ -12,6 +14,11 @@ export function PublicPageShell({
   dir?: "rtl" | "ltr";
   headerActions?: ReactNode;
 }) {
+  const { bgColor, textColor, btnColor, setBg, setText, setBtn } = useThemeColors();
+  const bgRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLInputElement>(null);
+  const btnRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="min-h-screen relative overflow-hidden text-foreground" dir={dir}>
       {/* ═══ Vivid purple/violet cosmic background ═══ */}
@@ -99,7 +106,27 @@ export function PublicPageShell({
             {headerActions}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {/* Color buttons */}
+            <button onClick={() => bgRef.current?.click()} className="p-1.5 rounded-lg hover:bg-white/10 transition relative" title="لون الخلفية">
+              <Palette className="h-4 w-4 text-muted-foreground/60" />
+              {bgColor && <div className="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white/30" style={{ backgroundColor: bgColor }} />}
+            </button>
+            <input ref={bgRef} type="color" value={bgColor || "#0a0a1a"} onChange={(e) => setBg(e.target.value)} className="sr-only" />
+
+            <button onClick={() => textRef.current?.click()} className="p-1.5 rounded-lg hover:bg-white/10 transition relative" title="لون الكتابة">
+              <Type className="h-4 w-4 text-muted-foreground/60" />
+              {textColor && <div className="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white/30" style={{ backgroundColor: textColor }} />}
+            </button>
+            <input ref={textRef} type="color" value={textColor || "#e0e0ee"} onChange={(e) => setText(e.target.value)} className="sr-only" />
+
+            <button onClick={() => btnRef.current?.click()} className="p-1.5 rounded-lg hover:bg-white/10 transition relative" title="لون الأزرار">
+              <MousePointerClick className="h-4 w-4 text-muted-foreground/60" />
+              {btnColor && <div className="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white/30" style={{ backgroundColor: btnColor }} />}
+            </button>
+            <input ref={btnRef} type="color" value={btnColor || "#5ec4ff"} onChange={(e) => setBtn(e.target.value)} className="sr-only" />
+
+            <span className="hidden sm:block w-px h-4 bg-white/10" />
             <Link to="/about" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">حول</Link>
             <Link to="/blog" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">Blog</Link>
             <Link to="/contact" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">تواصل</Link>
