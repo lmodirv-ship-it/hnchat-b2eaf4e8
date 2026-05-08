@@ -160,6 +160,12 @@ function GaPageViewTracker() {
   return null;
 }
 
+function VisitorTracker() {
+  const location = useLocation();
+  useVisitorTracking(location.pathname);
+  return null;
+}
+
 function RootComponent() {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: { queries: { staleTime: 60_000, refetchOnWindowFocus: false } },
