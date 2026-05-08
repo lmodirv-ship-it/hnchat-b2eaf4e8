@@ -167,7 +167,7 @@ function UsersPage() {
             <Input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-              placeholder="بحث بالاسم أو اسم المستخدم..."
+              placeholder="بحث بالمعرّف، الاسم، أو اسم المستخدم..."
               className="pr-9 bg-transparent border-[oklch(0.18_0.04_30)] text-[oklch(0.9_0.05_50)] placeholder:text-[oklch(0.4_0.04_40)]"
             />
           </div>
