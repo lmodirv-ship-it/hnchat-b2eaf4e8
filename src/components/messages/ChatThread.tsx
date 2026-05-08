@@ -423,20 +423,20 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                 return (
                   <div key={gi} className={cn("flex gap-2", mine ? "justify-end" : "justify-start")}>
                     {!mine && (
-                      <Link to="/profile/$username" params={{ username: members[group.senderId]?.username ?? group.senderId }}>
+                      <button type="button" onClick={() => setProfileUserId(group.senderId)}>
                         <Avatar className="h-8 w-8 mt-auto shrink-0 ring-1 ring-border hover:ring-primary/50 transition-all">
                           <AvatarImage src={sender?.avatar_url || undefined} />
                           <AvatarFallback className="bg-primary/10 text-primary text-[10px]">
                             {(sender?.username || "??").slice(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                      </Link>
+                      </button>
                     )}
                     <div className={cn("flex flex-col gap-0.5 max-w-[75%]", mine ? "items-end" : "items-start")}>
                       {!mine && isGroup && (
-                        <Link to="/profile/$username" params={{ username: members[group.senderId]?.username ?? group.senderId }} className="text-[11px] font-medium text-primary/90 px-1 hover:text-primary transition-colors">
+                        <button type="button" onClick={() => setProfileUserId(group.senderId)} className="text-[11px] font-medium text-primary/90 px-1 hover:text-primary transition-colors">
                           {sender?.full_name || sender?.username || "عضو"}
-                        </Link>
+                        </button>
                       )}
                       {group.items.map((m, idx) => {
                         const isFirst = idx === 0;
