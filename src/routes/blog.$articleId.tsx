@@ -272,7 +272,7 @@ function ArticlePage() {
           <CommentsSection articleId={article.id} isRTL={isRTL} />
 
           {/* Related */}
-          <RelatedArticles currentSlug={slug} />
+          <RelatedArticles currentSlug={article?.slug || ""} />
         </article>
       </div>
     </PublicPageShell>
