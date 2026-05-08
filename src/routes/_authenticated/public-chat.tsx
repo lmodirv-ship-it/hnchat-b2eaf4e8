@@ -279,14 +279,17 @@ function PublicChatPage() {
       {/* ── Chat area ── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2.5 sm:gap-3 bg-[oklch(0.10_0.02_258/0.95)] backdrop-blur-md">
-          <div className="p-1.5 sm:p-2 rounded-xl bg-[oklch(0.25_0.12_220/0.3)] shrink-0">
-            <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-[oklch(0.70_0.15_220)]" />
+        <div className="shrink-0 px-3 sm:px-4 py-2 sm:py-2.5 border-b border-[oklch(1_0_0/0.06)] flex items-center gap-2.5 sm:gap-3 bg-[oklch(0.09_0.02_258/0.92)] backdrop-blur-xl">
+          <div className="p-1.5 rounded-xl bg-gradient-to-br from-[oklch(0.32_0.14_220/0.4)] to-[oklch(0.22_0.10_240/0.3)] ring-1 ring-[oklch(0.50_0.15_220/0.25)] shrink-0">
+            <Globe className="h-4 w-4 sm:h-[18px] sm:w-[18px] text-[oklch(0.78_0.14_220)]" />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-sm sm:text-base font-bold text-white truncate">المحادثات العامة</h1>
-            <p className="text-[10px] sm:text-[11px] text-[oklch(0.55_0.02_250)] flex items-center gap-1">
-              <Circle className="h-1.5 w-1.5 fill-green-500 text-green-500" />
+            <h1 className="text-[13px] sm:text-[15px] font-semibold tracking-tight text-white truncate">HN chat</h1>
+            <p className="text-[10px] sm:text-[11px] text-[oklch(0.55_0.02_250)] flex items-center gap-1 mt-0.5">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
+              </span>
               {onlineUsers.length} متصل الآن
             </p>
           </div>
