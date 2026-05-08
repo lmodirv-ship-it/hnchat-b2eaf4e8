@@ -633,6 +633,8 @@ const footerStatsData: Record<Lang, { value: string; label: string; icon: any; c
 export function LandingPage() {
   const [lang, setLang] = useState<Lang>("ar");
   const [mounted, setMounted] = useState(false);
+  const [guestBusy, setGuestBusy] = useState(false);
+  const navigate = useNavigate();
   const l = t[lang];
   const nav = navLabels[lang];
   const sb = sidebarLabels[lang];
@@ -642,6 +644,26 @@ export function LandingPage() {
   const fStats = footerStatsData[lang];
 
   useEffect(() => { setMounted(true); setLang(detectLang()); }, []);
+
+  async function handleGuestEntry() {
+    if (guestBusy) return;
+    setGuestBusy(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate({ to: "/feed" });
+        return;
+      }
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      toast.success("مرحباً بك! تم منحك معرفاً مؤقتاً");
+      navigate({ to: "/feed" });
+    } catch (e: any) {
+      toast.error(e?.message || "تعذر الدخول كزائر");
+    } finally {
+      setGuestBusy(false);
+    }
+  }
 
   const isRTL = lang === "ar";
   const init = mounted ? "hidden" as const : undefined;
