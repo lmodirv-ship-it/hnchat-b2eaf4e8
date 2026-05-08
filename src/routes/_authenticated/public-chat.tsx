@@ -547,7 +547,8 @@ function PublicChatPage() {
           {onlineUsers.map((u) => (
             <div
               key={u.id}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group"
+              onClick={() => setProfileUserId(u.id)}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
             >
               <div className="relative">
                 <Avatar className="h-8 w-8">
