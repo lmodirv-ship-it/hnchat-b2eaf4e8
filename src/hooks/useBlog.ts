@@ -88,6 +88,7 @@ export function usePublishedArticles(options?: { category?: string; limit?: numb
         .eq("status", "published")
         .order("published_at", { ascending: false });
 
+      if (options?.language) q = q.eq("language", options.language);
       if (options?.limit) q = q.limit(options.limit);
 
       const { data, error } = await q;

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Eye, ArrowRight, FileText, User, TrendingUp, Sparkles, Mail, Search, Heart } from "lucide-react";
+import { Calendar, Clock, Eye, ArrowRight, FileText, User, TrendingUp, Sparkles, Mail, Search, Heart, Globe } from "lucide-react";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
 import { Button } from "@/components/ui/button";
@@ -21,10 +21,21 @@ export const Route = createFileRoute("/blog/")({
   component: BlogPage,
 });
 
+const LANGUAGES = [
+  { code: "all", label: "الكل", flag: "🌍" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+];
+
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeLang, setActiveLang] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: articles = [], isLoading } = usePublishedArticles();
+  const { data: articles = [], isLoading } = usePublishedArticles(
+    activeLang !== "all" ? { language: activeLang } : undefined
+  );
   const { data: categories = [] } = useCategories();
 
   const filtered = useMemo(() => {
@@ -38,11 +49,13 @@ function BlogPage() {
     return list;
   }, [articles, activeCategory, searchQuery]);
 
+  const isRtl = activeLang === "ar" || activeLang === "all";
+
   const featured = articles[0];
   const trending = articles.slice(0, 4);
 
   return (
-    <PublicPageShell dir="rtl" headerActions={
+    <PublicPageShell dir={isRtl ? "rtl" : "ltr"} headerActions={
       <Link
         to="/feed"
         hash="articles-section"
@@ -69,6 +82,25 @@ function BlogPage() {
           <p className="text-lg sm:text-xl text-muted-foreground/60 max-w-2xl mx-auto leading-relaxed mb-8">
             مقالات متخصصة في الذكاء الاصطناعي، العملات الرقمية، الخصوصية، والجيل القادم من التقنية الاجتماعية.
           </p>
+
+          {/* Language Selector */}
+          <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => setActiveLang(lang.code)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border flex items-center gap-2 ${
+                  activeLang === lang.code
+                    ? "bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground border-transparent shadow-[0_0_20px_oklch(0.78_0.18_220/0.15)]"
+                    : "border-ice-border/15 bg-[oklch(0.14_0.02_250)] text-muted-foreground hover:text-foreground hover:border-cyan-glow/25"
+                }`}
+              >
+                <span>{lang.flag}</span>
+                <span>{lang.label}</span>
+              </button>
+            ))}
+          </div>
+
           {/* Search */}
           <div className="max-w-xl mx-auto relative">
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/40" />
