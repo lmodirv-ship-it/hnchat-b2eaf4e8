@@ -12,7 +12,7 @@ import { Search, FileText, Heart, MessageCircle, Trash2, Loader2, Eye, ChevronLe
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/content")({
+export const Route = createFileRoute("/_owner/owner/content")({
   component: ContentPage,
 });
 

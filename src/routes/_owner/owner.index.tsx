@@ -6,7 +6,7 @@ import { Users, FileText, ShoppingBag, MessageCircle, Globe, TrendingUp, Crown, 
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useState, useEffect } from "react";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/")({
+export const Route = createFileRoute("/_owner/owner/")({
   component: MissionControl,
 });
 

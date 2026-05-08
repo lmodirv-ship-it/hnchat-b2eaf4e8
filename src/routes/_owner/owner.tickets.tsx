@@ -12,7 +12,7 @@ import { LifeBuoy, AlertCircle, CheckCircle, Clock, Loader2 } from "lucide-react
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/tickets")({
+export const Route = createFileRoute("/_owner/owner/tickets")({
   component: TicketsPage,
 });
 

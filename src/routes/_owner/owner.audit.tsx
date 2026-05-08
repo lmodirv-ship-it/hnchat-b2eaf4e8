@@ -5,7 +5,7 @@ import { OwnerShell, OwnerCard } from "@/components/owner/OwnerShell";
 import { Activity } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/audit")({
+export const Route = createFileRoute("/_owner/owner/audit")({
   component: AuditPage,
 });
 

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { OwnerShell, OwnerCard, OwnerStat } from "@/components/owner/OwnerShell";
 import { Globe, Languages, MapPin, Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/geography")({
+export const Route = createFileRoute("/_owner/owner/geography")({
   component: GeographyPage,
 });
 

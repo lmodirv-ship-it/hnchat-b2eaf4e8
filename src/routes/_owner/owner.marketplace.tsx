@@ -9,7 +9,7 @@ import { ShoppingBag, Package, DollarSign, Loader2, Trash2, Eye, EyeOff } from "
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/marketplace")({
+export const Route = createFileRoute("/_owner/owner/marketplace")({
   component: MarketplacePage,
 });
 
