@@ -16,6 +16,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   MessageCircle, Bot, ShoppingBag, TrendingUp, Mic, Video,
   Sparkles, Shield, Globe, Zap, ArrowLeft, Send,
+  Search, Moon, Bell, Star, Users, Users2, Settings, Heart, FileText, Rocket, Code2, Mountain,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════
@@ -436,318 +437,504 @@ function useFakeChat() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   COMPONENT
+   COMPONENT — Redesigned to match HN-Chat reference
    ═══════════════════════════════════════════════════════════ */
+// (icons imported at top)
+
+const navLabels: Record<Lang, { home: string; articles: string; chat: string; members: string; reels: string; aiTools: string; more: string }> = {
+  ar: { home: "الرئيسية", articles: "المقالات", chat: "الدردشة", members: "الأعضاء", reels: "Reels", aiTools: "أدوات AI", more: "المزيد" },
+  en: { home: "Home", articles: "Articles", chat: "Chat", members: "Members", reels: "Reels", aiTools: "AI Tools", more: "More" },
+  fr: { home: "Accueil", articles: "Articles", chat: "Chat", members: "Membres", reels: "Reels", aiTools: "Outils IA", more: "Plus" },
+  es: { home: "Inicio", articles: "Artículos", chat: "Chat", members: "Miembros", reels: "Reels", aiTools: "IA", more: "Más" },
+  de: { home: "Start", articles: "Artikel", chat: "Chat", members: "Mitglieder", reels: "Reels", aiTools: "KI-Tools", more: "Mehr" },
+  tr: { home: "Ana", articles: "Makaleler", chat: "Sohbet", members: "Üyeler", reels: "Reels", aiTools: "AI Araçları", more: "Daha" },
+  pt: { home: "Início", articles: "Artigos", chat: "Chat", members: "Membros", reels: "Reels", aiTools: "Ferramentas IA", more: "Mais" },
+  zh: { home: "首页", articles: "文章", chat: "聊天", members: "成员", reels: "Reels", aiTools: "AI 工具", more: "更多" },
+  ru: { home: "Главная", articles: "Статьи", chat: "Чат", members: "Участники", reels: "Reels", aiTools: "ИИ", more: "Ещё" },
+};
+
+const sidebarLabels: Record<Lang, string[]> = {
+  ar: ["الدردشة العامة", "المفضلة", "الرسائل", "الأصدقاء", "المجموعات", "الإشعارات", "الإعدادات"],
+  en: ["Public Chat", "Favorites", "Messages", "Friends", "Groups", "Notifications", "Settings"],
+  fr: ["Chat Public", "Favoris", "Messages", "Amis", "Groupes", "Notifications", "Paramètres"],
+  es: ["Chat Público", "Favoritos", "Mensajes", "Amigos", "Grupos", "Notificaciones", "Ajustes"],
+  de: ["Öffentlich", "Favoriten", "Nachrichten", "Freunde", "Gruppen", "Benachrichtigungen", "Einstellungen"],
+  tr: ["Genel", "Favoriler", "Mesajlar", "Arkadaşlar", "Gruplar", "Bildirimler", "Ayarlar"],
+  pt: ["Chat Público", "Favoritos", "Mensagens", "Amigos", "Grupos", "Notificações", "Configurações"],
+  zh: ["公共聊天", "收藏", "消息", "好友", "群组", "通知", "设置"],
+  ru: ["Общий чат", "Избранное", "Сообщения", "Друзья", "Группы", "Уведомления", "Настройки"],
+};
+
+const heroStatsData: Record<Lang, { value: string; label: string }[]> = {
+  ar: [{ value: "+2.5K", label: "عضو نشط" }, { value: "+15K", label: "رسالة يومياً" }, { value: "+120", label: "مقال منشور" }, { value: "256", label: "متصل الآن" }],
+  en: [{ value: "+2.5K", label: "Active Members" }, { value: "+15K", label: "Daily Messages" }, { value: "+120", label: "Published Articles" }, { value: "256", label: "Online Now" }],
+  fr: [{ value: "+2.5K", label: "Membres actifs" }, { value: "+15K", label: "Messages/jour" }, { value: "+120", label: "Articles publiés" }, { value: "256", label: "En ligne" }],
+  es: [{ value: "+2.5K", label: "Miembros activos" }, { value: "+15K", label: "Mensajes/día" }, { value: "+120", label: "Artículos" }, { value: "256", label: "En línea" }],
+  de: [{ value: "+2.5K", label: "Aktive Mitglieder" }, { value: "+15K", label: "Nachrichten/Tag" }, { value: "+120", label: "Artikel" }, { value: "256", label: "Online" }],
+  tr: [{ value: "+2.5K", label: "Aktif Üye" }, { value: "+15K", label: "Mesaj/gün" }, { value: "+120", label: "Makale" }, { value: "256", label: "Çevrimiçi" }],
+  pt: [{ value: "+2.5K", label: "Membros ativos" }, { value: "+15K", label: "Mensagens/dia" }, { value: "+120", label: "Artigos" }, { value: "256", label: "Online" }],
+  zh: [{ value: "+2.5K", label: "活跃会员" }, { value: "+15K", label: "每日消息" }, { value: "+120", label: "已发布文章" }, { value: "256", label: "在线" }],
+  ru: [{ value: "+2.5K", label: "Активных" }, { value: "+15K", label: "Сообщений/день" }, { value: "+120", label: "Статей" }, { value: "256", label: "Онлайн" }],
+};
+
+const heroLabels: Record<Lang, { welcome: string; tagline: string; startNow: string; joinChat: string; discoverContent: string; discoverSub: string; viewAll: string; onlineNow: string; chatTitle: string; typeMessage: string; }> = {
+  ar: { welcome: "مرحبا بك في", tagline: "منصة متكاملة تجمع بين الدردشة، المحتوى، الذكاء الاصطناعي وتواصل الأعضاء في مجتمع واحد.", startNow: "🚀 إبدأ الآن", joinChat: "انضم إلى الدردشة", discoverContent: "اكتشف محتوى مميز", discoverSub: "مقالات حصرية وأدوات ذكية لتطوير معرفتك", viewAll: "عرض الكل", onlineNow: "المتصلون الآن", chatTitle: "الدردشة العامة", typeMessage: "اكتب رسالة..." },
+  en: { welcome: "Welcome to", tagline: "An all-in-one platform combining chat, content, AI, and member networking in a single community.", startNow: "🚀 Start Now", joinChat: "Join Chat", discoverContent: "Discover Premium Content", discoverSub: "Exclusive articles & smart tools to expand your knowledge", viewAll: "View All", onlineNow: "Online Now", chatTitle: "Public Chat", typeMessage: "Type a message..." },
+  fr: { welcome: "Bienvenue sur", tagline: "Une plateforme intégrée combinant chat, contenu, IA et mise en relation des membres.", startNow: "🚀 Commencer", joinChat: "Rejoindre le chat", discoverContent: "Découvrez du contenu premium", discoverSub: "Articles exclusifs et outils intelligents", viewAll: "Voir tout", onlineNow: "En ligne", chatTitle: "Chat public", typeMessage: "Écrivez un message..." },
+  es: { welcome: "Bienvenido a", tagline: "Una plataforma integral que combina chat, contenido, IA y networking.", startNow: "🚀 Empezar", joinChat: "Unirse al chat", discoverContent: "Descubre contenido premium", discoverSub: "Artículos exclusivos y herramientas inteligentes", viewAll: "Ver todo", onlineNow: "En línea", chatTitle: "Chat público", typeMessage: "Escribe un mensaje..." },
+  de: { welcome: "Willkommen bei", tagline: "Eine All-in-One-Plattform für Chat, Inhalte, KI und Mitglieder-Networking.", startNow: "🚀 Loslegen", joinChat: "Chat beitreten", discoverContent: "Entdecke Premium-Inhalte", discoverSub: "Exklusive Artikel und smarte Tools", viewAll: "Alle ansehen", onlineNow: "Online", chatTitle: "Öffentlicher Chat", typeMessage: "Nachricht schreiben..." },
+  tr: { welcome: "Hoş geldin", tagline: "Sohbet, içerik, AI ve üye ağını birleştiren entegre platform.", startNow: "🚀 Başla", joinChat: "Sohbete katıl", discoverContent: "Premium içerik keşfet", discoverSub: "Özel makaleler ve akıllı araçlar", viewAll: "Tümünü gör", onlineNow: "Çevrimiçi", chatTitle: "Genel Sohbet", typeMessage: "Mesaj yaz..." },
+  pt: { welcome: "Bem-vindo ao", tagline: "Plataforma integrada de chat, conteúdo, IA e networking de membros.", startNow: "🚀 Começar", joinChat: "Entrar no chat", discoverContent: "Descubra conteúdo premium", discoverSub: "Artigos exclusivos e ferramentas inteligentes", viewAll: "Ver tudo", onlineNow: "Online", chatTitle: "Chat Público", typeMessage: "Digite uma mensagem..." },
+  zh: { welcome: "欢迎来到", tagline: "集聊天、内容、AI 和成员社交于一体的综合平台。", startNow: "🚀 立即开始", joinChat: "加入聊天", discoverContent: "发现精选内容", discoverSub: "独家文章和智能工具", viewAll: "查看全部", onlineNow: "在线", chatTitle: "公共聊天", typeMessage: "输入消息..." },
+  ru: { welcome: "Добро пожаловать в", tagline: "Универсальная платформа: чат, контент, ИИ и нетворкинг.", startNow: "🚀 Начать", joinChat: "Присоединиться", discoverContent: "Откройте премиум-контент", discoverSub: "Эксклюзивные статьи и умные инструменты", viewAll: "Все", onlineNow: "Онлайн", chatTitle: "Общий чат", typeMessage: "Введите сообщение..." },
+};
+
+const fakeChatMessages = [
+  { user: "Omar", time: "10:21 ص", msg: "مرحبا بالجميع! كيف حالكم اليوم؟ 👋", avatar: "👨", self: false },
+  { user: "Sarah", time: "10:22 ص", msg: "مرحبا عمر! أنا بخير شكراً ❤️", avatar: "👩", self: false },
+  { user: "Ahmed", time: "10:23 ص", msg: "صباح الخير للجميع 🌟", avatar: "🧑", self: false },
+  { user: "You", time: "10:24 ص", msg: "🎉 أهلاً وسهلاً بالجميع في منصة hn-chat.com", avatar: "🧑‍💼", self: true },
+];
+
+const onlineUsers = [
+  { name: "Omar", color: "from-violet-500 to-purple-600" },
+  { name: "Sarah", color: "from-pink-500 to-rose-600" },
+  { name: "Ahmed", color: "from-cyan-500 to-blue-600" },
+  { name: "Lina", color: "from-amber-500 to-orange-600" },
+  { name: "Mohamed", color: "from-emerald-500 to-green-600" },
+  { name: "Aya", color: "from-fuchsia-500 to-pink-600" },
+  { name: "Yassine", color: "from-indigo-500 to-violet-600" },
+];
+
+const blogPosts: Record<Lang, { tag: string; title: string; desc: string; date: string; reads: string; views: string; gradient: string; icon: any }[]> = {
+  ar: [
+    { tag: "الذكاء الاصطناعي", title: "أفضل أدوات الذكاء الاصطناعي في 2024", desc: "اكتشف أقوى أدوات الذكاء الاصطناعي التي تساعدك في العمل والدراسة وزيادة الإنتاجية.", date: "07 مايو 2024", reads: "5 دقائق", views: "1.2K مشاهدة", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "ريادة الأعمال", title: "10 خطوات لبناء مشروع ناجح من الصفر", desc: "دليل شامل لبناء مشروعك الخاص وتحقيق النجاح في عالم الأعمال.", date: "06 مايو 2024", reads: "8 دقائق", views: "990 مشاهدة", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "البرمجة", title: "تعلم البرمجة من البداية حتى الاحتراف", desc: "خطة تعليمية متكاملة لتعلم البرمجة وتطوير مهاراتك خطوة بخطوة.", date: "05 مايو 2024", reads: "12 دقيقة", views: "12K مشاهدة", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "التطوير الذاتي", title: "7 عادات يومية ستغير حياتك بالكامل", desc: "عادات بسيطة إذا التزمت بها ستغير حياتك نحو الأفضل.", date: "04 مايو 2024", reads: "6 دقائق", views: "1.1K مشاهدة", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  en: [
+    { tag: "AI", title: "Best AI Tools in 2024", desc: "Discover the most powerful AI tools to boost your work and productivity.", date: "May 07, 2024", reads: "5 min", views: "1.2K views", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "Business", title: "10 Steps to Build a Successful Startup", desc: "Complete guide to building your own business from scratch.", date: "May 06, 2024", reads: "8 min", views: "990 views", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Coding", title: "Learn Programming from Zero to Pro", desc: "Comprehensive plan to master programming step by step.", date: "May 05, 2024", reads: "12 min", views: "12K views", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Self-Growth", title: "7 Daily Habits That Will Change Your Life", desc: "Simple habits that will transform your life for the better.", date: "May 04, 2024", reads: "6 min", views: "1.1K views", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  fr: [
+    { tag: "IA", title: "Meilleurs outils d'IA en 2024", desc: "Découvrez les outils d'IA les plus puissants.", date: "07 mai 2024", reads: "5 min", views: "1.2K vues", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "Business", title: "10 étapes pour créer une startup", desc: "Guide complet pour bâtir votre entreprise.", date: "06 mai 2024", reads: "8 min", views: "990 vues", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Code", title: "Apprenez à coder de zéro", desc: "Plan complet pour maîtriser la programmation.", date: "05 mai 2024", reads: "12 min", views: "12K vues", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Dév. perso", title: "7 habitudes qui changeront votre vie", desc: "Des habitudes simples qui transformeront votre vie.", date: "04 mai 2024", reads: "6 min", views: "1.1K vues", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  es: [
+    { tag: "IA", title: "Mejores herramientas de IA 2024", desc: "Descubre las herramientas de IA más potentes.", date: "07 may 2024", reads: "5 min", views: "1.2K vistas", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "Negocios", title: "10 pasos para crear una startup", desc: "Guía completa para construir tu negocio.", date: "06 may 2024", reads: "8 min", views: "990 vistas", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Código", title: "Aprende programación desde cero", desc: "Plan completo para dominar la programación.", date: "05 may 2024", reads: "12 min", views: "12K vistas", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Crecimiento", title: "7 hábitos que cambiarán tu vida", desc: "Hábitos simples que transformarán tu vida.", date: "04 may 2024", reads: "6 min", views: "1.1K vistas", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  de: [
+    { tag: "KI", title: "Beste KI-Tools 2024", desc: "Entdecke die mächtigsten KI-Tools.", date: "07. Mai 2024", reads: "5 Min", views: "1.2K Aufrufe", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "Business", title: "10 Schritte zum Startup-Erfolg", desc: "Kompletter Leitfaden zum Aufbau deines Unternehmens.", date: "06. Mai 2024", reads: "8 Min", views: "990 Aufrufe", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Code", title: "Programmieren von 0 auf Profi", desc: "Kompletter Plan zum Programmieren lernen.", date: "05. Mai 2024", reads: "12 Min", views: "12K Aufrufe", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Wachstum", title: "7 Gewohnheiten die dein Leben verändern", desc: "Einfache Gewohnheiten für ein besseres Leben.", date: "04. Mai 2024", reads: "6 Min", views: "1.1K Aufrufe", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  tr: [
+    { tag: "AI", title: "2024'ün En İyi AI Araçları", desc: "En güçlü AI araçlarını keşfedin.", date: "07 Mayıs 2024", reads: "5 dk", views: "1.2K görüntüleme", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "İş", title: "Sıfırdan Başarılı Startup Kurma", desc: "Kendi işinizi kurmak için tam rehber.", date: "06 Mayıs 2024", reads: "8 dk", views: "990 görüntüleme", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Kod", title: "Sıfırdan Profesyonel Programlama", desc: "Programlamayı öğrenmek için kapsamlı plan.", date: "05 Mayıs 2024", reads: "12 dk", views: "12K görüntüleme", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Gelişim", title: "Hayatınızı Değiştirecek 7 Alışkanlık", desc: "Hayatınızı dönüştürecek basit alışkanlıklar.", date: "04 Mayıs 2024", reads: "6 dk", views: "1.1K görüntüleme", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  pt: [
+    { tag: "IA", title: "Melhores ferramentas de IA 2024", desc: "Descubra as ferramentas de IA mais potentes.", date: "07 mai 2024", reads: "5 min", views: "1.2K vistas", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "Negócios", title: "10 passos para criar uma startup", desc: "Guia completo para construir seu negócio.", date: "06 mai 2024", reads: "8 min", views: "990 vistas", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Código", title: "Aprenda programação do zero ao pro", desc: "Plano completo para dominar programação.", date: "05 mai 2024", reads: "12 min", views: "12K vistas", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Crescimento", title: "7 hábitos que mudarão sua vida", desc: "Hábitos simples que transformarão sua vida.", date: "04 mai 2024", reads: "6 min", views: "1.1K vistas", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  zh: [
+    { tag: "AI", title: "2024 年最佳 AI 工具", desc: "探索最强大的 AI 工具。", date: "2024年5月7日", reads: "5 分钟", views: "1.2K 浏览", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "商业", title: "从零打造成功创业的 10 步", desc: "构建自己业务的完整指南。", date: "2024年5月6日", reads: "8 分钟", views: "990 浏览", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "编程", title: "从零到精通学编程", desc: "掌握编程的完整计划。", date: "2024年5月5日", reads: "12 分钟", views: "12K 浏览", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "成长", title: "改变人生的 7 个习惯", desc: "改变生活的简单习惯。", date: "2024年5月4日", reads: "6 分钟", views: "1.1K 浏览", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+  ru: [
+    { tag: "ИИ", title: "Лучшие ИИ-инструменты 2024", desc: "Откройте самые мощные ИИ-инструменты.", date: "07 мая 2024", reads: "5 мин", views: "1.2K просмотров", gradient: "from-cyan-600 via-blue-700 to-indigo-800", icon: Sparkles },
+    { tag: "Бизнес", title: "10 шагов к успешному стартапу", desc: "Полное руководство по созданию бизнеса.", date: "06 мая 2024", reads: "8 мин", views: "990 просмотров", gradient: "from-orange-600 via-red-700 to-pink-800", icon: Rocket },
+    { tag: "Код", title: "От нуля до профи в программировании", desc: "Полный план изучения программирования.", date: "05 мая 2024", reads: "12 мин", views: "12K просмотров", gradient: "from-slate-700 via-slate-800 to-slate-900", icon: Code2 },
+    { tag: "Рост", title: "7 привычек, которые изменят жизнь", desc: "Простые привычки для лучшей жизни.", date: "04 мая 2024", reads: "6 мин", views: "1.1K просмотров", gradient: "from-amber-600 via-orange-700 to-rose-800", icon: Mountain },
+  ],
+};
+
+const footerStatsData: Record<Lang, { value: string; label: string; icon: any; color: string }[]> = {
+  ar: [
+    { value: "+2.5K", label: "عضو نشط", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "رسالة يومياً", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "مقال منشور", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "مجموعة نشطة", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "وقت التشغيل", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  en: [
+    { value: "+2.5K", label: "Active Members", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Daily Messages", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Articles", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Active Groups", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Uptime", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  fr: [
+    { value: "+2.5K", label: "Membres actifs", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Messages/jour", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Articles", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Groupes actifs", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Disponibilité", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  es: [
+    { value: "+2.5K", label: "Miembros activos", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Mensajes/día", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Artículos", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Grupos activos", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Disponibilidad", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  de: [
+    { value: "+2.5K", label: "Aktive Mitglieder", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Nachrichten/Tag", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Artikel", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Aktive Gruppen", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Verfügbarkeit", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  tr: [
+    { value: "+2.5K", label: "Aktif Üye", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Mesaj/gün", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Makale", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Aktif Grup", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Çalışma", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  pt: [
+    { value: "+2.5K", label: "Membros ativos", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Mensagens/dia", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Artigos", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Grupos ativos", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Disponibilidade", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  zh: [
+    { value: "+2.5K", label: "活跃会员", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "每日消息", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "文章", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "活跃群组", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "运行时间", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+  ru: [
+    { value: "+2.5K", label: "Активных", icon: Users, color: "from-violet-500 to-purple-600" },
+    { value: "+15K", label: "Сообщений/день", icon: MessageCircle, color: "from-pink-500 to-rose-600" },
+    { value: "+120", label: "Статей", icon: FileText, color: "from-violet-500 to-indigo-600" },
+    { value: "+50", label: "Групп", icon: Users2, color: "from-amber-500 to-orange-600" },
+    { value: "99.9%", label: "Доступность", icon: Shield, color: "from-emerald-500 to-green-600" },
+  ],
+};
+
 export function LandingPage() {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<Lang>("ar");
   const [mounted, setMounted] = useState(false);
   const l = t[lang];
-  const chatMessages = useFakeChat();
-  const chatRef = useRef<HTMLDivElement>(null);
+  const nav = navLabels[lang];
+  const sb = sidebarLabels[lang];
+  const hl = heroLabels[lang];
+  const stats = heroStatsData[lang];
+  const posts = blogPosts[lang];
+  const fStats = footerStatsData[lang];
 
   useEffect(() => { setMounted(true); setLang(detectLang()); }, []);
-  useEffect(() => { chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" }); }, [chatMessages]);
 
   const isRTL = lang === "ar";
   const init = mounted ? "hidden" as const : undefined;
   const enter = mounted ? "visible" as const : undefined;
 
+  const sidebarIcons = [MessageCircle, Star, Send, Users, Users2, Bell, Settings];
+
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden" dir={isRTL ? "rtl" : "ltr"}>
+    <div className="min-h-screen text-foreground overflow-x-hidden relative" dir={isRTL ? "rtl" : "ltr"} style={{ background: "radial-gradient(ellipse at top, oklch(0.14 0.05 270) 0%, oklch(0.08 0.04 265) 50%, oklch(0.06 0.03 260) 100%)" }}>
       <SocialProofToast />
 
-      {/* ═══ LAYERED BACKGROUND ═══ */}
+      {/* Background orbs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        {/* Animated mesh gradient orbs */}
-        <div className="absolute -top-32 -right-32 h-[600px] w-[600px] rounded-full bg-cyan-glow/20 blur-[120px] animate-[meshFloat1_20s_ease-in-out_infinite]" />
-        <div className="absolute top-1/3 -left-48 h-[700px] w-[700px] rounded-full bg-violet-glow/20 blur-[140px] animate-[meshFloat2_25s_ease-in-out_infinite]" />
-        <div className="absolute bottom-0 right-1/4 h-[500px] w-[500px] rounded-full bg-pink-glow/15 blur-[100px] animate-[meshFloat3_22s_ease-in-out_infinite]" />
-        <div className="absolute top-2/3 left-1/3 h-[400px] w-[400px] rounded-full bg-cyan-glow/10 blur-[100px] animate-[meshFloat1_18s_ease-in-out_infinite_reverse]" />
-        {/* Noise texture overlay */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")` }} />
+        <div className="absolute -top-40 -right-40 h-[700px] w-[700px] rounded-full blur-[160px]" style={{ background: "radial-gradient(circle, oklch(0.55 0.25 295 / 0.35) 0%, transparent 70%)", animation: "meshFloat1 25s ease-in-out infinite" }} />
+        <div className="absolute top-1/3 -left-40 h-[600px] w-[600px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, oklch(0.50 0.22 270 / 0.3) 0%, transparent 70%)", animation: "meshFloat2 30s ease-in-out infinite" }} />
+        <div className="absolute bottom-0 left-1/3 h-[500px] w-[500px] rounded-full blur-[130px]" style={{ background: "radial-gradient(circle, oklch(0.55 0.20 310 / 0.25) 0%, transparent 70%)", animation: "meshFloat3 22s ease-in-out infinite" }} />
       </div>
 
-      {/* AI Particles */}
       <FloatingParticles />
 
-      {/* ═══ NAVBAR ═══ */}
-      <nav className="relative z-20 h-[70px] flex items-center justify-between px-3 sm:px-6 max-w-[1280px] mx-auto">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <HnLogo size={40} showText={false} />
-          <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_oklch(0.78_0.18_60/0.4)]">hnChat</span>
-          <div className="hidden sm:block"><VisitorCounter /></div>
-        </div>
-        <div className="flex items-center gap-1.5 sm:gap-3">
-          {/* Lang Switcher — hidden on very small screens */}
-          <div className="relative group hidden sm:block">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 cursor-pointer">
-              <Globe className="h-3.5 w-3.5 text-cyan-glow" />
-              {langLabels[lang]}
-            </button>
-            <div className="absolute top-full right-0 mt-1 min-w-[140px] rounded-xl border border-ice-border/40 bg-background/90 backdrop-blur-2xl shadow-diamond opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
-              {(Object.keys(t) as Lang[]).map((code) => (
-                <button key={code} onClick={() => setLang(code)}
-                  className={`w-full text-left px-3 py-2 text-xs font-medium transition-all duration-200 ${lang === code ? "bg-gradient-to-r from-cyan-glow/20 to-violet-glow/20 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-ice-card/20"}`}
-                >{langLabels[code]}</button>
-              ))}
+      {/* ═══ HEADER ═══ */}
+      <header className="relative z-30 border-b border-violet-500/10 backdrop-blur-2xl" style={{ background: "oklch(0.10 0.04 270 / 0.6)" }}>
+        <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_oklch(0.55_0.25_295/0.5)]">
+              <MessageCircle className="h-5 w-5 text-white" />
             </div>
-          </div>
-          <button
-            onClick={async () => {
-              try {
-                const result = await lovable.auth.signInWithOAuth("google", {
-                  redirect_uri: window.location.origin + "/feed",
-                });
-                if (result.error) throw new Error(result.error.message || "Google sign-in failed");
-                if (result.redirected) return;
-                toast.success("مرحباً بك!");
-                window.location.href = "/feed";
-              } catch (e: any) {
-                toast.error(e.message ?? "Google sign-in failed");
-              }
-            }}
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-white text-gray-800 shadow-[0_0_15px_rgba(66,133,244,0.3)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(66,133,244,0.5)] hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-          >
-            <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            {l.signIn}
-          </button>
-          <Link to="/sign-up-login">
-            <button className="px-4 sm:px-5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.95] cursor-pointer">
-              {l.startFree}
-            </button>
+            <span className="text-xl font-extrabold bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-400 bg-clip-text text-transparent">HN-Chat</span>
           </Link>
+
+          {/* Nav pills */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {[
+              { label: nav.home, to: "/", active: true },
+              { label: nav.articles, to: "/blog" },
+              { label: nav.chat, to: "/sign-up-login" },
+              { label: nav.members, to: "/sign-up-login" },
+              { label: nav.reels, to: "/sign-up-login" },
+              { label: nav.aiTools, to: "/tools" },
+              { label: nav.more, to: "/about" },
+            ].map((item, i) => (
+              <Link key={i} to={item.to} className={`relative px-4 py-2 text-sm font-semibold rounded-lg transition-all ${item.active ? "text-violet-300" : "text-foreground/70 hover:text-foreground hover:bg-white/5"}`}>
+                {item.label}
+                {item.active && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-8 bg-gradient-to-r from-violet-400 to-fuchsia-400 rounded-full" />}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Icon actions */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button className="h-9 w-9 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-white/5 transition-all" aria-label="Search">
+              <Search className="h-4 w-4" />
+            </button>
+            <button className="h-9 w-9 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-white/5 transition-all" aria-label="Theme">
+              <Moon className="h-4 w-4" />
+            </button>
+            <button className="h-9 w-9 rounded-full flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-white/5 transition-all relative" aria-label="Notifications">
+              <Bell className="h-4 w-4" />
+              <span className="absolute top-1.5 right-1.5 h-4 w-4 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 text-[9px] font-bold text-white flex items-center justify-center">3</span>
+            </button>
+            {/* Lang dropdown */}
+            <div className="relative group">
+              <button className="h-9 px-3 rounded-full flex items-center gap-1.5 text-xs font-semibold bg-white/5 hover:bg-white/10 text-foreground/80 transition-all">
+                <Globe className="h-3.5 w-3.5" /> {lang.toUpperCase()}
+              </button>
+              <div className="absolute top-full mt-1 end-0 min-w-[140px] rounded-xl border border-white/10 backdrop-blur-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 overflow-hidden" style={{ background: "oklch(0.10 0.04 270 / 0.95)" }}>
+                {(Object.keys(t) as Lang[]).map((code) => (
+                  <button key={code} onClick={() => setLang(code)} className={`w-full text-start px-3 py-2 text-xs font-medium transition-all ${lang === code ? "bg-violet-500/20 text-violet-200" : "text-muted-foreground hover:text-foreground hover:bg-white/5"}`}>{langLabels[code]}</button>
+                ))}
+              </div>
+            </div>
+            <Link to="/sign-up-login" className="flex items-center gap-2 ps-1 pe-3 py-1 rounded-full bg-white/5 hover:bg-white/10 transition-all">
+              <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-[10px] font-bold text-white">HN</div>
+              <ArrowLeft className={`h-3.5 w-3.5 text-foreground/60 ${isRTL ? "" : "rotate-180"}`} />
+            </Link>
+          </div>
         </div>
-      </nav>
+      </header>
 
-      {/* ═══ HERO SECTION ═══ */}
-      <section className="relative z-10 overflow-visible">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-2 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] lg:grid-cols-[minmax(0,1fr)_480px] xl:grid-cols-[minmax(0,1fr)_540px] gap-4 items-center relative">
-          {/* Left: Hero text */}
-          <div className="text-center md:text-start max-w-2xl">
-            {/* Badge */}
-            <motion.div className="mb-1.5" initial={init} animate={enter} variants={fadeUp} custom={0}>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-xs text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
-                {l.badge}
-              </span>
-            </motion.div>
-
-            {/* Title */}
-            <motion.h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-bold leading-[1.06] mb-2" initial={init} animate={enter} variants={fadeUp} custom={0.5}>
-              {l.heroTitle1}{" "}
-              <br className="hidden lg:block" />
-              <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-cyan-glow via-foreground to-violet-glow bg-clip-text text-transparent" style={{ textShadow: "0 0 40px oklch(0.78 0.18 220 / 0.4), 0 0 80px oklch(0.65 0.25 295 / 0.2)" }}>
-                  {l.heroTitle2}
-                </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-cyan-glow/30 to-violet-glow/20 blur-3xl rounded-full animate-pulse" />
-              </span>
+      {/* ═══ HERO ═══ */}
+      <section className="relative z-10 max-w-[1400px] mx-auto px-6 pt-12 pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-10 items-center">
+          {/* Hero Text */}
+          <div className="text-center lg:text-start">
+            <motion.h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-5" initial={init} animate={enter} variants={fadeUp} custom={0}>
+              <span className="block text-foreground/90">{hl.welcome}</span>
+              <span className="block mt-2 text-7xl lg:text-8xl font-black bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-300 bg-clip-text text-transparent" style={{ textShadow: "0 0 60px oklch(0.55 0.25 295 / 0.5)" }}>HN-Chat</span>
             </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p className="text-sm sm:text-base lg:text-lg font-medium mb-3 text-muted-foreground/80" initial={init} animate={enter} variants={fadeUp} custom={1}>
-              {l.heroSub}
+            <motion.p className="text-base lg:text-lg text-foreground/60 leading-relaxed max-w-md mx-auto lg:mx-0 mb-8" initial={init} animate={enter} variants={fadeUp} custom={1}>
+              {hl.tagline}
             </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div className="flex items-center gap-3 justify-center md:justify-start" initial={init} animate={enter} variants={fadeUp} custom={1.5}>
+            <motion.div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8" initial={init} animate={enter} variants={fadeUp} custom={2}>
               <Link to="/sign-up-login">
-                <button className="px-6 py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shadow-[0_4px_20px_oklch(0.78_0.18_220/0.4)] transition-all duration-300 hover:shadow-[0_6px_30px_oklch(0.78_0.18_220/0.6)] hover:scale-[1.05] active:scale-[0.95] cursor-pointer">
-                  {l.joinNow}
+                <button className="px-7 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-[0_8px_30px_oklch(0.55_0.25_295/0.4)] hover:shadow-[0_12px_40px_oklch(0.55_0.25_295/0.6)] hover:scale-105 active:scale-95 transition-all">{hl.startNow}</button>
+              </Link>
+              <Link to="/sign-up-login">
+                <button className="px-7 py-3 text-sm font-bold rounded-xl border border-violet-500/40 bg-white/5 backdrop-blur-xl text-foreground hover:bg-white/10 hover:border-violet-400/60 transition-all flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" /> {hl.joinChat}
                 </button>
               </Link>
-              <Link to="/blog">
-                <button className="px-6 py-2.5 text-sm font-semibold rounded-xl border border-ice-border/40 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/50 cursor-pointer">
-                  {l.discover}
-                </button>
-              </Link>
+            </motion.div>
+
+            {/* Stats row */}
+            <motion.div className="grid grid-cols-2 sm:grid-cols-4 gap-3" initial={init} animate={enter} variants={fadeUp} custom={3}>
+              {stats.map((s, i) => {
+                const StatIcon = [Users, MessageCircle, FileText, Bot][i];
+                return (
+                  <div key={i} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl">
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-500/30 to-purple-600/30 flex items-center justify-center shrink-0">
+                      <StatIcon className="h-3.5 w-3.5 text-violet-300" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-sm font-bold text-foreground">{s.value}</div>
+                      <div className="text-[10px] text-foreground/50 truncate">{s.label}</div>
+                    </div>
+                  </div>
+                );
+              })}
             </motion.div>
           </div>
 
-          {/* Right: Phone + Chat widget — side by side unified block */}
-          <div className="hidden md:flex items-start gap-3 relative justify-end">
-            {/* 3D Phone */}
-            <motion.div
-              initial={mounted ? { opacity: 0, y: 30 } : undefined}
-              animate={mounted ? { opacity: 1, y: 0 } : undefined}
-              transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" as const }}
-              className="scale-[0.45] lg:scale-[0.55] xl:scale-[0.65] origin-top shrink-0"
-            >
-              <PhoneMockup />
-            </motion.div>
+          {/* Chat App Preview Card */}
+          <motion.div className="relative" initial={mounted ? { opacity: 0, y: 30 } : undefined} animate={mounted ? { opacity: 1, y: 0 } : undefined} transition={{ delay: 0.3, duration: 0.8 }}>
+            <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-violet-500/20 via-fuchsia-500/10 to-transparent blur-2xl" />
+            <div className="relative rounded-2xl border border-violet-500/20 backdrop-blur-2xl overflow-hidden shadow-[0_30px_80px_oklch(0_0_0/0.5)]" style={{ background: "linear-gradient(135deg, oklch(0.12 0.04 275 / 0.85) 0%, oklch(0.10 0.04 270 / 0.85) 100%)" }}>
+              <div className="grid grid-cols-[180px_1fr_180px] min-h-[460px]">
+                {/* Sidebar */}
+                <div className="border-e border-white/5 p-3" style={{ background: "oklch(0.08 0.03 270 / 0.5)" }}>
+                  <div className="text-xs font-bold text-foreground/80 mb-3 px-2">HN Chat</div>
+                  <div className="flex flex-col gap-1">
+                    {sb.map((label, i) => {
+                      const SIcon = sidebarIcons[i];
+                      const active = i === 0;
+                      return (
+                        <button key={i} className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-medium transition-all ${active ? "bg-gradient-to-r from-violet-500/30 to-purple-600/20 text-violet-200 border border-violet-500/30" : "text-foreground/60 hover:bg-white/5 hover:text-foreground"}`}>
+                          <SIcon className="h-3.5 w-3.5 shrink-0" />
+                          <span className="truncate">{label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-            {/* Chat Widget */}
-            <motion.div
-              className="w-[220px] lg:w-[250px] xl:w-[280px] mt-1 shrink-0"
-              initial={mounted ? { opacity: 0, x: 30 } : undefined}
-              animate={mounted ? { opacity: 1, x: 0 } : undefined}
-              transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" as const }}
-            >
-              <div className="rounded-2xl border border-ice-border/30 bg-ice-card/8 backdrop-blur-2xl shadow-[0_8px_40px_oklch(0_0_0/0.4),0_0_60px_oklch(0.78_0.18_220/0.06)] overflow-hidden">
-                {/* Header */}
-                <div className="flex items-center justify-between px-3 py-1.5 border-b border-ice-border/20 bg-ice-card/10">
-                  <div className="flex items-center gap-2">
-                    <div className="relative">
-                      <MessageCircle className="h-4 w-4 text-cyan-glow" />
-                      <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                    </div>
-                    <span className="text-sm font-semibold">{l.liveChat}</span>
-                  </div>
-                  <span className="flex items-center gap-1.5 text-[10px] text-green-400">
-                    <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
-                    {l.online}
-                  </span>
-                </div>
-                {/* Messages */}
-                <div ref={chatRef} className="px-3 py-2 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
-                  <div className="flex items-start gap-2">
-                    <div className="flex-1 rounded-2xl rounded-tl-sm bg-gradient-to-br from-cyan-glow/15 to-violet-glow/8 backdrop-blur-xl px-3.5 py-2.5 border border-ice-border/15">
-                      <p className="text-xs text-foreground/80 leading-relaxed">
-                        {lang === "ar" ? "مرحباً! كيف يمكنني مساعدتك؟" : lang === "fr" ? "Bonjour ! Comment puis-je vous aider ?" : "Hello! How can I help you?"}
-                      </p>
+                {/* Chat */}
+                <div className="flex flex-col">
+                  <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-bold">{hl.chatTitle}</div>
+                      <div className="flex items-center gap-1.5 text-[10px] text-emerald-400 mt-0.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        {hl.onlineNow}
+                      </div>
                     </div>
                   </div>
+                  <div className="flex-1 px-4 py-3 flex flex-col gap-3 overflow-hidden">
+                    {fakeChatMessages.map((m, i) => (
+                      <div key={i} className={`flex items-start gap-2 ${m.self ? "flex-row-reverse" : ""}`}>
+                        <div className={`h-7 w-7 rounded-full bg-gradient-to-br ${m.self ? "from-violet-500 to-purple-600" : "from-slate-500 to-slate-700"} flex items-center justify-center text-xs shrink-0`}>{m.avatar}</div>
+                        <div className="min-w-0 max-w-[75%]">
+                          <div className={`flex items-center gap-2 mb-1 text-[10px] ${m.self ? "flex-row-reverse" : ""}`}>
+                            <span className="font-bold text-foreground/80">{m.user}</span>
+                            <span className="text-foreground/40">{m.time}</span>
+                          </div>
+                          <div className={`px-3 py-2 rounded-2xl text-xs leading-relaxed ${m.self ? "bg-gradient-to-br from-violet-600 to-purple-700 text-white rounded-tr-sm" : "bg-white/[0.06] text-foreground/90 rounded-tl-sm border border-white/5"}`}>
+                            {m.msg}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="px-4 py-3 border-t border-white/5 flex items-center gap-2">
+                    <input readOnly placeholder={hl.typeMessage} className="flex-1 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-xs placeholder:text-foreground/40 focus:outline-none" />
+                    <button className="h-8 w-8 rounded-full bg-gradient-to-br from-violet-600 to-purple-700 flex items-center justify-center text-white">
+                      <Send className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </div>
-                {/* Input */}
-                <div className="px-3 py-1.5 border-t border-ice-border/15">
-                  <Link to="/sign-up-login" className="flex items-center justify-between rounded-2xl bg-ice-card/10 backdrop-blur-xl px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:bg-ice-card/20 transition-all cursor-pointer border border-ice-border/15">
-                    <span className="flex items-center gap-2">
-                      <span className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px]">👤</span>
-                      {lang === "ar" ? "اكتب رسالتك..." : lang === "fr" ? "Écrivez votre message..." : "Type your message..."}
-                    </span>
-                    <Send className="h-4 w-4 text-cyan-glow" />
-                  </Link>
+
+                {/* Online users */}
+                <div className="border-s border-white/5 p-3" style={{ background: "oklch(0.08 0.03 270 / 0.4)" }}>
+                  <div className="flex items-center justify-between mb-3 px-1">
+                    <span className="text-xs font-bold text-foreground/80">{hl.onlineNow}</span>
+                    <button className="text-[10px] text-violet-300">{hl.viewAll}</button>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {onlineUsers.map((u, i) => (
+                      <div key={i} className="flex items-center gap-2 px-1.5 py-1.5 rounded-lg hover:bg-white/5 transition-all">
+                        <div className="relative shrink-0">
+                          <div className={`h-7 w-7 rounded-full bg-gradient-to-br ${u.color} flex items-center justify-center text-[10px] font-bold text-white`}>{u.name[0]}</div>
+                          <span className="absolute -bottom-0.5 -end-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 border-2 border-[oklch(0.10_0.04_270)]" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-[11px] font-semibold text-foreground/90 truncate">{u.name}</div>
+                          <div className="text-[9px] text-foreground/40">{hl.onlineNow}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* ═══ BLOG SECTION ═══ */}
-      <BlogSection lang={lang} />
+      {/* ═══ DISCOVER CONTENT (Blog cards) ═══ */}
+      <section className="relative z-10 max-w-[1400px] mx-auto px-6 py-16">
+        <motion.div className="text-center mb-10" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-2 flex items-center justify-center gap-2">
+            <Sparkles className="h-6 w-6 text-violet-400" />
+            <span>{hl.discoverContent}</span>
+          </h2>
+          <p className="text-sm text-foreground/50">{hl.discoverSub}</p>
+        </motion.div>
 
-      {/* ═══ FLOATING STATS ═══ */}
-      <section className="relative z-10 max-w-5xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-4 sm:gap-10">
-          {l.stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              className="flex items-center gap-3 group"
-              initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={i}
-            >
-              <span className="text-2xl">{s.icon}</span>
-              <div>
-                <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent group-hover:drop-shadow-[0_0_12px_oklch(0.78_0.18_220/0.5)] transition-all duration-300">
-                  {s.value}
-                </div>
-                <div className="text-xs text-muted-foreground/60">{s.label}</div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ═══ BENTO GRID — FEATURES ═══ */}
-      <section className="relative z-10 max-w-6xl mx-auto px-3 sm:px-6 pb-16 sm:pb-20">
-        <motion.h2 className="text-2xl sm:text-4xl font-bold text-center mb-3 sm:mb-4" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
-          {l.allInOne} <span className="bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">{l.onePlace}</span>
-        </motion.h2>
-        <motion.p className="text-center text-muted-foreground mb-8 sm:mb-12 max-w-xl mx-auto text-sm sm:text-base" initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={1}>
-          {l.heroSub}
-        </motion.p>
-
-        {/* Bento Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-[140px] sm:auto-rows-[180px]">
-          {l.features.map((f, i) => {
-            const Icon = featureIcons[i];
-            const isLarge = i === 0 || i === 3;
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {posts.map((p, i) => {
+            const PIcon = p.icon;
             return (
-              <motion.div
-                key={f.title}
-                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-default ${isLarge ? "sm:col-span-2 sm:row-span-1" : ""}`}
-                initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={i * 0.5}
+              <motion.article
+                key={i}
+                className="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-hidden hover:border-violet-500/40 hover:scale-[1.02] transition-all cursor-pointer"
+                initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={i * 0.4}
               >
-                {/* Glass background */}
-                <div className="absolute inset-0 bg-ice-card/5 backdrop-blur-2xl border border-ice-border/15 rounded-3xl" />
-                {/* Hover gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${featureColors[i]} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl`} />
-                {/* Content */}
-                <div className="relative h-full flex flex-col justify-between p-4 sm:p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-background/40 backdrop-blur-xl border border-ice-border/10 group-hover:shadow-[0_0_30px_oklch(0.78_0.18_220/0.15)] transition-all duration-500">
-                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/80 group-hover:text-cyan-glow transition-colors duration-500" />
-                    </div>
-                    <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-45">
-                      <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-cyan-glow" />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-sm sm:text-lg font-bold mb-0.5 sm:mb-1.5">{f.title}</h3>
-                    <p className="text-[11px] sm:text-sm text-muted-foreground/70 leading-relaxed line-clamp-2">{f.desc}</p>
+                <div className={`relative h-40 bg-gradient-to-br ${p.gradient} overflow-hidden flex items-center justify-center`}>
+                  <PIcon className="h-16 w-16 text-white/20 absolute" />
+                  <span className="absolute top-3 start-3 px-2.5 py-1 text-[10px] font-bold rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">{p.tag}</span>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-base font-bold text-foreground mb-2 line-clamp-2 group-hover:text-violet-300 transition-colors">{p.title}</h3>
+                  <p className="text-xs text-foreground/50 line-clamp-2 mb-3 leading-relaxed">{p.desc}</p>
+                  <div className="flex items-center justify-between text-[10px] text-foreground/40 pt-3 border-t border-white/5">
+                    <span>{p.date}</span>
+                    <span>{p.reads}</span>
+                    <span className="flex items-center gap-1">
+                      <span className="h-1 w-1 rounded-full bg-foreground/40" />
+                      {p.views}
+                    </span>
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>
       </section>
 
-
-      {/* ═══ TRUST BAR ═══ */}
-      <section className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pb-16">
-        <motion.div
-          className="rounded-3xl border border-ice-border/15 bg-ice-card/5 backdrop-blur-2xl p-8 flex flex-col md:flex-row items-center gap-6"
-          initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}
-        >
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-glow/15 to-violet-glow/10">
-            <Shield className="h-10 w-10 text-cyan-glow" />
+      {/* ═══ FOOTER STATS BAR ═══ */}
+      <section className="relative z-10 max-w-[1400px] mx-auto px-6 pb-12">
+        <motion.div className="rounded-2xl border border-white/10 backdrop-blur-2xl p-6 lg:p-8" style={{ background: "oklch(0.10 0.04 270 / 0.5)" }} initial={init} whileInView={enter} viewport={{ once: true }} variants={fadeUp} custom={0}>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            {fStats.map((s, i) => {
+              const SIcon = s.icon;
+              return (
+                <div key={i} className="flex items-center gap-3 justify-center">
+                  <div>
+                    <div className="text-2xl lg:text-3xl font-black bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">{s.value}</div>
+                    <div className="text-xs text-foreground/50 mt-0.5">{s.label}</div>
+                  </div>
+                  <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-lg`}>
+                    <SIcon className="h-5 w-5 text-white" />
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div className="text-center md:text-start flex-1">
-            <h3 className="text-xl font-bold mb-2">{l.privacyTitle}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{l.privacyDesc}</p>
-          </div>
-          <Link to="/sign-up-login">
-            <button className="px-6 py-3 text-sm font-semibold rounded-xl border border-cyan-glow/30 bg-ice-card/10 backdrop-blur-2xl text-foreground transition-all duration-300 hover:border-cyan-glow/60 hover:shadow-[0_0_20px_oklch(0.78_0.18_220/0.2)] hover:scale-[1.03] cursor-pointer whitespace-nowrap">
-              {l.registerNow}
-            </button>
-          </Link>
         </motion.div>
       </section>
 
+      {/* ═══ BLOG SECTION (existing) ═══ */}
+      <BlogSection lang={lang} />
 
       {/* ═══ AD UNIT ═══ */}
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-10">
         <AdSenseUnit className="rounded-2xl overflow-hidden" />
       </section>
 
-      {/* ═══ PARTNER STRIP ═══ */}
       <PartnerStrip />
 
-      {/* ═══ FOOTER — Elegant ═══ */}
-      <footer className="relative z-10 py-10 px-6">
-        {/* Ultra-thin separator */}
-        <div className="max-w-3xl mx-auto mb-8">
-          <div className="h-px bg-gradient-to-r from-transparent via-ice-border/30 to-transparent" />
-        </div>
+      {/* ═══ FOOTER ═══ */}
+      <footer className="relative z-10 py-10 px-6 border-t border-white/5">
         <div className="max-w-5xl mx-auto flex flex-col items-center gap-5">
           <div className="flex items-center gap-2">
             <HnLogo className="h-5 w-5 opacity-70" />
-            <span className="text-xs font-semibold bg-gradient-to-r from-cyan-glow/70 to-violet-glow/70 bg-clip-text text-transparent">hnChat</span>
+            <span className="text-xs font-semibold bg-gradient-to-r from-violet-300 to-fuchsia-300 bg-clip-text text-transparent">HN-Chat</span>
           </div>
-          <div className="flex items-center gap-5 text-xs text-muted-foreground/50 flex-wrap justify-center">
+          <div className="flex items-center gap-5 text-xs text-foreground/40 flex-wrap justify-center">
             <Link to="/about" className="hover:text-foreground/70 transition-colors">{l.about}</Link>
             <Link to="/blog" className="hover:text-foreground/70 transition-colors">Blog</Link>
             <Link to="/contact" className="hover:text-foreground/70 transition-colors">{l.contact}</Link>
             <Link to="/privacy" className="hover:text-foreground/70 transition-colors">{l.privacy}</Link>
             <Link to="/terms" className="hover:text-foreground/70 transition-colors">{l.terms}</Link>
           </div>
-          <p className="text-[11px] text-muted-foreground/30 text-center tracking-wide">{l.copyright}</p>
+          <p className="text-[11px] text-foreground/30 text-center tracking-wide">{l.copyright}</p>
         </div>
       </footer>
     </div>
