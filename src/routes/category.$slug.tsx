@@ -121,7 +121,7 @@ function CategoryPage() {
                 <Link
                   key={tool.id}
                   to="/tools/$slug"
-                  params={{ articleId: tool.id }}
+                  params={{ slug: tool.slug }}
                   className="rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   <h3 className="font-bold text-foreground text-sm">{tool.name}</h3>
