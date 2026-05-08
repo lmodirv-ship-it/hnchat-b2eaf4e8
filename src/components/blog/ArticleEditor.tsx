@@ -438,3 +438,17 @@ export function ArticleEditor({ article }: Props) {
     </div>
   );
 }
+
+function SanitizedPreview({ content, renderPreview, sanitizeHtml }: { content: string; renderPreview: (t: string) => string; sanitizeHtml: (h: string) => Promise<string> }) {
+  const [safe, setSafe] = useState('');
+  useEffect(() => {
+    sanitizeHtml(`<p class="mb-5 leading-relaxed">${renderPreview(content)}</p>`).then(setSafe);
+  }, [content, renderPreview, sanitizeHtml]);
+  return (
+    <div className="p-8 sm:p-12 rounded-2xl border border-ice-border/10 bg-gradient-to-br from-[oklch(0.16_0.025_250)] to-[oklch(0.13_0.02_250)] min-h-[500px] mb-8 shadow-[0_4px_30px_oklch(0_0_0/0.2)]">
+      <div className="max-w-3xl mx-auto prose prose-invert prose-lg"
+        style={{ fontSize: '1.125rem', lineHeight: '2' }}
+        dangerouslySetInnerHTML={{ __html: safe }} />
+    </div>
+  );
+}
