@@ -44,6 +44,7 @@ import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
 import { Route as AuthenticatedReelsRouteImport } from './routes/_authenticated/reels'
 import { Route as AuthenticatedPushRouteImport } from './routes/_authenticated/push'
+import { Route as AuthenticatedPublicChatRouteImport } from './routes/_authenticated/public-chat'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedPrivacyPolicyRouteImport } from './routes/_authenticated/privacy-policy'
 import { Route as AuthenticatedPreferencesRouteImport } from './routes/_authenticated/preferences'
@@ -271,6 +272,11 @@ const AuthenticatedReelsRoute = AuthenticatedReelsRouteImport.update({
 const AuthenticatedPushRoute = AuthenticatedPushRouteImport.update({
   id: '/push',
   path: '/push',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPublicChatRoute = AuthenticatedPublicChatRouteImport.update({
+  id: '/public-chat',
+  path: '/public-chat',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
@@ -598,6 +604,7 @@ export interface FileRoutesByFullPath {
   '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/profile': typeof AuthenticatedProfileRouteWithChildren
+  '/public-chat': typeof AuthenticatedPublicChatRoute
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
   '/referral': typeof AuthenticatedReferralRoute
@@ -684,6 +691,7 @@ export interface FileRoutesByTo {
   '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/profile': typeof AuthenticatedProfileRouteWithChildren
+  '/public-chat': typeof AuthenticatedPublicChatRoute
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
   '/referral': typeof AuthenticatedReferralRoute
@@ -776,6 +784,7 @@ export interface FileRoutesById {
   '/_authenticated/preferences': typeof AuthenticatedPreferencesRoute
   '/_authenticated/privacy-policy': typeof AuthenticatedPrivacyPolicyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRouteWithChildren
+  '/_authenticated/public-chat': typeof AuthenticatedPublicChatRoute
   '/_authenticated/push': typeof AuthenticatedPushRoute
   '/_authenticated/reels': typeof AuthenticatedReelsRoute
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
@@ -866,6 +875,7 @@ export interface FileRouteTypes {
     | '/preferences'
     | '/privacy-policy'
     | '/profile'
+    | '/public-chat'
     | '/push'
     | '/reels'
     | '/referral'
@@ -952,6 +962,7 @@ export interface FileRouteTypes {
     | '/preferences'
     | '/privacy-policy'
     | '/profile'
+    | '/public-chat'
     | '/push'
     | '/reels'
     | '/referral'
@@ -1043,6 +1054,7 @@ export interface FileRouteTypes {
     | '/_authenticated/preferences'
     | '/_authenticated/privacy-policy'
     | '/_authenticated/profile'
+    | '/_authenticated/public-chat'
     | '/_authenticated/push'
     | '/_authenticated/reels'
     | '/_authenticated/referral'
@@ -1359,6 +1371,13 @@ declare module '@tanstack/react-router' {
       path: '/push'
       fullPath: '/push'
       preLoaderRoute: typeof AuthenticatedPushRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/public-chat': {
+      id: '/_authenticated/public-chat'
+      path: '/public-chat'
+      fullPath: '/public-chat'
+      preLoaderRoute: typeof AuthenticatedPublicChatRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/profile': {
@@ -1839,6 +1858,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPreferencesRoute: typeof AuthenticatedPreferencesRoute
   AuthenticatedPrivacyPolicyRoute: typeof AuthenticatedPrivacyPolicyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRouteWithChildren
+  AuthenticatedPublicChatRoute: typeof AuthenticatedPublicChatRoute
   AuthenticatedPushRoute: typeof AuthenticatedPushRoute
   AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
   AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
@@ -1884,6 +1904,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPreferencesRoute: AuthenticatedPreferencesRoute,
   AuthenticatedPrivacyPolicyRoute: AuthenticatedPrivacyPolicyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRouteWithChildren,
+  AuthenticatedPublicChatRoute: AuthenticatedPublicChatRoute,
   AuthenticatedPushRoute: AuthenticatedPushRoute,
   AuthenticatedReelsRoute: AuthenticatedReelsRoute,
   AuthenticatedReferralRoute: AuthenticatedReferralRoute,
