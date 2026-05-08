@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, Send, ShieldCheck, Smile, Paperclip, Users, Sparkles, ArrowDown, X, Image as ImageIcon } from "lucide-react";
+import { Loader2, Send, ShieldCheck, Smile, Paperclip, Users, Sparkles, ArrowDown, X, Image as ImageIcon, Phone, Video, MoreVertical, Plus } from "lucide-react";
 import { format, isToday, isYesterday } from "date-fns";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -395,6 +395,33 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
               </>
             ) : null}
           </p>
+        </div>
+        {/* Action buttons (call / video / menu) */}
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            type="button"
+            onClick={() => toast.info("ميزة المكالمات قريباً")}
+            className="h-9 w-9 rounded-full flex items-center justify-center text-[oklch(0.75_0.10_250)] hover:text-white hover:bg-[oklch(0.55_0.20_260/0.20)] transition-all hover:scale-110"
+            aria-label="مكالمة صوتية"
+          >
+            <Phone className="h-[18px] w-[18px]" />
+          </button>
+          <button
+            type="button"
+            onClick={() => toast.info("ميزة مكالمة الفيديو قريباً")}
+            className="h-9 w-9 rounded-full flex items-center justify-center text-[oklch(0.75_0.10_250)] hover:text-white hover:bg-[oklch(0.55_0.20_260/0.20)] transition-all hover:scale-110"
+            aria-label="مكالمة فيديو"
+          >
+            <Video className="h-[18px] w-[18px]" />
+          </button>
+          <button
+            type="button"
+            onClick={() => otherUser && setProfileUserId(otherUser.id)}
+            className="h-9 w-9 rounded-full flex items-center justify-center text-[oklch(0.75_0.10_250)] hover:text-white hover:bg-[oklch(0.55_0.20_260/0.20)] transition-all hover:scale-110"
+            aria-label="المزيد"
+          >
+            <MoreVertical className="h-[18px] w-[18px]" />
+          </button>
         </div>
       </div>
 
