@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce, useLocation } from "@tanstack/react-router";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
