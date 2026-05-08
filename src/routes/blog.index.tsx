@@ -21,10 +21,21 @@ export const Route = createFileRoute("/blog/")({
   component: BlogPage,
 });
 
+const LANGUAGES = [
+  { code: "all", label: "الكل", flag: "🌍" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+];
+
 function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeLang, setActiveLang] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: articles = [], isLoading } = usePublishedArticles();
+  const { data: articles = [], isLoading } = usePublishedArticles(
+    activeLang !== "all" ? { language: activeLang } : undefined
+  );
   const { data: categories = [] } = useCategories();
 
   const filtered = useMemo(() => {
@@ -37,6 +48,8 @@ function BlogPage() {
     }
     return list;
   }, [articles, activeCategory, searchQuery]);
+
+  const isRtl = activeLang === "ar" || activeLang === "all";
 
   const featured = articles[0];
   const trending = articles.slice(0, 4);
