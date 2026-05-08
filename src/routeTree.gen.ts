@@ -31,7 +31,6 @@ import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BlogArticleIdRouteImport } from './routes/blog.$articleId'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
@@ -206,11 +205,6 @@ const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => CategoryRoute,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
 } as any)
 const BlogArticleIdRoute = BlogArticleIdRouteImport.update({
   id: '/$articleId',
@@ -617,7 +611,6 @@ export interface FileRoutesByFullPath {
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$articleId': typeof BlogArticleIdRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -704,7 +697,6 @@ export interface FileRoutesByTo {
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$articleId': typeof BlogArticleIdRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -797,7 +789,6 @@ export interface FileRoutesById {
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$articleId': typeof BlogArticleIdRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -888,7 +879,6 @@ export interface FileRouteTypes {
     | '/voice'
     | '/youtube'
     | '/blog/$articleId'
-    | '/blog/$slug'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -975,7 +965,6 @@ export interface FileRouteTypes {
     | '/voice'
     | '/youtube'
     | '/blog/$articleId'
-    | '/blog/$slug'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1067,7 +1056,6 @@ export interface FileRouteTypes {
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
     | '/blog/$articleId'
-    | '/blog/$slug'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1281,13 +1269,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/category/$slug'
       preLoaderRoute: typeof CategorySlugRouteImport
       parentRoute: typeof CategoryRoute
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
     }
     '/blog/$articleId': {
       id: '/blog/$articleId'
@@ -1960,14 +1941,12 @@ const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
 interface BlogRouteChildren {
   BlogArticleIdRoute: typeof BlogArticleIdRoute
-  BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   BlogAuthorUsernameRoute: typeof BlogAuthorUsernameRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
   BlogArticleIdRoute: BlogArticleIdRoute,
-  BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   BlogAuthorUsernameRoute: BlogAuthorUsernameRoute,
 }
@@ -2022,3 +2001,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
