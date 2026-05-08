@@ -14,6 +14,11 @@ export function PublicPageShell({
   dir?: "rtl" | "ltr";
   headerActions?: ReactNode;
 }) {
+  const { bgColor, textColor, btnColor, setBg, setText, setBtn } = useThemeColors();
+  const bgRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLInputElement>(null);
+  const btnRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="min-h-screen relative overflow-hidden text-foreground" dir={dir}>
       {/* ═══ Vivid purple/violet cosmic background ═══ */}
