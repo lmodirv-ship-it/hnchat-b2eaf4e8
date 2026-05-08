@@ -491,10 +491,10 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                             {m.content === "📷 صورة" && attachments.length === 0 && (
                               <p className="whitespace-pre-wrap leading-relaxed">{m.content}</p>
                             )}
-                            <div className="flex items-center gap-1 justify-end mt-0.5 opacity-70">
+                            <div className={cn("flex items-center gap-1 justify-end mt-0.5", mine ? "opacity-80" : "opacity-60")}>
                               <span className="text-[10px]">{format(new Date(m.created_at), "HH:mm")}</span>
                               {mine && (
-                                <span className={cn("text-[10px]", m.read_at ? "text-primary" : "text-muted-foreground")}>
+                                <span className={cn("text-[10px]", m.read_at ? "text-cyan-200" : "text-white/70")}>
                                   {m.read_at ? "✓✓" : "✓"}
                                 </span>
                               )}
