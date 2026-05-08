@@ -10,10 +10,10 @@ import { Input } from "@/components/ui/input";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "hnChat Blog — Latest News on AI, Crypto, and Super Apps" },
-      { name: "description", content: "Stay updated with the latest articles on AI chat, crypto trading, privacy, community building, and more from the hnChat team." },
-      { property: "og:title", content: "hnChat Blog — Latest News" },
-      { property: "og:description", content: "Articles on AI, crypto, privacy, and super app technology." },
+      { title: "مدونة hnChat — أحدث أخبار الذكاء الاصطناعي والتقنية" },
+      { name: "description", content: "تابع أحدث المقالات عن الذكاء الاصطناعي، الكريبتو، الخصوصية، وتقنيات التطبيقات الشاملة من فريق hnChat." },
+      { property: "og:title", content: "مدونة hnChat — أحدث الأخبار" },
+      { property: "og:description", content: "مقالات عن الذكاء الاصطناعي والكريبتو والخصوصية وتقنيات التطبيقات الشاملة." },
       { name: "robots", content: "index, follow" },
     ],
     links: [{ rel: "canonical", href: "https://hn-chat.com/blog" }],
@@ -42,7 +42,7 @@ function BlogPage() {
   const trending = articles.slice(0, 4);
 
   return (
-    <PublicPageShell dir="ltr">
+    <PublicPageShell dir="rtl">
       {/* Hero */}
       <section className="relative py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.2_0.06_250)] via-transparent to-transparent" />
@@ -51,23 +51,23 @@ function BlogPage() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
           className="relative z-10 max-w-4xl mx-auto text-center">
           <span className="inline-block px-5 py-2 text-[11px] font-bold uppercase tracking-[0.2em] rounded-full border border-cyan-glow/20 text-cyan-glow mb-6 bg-cyan-glow/5">
-            hnChat Blog
+            مدونة hnChat
           </span>
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] tracking-tight">
-            Discover the Future of{" "}
-            <span className="bg-gradient-to-r from-cyan-glow via-[oklch(0.75_0.2_260)] to-violet-glow bg-clip-text text-transparent">AI & Tech</span>
+            اكتشف مستقبل{" "}
+            <span className="bg-gradient-to-r from-cyan-glow via-[oklch(0.75_0.2_260)] to-violet-glow bg-clip-text text-transparent">الذكاء الاصطناعي والتقنية</span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground/60 max-w-2xl mx-auto leading-relaxed mb-8">
-            Expert articles on artificial intelligence, cryptocurrency, privacy, and the next generation of social technology.
+            مقالات متخصصة في الذكاء الاصطناعي، العملات الرقمية، الخصوصية، والجيل القادم من التقنية الاجتماعية.
           </p>
           {/* Search */}
           <div className="max-w-xl mx-auto relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/40" />
+            <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/40" />
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search articles..."
-              className="w-full h-13 pl-12 pr-5 rounded-2xl bg-[oklch(0.15_0.02_250)] border border-ice-border/15 text-sm placeholder:text-muted-foreground/30 outline-none focus:border-cyan-glow/30 transition"
+              placeholder="ابحث في المقالات..."
+              className="w-full h-13 pr-12 pl-5 rounded-2xl bg-[oklch(0.15_0.02_250)] border border-ice-border/15 text-sm placeholder:text-muted-foreground/30 outline-none focus:border-cyan-glow/30 transition"
             />
           </div>
         </motion.div>
@@ -92,7 +92,7 @@ function BlogPage() {
                 </div>
                 <div className="p-8 lg:p-14 flex flex-col justify-center">
                   <span className="inline-block px-3 py-1 text-[10px] font-bold rounded-full bg-gradient-to-r from-cyan-glow to-violet-glow text-white w-fit mb-4 tracking-wider">
-                    FEATURED
+                    مميز
                   </span>
                   {(featured.article_categories as any) && (
                     <span className="text-xs text-cyan-glow/80 font-semibold mb-3 tracking-wide uppercase">{(featured.article_categories as any).name}</span>
@@ -111,7 +111,7 @@ function BlogPage() {
                       <span className="font-medium text-foreground/60">{(featured.profiles as any)?.full_name ?? (featured.profiles as any)?.username}</span>
                     </div>
                     <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{featured.published_at ? new Date(featured.published_at).toLocaleDateString() : ""}</span>
-                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{featured.reading_time} min</span>
+                    <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" />{featured.reading_time} دقائق</span>
                     <span className="flex items-center gap-1.5"><Eye className="h-3.5 w-3.5" />{featured.views_count}</span>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ function BlogPage() {
         <section className="max-w-7xl mx-auto px-6 mb-16">
           <div className="flex items-center gap-2.5 mb-7">
             <div className="p-2 rounded-xl bg-cyan-glow/10"><TrendingUp className="h-4 w-4 text-cyan-glow" /></div>
-            <h2 className="text-xl font-bold">Trending Now</h2>
+            <h2 className="text-xl font-bold">الأكثر رواجاً</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {trending.map((article, i) => (
@@ -152,7 +152,7 @@ function BlogPage() {
                       <div className="flex items-center gap-3 mt-3 text-[10px] text-muted-foreground/35">
                         <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{article.views_count}</span>
                         <span className="flex items-center gap-1"><Heart className="h-3 w-3" />{article.likes_count}</span>
-                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{article.reading_time} min</span>
+                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{article.reading_time} دقائق</span>
                       </div>
                     </div>
                   </article>
@@ -172,7 +172,7 @@ function BlogPage() {
                 ? "bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground border-transparent shadow-[0_0_25px_oklch(0.78_0.18_220/0.15)]"
                 : "border-ice-border/15 bg-[oklch(0.14_0.02_250)] text-muted-foreground hover:text-foreground hover:border-cyan-glow/25"
             }`}>
-            All Articles
+            جميع المقالات
           </button>
           {categories.map((c) => (
             <button key={c.id} onClick={() => setActiveCategory(c.slug)}
@@ -191,7 +191,7 @@ function BlogPage() {
       <section className="max-w-7xl mx-auto px-6 pb-14">
         <div className="flex items-center gap-2.5 mb-7">
           <div className="p-2 rounded-xl bg-violet-glow/10"><Sparkles className="h-4 w-4 text-violet-glow" /></div>
-          <h2 className="text-xl font-bold">{searchQuery ? `Search Results` : "Latest Articles"}</h2>
+          <h2 className="text-xl font-bold">{searchQuery ? "نتائج البحث" : "أحدث المقالات"}</h2>
           {searchQuery && <span className="text-sm text-muted-foreground/40">({filtered.length})</span>}
         </div>
         {isLoading ? (
@@ -203,9 +203,9 @@ function BlogPage() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-24 rounded-3xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)]">
             <FileText className="h-14 w-14 text-muted-foreground/15 mx-auto mb-5" />
-            <h3 className="text-lg font-bold mb-2">No articles found</h3>
+            <h3 className="text-lg font-bold mb-2">لا توجد مقالات</h3>
             <p className="text-sm text-muted-foreground/40">
-              {searchQuery ? "Try a different search term." : "No articles in this category yet."}
+              {searchQuery ? "جرب كلمة بحث مختلفة." : "لا توجد مقالات في هذا القسم بعد."}
             </p>
           </div>
         ) : (
@@ -271,14 +271,14 @@ function BlogPage() {
             <div className="p-3.5 rounded-2xl bg-cyan-glow/10 border border-cyan-glow/15 w-fit mx-auto mb-6">
               <Mail className="h-7 w-7 text-cyan-glow" />
             </div>
-            <h2 className="text-3xl font-bold mb-3">Stay Updated</h2>
+            <h2 className="text-3xl font-bold mb-3">ابقَ على اطلاع</h2>
             <p className="text-muted-foreground/50 mb-8 max-w-md mx-auto leading-relaxed">
-              Get the latest articles delivered to your inbox. No spam, just quality content about AI and technology.
+              احصل على أحدث المقالات مباشرة في بريدك. بدون إزعاج، فقط محتوى عالي الجودة عن الذكاء الاصطناعي والتقنية.
             </p>
             <div className="flex max-w-md mx-auto gap-3">
-              <Input placeholder="your@email.com" className="bg-[oklch(0.12_0.02_250)] border-ice-border/15 h-12" />
+              <Input placeholder="بريدك@email.com" className="bg-[oklch(0.12_0.02_250)] border-ice-border/15 h-12" />
               <Button className="bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground shrink-0 px-7 h-12 font-semibold">
-                Subscribe
+                اشتراك
               </Button>
             </div>
           </div>

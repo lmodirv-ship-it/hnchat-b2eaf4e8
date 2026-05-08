@@ -24,7 +24,7 @@ function ArticlePage() {
 
   if (isLoading) {
     return (
-      <PublicPageShell dir="ltr">
+      <PublicPageShell dir="rtl">
         <div className="max-w-4xl mx-auto px-6 py-20">
           <div className="space-y-6">
             <div className="h-12 w-2/3 bg-[oklch(0.14_0.02_250)] animate-pulse rounded-xl" />
@@ -38,17 +38,17 @@ function ArticlePage() {
 
   if (error || !article) {
     return (
-      <PublicPageShell dir="ltr">
+      <PublicPageShell dir="rtl">
         <div className="text-center py-24">
           <FileText className="h-14 w-14 text-muted-foreground/15 mx-auto mb-5" />
-          <h1 className="text-2xl font-bold mb-3">Article not found</h1>
-          <Link to="/blog" className="text-cyan-glow hover:underline underline-offset-4">← Back to Blog</Link>
+          <h1 className="text-2xl font-bold mb-3">المقال غير موجود</h1>
+          <Link to="/blog" className="text-cyan-glow hover:underline underline-offset-4">→ العودة للمدونة</Link>
         </div>
       </PublicPageShell>
     );
   }
 
-  const isRTL = article.language === "ar";
+  const isRTL = article.language !== "en";
 
   return (
     <PublicPageShell dir={isRTL ? "rtl" : "ltr"}>
@@ -347,7 +347,7 @@ function RelatedArticles({ currentSlug }: { currentSlug: string }) {
     <div className="mb-16">
       <h3 className="text-xl font-bold mb-7 flex items-center gap-2.5">
         <div className="p-2 rounded-xl bg-violet-glow/10"><FileText className="h-4 w-4 text-violet-glow" /></div>
-        Related Articles
+        مقالات ذات صلة
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {related.map((a) => (
@@ -365,7 +365,7 @@ function RelatedArticles({ currentSlug }: { currentSlug: string }) {
               <div className="p-4">
                 <h4 className="font-bold text-sm line-clamp-2 group-hover:text-cyan-glow transition-colors">{a.title}</h4>
                 <div className="flex items-center gap-3 mt-3 text-[10px] text-muted-foreground/30">
-                  <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{a.reading_time} min</span>
+                  <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{a.reading_time} دقائق</span>
                   <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{a.views_count}</span>
                 </div>
               </div>
