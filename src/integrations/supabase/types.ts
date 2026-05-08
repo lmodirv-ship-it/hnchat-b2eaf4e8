@@ -356,6 +356,42 @@ export type Database = {
         }
         Relationships: []
       }
+      app_versions: {
+        Row: {
+          changes: Json
+          created_at: string
+          created_by: string | null
+          description: string | null
+          files_changed: Json
+          id: string
+          name: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          changes?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          files_changed?: Json
+          id?: string
+          name: string
+          updated_at?: string
+          version: string
+        }
+        Update: {
+          changes?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          files_changed?: Json
+          id?: string
+          name?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
       article_bookmarks: {
         Row: {
           article_id: string
