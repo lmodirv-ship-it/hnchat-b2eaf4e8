@@ -93,15 +93,24 @@ function ArticlePage() {
       {/* Article Body — wide magazine layout */}
       <div className="max-w-[820px] mx-auto px-5 sm:px-8">
         <article className="mt-10 relative z-10">
-          {/* Back */}
-          <Link
-            to="/feed"
-            hash="articles-section"
-            className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-8"
-          >
-            <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} />{" "}
-            {isRTL ? "العودة للمقالات" : "Back to Feed"}
-          </Link>
+          {/* Back buttons */}
+          <div className="flex items-center gap-4 mb-8">
+            <Link
+              to="/feed"
+              hash="articles-section"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-cyan-glow/10 text-cyan-glow border border-cyan-glow/20 hover:bg-cyan-glow/20 transition"
+            >
+              <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} />
+              {isRTL ? "العودة للمقالات" : "Back to Feed"}
+            </Link>
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-muted/50 text-foreground/70 border border-ice-border/10 hover:bg-muted transition"
+            >
+              <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} />
+              {isRTL ? "العودة للمدونة" : "Back to Blog"}
+            </Link>
+          </div>
 
           {/* Category */}
           {(article.article_categories as any) && (
