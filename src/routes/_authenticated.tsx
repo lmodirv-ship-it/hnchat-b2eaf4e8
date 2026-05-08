@@ -41,13 +41,16 @@ function AuthenticatedLayout() {
       <RealtimeProvider>
         <LayoutContext.Provider value={{ sidebarCollapsed, setSidebarCollapsed, mobileSidebarOpen, setMobileSidebarOpen }}>
           {/* App shell — fixed viewport, no outer scroll like Discord/Telegram */}
-          <div className="h-screen w-screen overflow-hidden flex bg-[oklch(0.10_0.02_258)]">
-            <AppSidebar />
-            <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
-              <OfflineBanner />
-              <TopBar />
-              {/* Content area scrolls internally */}
-              <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+            <div
+              className="h-screen w-screen overflow-hidden flex"
+              style={{ backgroundColor: "var(--theme-bg, oklch(0.10 0.02 258))", color: "var(--theme-text, inherit)" }}
+            >
+              <AppSidebar />
+              <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+                <OfflineBanner />
+                <TopBar />
+                {/* Content area scrolls internally */}
+                <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
                 <Outlet />
               </main>
               <MobileBottomNav />
