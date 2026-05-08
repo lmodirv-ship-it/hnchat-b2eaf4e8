@@ -31,6 +31,7 @@ function UsersPage() {
   const [page, setPage] = useState(0);
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [verifiedFilter, setVerifiedFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("created_desc");
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
   const { data: stats } = useQuery({
