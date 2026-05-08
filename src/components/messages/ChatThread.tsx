@@ -77,6 +77,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [profileUserId, setProfileUserId] = useState<string | null>(null);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [showEmojis, setShowEmojis] = useState(false);
   const [showJump, setShowJump] = useState(false);
