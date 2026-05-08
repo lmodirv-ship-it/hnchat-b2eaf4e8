@@ -585,6 +585,11 @@ function PublicChatPage() {
           )}
         </div>
       </div>
+      <UserProfileDialog
+        userId={profileUserId}
+        open={!!profileUserId}
+        onOpenChange={(o) => !o && setProfileUserId(null)}
+      />
     </div>
   );
 }
