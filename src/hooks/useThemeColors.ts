@@ -10,6 +10,14 @@ export function useThemeColors() {
   const [loaded, setLoaded] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  // Keep refs in sync for save closure
+  const bgRef = useRef(bgColor);
+  const textRef = useRef(textColor);
+  const btnRef = useRef(btnColor);
+  bgRef.current = bgColor;
+  textRef.current = textColor;
+  btnRef.current = btnColor;
+
   // Load from DB
   useEffect(() => {
     if (!user) return;
@@ -40,24 +48,25 @@ export function useThemeColors() {
   }, [bgColor, textColor, btnColor]);
 
   // Save to DB (debounced)
-  const save = useCallback(
-    (bg: string, text: string, btn: string) => {
-      if (!user || !loaded) return;
-      clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(() => {
-        supabase
-          .from("profiles")
-          .update({ bg_color: bg || null, text_color: text || null, btn_color: btn || null })
-          .eq("id", user.id)
-          .then(() => {});
-      }, 800);
-    },
-    [user, loaded],
-  );
+  const saveToDb = useCallback(() => {
+    if (!user || !loaded) return;
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      supabase
+        .from("profiles")
+        .update({
+          bg_color: bgRef.current || null,
+          text_color: textRef.current || null,
+          btn_color: btnRef.current || null,
+        })
+        .eq("id", user.id)
+        .then(() => {});
+    }, 800);
+  }, [user, loaded]);
 
-  const setBg = (v: string) => { setBgColor(v); save(v, textColor, btnColor); };
-  const setText = (v: string) => { setTextColor(v); save(bgColor, v, btnColor); };
-  const setBtn = (v: string) => { setBtnColor(v); save(bgColor, textColor, v); };
+  const setBg = useCallback((v: string) => { setBgColor(v); bgRef.current = v; saveToDb(); }, [saveToDb]);
+  const setText = useCallback((v: string) => { setTextColor(v); textRef.current = v; saveToDb(); }, [saveToDb]);
+  const setBtn = useCallback((v: string) => { setBtnColor(v); btnRef.current = v; saveToDb(); }, [saveToDb]);
 
   return { bgColor, textColor, btnColor, setBg, setText, setBtn };
 }
