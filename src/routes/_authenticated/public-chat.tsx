@@ -441,7 +441,7 @@ function PublicChatPage() {
         </div>
 
         {/* Input */}
-        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)] backdrop-blur-md pb-[max(0.625rem,env(safe-area-inset-bottom))]">
+        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)] backdrop-blur-md mb-16 md:mb-0 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
