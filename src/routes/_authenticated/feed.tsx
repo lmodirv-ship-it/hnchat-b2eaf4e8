@@ -165,7 +165,7 @@ function FeedArticleCard({ article }: { article: any }) {
   const profile = article.profiles;
   const category = article.article_categories;
   return (
-    <Link to="/blog/$slug" params={{ slug: article.slug }} className="block group">
+    <Link to="/blog/$articleId" params={{ articleId: article.id }} className="block group">
       <div className="rounded-2xl bg-[oklch(0.06_0.015_260/0.5)] border border-[oklch(1_0_0/0.05)] overflow-hidden hover:border-[oklch(0.78_0.18_220/0.3)] transition-all duration-300">
         {article.cover_image && (
           <div className="h-40 overflow-hidden">
