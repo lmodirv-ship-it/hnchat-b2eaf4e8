@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { MessageSquare, Video, ShoppingBag, Users, Sparkles, Radio, Shield, Globe } from "lucide-react";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 const SITE_URL = "https://www.hn-chat.com";
 
@@ -110,6 +111,11 @@ function AboutPage() {
             logo: `${SITE_URL}/icon-512.png`,
           },
         })}} />
+
+        {/* Ad Unit */}
+        <div className="max-w-4xl mx-auto px-6 py-6">
+          <AdSenseUnit className="rounded-xl overflow-hidden" />
+        </div>
       </div>
     </PublicPageShell>
   );

@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { fetchPublicPost } from "@/utils/public-pages.functions";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 const SITE_URL = "https://www.hnchat.net";
 
@@ -230,6 +231,11 @@ function PublicPostPage() {
             }).replace(/<\/script>/gi, "<\\/script>"),
           }}
         />
+
+        {/* Ad Unit */}
+        <div className="max-w-2xl mx-auto px-4 py-6">
+          <AdSenseUnit className="rounded-xl overflow-hidden" />
+        </div>
       </main>
     </div>
   );

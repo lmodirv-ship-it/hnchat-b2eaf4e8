@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import { useAiTools, useAiToolCategories, type AiTool } from "@/hooks/useAiTools";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const Route = createFileRoute("/tools/")({
   head: () => ({
@@ -140,6 +141,11 @@ function ToolsIndexPage() {
             ))}
           </div>
         )}
+
+        {/* Ad Unit */}
+        <div className="mt-10">
+          <AdSenseUnit className="rounded-xl overflow-hidden" />
+        </div>
 
         {/* Newsletter */}
         <div className="mt-16">

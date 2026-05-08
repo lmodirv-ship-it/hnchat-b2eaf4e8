@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { fetchSharedChat } from "@/utils/shared-chats.functions";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { Sparkles, User as UserIcon, ArrowLeft } from "lucide-react";
 
 const SITE_URL = "https://www.hn-chat.com";
@@ -99,6 +100,11 @@ function SharedChatPage() {
           <Link to="/sign-up-login" className="inline-block px-6 py-2.5 rounded-md bg-primary text-primary-foreground text-sm font-medium">
             ابدأ الآن
           </Link>
+        </div>
+
+        {/* Ad Unit */}
+        <div className="max-w-3xl mx-auto px-4 py-6">
+          <AdSenseUnit className="rounded-xl overflow-hidden" />
         </div>
       </main>
 
