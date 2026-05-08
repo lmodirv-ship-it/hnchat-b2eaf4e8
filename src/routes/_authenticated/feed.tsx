@@ -245,12 +245,83 @@ function FeedPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  const [bgColor, setBgColor] = useState(() => localStorage.getItem("hn-bg-color") || "");
+  const [textColor, setTextColor] = useState(() => localStorage.getItem("hn-text-color") || "");
+  const [btnColor, setBtnColor] = useState(() => localStorage.getItem("hn-btn-color") || "");
+
+  const bgRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLInputElement>(null);
+  const btnRef = useRef<HTMLInputElement>(null);
+
+  const applyColors = useCallback(() => {
+    const root = document.documentElement;
+    if (bgColor) { root.style.setProperty("--feed-bg", bgColor); localStorage.setItem("hn-bg-color", bgColor); }
+    else { root.style.removeProperty("--feed-bg"); localStorage.removeItem("hn-bg-color"); }
+    if (textColor) { root.style.setProperty("--feed-text", textColor); localStorage.setItem("hn-text-color", textColor); }
+    else { root.style.removeProperty("--feed-text"); localStorage.removeItem("hn-text-color"); }
+    if (btnColor) { root.style.setProperty("--feed-btn", btnColor); localStorage.setItem("hn-btn-color", btnColor); }
+    else { root.style.removeProperty("--feed-btn"); localStorage.removeItem("hn-btn-color"); }
+  }, [bgColor, textColor, btnColor]);
+
+  useEffect(() => { applyColors(); }, [applyColors]);
+
   return (
-    <div className="w-full px-3 sm:px-6 py-4 sm:py-6">
+    <div className="w-full px-3 sm:px-6 py-4 sm:py-6" style={{ backgroundColor: bgColor || undefined, color: textColor || undefined }}>
       {/* Page header */}
-      <div className="mb-5">
-        <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">التغذية</h1>
-        <p className="text-xs text-[oklch(0.45_0.03_250)] mt-0.5">اكتشف ما يحدث في عالمك الآن</p>
+      <div className="mb-5 flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold" style={{ color: textColor || "oklch(0.92 0.03 250)" }}>التغذية</h1>
+          <p className="text-xs mt-0.5" style={{ color: textColor ? `${textColor}99` : "oklch(0.45 0.03 250)" }}>اكتشف ما يحدث في عالمك الآن</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Background color */}
+          <button
+            onClick={() => bgRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium border transition-all hover:scale-105"
+            style={{
+              borderColor: bgColor || "oklch(1 0 0 / 0.08)",
+              backgroundColor: bgColor ? `${bgColor}22` : "oklch(0.06 0.015 260 / 0.5)",
+              color: textColor || "oklch(0.75 0.03 250)",
+            }}
+          >
+            <Palette className="h-3.5 w-3.5" />
+            الخلفية
+            <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: bgColor || "#0a0a1a" }} />
+          </button>
+          <input ref={bgRef} type="color" value={bgColor || "#0a0a1a"} onChange={(e) => setBgColor(e.target.value)} className="sr-only" />
+
+          {/* Text color */}
+          <button
+            onClick={() => textRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium border transition-all hover:scale-105"
+            style={{
+              borderColor: "oklch(1 0 0 / 0.08)",
+              backgroundColor: "oklch(0.06 0.015 260 / 0.5)",
+              color: textColor || "oklch(0.75 0.03 250)",
+            }}
+          >
+            <Type className="h-3.5 w-3.5" />
+            الكتابة
+            <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: textColor || "#e0e0ee" }} />
+          </button>
+          <input ref={textRef} type="color" value={textColor || "#e0e0ee"} onChange={(e) => setTextColor(e.target.value)} className="sr-only" />
+
+          {/* Button color */}
+          <button
+            onClick={() => btnRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium border transition-all hover:scale-105"
+            style={{
+              borderColor: btnColor || "oklch(1 0 0 / 0.08)",
+              backgroundColor: btnColor ? `${btnColor}22` : "oklch(0.06 0.015 260 / 0.5)",
+              color: textColor || "oklch(0.75 0.03 250)",
+            }}
+          >
+            <MousePointerClick className="h-3.5 w-3.5" />
+            الأزرار
+            <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: btnColor || "#5ec4ff" }} />
+          </button>
+          <input ref={btnRef} type="color" value={btnColor || "#5ec4ff"} onChange={(e) => setBtnColor(e.target.value)} className="sr-only" />
+        </div>
       </div>
 
       {/* Stories */}
