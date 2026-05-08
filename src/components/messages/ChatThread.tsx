@@ -339,11 +339,18 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
 
   return (
     <Card className={cn(
-      "relative overflow-hidden bg-gradient-to-b from-card via-card to-background/40 border-border flex flex-col shadow-lg",
-      compact ? "h-full" : "h-[calc(100vh-180px)] min-h-[520px]"
+      "relative overflow-hidden border-[oklch(1_0_0/0.06)] flex flex-col shadow-2xl",
+      "bg-[oklch(0.11_0.025_258)]",
+      compact ? "h-full rounded-none border-0" : "h-[calc(100vh-180px)] min-h-[520px] rounded-2xl"
     )}>
+      {/* Ambient gradient orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[oklch(0.55_0.20_260/0.15)] blur-3xl" />
+        <div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-[oklch(0.55_0.18_200/0.12)] blur-3xl" />
+      </div>
+
       {/* Header */}
-      <div className="relative flex items-center gap-3 p-4 border-b border-border/70 backdrop-blur-xl bg-card/60">
+      <div className="relative z-10 flex items-center gap-3 px-4 py-3 border-b border-[oklch(1_0_0/0.06)] backdrop-blur-2xl bg-[oklch(0.10_0.02_258/0.75)]">
         <button
           type="button"
           onClick={() => otherUser && setProfileUserId(otherUser.id)}
