@@ -190,6 +190,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { to: "/feed", label: "الرئيسية", icon: Home },
       { to: "/messages", label: "المحادثات", icon: MessageCircle },
+      { to: "/public-chat", label: "المحادثات العامة", icon: Globe },
       { to: "/groups", label: "المجموعات", icon: Users },
       { to: "/pages-groups", label: "القنوات", icon: Hash },
       { to: "/voice", label: "الغرف الصوتية", icon: Mic },
