@@ -24,6 +24,7 @@ const ICON: Record<NotifType, { icon: typeof Heart; tone: string }> = {
   follow:  { icon: UserPlus,      tone: "text-violet-glow bg-violet-glow/10 border-violet-glow/30" },
   mention: { icon: AtSign,        tone: "text-cyan-glow bg-cyan-glow/10 border-cyan-glow/30" },
   message: { icon: Mail,          tone: "text-violet-glow bg-violet-glow/10 border-violet-glow/30" },
+  new_post:{ icon: Sparkles,      tone: "text-cyan-glow bg-cyan-glow/10 border-cyan-glow/30" },
   system:  { icon: Sparkles,      tone: "text-foreground bg-muted/40 border-ice-border" },
 };
 
