@@ -159,7 +159,7 @@ function TrendingPage() {
                 <Link
                   key={tool.id}
                   to="/tools/$slug"
-                  params={{ articleId: tool.id }}
+                  params={{ slug: tool.slug }}
                   className="rounded-2xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all text-center"
                 >
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-2">
