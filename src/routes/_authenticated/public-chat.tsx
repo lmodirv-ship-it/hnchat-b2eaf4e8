@@ -210,6 +210,39 @@ function PublicChatPage() {
     inputRef.current?.focus();
   };
 
+  /* ── upload attachment ── */
+  const handleFileUpload = async (file: File, kind: "image" | "file") => {
+    if (!user || uploading) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("الحجم الأقصى 10 ميجابايت");
+      return;
+    }
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop() || "bin";
+      const path = `public-chat/${user.id}/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("chat-attachments")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("chat-attachments").getPublicUrl(path);
+      const { error } = await supabase.from("public_chat_messages").insert({
+        user_id: user.id,
+        content: kind === "image" ? "" : file.name,
+        attachment_url: pub.publicUrl,
+        attachment_type: kind === "image" ? "image" : "file",
+      });
+      if (error) throw error;
+    } catch (e) {
+      console.error(e);
+      toast.error("فشل رفع الملف");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (imageInputRef.current) imageInputRef.current.value = "";
+    }
+  };
+
   /* ── send invitation ── */
   const sendInvite = async (receiverId: string) => {
     if (!user) return;
