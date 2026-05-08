@@ -396,12 +396,14 @@ function PublicChatPage() {
               >
                 <div className="w-7 sm:w-8 shrink-0">
                   {!grouped && (
-                    <Avatar className="h-7 w-7 sm:h-8 sm:w-8 mt-0.5 ring-1 ring-[oklch(1_0_0/0.06)]">
-                      <AvatarImage src={msg.profile?.avatar_url || undefined} />
-                      <AvatarFallback className="text-[10px] bg-gradient-to-br from-[oklch(0.28_0.08_230)] to-[oklch(0.22_0.06_245)] text-white">
-                        {msg.profile?.username?.[0]?.toUpperCase() || "?"}
-                      </AvatarFallback>
-                    </Avatar>
+                    <button type="button" onClick={() => setProfileUserId(msg.user_id)}>
+                      <Avatar className="h-7 w-7 sm:h-8 sm:w-8 mt-0.5 ring-1 ring-[oklch(1_0_0/0.06)] hover:ring-[oklch(0.50_0.15_220)] transition">
+                        <AvatarImage src={msg.profile?.avatar_url || undefined} />
+                        <AvatarFallback className="text-[10px] bg-gradient-to-br from-[oklch(0.28_0.08_230)] to-[oklch(0.22_0.06_245)] text-white">
+                          {msg.profile?.username?.[0]?.toUpperCase() || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </button>
                   )}
                 </div>
                 <div className="min-w-0 flex flex-col">
