@@ -62,16 +62,21 @@ function UsersPage() {
   });
 
   const { data: usersData, isLoading } = useQuery({
-    queryKey: ["owner-users", search, page, roleFilter, verifiedFilter],
+    queryKey: ["owner-users", search, page, roleFilter, verifiedFilter, sortBy],
     queryFn: async () => {
-      let q = supabase.from("profiles").select("*", { count: "exact" }).order("created_at", { ascending: false }).range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-      if (search.trim()) q = q.or(`username.ilike.%${search.trim()}%,full_name.ilike.%${search.trim()}%`);
+      let q = supabase.from("profiles").select("*", { count: "exact" });
+      if (sortBy === "member_asc") q = q.order("member_id", { ascending: true, nullsFirst: false });
+      else if (sortBy === "member_desc") q = q.order("member_id", { ascending: false, nullsFirst: false });
+      else if (sortBy === "created_asc") q = q.order("created_at", { ascending: true });
+      else q = q.order("created_at", { ascending: false });
+      q = q.range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+      const s = search.trim();
+      if (s) q = q.or(`username.ilike.%${s}%,full_name.ilike.%${s}%,member_id.ilike.%${s}%`);
       if (verifiedFilter === "yes") q = q.eq("is_verified", true);
       else if (verifiedFilter === "no") q = q.eq("is_verified", false);
       const { data, count } = await q;
 
       let filtered = data ?? [];
-      // Client-side role filter (since roles are in separate table)
       if (roleFilter !== "all" && roles) {
         filtered = filtered.filter((u) => {
           const userRoles = roles.get(u.id) ?? [];
