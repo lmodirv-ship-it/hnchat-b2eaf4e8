@@ -447,8 +447,9 @@ export function AppSidebar() {
     <>
       {/* Desktop sidebar */}
       <aside
+        style={{ backgroundColor: "var(--theme-bg, oklch(0.09 0.02 258))" }}
         className={cn(
-          "hidden md:block shrink-0 bg-[oklch(0.09_0.02_258)] border-l border-[oklch(1_0_0/0.07)] h-full transition-[width] duration-300 ease-in-out",
+          "hidden md:block shrink-0 border-l border-[oklch(1_0_0/0.07)] h-full transition-[width] duration-300 ease-in-out",
           collapsed ? "w-[56px]" : "w-[240px]",
         )}
       >
@@ -462,7 +463,7 @@ export function AppSidebar() {
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setMobileSidebarOpen(false)}
           />
-          <aside className="relative w-[280px] bg-[oklch(0.09_0.02_258)] border-l border-[oklch(1_0_0/0.07)] h-full animate-slide-in-right shadow-2xl">
+          <aside style={{ backgroundColor: "var(--theme-bg, oklch(0.09 0.02 258))" }} className="relative w-[280px] border-l border-[oklch(1_0_0/0.07)] h-full animate-slide-in-right shadow-2xl">
             <button
               onClick={() => setMobileSidebarOpen(false)}
               className="absolute top-2 left-2 p-2 rounded-lg hover:bg-[oklch(0.18_0.03_250/0.5)] transition z-10"

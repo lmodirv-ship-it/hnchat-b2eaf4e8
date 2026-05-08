@@ -47,7 +47,7 @@ export function TopBar() {
   const displayName = profile?.full_name || profile?.username || user?.email?.split("@")[0] || "User";
 
   return (
-    <header className="shrink-0 h-12 flex items-center border-b border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)] backdrop-blur-xl z-30">
+    <header style={{ backgroundColor: "var(--theme-bg, oklch(0.11 0.02 258 / 0.95))" }} className="shrink-0 h-12 flex items-center border-b border-[oklch(1_0_0/0.07)] backdrop-blur-xl z-30">
       <div className="flex items-center w-full px-3 gap-2">
         {/* Hamburger — mobile */}
         <button

@@ -20,7 +20,15 @@ export function PublicPageShell({
   const btnRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="min-h-screen relative overflow-hidden text-foreground" dir={dir}>
+    <div
+      className="min-h-screen relative overflow-hidden text-foreground"
+      dir={dir}
+      style={{
+        ...(bgColor ? { '--theme-bg': bgColor, backgroundColor: bgColor } : {}),
+        ...(textColor ? { '--theme-text': textColor, color: textColor } : {}),
+        ...(btnColor ? { '--theme-btn': btnColor } : {}),
+      } as React.CSSProperties}
+    >
       {/* ═══ Vivid purple/violet cosmic background ═══ */}
       <div className="pointer-events-none fixed inset-0 z-0">
         {/* Base gradient — deep purple/indigo */}
