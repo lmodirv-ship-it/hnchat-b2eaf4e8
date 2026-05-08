@@ -447,8 +447,49 @@ function PublicChatPage() {
               e.preventDefault();
               handleSend();
             }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1.5"
           >
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFileUpload(f, "image");
+              }}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFileUpload(f, "file");
+              }}
+            />
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              disabled={uploading}
+              onClick={() => imageInputRef.current?.click()}
+              className="rounded-full h-10 w-10 shrink-0 text-[oklch(0.65_0.12_220)] hover:bg-[oklch(0.20_0.06_230/0.5)]"
+              title="إرسال صورة"
+            >
+              {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+            </Button>
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              disabled={uploading}
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-full h-10 w-10 shrink-0 text-[oklch(0.65_0.12_220)] hover:bg-[oklch(0.20_0.06_230/0.5)]"
+              title="إرسال ملف"
+            >
+              <Paperclip className="h-4 w-4" />
+            </Button>
             <Input
               ref={inputRef}
               value={newMsg}
