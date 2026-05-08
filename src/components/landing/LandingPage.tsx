@@ -1,6 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { HnLogo } from "@/components/HnLogo";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
@@ -632,6 +633,8 @@ const footerStatsData: Record<Lang, { value: string; label: string; icon: any; c
 export function LandingPage() {
   const [lang, setLang] = useState<Lang>("ar");
   const [mounted, setMounted] = useState(false);
+  const [guestBusy, setGuestBusy] = useState(false);
+  const navigate = useNavigate();
   const l = t[lang];
   const nav = navLabels[lang];
   const sb = sidebarLabels[lang];
@@ -641,6 +644,26 @@ export function LandingPage() {
   const fStats = footerStatsData[lang];
 
   useEffect(() => { setMounted(true); setLang(detectLang()); }, []);
+
+  async function handleGuestEntry() {
+    if (guestBusy) return;
+    setGuestBusy(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate({ to: "/feed" });
+        return;
+      }
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      toast.success("مرحباً بك! تم منحك معرفاً مؤقتاً");
+      navigate({ to: "/feed" });
+    } catch (e: any) {
+      toast.error(e?.message || "تعذر الدخول كزائر");
+    } finally {
+      setGuestBusy(false);
+    }
+  }
 
   const isRTL = lang === "ar";
   const init = mounted ? "hidden" as const : undefined;
@@ -734,6 +757,9 @@ export function LandingPage() {
               {hl.tagline}
             </motion.p>
             <motion.div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8" initial={init} animate={enter} variants={fadeUp} custom={2}>
+              <button onClick={handleGuestEntry} disabled={guestBusy} className="px-7 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-[0_8px_30px_oklch(0.65_0.18_180/0.4)] hover:shadow-[0_12px_40px_oklch(0.65_0.18_180/0.6)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60">
+                <Zap className="h-4 w-4" /> {guestBusy ? "..." : "دخول مباشر"}
+              </button>
               <Link to="/sign-up-login">
                 <button className="px-7 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-[0_8px_30px_oklch(0.55_0.25_295/0.4)] hover:shadow-[0_12px_40px_oklch(0.55_0.25_295/0.6)] hover:scale-105 active:scale-95 transition-all">{hl.startNow}</button>
               </Link>
