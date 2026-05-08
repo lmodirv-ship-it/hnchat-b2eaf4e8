@@ -110,7 +110,25 @@ export function TopBar() {
             )}
           </Link>
 
-          {/* Dark mode */}
+          {/* Color customization */}
+          <button onClick={() => bgRef.current?.click()} className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition relative" aria-label="لون الخلفية" title="لون الخلفية">
+            <Palette className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
+            {bgColor && <div className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: bgColor }} />}
+          </button>
+          <input ref={bgRef} type="color" value={bgColor || "#0a0a1a"} onChange={(e) => setBg(e.target.value)} className="sr-only" />
+
+          <button onClick={() => textRef.current?.click()} className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition relative" aria-label="لون الكتابة" title="لون الكتابة">
+            <Type className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
+            {textColor && <div className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: textColor }} />}
+          </button>
+          <input ref={textRef} type="color" value={textColor || "#e0e0ee"} onChange={(e) => setText(e.target.value)} className="sr-only" />
+
+          <button onClick={() => btnRef.current?.click()} className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition relative" aria-label="لون الأزرار" title="لون الأزرار">
+            <MousePointerClick className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
+            {btnColor && <div className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: btnColor }} />}
+          </button>
+          <input ref={btnRef} type="color" value={btnColor || "#5ec4ff"} onChange={(e) => setBtn(e.target.value)} className="sr-only" />
+
           <button className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition" aria-label="الوضع الليلي">
             <Moon className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
           </button>
