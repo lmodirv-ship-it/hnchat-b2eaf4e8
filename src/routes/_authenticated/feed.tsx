@@ -245,112 +245,12 @@ function FeedPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const [bgColor, setBgColor] = useState("");
-  const [textColor, setTextColor] = useState("");
-  const [btnColor, setBtnColor] = useState("");
-  const [colorsLoaded, setColorsLoaded] = useState(false);
-
-  const bgRef = useRef<HTMLInputElement>(null);
-  const textRef = useRef<HTMLInputElement>(null);
-  const btnRef = useRef<HTMLInputElement>(null);
-
-  // Load colors from DB on mount
-  useEffect(() => {
-    if (!user) return;
-    supabase.from("profiles").select("bg_color, text_color, btn_color").eq("id", user.id).single()
-      .then(({ data }) => {
-        if (data) {
-          setBgColor(data.bg_color || "");
-          setTextColor(data.text_color || "");
-          setBtnColor(data.btn_color || "");
-        }
-        setColorsLoaded(true);
-      });
-  }, [user]);
-
-  // Save colors to DB when changed (debounced)
-  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const saveColors = useCallback((bg: string, text: string, btn: string) => {
-    if (!user || !colorsLoaded) return;
-    clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = setTimeout(() => {
-      supabase.from("profiles").update({
-        bg_color: bg || null,
-        text_color: text || null,
-        btn_color: btn || null,
-      }).eq("id", user.id).then(() => {});
-    }, 800);
-  }, [user, colorsLoaded]);
-
-  const handleBgChange = (v: string) => { setBgColor(v); saveColors(v, textColor, btnColor); };
-  const handleTextChange = (v: string) => { setTextColor(v); saveColors(bgColor, v, btnColor); };
-  const handleBtnChange = (v: string) => { setBtnColor(v); saveColors(bgColor, textColor, v); };
-
-  // Apply CSS vars
-  useEffect(() => {
-    const root = document.documentElement;
-    if (bgColor) root.style.setProperty("--feed-bg", bgColor); else root.style.removeProperty("--feed-bg");
-    if (textColor) root.style.setProperty("--feed-text", textColor); else root.style.removeProperty("--feed-text");
-    if (btnColor) root.style.setProperty("--feed-btn", btnColor); else root.style.removeProperty("--feed-btn");
-  }, [bgColor, textColor, btnColor]);
-
   return (
-    <div className="w-full px-3 sm:px-6 py-4 sm:py-6" style={{ backgroundColor: bgColor || undefined, color: textColor || undefined }}>
+    <div className="w-full px-3 sm:px-6 py-4 sm:py-6">
       {/* Page header */}
-      <div className="mb-5 flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold" style={{ color: textColor || "oklch(0.92 0.03 250)" }}>التغذية</h1>
-          <p className="text-xs mt-0.5" style={{ color: textColor ? `${textColor}99` : "oklch(0.45 0.03 250)" }}>اكتشف ما يحدث في عالمك الآن</p>
-        </div>
-        <div className="flex items-center gap-2">
-          {/* Background color */}
-          <button
-            onClick={() => bgRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium border transition-all hover:scale-105"
-            style={{
-              borderColor: bgColor || "oklch(1 0 0 / 0.08)",
-              backgroundColor: bgColor ? `${bgColor}22` : "oklch(0.06 0.015 260 / 0.5)",
-              color: textColor || "oklch(0.75 0.03 250)",
-            }}
-          >
-            <Palette className="h-3.5 w-3.5" />
-            الخلفية
-            <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: bgColor || "#0a0a1a" }} />
-          </button>
-          <input ref={bgRef} type="color" value={bgColor || "#0a0a1a"} onChange={(e) => handleBgChange(e.target.value)} className="sr-only" />
-
-          {/* Text color */}
-          <button
-            onClick={() => textRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium border transition-all hover:scale-105"
-            style={{
-              borderColor: "oklch(1 0 0 / 0.08)",
-              backgroundColor: "oklch(0.06 0.015 260 / 0.5)",
-              color: textColor || "oklch(0.75 0.03 250)",
-            }}
-          >
-            <Type className="h-3.5 w-3.5" />
-            الكتابة
-            <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: textColor || "#e0e0ee" }} />
-          </button>
-          <input ref={textRef} type="color" value={textColor || "#e0e0ee"} onChange={(e) => handleTextChange(e.target.value)} className="sr-only" />
-
-          {/* Button color */}
-          <button
-            onClick={() => btnRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium border transition-all hover:scale-105"
-            style={{
-              borderColor: btnColor || "oklch(1 0 0 / 0.08)",
-              backgroundColor: btnColor ? `${btnColor}22` : "oklch(0.06 0.015 260 / 0.5)",
-              color: textColor || "oklch(0.75 0.03 250)",
-            }}
-          >
-            <MousePointerClick className="h-3.5 w-3.5" />
-            الأزرار
-            <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: btnColor || "#5ec4ff" }} />
-          </button>
-          <input ref={btnRef} type="color" value={btnColor || "#5ec4ff"} onChange={(e) => handleBtnChange(e.target.value)} className="sr-only" />
-        </div>
+      <div className="mb-5">
+        <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">التغذية</h1>
+        <p className="text-xs text-[oklch(0.45_0.03_250)] mt-0.5">اكتشف ما يحدث في عالمك الآن</p>
       </div>
 
       {/* Stories */}
