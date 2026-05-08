@@ -2084,6 +2084,7 @@ export type Database = {
           language_code: string | null
           last_seen: string | null
           locale_source: string | null
+          member_id: string | null
           posts_count: number
           referral_code: string | null
           status: string
@@ -2108,6 +2109,7 @@ export type Database = {
           language_code?: string | null
           last_seen?: string | null
           locale_source?: string | null
+          member_id?: string | null
           posts_count?: number
           referral_code?: string | null
           status?: string
@@ -2132,6 +2134,7 @@ export type Database = {
           language_code?: string | null
           last_seen?: string | null
           locale_source?: string | null
+          member_id?: string | null
           posts_count?: number
           referral_code?: string | null
           status?: string
@@ -2822,6 +2825,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      generate_member_id: { Args: never; Returns: string }
       get_stream_ingest_url: { Args: { _stream_id: string }; Returns: string }
       get_visitor_stats: {
         Args: never
