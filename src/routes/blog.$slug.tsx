@@ -42,7 +42,7 @@ function ArticlePage() {
         <div className="text-center py-24">
           <FileText className="h-14 w-14 text-muted-foreground/15 mx-auto mb-5" />
           <h1 className="text-2xl font-bold mb-3">المقال غير موجود</h1>
-          <Link to="/blog" className="text-cyan-glow hover:underline underline-offset-4">→ العودة للمدونة</Link>
+          <Link to="/feed" hash="articles-section" className="text-cyan-glow hover:underline underline-offset-4">→ العودة للمقالات</Link>
         </div>
       </PublicPageShell>
     );
@@ -69,8 +69,8 @@ function ArticlePage() {
       <div className="max-w-[820px] mx-auto px-5 sm:px-8">
         <article className="mt-10 relative z-10">
           {/* Back */}
-          <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-8">
-            <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} /> {isRTL ? "العودة للمدونة" : "Back to Blog"}
+          <Link to="/feed" hash="articles-section" className="inline-flex items-center gap-1.5 text-sm text-cyan-glow/70 hover:text-cyan-glow transition mb-8">
+            <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} /> {isRTL ? "العودة للمقالات" : "Back to Feed"}
           </Link>
 
           {/* Category */}
