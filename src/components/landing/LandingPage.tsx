@@ -665,7 +665,7 @@ export function LandingPage() {
       <header className="relative z-30 border-b border-violet-500/10 backdrop-blur-2xl" style={{ background: "oklch(0.10 0.04 270 / 0.6)" }}>
         <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 shrink-0">
+          <Link to="/feed" className="flex items-center gap-2.5 shrink-0">
             <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_oklch(0.55_0.25_295/0.5)]">
               <MessageCircle className="h-5 w-5 text-white" />
             </div>
