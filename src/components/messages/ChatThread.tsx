@@ -512,13 +512,13 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
 
         {/* Typing indicator */}
         {typingUsers.length > 0 && (
-          <div className="flex items-center gap-2 px-2">
-            <div className="flex gap-1 px-3 py-2 rounded-2xl bg-background/70 border border-border w-fit">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }} />
+          <div className="flex items-center gap-2 px-2 animate-in fade-in slide-in-from-bottom-1">
+            <div className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-[oklch(0.16_0.025_258)] border border-[oklch(1_0_0/0.06)] w-fit">
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.65_0.18_260)] animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.65_0.18_260)] animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.65_0.18_260)] animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[11px] text-[oklch(0.55_0.02_250)]">
               {typingUsers.length === 1
                 ? `${members[typingUsers[0]]?.username || "شخص ما"} يكتب...`
                 : `${typingUsers.length} أشخاص يكتبون...`}
