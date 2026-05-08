@@ -137,7 +137,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="ar" dir="rtl" className="dark">
       <head>
         <HeadContent />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QPQ40Z8H14" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-C06R5JEZ3G" />
+        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C06R5JEZ3G');` }} />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3443455318197857" crossOrigin="anonymous" />
       </head>
       <body className="dark">
