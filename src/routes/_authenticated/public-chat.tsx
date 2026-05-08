@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { UserProfileDialog } from "@/components/profile/UserProfileDialog";
 
 export const Route = createFileRoute("/_authenticated/public-chat")({
   component: PublicChatPage,
