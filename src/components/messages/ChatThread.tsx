@@ -344,8 +344,13 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
     )}>
       {/* Header */}
       <div className="relative flex items-center gap-3 p-4 border-b border-border/70 backdrop-blur-xl bg-card/60">
-        <Link to={otherUser ? "/user/$userId" : "#"} params={otherUser ? { userId: otherUser.id } : undefined as any} className="relative">
-          <Avatar className="h-11 w-11 ring-2 ring-primary/40 ring-offset-2 ring-offset-card">
+        <button
+          type="button"
+          onClick={() => otherUser && setProfileUserId(otherUser.id)}
+          className="relative"
+          disabled={!otherUser}
+        >
+          <Avatar className="h-11 w-11 ring-2 ring-primary/40 ring-offset-2 ring-offset-card hover:ring-primary transition">
             <AvatarImage src={otherUser?.avatar_url || undefined} />
             <AvatarFallback className="bg-primary/10 text-primary font-bold">
               {isGroup ? <Users className="h-5 w-5" /> : headerTitle.slice(0, 2).toUpperCase()}
@@ -354,10 +359,17 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           {!isGroup && otherUser?.is_online && (
             <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-card animate-pulse" />
           )}
-        </Link>
+        </button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <Link to={otherUser ? "/user/$userId" : "#"} params={otherUser ? { userId: otherUser.id } : undefined as any} className="font-semibold truncate text-base hover:text-primary transition-colors">{headerTitle}</Link>
+            <button
+              type="button"
+              onClick={() => otherUser && setProfileUserId(otherUser.id)}
+              className="font-semibold truncate text-base hover:text-primary transition-colors text-right"
+              disabled={!otherUser}
+            >
+              {headerTitle}
+            </button>
             {otherUser?.is_verified && <ShieldCheck className="h-4 w-4 text-primary shrink-0" />}
           </div>
           <p className="text-xs text-muted-foreground truncate flex items-center gap-1.5">
