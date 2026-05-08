@@ -6,6 +6,7 @@ import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -324,6 +325,11 @@ function BlogPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Ad Unit */}
+      <section className="max-w-5xl mx-auto px-6 pb-10">
+        <AdSenseUnit className="rounded-2xl overflow-hidden" />
       </section>
     </PublicPageShell>
   );
