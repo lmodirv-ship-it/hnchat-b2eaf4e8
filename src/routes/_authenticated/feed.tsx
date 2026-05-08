@@ -1,16 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Send, Loader2, Sparkles, RefreshCw, Brain, Zap, TrendingUp } from "lucide-react";
+import { Send, Loader2, Sparkles, RefreshCw, Brain, Zap, TrendingUp, BookOpen, Clock, Eye, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 import { useEnergy } from "@/hooks/useEnergySystem";
 import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
+import { usePublishedArticles } from "@/hooks/useBlog";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
