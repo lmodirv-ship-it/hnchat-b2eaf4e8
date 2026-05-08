@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
-  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle,
+  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -19,7 +19,9 @@ export const Route = createFileRoute("/_authenticated/public-chat")({
 interface ChatMsg {
   id: string;
   user_id: string;
-  content: string;
+  content: string | null;
+  attachment_url?: string | null;
+  attachment_type?: string | null;
   created_at: string;
   profile?: { username: string; avatar_url: string | null; full_name: string | null };
 }
@@ -50,8 +52,11 @@ function PublicChatPage() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [newMsg, setNewMsg] = useState("");
   const [sending, setSending] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   /* ── load messages ── */
   const loadMessages = useCallback(async () => {
@@ -203,6 +208,39 @@ function PublicChatPage() {
     if (error) toast.error("فشل إرسال الرسالة");
     setSending(false);
     inputRef.current?.focus();
+  };
+
+  /* ── upload attachment ── */
+  const handleFileUpload = async (file: File, kind: "image" | "file") => {
+    if (!user || uploading) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("الحجم الأقصى 10 ميجابايت");
+      return;
+    }
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop() || "bin";
+      const path = `public-chat/${user.id}/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("chat-attachments")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("chat-attachments").getPublicUrl(path);
+      const { error } = await supabase.from("public_chat_messages").insert({
+        user_id: user.id,
+        content: kind === "image" ? "" : file.name,
+        attachment_url: pub.publicUrl,
+        attachment_type: kind === "image" ? "image" : "file",
+      });
+      if (error) throw error;
+    } catch (e) {
+      console.error(e);
+      toast.error("فشل رفع الملف");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (imageInputRef.current) imageInputRef.current.value = "";
+    }
   };
 
   /* ── send invitation ── */
@@ -362,13 +400,39 @@ function PublicChatPage() {
                   </div>
                   <div
                     className={cn(
-                      "rounded-2xl px-3 sm:px-3.5 py-2 text-[13px] leading-relaxed break-words",
+                      "rounded-2xl text-[13px] leading-relaxed break-words overflow-hidden",
+                      msg.attachment_type === "image" && !msg.content
+                        ? "p-1 bg-[oklch(0.16_0.02_258)] border border-[oklch(1_0_0/0.06)]"
+                        : "px-3 sm:px-3.5 py-2",
                       isMe
                         ? "bg-gradient-to-br from-[oklch(0.32_0.13_220)] to-[oklch(0.28_0.12_230)] text-white rounded-br-sm shadow-sm"
                         : "bg-[oklch(0.16_0.02_258)] text-[oklch(0.88_0.01_250)] border border-[oklch(1_0_0/0.06)] rounded-bl-sm",
                     )}
                   >
-                    {msg.content}
+                    {msg.attachment_type === "image" && msg.attachment_url && (
+                      <a href={msg.attachment_url} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={msg.attachment_url}
+                          alt="attachment"
+                          className="rounded-xl max-h-64 w-auto object-cover"
+                          loading="lazy"
+                        />
+                      </a>
+                    )}
+                    {msg.attachment_type === "file" && msg.attachment_url && (
+                      <a
+                        href={msg.attachment_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 underline-offset-2 hover:underline"
+                      >
+                        <Paperclip className="h-4 w-4" />
+                        <span className="truncate">{msg.content || "ملف"}</span>
+                      </a>
+                    )}
+                    {msg.attachment_type !== "file" && msg.content && (
+                      <div className={cn(msg.attachment_url && "mt-1.5 px-1")}>{msg.content}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -383,8 +447,49 @@ function PublicChatPage() {
               e.preventDefault();
               handleSend();
             }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1.5"
           >
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFileUpload(f, "image");
+              }}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFileUpload(f, "file");
+              }}
+            />
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              disabled={uploading}
+              onClick={() => imageInputRef.current?.click()}
+              className="rounded-full h-10 w-10 shrink-0 text-[oklch(0.65_0.12_220)] hover:bg-[oklch(0.20_0.06_230/0.5)]"
+              title="إرسال صورة"
+            >
+              {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+            </Button>
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              disabled={uploading}
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-full h-10 w-10 shrink-0 text-[oklch(0.65_0.12_220)] hover:bg-[oklch(0.20_0.06_230/0.5)]"
+              title="إرسال ملف"
+            >
+              <Paperclip className="h-4 w-4" />
+            </Button>
             <Input
               ref={inputRef}
               value={newMsg}

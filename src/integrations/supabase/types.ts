@@ -2107,19 +2107,25 @@ export type Database = {
       }
       public_chat_messages: {
         Row: {
-          content: string
+          attachment_type: string | null
+          attachment_url: string | null
+          content: string | null
           created_at: string
           id: string
           user_id: string
         }
         Insert: {
-          content: string
+          attachment_type?: string | null
+          attachment_url?: string | null
+          content?: string | null
           created_at?: string
           id?: string
           user_id: string
         }
         Update: {
-          content?: string
+          attachment_type?: string | null
+          attachment_url?: string | null
+          content?: string | null
           created_at?: string
           id?: string
           user_id?: string
