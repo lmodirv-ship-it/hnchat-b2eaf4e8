@@ -248,9 +248,20 @@ function FeedPage() {
   return (
     <div className="w-full px-3 sm:px-6 py-4 sm:py-6">
       {/* Page header */}
-      <div className="mb-5">
-        <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">التغذية</h1>
-        <p className="text-xs text-[oklch(0.45_0.03_250)] mt-0.5">اكتشف ما يحدث في عالمك الآن</p>
+      <div className="mb-5 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">التغذية</h1>
+          <p className="text-xs text-[oklch(0.45_0.03_250)] mt-0.5">اكتشف ما يحدث في عالمك الآن</p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => refetch()}
+          className="gap-1.5 text-xs text-[oklch(0.65_0.02_250)] hover:text-[oklch(0.78_0.18_220)] hover:bg-[oklch(0.78_0.18_220/0.08)]"
+        >
+          <RefreshCw className="h-4 w-4" />
+          تحديث
+        </Button>
       </div>
 
       {/* Stories */}
