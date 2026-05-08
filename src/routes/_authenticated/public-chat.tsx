@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
-  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle,
+  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -19,7 +19,9 @@ export const Route = createFileRoute("/_authenticated/public-chat")({
 interface ChatMsg {
   id: string;
   user_id: string;
-  content: string;
+  content: string | null;
+  attachment_url?: string | null;
+  attachment_type?: string | null;
   created_at: string;
   profile?: { username: string; avatar_url: string | null; full_name: string | null };
 }
