@@ -194,6 +194,18 @@ function UsersPage() {
                 <SelectItem value="no">غير موثق</SelectItem>
               </SelectContent>
             </Select>
+            <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setPage(0); }}>
+              <SelectTrigger className="w-40 bg-transparent border-[oklch(0.18_0.04_30)] text-[oklch(0.8_0.04_40)] text-xs">
+                <Hash className="h-3 w-3 ml-1" />
+                <SelectValue placeholder="الترتيب" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="created_desc">الأحدث انضماماً</SelectItem>
+                <SelectItem value="created_asc">الأقدم انضماماً</SelectItem>
+                <SelectItem value="member_asc">المعرّف ↑</SelectItem>
+                <SelectItem value="member_desc">المعرّف ↓</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </OwnerCard>
