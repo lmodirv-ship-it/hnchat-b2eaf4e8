@@ -251,7 +251,7 @@ function FeedPage() {
       {/* Page header */}
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">التغذية</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">HN</h1>
           <p className="text-xs text-[oklch(0.45_0.03_250)] mt-0.5">اكتشف ما يحدث في عالمك الآن</p>
         </div>
         <Button
