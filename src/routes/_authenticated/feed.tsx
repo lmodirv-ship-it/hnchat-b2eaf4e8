@@ -291,6 +291,11 @@ function FeedPage() {
         </div>
       )}
 
+      {/* Ad Unit */}
+      <div className="mb-5">
+        <AdSenseUnit className="rounded-xl overflow-hidden" />
+      </div>
+
       {/* AI Composer */}
       <div className="mb-6">
         <AiComposer onPost={refetch} />
