@@ -116,6 +116,25 @@ export function useArticleBySlug(slug: string) {
   });
 }
 
+export function useArticleByIdFull(id: string) {
+  return useQuery({
+    queryKey: ["article-full", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("articles")
+        .select("*, profiles(username, full_name, avatar_url, bio), article_categories(*)")
+        .eq("id", id)
+        .single();
+      if (error) throw error;
+      if (data?.id) {
+        await supabase.rpc("increment_article_views", { _article_id: data.id });
+      }
+      return data as any as Article;
+    },
+  });
+}
+
 export function useArticleById(id: string) {
   return useQuery({
     queryKey: ["article-edit", id],
