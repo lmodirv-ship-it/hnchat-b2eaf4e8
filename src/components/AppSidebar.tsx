@@ -130,11 +130,17 @@ function SidebarLink({
 }) {
   const Icon = item.icon;
   const displayBadge = badge ?? item.badge;
+  const themeBtnStyle: React.CSSProperties | undefined =
+    active
+      ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
+      : undefined;
+
   return (
     <Link
       to={item.to}
       hash={item.hash}
       title={collapsed ? item.label : undefined}
+      style={!item.highlight ? themeBtnStyle : undefined}
       className={cn(
         "group relative flex items-center rounded-lg text-[13px] font-medium transition-all duration-150",
         collapsed ? "justify-center p-2 mx-auto w-10 h-10" : "gap-3 px-3 py-2",
