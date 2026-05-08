@@ -341,8 +341,8 @@ export function AppSidebar() {
               ))}
               {/* Public blog link */}
               <SidebarLink
-                item={{ to: "/blog", label: "تصفح المقالات", icon: BookOpen }}
-                active={isActive("/blog") && !isActive("/blog-dashboard") && !isActive("/blog-editor")}
+                item={{ to: "/feed", label: "تصفح المقالات", icon: BookOpen }}
+                active={false}
                 collapsed={false}
               />
             </>
