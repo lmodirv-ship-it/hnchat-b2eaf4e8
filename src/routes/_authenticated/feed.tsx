@@ -160,10 +160,51 @@ function FeedInsights({ postsCount }: { postsCount: number }) {
   );
 }
 
+/* ═══ Article Card for Feed ═══ */
+function FeedArticleCard({ article }: { article: any }) {
+  const profile = article.profiles;
+  const category = article.article_categories;
+  return (
+    <Link to="/blog/$slug" params={{ slug: article.slug }} className="block group">
+      <div className="rounded-2xl bg-[oklch(0.06_0.015_260/0.5)] border border-[oklch(1_0_0/0.05)] overflow-hidden hover:border-[oklch(0.78_0.18_220/0.3)] transition-all duration-300">
+        {article.cover_image && (
+          <div className="h-40 overflow-hidden">
+            <img src={article.cover_image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+        )}
+        <div className="p-4">
+          {category?.name && (
+            <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold rounded-full bg-[oklch(0.78_0.18_220/0.1)] text-[oklch(0.78_0.18_220)] mb-2">
+              {category.name}
+            </span>
+          )}
+          <h3 className="text-sm font-bold text-[oklch(0.92_0.03_250)] mb-1.5 line-clamp-2 group-hover:text-[oklch(0.78_0.18_220)] transition-colors">
+            {article.title}
+          </h3>
+          {article.short_description && (
+            <p className="text-xs text-[oklch(0.5_0.03_250)] line-clamp-2 mb-3">{article.short_description}</p>
+          )}
+          <div className="flex items-center justify-between text-[10px] text-[oklch(0.45_0.03_250)]">
+            <div className="flex items-center gap-2">
+              {profile?.avatar_url && <img src={profile.avatar_url} className="w-5 h-5 rounded-full" alt="" />}
+              <span>{profile?.full_name || profile?.username || "كاتب"}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{article.read_time ?? 3} د</span>
+              <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{article.views_count ?? 0}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 function FeedPage() {
   const { user } = useAuth();
   const { activityPulse } = useEnergy();
   const { newPostsCount, clearNewPosts } = useRealtimeFeed();
+  const { data: articles = [] } = usePublishedArticles({ limit: 6 });
 
   const { data: posts, refetch, isLoading } = useQuery({
     queryKey: ["feed-posts", user?.id],
@@ -217,6 +258,26 @@ function FeedPage() {
 
       {/* Feed Insights */}
       <FeedInsights postsCount={posts?.length ?? 0} />
+
+      {/* Articles Section */}
+      {articles.length > 0 && (
+        <div id="articles-section" className="mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4 text-[oklch(0.78_0.18_220)]" />
+              <h2 className="text-sm font-bold text-[oklch(0.88_0.03_250)]">أحدث المقالات</h2>
+            </div>
+            <Link to="/blog" className="flex items-center gap-1 text-[10px] text-[oklch(0.78_0.18_220)] hover:underline">
+              عرض الكل <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {articles.map((article: any) => (
+              <FeedArticleCard key={article.id} article={article} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* AI Composer */}
       <div className="mb-6">
