@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Search, Moon, Command, Menu, ChevronDown } from "lucide-react";
+import { Bell, Search, Moon, Command, Menu, ChevronDown, Palette, Type, MousePointerClick } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
@@ -9,6 +9,7 @@ import { useRealtime } from "@/components/providers/RealtimeProvider";
 import { useLayout } from "@/hooks/useLayoutStore";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
+import { useThemeColors } from "@/hooks/useThemeColors";
 
 export function TopBar() {
   const { user } = useAuth();
