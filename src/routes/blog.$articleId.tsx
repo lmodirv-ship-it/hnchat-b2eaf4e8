@@ -38,8 +38,8 @@ export const Route = createFileRoute("/blog/$articleId")({
 });
 
 function ArticlePage() {
-  const { slug } = Route.useParams();
-  const { data: article, isLoading, error } = useArticleBySlug(slug);
+  const { articleId } = Route.useParams();
+  const { data: article, isLoading, error } = useArticleByIdFull(articleId);
 
   if (isLoading) {
     return (
