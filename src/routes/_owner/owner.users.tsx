@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Search, Users, UserCheck, Shield, Crown, Loader2, ChevronLeft, ChevronRight,
-  Eye, Activity, Ban, CheckCircle, XCircle, Filter,
+  Eye, Activity, Ban, CheckCircle, XCircle, Filter, Hash, Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
@@ -31,6 +31,7 @@ function UsersPage() {
   const [page, setPage] = useState(0);
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [verifiedFilter, setVerifiedFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("created_desc");
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
   const { data: stats } = useQuery({
@@ -61,16 +62,21 @@ function UsersPage() {
   });
 
   const { data: usersData, isLoading } = useQuery({
-    queryKey: ["owner-users", search, page, roleFilter, verifiedFilter],
+    queryKey: ["owner-users", search, page, roleFilter, verifiedFilter, sortBy],
     queryFn: async () => {
-      let q = supabase.from("profiles").select("*", { count: "exact" }).order("created_at", { ascending: false }).range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-      if (search.trim()) q = q.or(`username.ilike.%${search.trim()}%,full_name.ilike.%${search.trim()}%`);
+      let q = supabase.from("profiles").select("*", { count: "exact" });
+      if (sortBy === "member_asc") q = q.order("member_id", { ascending: true, nullsFirst: false });
+      else if (sortBy === "member_desc") q = q.order("member_id", { ascending: false, nullsFirst: false });
+      else if (sortBy === "created_asc") q = q.order("created_at", { ascending: true });
+      else q = q.order("created_at", { ascending: false });
+      q = q.range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+      const s = search.trim();
+      if (s) q = q.or(`username.ilike.%${s}%,full_name.ilike.%${s}%,member_id.ilike.%${s}%`);
       if (verifiedFilter === "yes") q = q.eq("is_verified", true);
       else if (verifiedFilter === "no") q = q.eq("is_verified", false);
       const { data, count } = await q;
 
       let filtered = data ?? [];
-      // Client-side role filter (since roles are in separate table)
       if (roleFilter !== "all" && roles) {
         filtered = filtered.filter((u) => {
           const userRoles = roles.get(u.id) ?? [];
@@ -161,7 +167,7 @@ function UsersPage() {
             <Input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-              placeholder="بحث بالاسم أو اسم المستخدم..."
+              placeholder="بحث بالمعرّف، الاسم، أو اسم المستخدم..."
               className="pr-9 bg-transparent border-[oklch(0.18_0.04_30)] text-[oklch(0.9_0.05_50)] placeholder:text-[oklch(0.4_0.04_40)]"
             />
           </div>
@@ -188,6 +194,18 @@ function UsersPage() {
                 <SelectItem value="no">غير موثق</SelectItem>
               </SelectContent>
             </Select>
+            <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setPage(0); }}>
+              <SelectTrigger className="w-40 bg-transparent border-[oklch(0.18_0.04_30)] text-[oklch(0.8_0.04_40)] text-xs">
+                <Hash className="h-3 w-3 ml-1" />
+                <SelectValue placeholder="الترتيب" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="created_desc">الأحدث انضماماً</SelectItem>
+                <SelectItem value="created_asc">الأقدم انضماماً</SelectItem>
+                <SelectItem value="member_asc">المعرّف ↑</SelectItem>
+                <SelectItem value="member_desc">المعرّف ↓</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </OwnerCard>
@@ -202,6 +220,7 @@ function UsersPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-[oklch(0.55_0.04_40)] text-xs uppercase tracking-wider border-b border-[oklch(0.15_0.03_30)]">
+                    <th className="text-right p-3">المعرّف</th>
                     <th className="text-right p-3">المستخدم</th>
                     <th className="text-right p-3">الأدوار</th>
                     <th className="text-center p-3">موثق</th>
@@ -217,6 +236,12 @@ function UsersPage() {
                     const isOwnerUser = userRoles.includes("owner");
                     return (
                       <tr key={u.id} className="hover:bg-[oklch(0.08_0.02_30)] transition cursor-pointer" onClick={() => setSelectedUser(u)}>
+                        <td className="p-3" onClick={(e) => { e.stopPropagation(); if (u.member_id) { navigator.clipboard.writeText(u.member_id); toast.success("تم نسخ المعرّف"); } }}>
+                          <span className="inline-flex items-center gap-1 font-mono text-xs px-2 py-1 rounded border border-[oklch(0.75_0.18_50)/0.4] text-[oklch(0.85_0.15_50)] bg-[oklch(0.75_0.18_50)/0.06] hover:bg-[oklch(0.75_0.18_50)/0.12]">
+                            <Hash className="h-3 w-3 opacity-60" />
+                            {u.member_id ?? "—"}
+                          </span>
+                        </td>
                         <td className="p-3">
                           <div className="flex items-center gap-2">
                             <Avatar className="h-8 w-8">
@@ -308,9 +333,20 @@ function UsersPage() {
                   {(selectedUser?.username ?? "?").slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div>
+              <div className="flex-1">
                 <div className="text-lg font-bold">@{selectedUser?.username}</div>
                 <div className="text-xs text-[oklch(0.55_0.04_40)] font-normal">{selectedUser?.full_name} · {selectedUser?.country_code ?? "—"}</div>
+                {selectedUser?.member_id && (
+                  <button
+                    type="button"
+                    onClick={() => { navigator.clipboard.writeText(selectedUser.member_id); toast.success("تم نسخ المعرّف"); }}
+                    className="mt-1 inline-flex items-center gap-1 font-mono text-xs px-2 py-0.5 rounded border border-[oklch(0.75_0.18_50)/0.4] text-[oklch(0.85_0.15_50)] bg-[oklch(0.75_0.18_50)/0.08] hover:bg-[oklch(0.75_0.18_50)/0.16]"
+                  >
+                    <Hash className="h-3 w-3 opacity-60" />
+                    {selectedUser.member_id}
+                    <Copy className="h-3 w-3 opacity-60" />
+                  </button>
+                )}
               </div>
             </DialogTitle>
           </DialogHeader>
