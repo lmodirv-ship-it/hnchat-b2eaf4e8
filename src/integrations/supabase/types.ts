@@ -2261,26 +2261,38 @@ export type Database = {
       }
       site_visits: {
         Row: {
+          country: string | null
+          device_type: string | null
           first_seen: string
           id: string
+          ip_address: string | null
           last_seen: string
           path: string | null
+          referrer: string | null
           session_id: string
           user_agent: string | null
         }
         Insert: {
+          country?: string | null
+          device_type?: string | null
           first_seen?: string
           id?: string
+          ip_address?: string | null
           last_seen?: string
           path?: string | null
+          referrer?: string | null
           session_id: string
           user_agent?: string | null
         }
         Update: {
+          country?: string | null
+          device_type?: string | null
           first_seen?: string
           id?: string
+          ip_address?: string | null
           last_seen?: string
           path?: string | null
+          referrer?: string | null
           session_id?: string
           user_agent?: string | null
         }

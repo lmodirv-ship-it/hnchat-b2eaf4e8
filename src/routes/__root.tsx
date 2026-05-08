@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce, useLocation } from "@tanstack/react-router";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
@@ -159,6 +160,12 @@ function GaPageViewTracker() {
   return null;
 }
 
+function VisitorTracker() {
+  const location = useLocation();
+  useVisitorTracking(location.pathname);
+  return null;
+}
+
 function RootComponent() {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: { queries: { staleTime: 60_000, refetchOnWindowFocus: false } },
@@ -167,6 +174,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ScriptOnce children={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-QPQ40Z8H14');`} />
+        <VisitorTracker />
         <GaPageViewTracker />
         <NativeStatusBar />
         <NetworkStatus />
