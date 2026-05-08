@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Search, Users, UserCheck, Shield, Crown, Loader2, ChevronLeft, ChevronRight,
-  Eye, Activity, Ban, CheckCircle, XCircle, Filter,
+  Eye, Activity, Ban, CheckCircle, XCircle, Filter, Hash, Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
