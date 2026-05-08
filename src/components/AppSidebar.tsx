@@ -21,6 +21,7 @@ interface NavItem {
   to: string;
   label: string;
   icon: any;
+  hash?: string;
   badge?: number | string;
   highlight?: boolean;
 }
@@ -132,6 +133,7 @@ function SidebarLink({
   return (
     <Link
       to={item.to}
+      hash={item.hash}
       title={collapsed ? item.label : undefined}
       className={cn(
         "group relative flex items-center rounded-lg text-[13px] font-medium transition-all duration-150",
@@ -341,8 +343,8 @@ export function AppSidebar() {
               ))}
               {/* Public blog link */}
               <SidebarLink
-                item={{ to: "/blog", label: "تصفح المقالات", icon: BookOpen }}
-                active={false}
+                item={{ to: "/feed", hash: "articles-section", label: "تصفح المقالات", icon: BookOpen }}
+                active={pathname === "/feed" && location.hash === "#articles-section"}
                 collapsed={false}
               />
             </>
