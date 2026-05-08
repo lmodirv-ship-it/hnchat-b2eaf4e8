@@ -241,17 +241,47 @@ function PublicChatPage() {
       {/* ── Chat area ── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="shrink-0 px-4 py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-[oklch(0.25_0.12_220/0.3)]">
-            <Globe className="h-5 w-5 text-[oklch(0.70_0.15_220)]" />
+        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2.5 sm:gap-3 bg-[oklch(0.10_0.02_258/0.95)] backdrop-blur-md">
+          <div className="p-1.5 sm:p-2 rounded-xl bg-[oklch(0.25_0.12_220/0.3)] shrink-0">
+            <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-[oklch(0.70_0.15_220)]" />
           </div>
-          <div>
-            <h1 className="text-base font-bold text-white">المحادثات العامة</h1>
-            <p className="text-[11px] text-[oklch(0.55_0.02_250)]">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-sm sm:text-base font-bold text-white truncate">المحادثات العامة</h1>
+            <p className="text-[10px] sm:text-[11px] text-[oklch(0.55_0.02_250)] flex items-center gap-1">
+              <Circle className="h-1.5 w-1.5 fill-green-500 text-green-500" />
               {onlineUsers.length} متصل الآن
             </p>
           </div>
         </div>
+
+        {/* Mobile online users strip */}
+        {onlineUsers.length > 0 && (
+          <div className="lg:hidden shrink-0 border-b border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
+            <div className="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-thin">
+              {onlineUsers.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => user && u.id !== user.id && sendInvite(u.id)}
+                  className="flex flex-col items-center gap-1 shrink-0 w-14 group"
+                  title={u.username}
+                >
+                  <div className="relative">
+                    <Avatar className="h-10 w-10 ring-2 ring-[oklch(0.30_0.12_220/0.4)] group-hover:ring-[oklch(0.50_0.15_220)] transition">
+                      <AvatarImage src={u.avatar_url || undefined} />
+                      <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
+                        {u.username?.[0]?.toUpperCase() || "?"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 fill-green-500 text-green-500" />
+                  </div>
+                  <span className="text-[9px] text-[oklch(0.65_0.02_250)] truncate w-full text-center">
+                    {u.username}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Invitations bar */}
         {invitations.length > 0 && (
@@ -295,7 +325,7 @@ function PublicChatPage() {
         {/* Messages */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin"
+          className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 space-y-2.5 sm:space-y-3 scrollbar-thin"
         >
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center">
@@ -311,31 +341,31 @@ function PublicChatPage() {
               <div
                 key={msg.id}
                 className={cn(
-                  "flex gap-2.5 max-w-[85%]",
+                  "flex gap-2 sm:gap-2.5 max-w-[88%] sm:max-w-[85%]",
                   isMe ? "mr-auto flex-row-reverse" : "ml-auto",
                 )}
               >
-                <Avatar className="h-8 w-8 shrink-0 mt-0.5">
+                <Avatar className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 mt-0.5">
                   <AvatarImage src={msg.profile?.avatar_url || undefined} />
                   <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
                     {msg.profile?.username?.[0]?.toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-[11px] font-semibold text-[oklch(0.70_0.15_220)]">
+                <div className="min-w-0">
+                  <div className={cn("flex items-center gap-2 mb-0.5", isMe && "flex-row-reverse")}>
+                    <span className="text-[11px] font-semibold text-[oklch(0.70_0.15_220)] truncate max-w-[140px]">
                       {msg.profile?.full_name || msg.profile?.username || "مجهول"}
                     </span>
-                    <span className="text-[10px] text-[oklch(0.40_0.02_250)]">
+                    <span className="text-[10px] text-[oklch(0.40_0.02_250)] shrink-0">
                       {formatTime(msg.created_at)}
                     </span>
                   </div>
                   <div
                     className={cn(
-                      "rounded-xl px-3.5 py-2 text-[13px] leading-relaxed",
+                      "rounded-2xl px-3 sm:px-3.5 py-2 text-[13px] leading-relaxed break-words",
                       isMe
-                        ? "bg-[oklch(0.30_0.12_220)] text-white rounded-br-sm"
-                        : "bg-[oklch(0.16_0.02_258)] text-[oklch(0.85_0.01_250)] border border-[oklch(1_0_0/0.06)] rounded-bl-sm",
+                        ? "bg-gradient-to-br from-[oklch(0.32_0.13_220)] to-[oklch(0.28_0.12_230)] text-white rounded-br-sm shadow-sm"
+                        : "bg-[oklch(0.16_0.02_258)] text-[oklch(0.88_0.01_250)] border border-[oklch(1_0_0/0.06)] rounded-bl-sm",
                     )}
                   >
                     {msg.content}
@@ -347,7 +377,7 @@ function PublicChatPage() {
         </div>
 
         {/* Input */}
-        <div className="shrink-0 px-4 py-3 border-t border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)]">
+        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)] backdrop-blur-md pb-[max(0.625rem,env(safe-area-inset-bottom))]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -360,14 +390,14 @@ function PublicChatPage() {
               value={newMsg}
               onChange={(e) => setNewMsg(e.target.value)}
               placeholder="اكتب رسالة للجميع..."
-              className="flex-1 bg-[oklch(0.14_0.02_258)] border-[oklch(1_0_0/0.08)] text-white placeholder:text-[oklch(0.40_0.02_250)] text-[13px]"
+              className="flex-1 bg-[oklch(0.14_0.02_258)] border-[oklch(1_0_0/0.08)] text-white placeholder:text-[oklch(0.40_0.02_250)] text-[13px] rounded-full h-10 px-4"
               maxLength={500}
             />
             <Button
               type="submit"
-              size="sm"
+              size="icon"
               disabled={!newMsg.trim() || sending}
-              className="bg-[oklch(0.40_0.15_220)] hover:bg-[oklch(0.45_0.15_220)] text-white rounded-lg px-3"
+              className="bg-gradient-to-br from-[oklch(0.42_0.16_220)] to-[oklch(0.36_0.14_230)] hover:opacity-90 text-white rounded-full h-10 w-10 shrink-0 shadow-lg shadow-[oklch(0.40_0.15_220/0.3)]"
             >
               <Send className="h-4 w-4" />
             </Button>
