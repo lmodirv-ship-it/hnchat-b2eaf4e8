@@ -34,6 +34,7 @@ const LABEL: Record<NotifType, string> = {
   follow: "بدأ بمتابعتك",
   mention: "أشار إليك",
   message: "أرسل لك رسالة",
+  new_post: "نشر منشوراً جديداً",
   system: "إشعار من النظام",
 };
 
