@@ -220,6 +220,7 @@ function UsersPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-[oklch(0.55_0.04_40)] text-xs uppercase tracking-wider border-b border-[oklch(0.15_0.03_30)]">
+                    <th className="text-right p-3">المعرّف</th>
                     <th className="text-right p-3">المستخدم</th>
                     <th className="text-right p-3">الأدوار</th>
                     <th className="text-center p-3">موثق</th>
