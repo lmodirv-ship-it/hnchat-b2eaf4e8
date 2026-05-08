@@ -304,7 +304,7 @@ function PublicChatPage() {
               {onlineUsers.map((u) => (
                 <button
                   key={u.id}
-                  onClick={() => user && u.id !== user.id && sendInvite(u.id)}
+                  onClick={() => setProfileUserId(u.id)}
                   className="flex flex-col items-center gap-1 shrink-0 w-14 group"
                   title={u.username}
                 >
