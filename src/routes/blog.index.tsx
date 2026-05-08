@@ -42,7 +42,16 @@ function BlogPage() {
   const trending = articles.slice(0, 4);
 
   return (
-    <PublicPageShell dir="rtl">
+    <PublicPageShell dir="rtl" headerActions={
+      <Link
+        to="/feed"
+        hash="articles-section"
+        className="px-5 py-2 text-xs font-semibold rounded-full text-white transition-all hover:shadow-[0_0_20px_oklch(0.65_0.25_295/0.4)] hover:scale-105"
+        style={{ background: "linear-gradient(135deg, oklch(0.65 0.25 295) 0%, oklch(0.55 0.20 270) 50%, oklch(0.78 0.18 220) 100%)" }}
+      >
+        المقالات
+      </Link>
+    }>
       {/* Hero */}
       <section className="relative py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.2_0.06_250)] via-transparent to-transparent" />
