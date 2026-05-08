@@ -17,17 +17,17 @@ import {
 } from "lucide-react";
 
 const PAGES = [
-  { name: "Mission Control", path: "/owner-x9k2m7", icon: Crown },
-  { name: "User Operations", path: "/owner-x9k2m7/users", icon: Users },
-  { name: "Content & Moderation", path: "/owner-x9k2m7/content", icon: FileText },
-  { name: "Commerce & Revenue", path: "/owner-x9k2m7/marketplace", icon: ShoppingBag },
-  { name: "Geo & Language", path: "/owner-x9k2m7/geography", icon: Globe },
-  { name: "Groups Network", path: "/owner-x9k2m7/groups", icon: Flag },
-  { name: "Feature Flags", path: "/owner-x9k2m7/features", icon: Power },
-  { name: "Security & RLS", path: "/owner-x9k2m7/security", icon: ShieldAlert },
-  { name: "Audit Logs", path: "/owner-x9k2m7/audit", icon: Activity },
-  { name: "Finance", path: "/owner-x9k2m7/finance", icon: DollarSign },
-  { name: "System Settings", path: "/owner-x9k2m7/settings", icon: Settings },
+  { name: "Mission Control", path: "/owner", icon: Crown },
+  { name: "User Operations", path: "/owner/users", icon: Users },
+  { name: "Content & Moderation", path: "/owner/content", icon: FileText },
+  { name: "Commerce & Revenue", path: "/owner/marketplace", icon: ShoppingBag },
+  { name: "Geo & Language", path: "/owner/geography", icon: Globe },
+  { name: "Groups Network", path: "/owner/groups", icon: Flag },
+  { name: "Feature Flags", path: "/owner/features", icon: Power },
+  { name: "Security & RLS", path: "/owner/security", icon: ShieldAlert },
+  { name: "Audit Logs", path: "/owner/audit", icon: Activity },
+  { name: "Finance", path: "/owner/finance", icon: DollarSign },
+  { name: "System Settings", path: "/owner/settings", icon: Settings },
 ];
 
 export function OwnerCommandPalette() {
@@ -106,7 +106,7 @@ export function OwnerCommandPalette() {
               <CommandSeparator />
               <CommandGroup heading="المستخدمون">
                 {users.map((u) => (
-                  <CommandItem key={u.id} onSelect={() => go("/owner-x9k2m7/users")}>
+                  <CommandItem key={u.id} onSelect={() => go("/owner/users")}>
                     <User className="h-4 w-4 ml-2 text-[oklch(0.65_0.04_40)]" />
                     <span>@{u.username}</span>
                     {u.full_name && (
