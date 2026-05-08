@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 const SESSION_KEY = "hn_visitor_session";
 
 function getSessionId(): string {
+  if (typeof window === "undefined") return "";
   let sid = sessionStorage.getItem(SESSION_KEY);
   if (!sid) {
     sid = crypto.randomUUID();
