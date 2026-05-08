@@ -333,9 +333,20 @@ function UsersPage() {
                   {(selectedUser?.username ?? "?").slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div>
+              <div className="flex-1">
                 <div className="text-lg font-bold">@{selectedUser?.username}</div>
                 <div className="text-xs text-[oklch(0.55_0.04_40)] font-normal">{selectedUser?.full_name} · {selectedUser?.country_code ?? "—"}</div>
+                {selectedUser?.member_id && (
+                  <button
+                    type="button"
+                    onClick={() => { navigator.clipboard.writeText(selectedUser.member_id); toast.success("تم نسخ المعرّف"); }}
+                    className="mt-1 inline-flex items-center gap-1 font-mono text-xs px-2 py-0.5 rounded border border-[oklch(0.75_0.18_50)/0.4] text-[oklch(0.85_0.15_50)] bg-[oklch(0.75_0.18_50)/0.08] hover:bg-[oklch(0.75_0.18_50)/0.16]"
+                  >
+                    <Hash className="h-3 w-3 opacity-60" />
+                    {selectedUser.member_id}
+                    <Copy className="h-3 w-3 opacity-60" />
+                  </button>
+                )}
               </div>
             </DialogTitle>
           </DialogHeader>
