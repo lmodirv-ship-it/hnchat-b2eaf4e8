@@ -339,11 +339,18 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
 
   return (
     <Card className={cn(
-      "relative overflow-hidden bg-gradient-to-b from-card via-card to-background/40 border-border flex flex-col shadow-lg",
-      compact ? "h-full" : "h-[calc(100vh-180px)] min-h-[520px]"
+      "relative overflow-hidden border-[oklch(1_0_0/0.06)] flex flex-col shadow-2xl",
+      "bg-[oklch(0.11_0.025_258)]",
+      compact ? "h-full rounded-none border-0" : "h-[calc(100vh-180px)] min-h-[520px] rounded-2xl"
     )}>
+      {/* Ambient gradient orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[oklch(0.55_0.20_260/0.15)] blur-3xl" />
+        <div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-[oklch(0.55_0.18_200/0.12)] blur-3xl" />
+      </div>
+
       {/* Header */}
-      <div className="relative flex items-center gap-3 p-4 border-b border-border/70 backdrop-blur-xl bg-card/60">
+      <div className="relative z-10 flex items-center gap-3 px-4 py-3 border-b border-[oklch(1_0_0/0.06)] backdrop-blur-2xl bg-[oklch(0.10_0.02_258/0.75)]">
         <button
           type="button"
           onClick={() => otherUser && setProfileUserId(otherUser.id)}
@@ -395,7 +402,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="relative flex-1 overflow-y-auto px-3 sm:px-5 py-4 space-y-4 scroll-smooth"
+        className="relative z-10 flex-1 overflow-y-auto px-3 sm:px-5 py-4 space-y-4 scroll-smooth chat-scroll"
       >
         {loading ? (
           <div className="flex justify-center py-12">
@@ -412,7 +419,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           grouped.map((day) => (
             <div key={day.date} className="space-y-3">
               <div className="flex items-center justify-center sticky top-0 z-10">
-                <div className="px-3 py-1 rounded-full text-[11px] font-medium bg-background/80 backdrop-blur-md border border-border text-muted-foreground">
+                <div className="px-3 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-[oklch(0.10_0.02_258/0.80)] backdrop-blur-md border border-[oklch(1_0_0/0.06)] text-[oklch(0.60_0.02_250)] uppercase">
                   {day.label}
                 </div>
               </div>
@@ -446,11 +453,11 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                           <div
                             key={m.id}
                             className={cn(
-                              "group/msg relative px-4 py-2 text-sm break-words backdrop-blur-sm transition-all",
-                              "border shadow-sm hover:shadow-md",
+                              "group/msg relative px-3.5 py-2 text-sm break-words transition-all duration-200",
+                              "shadow-sm hover:shadow-lg animate-in fade-in slide-in-from-bottom-1",
                               mine
-                                ? "bg-primary/15 border-primary/30 text-foreground"
-                                : "bg-background/70 border-border text-foreground",
+                                ? "bg-gradient-to-br from-[oklch(0.55_0.20_260)] to-[oklch(0.45_0.22_270)] text-white shadow-[oklch(0.50_0.20_260)]/20"
+                                : "bg-[oklch(0.16_0.025_258)] border border-[oklch(1_0_0/0.06)] text-[oklch(0.95_0.01_250)]",
                               mine
                                 ? cn(
                                     "rounded-2xl rounded-br-md",
@@ -484,10 +491,10 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                             {m.content === "📷 صورة" && attachments.length === 0 && (
                               <p className="whitespace-pre-wrap leading-relaxed">{m.content}</p>
                             )}
-                            <div className="flex items-center gap-1 justify-end mt-0.5 opacity-70">
+                            <div className={cn("flex items-center gap-1 justify-end mt-0.5", mine ? "opacity-80" : "opacity-60")}>
                               <span className="text-[10px]">{format(new Date(m.created_at), "HH:mm")}</span>
                               {mine && (
-                                <span className={cn("text-[10px]", m.read_at ? "text-primary" : "text-muted-foreground")}>
+                                <span className={cn("text-[10px]", m.read_at ? "text-cyan-200" : "text-white/70")}>
                                   {m.read_at ? "✓✓" : "✓"}
                                 </span>
                               )}
@@ -505,13 +512,13 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
 
         {/* Typing indicator */}
         {typingUsers.length > 0 && (
-          <div className="flex items-center gap-2 px-2">
-            <div className="flex gap-1 px-3 py-2 rounded-2xl bg-background/70 border border-border w-fit">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }} />
+          <div className="flex items-center gap-2 px-2 animate-in fade-in slide-in-from-bottom-1">
+            <div className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-[oklch(0.16_0.025_258)] border border-[oklch(1_0_0/0.06)] w-fit">
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.65_0.18_260)] animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.65_0.18_260)] animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.65_0.18_260)] animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[11px] text-[oklch(0.55_0.02_250)]">
               {typingUsers.length === 1
                 ? `${members[typingUsers[0]]?.username || "شخص ما"} يكتب...`
                 : `${typingUsers.length} أشخاص يكتبون...`}
@@ -526,7 +533,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
       {showJump && (
         <button
           onClick={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })}
-          className="absolute bottom-24 right-4 z-20 h-10 w-10 rounded-full bg-primary/20 hover:bg-primary/30 border border-primary/50 backdrop-blur-md flex items-center justify-center text-primary shadow-lg transition-all"
+          className="absolute bottom-24 right-4 z-20 h-11 w-11 rounded-full bg-gradient-to-br from-[oklch(0.55_0.20_260)] to-[oklch(0.45_0.22_270)] hover:scale-110 border border-white/10 flex items-center justify-center text-white shadow-xl shadow-[oklch(0.50_0.20_260)]/40 transition-all animate-in fade-in zoom-in"
           aria-label="انتقل للأسفل"
         >
           <ArrowDown className="h-4 w-4" />
@@ -535,13 +542,13 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
 
       {/* Pending files preview */}
       {pendingFiles.length > 0 && (
-        <div className="px-3 pt-2 flex gap-2 overflow-x-auto border-t border-border bg-card/60">
+        <div className="relative z-10 px-3 pt-2 pb-1 flex gap-2 overflow-x-auto border-t border-[oklch(1_0_0/0.06)] bg-[oklch(0.10_0.02_258/0.75)] backdrop-blur-xl">
           {pendingFiles.map((f, i) => (
-            <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-border shrink-0">
+            <div key={i} className="relative w-16 h-16 rounded-xl overflow-hidden ring-1 ring-[oklch(1_0_0/0.08)] shrink-0 group">
               <img src={URL.createObjectURL(f)} alt={f.name} className="w-full h-full object-cover" />
               <button
                 onClick={() => removePendingFile(i)}
-                className="absolute top-0 right-0 p-0.5 bg-black/60 rounded-bl-lg text-white"
+                className="absolute top-1 right-1 p-0.5 bg-black/70 hover:bg-red-500/80 rounded-full text-white transition-colors"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -552,7 +559,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
 
       {/* Emoji bar */}
       {showEmojis && (
-        <div className="px-3 pt-2 flex flex-wrap gap-1.5 border-t border-border bg-card/60 backdrop-blur-xl">
+        <div className="relative z-10 px-3 py-2 flex flex-wrap gap-1 border-t border-[oklch(1_0_0/0.06)] bg-[oklch(0.10_0.02_258/0.85)] backdrop-blur-xl animate-in slide-in-from-bottom-2">
           {QUICK_EMOJIS.map((e) => (
             <button
               key={e}
@@ -561,7 +568,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
                 setText((t) => t + e);
                 inputRef.current?.focus();
               }}
-              className="h-9 w-9 rounded-lg hover:bg-primary/15 text-xl transition-all hover:scale-110"
+              className="h-9 w-9 rounded-lg hover:bg-[oklch(0.55_0.20_260/0.20)] text-xl transition-all hover:scale-125 active:scale-95"
             >
               {e}
             </button>
@@ -572,7 +579,7 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
       {/* Composer */}
       <form
         onSubmit={handleSend}
-        className="relative p-3 border-t border-border/70 backdrop-blur-xl bg-card/60 flex items-end gap-2"
+        className="relative z-10 p-2.5 border-t border-[oklch(1_0_0/0.06)] backdrop-blur-2xl bg-[oklch(0.10_0.02_258/0.85)] flex items-end gap-1.5"
       >
         <input
           ref={fileInputRef}
@@ -582,39 +589,44 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           className="hidden"
           onChange={handleFileSelect}
         />
-        <Button
-          type="button"
-          size="icon"
-          variant="ghost"
-          onClick={() => setShowEmojis((v) => !v)}
-          className="h-10 w-10 shrink-0 text-muted-foreground hover:text-primary hover:bg-primary/10"
-        >
-          <Smile className="h-5 w-5" />
-        </Button>
-        <Button
-          type="button"
-          size="icon"
-          variant="ghost"
-          className="h-10 w-10 shrink-0 text-muted-foreground hover:text-primary hover:bg-primary/10"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <ImageIcon className="h-5 w-5" />
-        </Button>
-        <textarea
-          ref={inputRef}
-          value={text}
-          onChange={(e) => onTextChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="اكتب رسالة..."
-          disabled={sending || uploading}
-          rows={1}
-          className="flex-1 resize-none max-h-32 min-h-[40px] rounded-2xl bg-background/70 border border-border focus:border-primary/60 focus:ring-2 focus:ring-primary/20 px-4 py-2 text-sm outline-none transition-all"
-        />
+        <div className="flex-1 flex items-end gap-1.5 rounded-2xl bg-[oklch(0.14_0.025_258)] ring-1 ring-[oklch(1_0_0/0.06)] focus-within:ring-2 focus-within:ring-[oklch(0.55_0.20_260/0.50)] transition-all px-1.5 py-1">
+          <Button
+            type="button"
+            size="icon"
+            variant="ghost"
+            onClick={() => setShowEmojis((v) => !v)}
+            className={cn(
+              "h-9 w-9 shrink-0 rounded-full text-[oklch(0.55_0.02_250)] hover:text-[oklch(0.70_0.18_60)] hover:bg-[oklch(0.70_0.18_60/0.10)]",
+              showEmojis && "text-[oklch(0.70_0.18_60)] bg-[oklch(0.70_0.18_60/0.10)]"
+            )}
+          >
+            <Smile className="h-5 w-5" />
+          </Button>
+          <Button
+            type="button"
+            size="icon"
+            variant="ghost"
+            className="h-9 w-9 shrink-0 rounded-full text-[oklch(0.55_0.02_250)] hover:text-[oklch(0.65_0.18_200)] hover:bg-[oklch(0.65_0.18_200/0.10)]"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <ImageIcon className="h-5 w-5" />
+          </Button>
+          <textarea
+            ref={inputRef}
+            value={text}
+            onChange={(e) => onTextChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="اكتب رسالة..."
+            disabled={sending || uploading}
+            rows={1}
+            className="flex-1 resize-none max-h-32 min-h-[36px] bg-transparent border-0 px-2 py-1.5 text-[14px] text-white placeholder:text-[oklch(0.45_0.02_250)] outline-none"
+          />
+        </div>
         <Button
           type="submit"
           size="icon"
           disabled={(!text.trim() && pendingFiles.length === 0) || sending || uploading}
-          className="h-10 w-10 shrink-0 rounded-full bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 shadow-lg"
+          className="h-11 w-11 shrink-0 rounded-full bg-gradient-to-br from-[oklch(0.55_0.20_260)] to-[oklch(0.45_0.22_270)] hover:from-[oklch(0.60_0.22_260)] hover:to-[oklch(0.50_0.24_270)] text-white shadow-lg shadow-[oklch(0.50_0.20_260)]/30 disabled:opacity-30 disabled:shadow-none transition-all hover:scale-105 active:scale-95 disabled:hover:scale-100"
         >
           {sending || uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </Button>
