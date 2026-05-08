@@ -400,13 +400,39 @@ function PublicChatPage() {
                   </div>
                   <div
                     className={cn(
-                      "rounded-2xl px-3 sm:px-3.5 py-2 text-[13px] leading-relaxed break-words",
+                      "rounded-2xl text-[13px] leading-relaxed break-words overflow-hidden",
+                      msg.attachment_type === "image" && !msg.content
+                        ? "p-1 bg-[oklch(0.16_0.02_258)] border border-[oklch(1_0_0/0.06)]"
+                        : "px-3 sm:px-3.5 py-2",
                       isMe
                         ? "bg-gradient-to-br from-[oklch(0.32_0.13_220)] to-[oklch(0.28_0.12_230)] text-white rounded-br-sm shadow-sm"
                         : "bg-[oklch(0.16_0.02_258)] text-[oklch(0.88_0.01_250)] border border-[oklch(1_0_0/0.06)] rounded-bl-sm",
                     )}
                   >
-                    {msg.content}
+                    {msg.attachment_type === "image" && msg.attachment_url && (
+                      <a href={msg.attachment_url} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={msg.attachment_url}
+                          alt="attachment"
+                          className="rounded-xl max-h-64 w-auto object-cover"
+                          loading="lazy"
+                        />
+                      </a>
+                    )}
+                    {msg.attachment_type === "file" && msg.attachment_url && (
+                      <a
+                        href={msg.attachment_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 underline-offset-2 hover:underline"
+                      >
+                        <Paperclip className="h-4 w-4" />
+                        <span className="truncate">{msg.content || "ملف"}</span>
+                      </a>
+                    )}
+                    {msg.attachment_type !== "file" && msg.content && (
+                      <div className={cn(msg.attachment_url && "mt-1.5 px-1")}>{msg.content}</div>
+                    )}
                   </div>
                 </div>
               </div>
