@@ -582,3 +582,34 @@ html, body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: oklch(0.25 0.02 250 / 0.3); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: oklch(0.35 0.02 250 / 0.5); }
+
+/* ── User Theme Color Overrides ── */
+/* These CSS custom properties are set per-user by useThemeColors hook */
+
+/* Text color override — applies to all text */
+[style*="--theme-text"] * {
+  color: var(--theme-text) !important;
+}
+/* Preserve badge, icon-specific, and button foreground colors */
+[style*="--theme-text"] .badge,
+[style*="--theme-text"] [data-no-theme] {
+  color: revert !important;
+}
+
+/* Button color override — applies to all interactive buttons & links in nav */
+[style*="--theme-btn"] button,
+[style*="--theme-btn"] a[class*="rounded"],
+[style*="--theme-btn"] [role="button"] {
+  border-color: var(--theme-btn) !important;
+}
+[style*="--theme-btn"] button:hover,
+[style*="--theme-btn"] a[class*="rounded"]:hover,
+[style*="--theme-btn"] [role="button"]:hover {
+  background-color: color-mix(in oklch, var(--theme-btn) 20%, transparent) !important;
+}
+[style*="--theme-btn"] button[class*="bg-primary"],
+[style*="--theme-btn"] button[class*="bg-gradient"],
+[style*="--theme-btn"] [class*="highlight"] {
+  background-color: var(--theme-btn) !important;
+  border-color: var(--theme-btn) !important;
+}
