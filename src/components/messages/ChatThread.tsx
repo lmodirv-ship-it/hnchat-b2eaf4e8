@@ -10,6 +10,7 @@ import { format, isToday, isYesterday } from "date-fns";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/haptics";
+import { UserProfileDialog } from "@/components/profile/UserProfileDialog";
 
 interface Attachment {
   url: string;
