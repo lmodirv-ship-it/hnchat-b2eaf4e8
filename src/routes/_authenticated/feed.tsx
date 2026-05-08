@@ -245,25 +245,54 @@ function FeedPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const [bgColor, setBgColor] = useState(() => localStorage.getItem("hn-bg-color") || "");
-  const [textColor, setTextColor] = useState(() => localStorage.getItem("hn-text-color") || "");
-  const [btnColor, setBtnColor] = useState(() => localStorage.getItem("hn-btn-color") || "");
+  const [bgColor, setBgColor] = useState("");
+  const [textColor, setTextColor] = useState("");
+  const [btnColor, setBtnColor] = useState("");
+  const [colorsLoaded, setColorsLoaded] = useState(false);
 
   const bgRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLInputElement>(null);
   const btnRef = useRef<HTMLInputElement>(null);
 
-  const applyColors = useCallback(() => {
-    const root = document.documentElement;
-    if (bgColor) { root.style.setProperty("--feed-bg", bgColor); localStorage.setItem("hn-bg-color", bgColor); }
-    else { root.style.removeProperty("--feed-bg"); localStorage.removeItem("hn-bg-color"); }
-    if (textColor) { root.style.setProperty("--feed-text", textColor); localStorage.setItem("hn-text-color", textColor); }
-    else { root.style.removeProperty("--feed-text"); localStorage.removeItem("hn-text-color"); }
-    if (btnColor) { root.style.setProperty("--feed-btn", btnColor); localStorage.setItem("hn-btn-color", btnColor); }
-    else { root.style.removeProperty("--feed-btn"); localStorage.removeItem("hn-btn-color"); }
-  }, [bgColor, textColor, btnColor]);
+  // Load colors from DB on mount
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("bg_color, text_color, btn_color").eq("id", user.id).single()
+      .then(({ data }) => {
+        if (data) {
+          setBgColor(data.bg_color || "");
+          setTextColor(data.text_color || "");
+          setBtnColor(data.btn_color || "");
+        }
+        setColorsLoaded(true);
+      });
+  }, [user]);
 
-  useEffect(() => { applyColors(); }, [applyColors]);
+  // Save colors to DB when changed (debounced)
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const saveColors = useCallback((bg: string, text: string, btn: string) => {
+    if (!user || !colorsLoaded) return;
+    clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      supabase.from("profiles").update({
+        bg_color: bg || null,
+        text_color: text || null,
+        btn_color: btn || null,
+      }).eq("id", user.id).then(() => {});
+    }, 800);
+  }, [user, colorsLoaded]);
+
+  const handleBgChange = (v: string) => { setBgColor(v); saveColors(v, textColor, btnColor); };
+  const handleTextChange = (v: string) => { setTextColor(v); saveColors(bgColor, v, btnColor); };
+  const handleBtnChange = (v: string) => { setBtnColor(v); saveColors(bgColor, textColor, v); };
+
+  // Apply CSS vars
+  useEffect(() => {
+    const root = document.documentElement;
+    if (bgColor) root.style.setProperty("--feed-bg", bgColor); else root.style.removeProperty("--feed-bg");
+    if (textColor) root.style.setProperty("--feed-text", textColor); else root.style.removeProperty("--feed-text");
+    if (btnColor) root.style.setProperty("--feed-btn", btnColor); else root.style.removeProperty("--feed-btn");
+  }, [bgColor, textColor, btnColor]);
 
   return (
     <div className="w-full px-3 sm:px-6 py-4 sm:py-6" style={{ backgroundColor: bgColor || undefined, color: textColor || undefined }}>
