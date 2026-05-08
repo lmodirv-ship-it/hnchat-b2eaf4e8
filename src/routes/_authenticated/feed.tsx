@@ -317,7 +317,7 @@ function FeedPage() {
             الخلفية
             <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: bgColor || "#0a0a1a" }} />
           </button>
-          <input ref={bgRef} type="color" value={bgColor || "#0a0a1a"} onChange={(e) => setBgColor(e.target.value)} className="sr-only" />
+          <input ref={bgRef} type="color" value={bgColor || "#0a0a1a"} onChange={(e) => handleBgChange(e.target.value)} className="sr-only" />
 
           {/* Text color */}
           <button
