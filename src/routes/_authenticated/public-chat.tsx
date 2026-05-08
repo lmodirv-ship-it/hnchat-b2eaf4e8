@@ -325,7 +325,7 @@ function PublicChatPage() {
         {/* Messages */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin"
+          className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 space-y-2.5 sm:space-y-3 scrollbar-thin"
         >
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center">
@@ -341,31 +341,31 @@ function PublicChatPage() {
               <div
                 key={msg.id}
                 className={cn(
-                  "flex gap-2.5 max-w-[85%]",
+                  "flex gap-2 sm:gap-2.5 max-w-[88%] sm:max-w-[85%]",
                   isMe ? "mr-auto flex-row-reverse" : "ml-auto",
                 )}
               >
-                <Avatar className="h-8 w-8 shrink-0 mt-0.5">
+                <Avatar className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 mt-0.5">
                   <AvatarImage src={msg.profile?.avatar_url || undefined} />
                   <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
                     {msg.profile?.username?.[0]?.toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-[11px] font-semibold text-[oklch(0.70_0.15_220)]">
+                <div className="min-w-0">
+                  <div className={cn("flex items-center gap-2 mb-0.5", isMe && "flex-row-reverse")}>
+                    <span className="text-[11px] font-semibold text-[oklch(0.70_0.15_220)] truncate max-w-[140px]">
                       {msg.profile?.full_name || msg.profile?.username || "مجهول"}
                     </span>
-                    <span className="text-[10px] text-[oklch(0.40_0.02_250)]">
+                    <span className="text-[10px] text-[oklch(0.40_0.02_250)] shrink-0">
                       {formatTime(msg.created_at)}
                     </span>
                   </div>
                   <div
                     className={cn(
-                      "rounded-xl px-3.5 py-2 text-[13px] leading-relaxed",
+                      "rounded-2xl px-3 sm:px-3.5 py-2 text-[13px] leading-relaxed break-words",
                       isMe
-                        ? "bg-[oklch(0.30_0.12_220)] text-white rounded-br-sm"
-                        : "bg-[oklch(0.16_0.02_258)] text-[oklch(0.85_0.01_250)] border border-[oklch(1_0_0/0.06)] rounded-bl-sm",
+                        ? "bg-gradient-to-br from-[oklch(0.32_0.13_220)] to-[oklch(0.28_0.12_230)] text-white rounded-br-sm shadow-sm"
+                        : "bg-[oklch(0.16_0.02_258)] text-[oklch(0.88_0.01_250)] border border-[oklch(1_0_0/0.06)] rounded-bl-sm",
                     )}
                   >
                     {msg.content}
