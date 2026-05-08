@@ -59,7 +59,7 @@ export function TopBar() {
         </button>
 
         {/* Logo — mobile only */}
-        <Link to="/" className="flex items-center gap-1.5 shrink-0 md:hidden">
+        <Link to="/feed" className="flex items-center gap-1.5 shrink-0 md:hidden">
           <HnLogo size={24} showText={false} />
           <span className="font-bold text-sm text-white">hnChat</span>
           <span className="px-1 py-px rounded text-[7px] font-bold bg-[oklch(0.50_0.18_260)] text-white leading-none">AI+</span>
