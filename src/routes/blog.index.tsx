@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Eye, ArrowRight, FileText, User, TrendingUp, Sparkles, Mail, Search, Heart } from "lucide-react";
+import { Calendar, Clock, Eye, ArrowRight, FileText, User, TrendingUp, Sparkles, Mail, Search, Heart, Globe } from "lucide-react";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
 import { Button } from "@/components/ui/button";
