@@ -55,7 +55,7 @@ function BlogPage() {
   const trending = articles.slice(0, 4);
 
   return (
-    <PublicPageShell dir="rtl" headerActions={
+    <PublicPageShell dir={isRtl ? "rtl" : "ltr"} headerActions={
       <Link
         to="/feed"
         hash="articles-section"
@@ -82,6 +82,25 @@ function BlogPage() {
           <p className="text-lg sm:text-xl text-muted-foreground/60 max-w-2xl mx-auto leading-relaxed mb-8">
             مقالات متخصصة في الذكاء الاصطناعي، العملات الرقمية، الخصوصية، والجيل القادم من التقنية الاجتماعية.
           </p>
+
+          {/* Language Selector */}
+          <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => setActiveLang(lang.code)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border flex items-center gap-2 ${
+                  activeLang === lang.code
+                    ? "bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground border-transparent shadow-[0_0_20px_oklch(0.78_0.18_220/0.15)]"
+                    : "border-ice-border/15 bg-[oklch(0.14_0.02_250)] text-muted-foreground hover:text-foreground hover:border-cyan-glow/25"
+                }`}
+              >
+                <span>{lang.flag}</span>
+                <span>{lang.label}</span>
+              </button>
+            ))}
+          </div>
+
           {/* Search */}
           <div className="max-w-xl mx-auto relative">
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/40" />
