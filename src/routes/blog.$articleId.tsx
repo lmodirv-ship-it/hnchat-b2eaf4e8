@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
-  useArticleBySlug,
+  useArticleByIdFull,
   useArticleComments,
   useAddArticleComment,
   useDeleteArticleComment,
