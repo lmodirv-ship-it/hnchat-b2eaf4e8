@@ -757,6 +757,9 @@ export function LandingPage() {
               {hl.tagline}
             </motion.p>
             <motion.div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-8" initial={init} animate={enter} variants={fadeUp} custom={2}>
+              <button onClick={handleGuestEntry} disabled={guestBusy} className="px-7 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-[0_8px_30px_oklch(0.65_0.18_180/0.4)] hover:shadow-[0_12px_40px_oklch(0.65_0.18_180/0.6)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-60">
+                <Zap className="h-4 w-4" /> {guestBusy ? "..." : "دخول مباشر"}
+              </button>
               <Link to="/sign-up-login">
                 <button className="px-7 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-[0_8px_30px_oklch(0.55_0.25_295/0.4)] hover:shadow-[0_12px_40px_oklch(0.55_0.25_295/0.6)] hover:scale-105 active:scale-95 transition-all">{hl.startNow}</button>
               </Link>
