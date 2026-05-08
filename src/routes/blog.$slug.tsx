@@ -75,21 +75,15 @@ function ArticlePage() {
 
   const isRTL = article.language !== "en";
 
+  const gradientStyle = { background: "linear-gradient(135deg, oklch(0.65 0.25 295) 0%, oklch(0.55 0.20 270) 50%, oklch(0.78 0.18 220) 100%)" };
+  const btnClass = "px-5 py-2 text-xs font-semibold rounded-full text-white transition-all hover:shadow-[0_0_20px_oklch(0.65_0.25_295/0.4)] hover:scale-105";
+
   const headerButtons = (
     <>
-      <Link
-        to="/feed"
-        hash="articles-section"
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-cyan-glow/10 text-cyan-glow border border-cyan-glow/20 hover:bg-cyan-glow/20 transition"
-      >
-        <ArrowLeft className={`h-3.5 w-3.5 ${isRTL ? "rotate-180" : ""}`} />
+      <Link to="/feed" hash="articles-section" className={btnClass} style={gradientStyle}>
         {isRTL ? "المقالات" : "Feed"}
       </Link>
-      <Link
-        to="/blog"
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-muted/50 text-foreground/70 border border-ice-border/10 hover:bg-muted transition"
-      >
-        <ArrowLeft className={`h-3.5 w-3.5 ${isRTL ? "rotate-180" : ""}`} />
+      <Link to="/blog" className={btnClass} style={gradientStyle}>
         {isRTL ? "المدونة" : "Blog"}
       </Link>
     </>
