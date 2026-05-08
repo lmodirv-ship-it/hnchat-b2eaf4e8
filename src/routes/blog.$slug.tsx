@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useArticleBySlug, useArticleComments, useAddArticleComment, useDeleteArticleComment, useArticleLike, usePublishedArticles } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
@@ -184,27 +184,46 @@ function ArticlePage() {
 }
 
 function ArticleContent({ content }: { content: string }) {
-  // Clean stray separators like "..." or "…" on their own line
-  const cleaned = content
-    .replace(/^\s*\.{2,}\s*$/gm, '')
-    .replace(/^\s*…+\s*$/gm, '')
-    .replace(/\n{3,}/g, '\n\n');
+  const [sanitizedHtml, setSanitizedHtml] = useState('');
 
-  const html = cleaned
-    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-8 mb-3" style="color:oklch(0.82 0.08 70)">$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-9 mb-3" style="color:oklch(0.85 0.09 65)">$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-10 mb-4" style="color:oklch(0.88 0.10 65)">$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:oklch(0.93 0.005 250);font-weight:600">$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/```([\s\S]*?)```/gm, '<pre class="p-5 rounded-xl overflow-x-auto my-6" style="background:oklch(0.11 0.02 255);border:1px solid oklch(0.3 0.03 255/0.15)"><code class="text-sm font-mono leading-relaxed" style="color:oklch(0.80 0.005 250)">$1</code></pre>')
-    .replace(/`(.+?)`/g, '<code class="px-1.5 py-0.5 rounded-md text-[0.9em] font-mono" style="background:oklch(0.16 0.02 255);color:oklch(0.82 0.005 250);border:1px solid oklch(0.3 0.03 255/0.12)">$1</code>')
-    .replace(/^> (.+)$/gm, '<blockquote class="pl-5 italic my-5 text-base leading-relaxed" style="border-left:3px solid oklch(0.75 0.08 65/0.4);color:oklch(0.75 0.005 250)">$1</blockquote>')
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="underline underline-offset-4 transition" style="color:oklch(0.70 0.08 220);text-decoration-color:oklch(0.70 0.08 220/0.3)" target="_blank" rel="noopener">$1</a>')
-    .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-1.5" style="color:oklch(0.85 0.005 250)">$1</li>')
-    .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-1.5" style="color:oklch(0.85 0.005 250)">$1</li>')
-    .replace(/\n\n/g, '</p><p class="mb-4 leading-[1.85]" style="color:oklch(0.88 0.005 250)">')
-    .replace(/\n/g, '<br/>');
-  return <div className="leading-[1.85]" style={{ color: 'oklch(0.88 0.005 250)' }} dangerouslySetInnerHTML={{ __html: `<p class="mb-4 leading-[1.85]">${html}</p>` }} />;
+  useEffect(() => {
+    import('dompurify').then((mod) => {
+      const DOMPurify = mod.default;
+      const cleaned = content
+        .replace(/^\s*\.{2,}\s*$/gm, '')
+        .replace(/^\s*…+\s*$/gm, '')
+        .replace(/\n{3,}/g, '\n\n');
+
+      const raw = cleaned
+        .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-8 mb-3" style="color:oklch(0.82 0.08 70)">$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-9 mb-3" style="color:oklch(0.85 0.09 65)">$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-extrabold mt-10 mb-4" style="color:oklch(0.88 0.10 65)">$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong style="color:oklch(0.93 0.005 250);font-weight:600">$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/```([\s\S]*?)```/gm, '<pre class="p-5 rounded-xl overflow-x-auto my-6" style="background:oklch(0.11 0.02 255);border:1px solid oklch(0.3 0.03 255/0.15)"><code class="text-sm font-mono leading-relaxed" style="color:oklch(0.80 0.005 250)">$1</code></pre>')
+        .replace(/`(.+?)`/g, '<code class="px-1.5 py-0.5 rounded-md text-[0.9em] font-mono" style="background:oklch(0.16 0.02 255);color:oklch(0.82 0.005 250);border:1px solid oklch(0.3 0.03 255/0.12)">$1</code>')
+        .replace(/^> (.+)$/gm, '<blockquote class="pl-5 italic my-5 text-base leading-relaxed" style="border-left:3px solid oklch(0.75 0.08 65/0.4);color:oklch(0.75 0.005 250)">$1</blockquote>')
+        .replace(/\[(.+?)\]\((.+?)\)/g, (_, text, url) => {
+          if (/^https?:\/\//i.test(url)) {
+            return `<a href="${url}" class="underline underline-offset-4 transition" style="color:oklch(0.70 0.08 220);text-decoration-color:oklch(0.70 0.08 220/0.3)" target="_blank" rel="noopener">${text}</a>`;
+          }
+          return text;
+        })
+        .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-1.5" style="color:oklch(0.85 0.005 250)">$1</li>')
+        .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-1.5" style="color:oklch(0.85 0.005 250)">$1</li>')
+        .replace(/\n\n/g, '</p><p class="mb-4 leading-[1.85]" style="color:oklch(0.88 0.005 250)">')
+        .replace(/\n/g, '<br/>');
+
+      const safe = DOMPurify.sanitize(`<p class="mb-4 leading-[1.85]">${raw}</p>`, {
+        ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'a', 'code', 'pre', 'blockquote', 'li', 'ul', 'ol', 'span'],
+        ALLOWED_ATTR: ['class', 'style', 'href', 'target', 'rel'],
+        ALLOWED_URI_REGEXP: /^https?:\/\//i,
+      });
+      setSanitizedHtml(safe);
+    });
+  }, [content]);
+
+  return <div className="leading-[1.85]" style={{ color: 'oklch(0.88 0.005 250)' }} dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
 }
 
 function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {
