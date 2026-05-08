@@ -619,6 +619,11 @@ export function ChatThread({ conversationId, compact = false }: { conversationId
           {sending || uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </Button>
       </form>
+      <UserProfileDialog
+        userId={profileUserId}
+        open={!!profileUserId}
+        onOpenChange={(o) => !o && setProfileUserId(null)}
+      />
     </Card>
   );
 }
