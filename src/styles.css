@@ -586,22 +586,21 @@ html, body {
 /* ── User Theme Color Overrides ── */
 /* These CSS custom properties are set per-user by useThemeColors hook */
 
-/* Text color override — applies to all text */
-[style*="--theme-text"] * {
+/* Text color override — applies to text elements, not icons/badges */
+[style*="--theme-text"] p,
+[style*="--theme-text"] span:not([class*="badge"]):not([class*="bg-"]),
+[style*="--theme-text"] h1, [style*="--theme-text"] h2,
+[style*="--theme-text"] h3, [style*="--theme-text"] h4,
+[style*="--theme-text"] h5, [style*="--theme-text"] h6,
+[style*="--theme-text"] label,
+[style*="--theme-text"] a:not([class*="bg-"]),
+[style*="--theme-text"] li,
+[style*="--theme-text"] td, [style*="--theme-text"] th,
+[style*="--theme-text"] div:not([class*="bg-"]):not([class*="badge"]) {
   color: var(--theme-text) !important;
 }
-/* Preserve badge, icon-specific, and button foreground colors */
-[style*="--theme-text"] .badge,
-[style*="--theme-text"] [data-no-theme] {
-  color: revert !important;
-}
 
-/* Button color override — applies to all interactive buttons & links in nav */
-[style*="--theme-btn"] button,
-[style*="--theme-btn"] a[class*="rounded"],
-[style*="--theme-btn"] [role="button"] {
-  border-color: var(--theme-btn) !important;
-}
+/* Button/interactive color override */
 [style*="--theme-btn"] button:hover,
 [style*="--theme-btn"] a[class*="rounded"]:hover,
 [style*="--theme-btn"] [role="button"]:hover {
@@ -611,5 +610,4 @@ html, body {
 [style*="--theme-btn"] button[class*="bg-gradient"],
 [style*="--theme-btn"] [class*="highlight"] {
   background-color: var(--theme-btn) !important;
-  border-color: var(--theme-btn) !important;
 }
