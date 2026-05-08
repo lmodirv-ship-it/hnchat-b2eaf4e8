@@ -333,7 +333,7 @@ function FeedPage() {
             الكتابة
             <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: textColor || "#e0e0ee" }} />
           </button>
-          <input ref={textRef} type="color" value={textColor || "#e0e0ee"} onChange={(e) => setTextColor(e.target.value)} className="sr-only" />
+          <input ref={textRef} type="color" value={textColor || "#e0e0ee"} onChange={(e) => handleTextChange(e.target.value)} className="sr-only" />
 
           {/* Button color */}
           <button
