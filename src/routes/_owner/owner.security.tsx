@@ -5,7 +5,7 @@ import { OwnerShell, OwnerCard } from "@/components/owner/OwnerShell";
 import { ShieldCheck, ShieldAlert, Table, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/security")({
+export const Route = createFileRoute("/_owner/owner/security")({
   component: SecurityPage,
 });
 

@@ -6,7 +6,7 @@ import { DollarSign, ShoppingCart, TrendingUp, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/finance")({
+export const Route = createFileRoute("/_owner/owner/finance")({
   component: FinancePage,
 });
 

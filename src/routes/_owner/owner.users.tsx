@@ -18,7 +18,7 @@ import {
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/users")({
+export const Route = createFileRoute("/_owner/owner/users")({
   component: UsersPage,
 });
 

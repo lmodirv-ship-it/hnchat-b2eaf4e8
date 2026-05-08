@@ -71,21 +71,21 @@ import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAiAssistantRouteImport } from './routes/_authenticated/ai-assistant'
 import { Route as AuthenticatedAdsPromoRouteImport } from './routes/_authenticated/ads-promo'
 import { Route as AuthenticatedAdsManagerRouteImport } from './routes/_authenticated/ads-manager'
-import { Route as OwnerOwnerX9k2m7IndexRouteImport } from './routes/_owner/owner-x9k2m7.index'
+import { Route as OwnerOwnerIndexRouteImport } from './routes/_owner/owner.index'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as BlogAuthorUsernameRouteImport } from './routes/blog.author.$username'
-import { Route as OwnerOwnerX9k2m7UsersRouteImport } from './routes/_owner/owner-x9k2m7.users'
-import { Route as OwnerOwnerX9k2m7TicketsRouteImport } from './routes/_owner/owner-x9k2m7.tickets'
-import { Route as OwnerOwnerX9k2m7SettingsRouteImport } from './routes/_owner/owner-x9k2m7.settings'
-import { Route as OwnerOwnerX9k2m7SecurityRouteImport } from './routes/_owner/owner-x9k2m7.security'
-import { Route as OwnerOwnerX9k2m7MarketplaceRouteImport } from './routes/_owner/owner-x9k2m7.marketplace'
-import { Route as OwnerOwnerX9k2m7GroupsRouteImport } from './routes/_owner/owner-x9k2m7.groups'
-import { Route as OwnerOwnerX9k2m7GeographyRouteImport } from './routes/_owner/owner-x9k2m7.geography'
-import { Route as OwnerOwnerX9k2m7FinanceRouteImport } from './routes/_owner/owner-x9k2m7.finance'
-import { Route as OwnerOwnerX9k2m7FeaturesRouteImport } from './routes/_owner/owner-x9k2m7.features'
-import { Route as OwnerOwnerX9k2m7ContentRouteImport } from './routes/_owner/owner-x9k2m7.content'
-import { Route as OwnerOwnerX9k2m7AuditRouteImport } from './routes/_owner/owner-x9k2m7.audit'
-import { Route as OwnerOwnerX9k2m7ApiUsageRouteImport } from './routes/_owner/owner-x9k2m7.api-usage'
+import { Route as OwnerOwnerUsersRouteImport } from './routes/_owner/owner.users'
+import { Route as OwnerOwnerTicketsRouteImport } from './routes/_owner/owner.tickets'
+import { Route as OwnerOwnerSettingsRouteImport } from './routes/_owner/owner.settings'
+import { Route as OwnerOwnerSecurityRouteImport } from './routes/_owner/owner.security'
+import { Route as OwnerOwnerMarketplaceRouteImport } from './routes/_owner/owner.marketplace'
+import { Route as OwnerOwnerGroupsRouteImport } from './routes/_owner/owner.groups'
+import { Route as OwnerOwnerGeographyRouteImport } from './routes/_owner/owner.geography'
+import { Route as OwnerOwnerFinanceRouteImport } from './routes/_owner/owner.finance'
+import { Route as OwnerOwnerFeaturesRouteImport } from './routes/_owner/owner.features'
+import { Route as OwnerOwnerContentRouteImport } from './routes/_owner/owner.content'
+import { Route as OwnerOwnerAuditRouteImport } from './routes/_owner/owner.audit'
+import { Route as OwnerOwnerApiUsageRouteImport } from './routes/_owner/owner.api-usage'
 import { Route as AuthenticatedWatchIdRouteImport } from './routes/_authenticated/watch.$id'
 import { Route as AuthenticatedWatchYtVideoIdRouteImport } from './routes/_authenticated/watch-yt.$videoId'
 import { Route as AuthenticatedUserUserIdRouteImport } from './routes/_authenticated/user.$userId'
@@ -416,9 +416,9 @@ const AuthenticatedAdsManagerRoute = AuthenticatedAdsManagerRouteImport.update({
   path: '/ads-manager',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const OwnerOwnerX9k2m7IndexRoute = OwnerOwnerX9k2m7IndexRouteImport.update({
-  id: '/owner-x9k2m7/',
-  path: '/owner-x9k2m7/',
+const OwnerOwnerIndexRoute = OwnerOwnerIndexRouteImport.update({
+  id: '/owner/',
+  path: '/owner/',
   getParentRoute: () => OwnerRoute,
 } as any)
 const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
@@ -431,72 +431,66 @@ const BlogAuthorUsernameRoute = BlogAuthorUsernameRouteImport.update({
   path: '/author/$username',
   getParentRoute: () => BlogRoute,
 } as any)
-const OwnerOwnerX9k2m7UsersRoute = OwnerOwnerX9k2m7UsersRouteImport.update({
-  id: '/owner-x9k2m7/users',
-  path: '/owner-x9k2m7/users',
+const OwnerOwnerUsersRoute = OwnerOwnerUsersRouteImport.update({
+  id: '/owner/users',
+  path: '/owner/users',
   getParentRoute: () => OwnerRoute,
 } as any)
-const OwnerOwnerX9k2m7TicketsRoute = OwnerOwnerX9k2m7TicketsRouteImport.update({
-  id: '/owner-x9k2m7/tickets',
-  path: '/owner-x9k2m7/tickets',
+const OwnerOwnerTicketsRoute = OwnerOwnerTicketsRouteImport.update({
+  id: '/owner/tickets',
+  path: '/owner/tickets',
   getParentRoute: () => OwnerRoute,
 } as any)
-const OwnerOwnerX9k2m7SettingsRoute =
-  OwnerOwnerX9k2m7SettingsRouteImport.update({
-    id: '/owner-x9k2m7/settings',
-    path: '/owner-x9k2m7/settings',
-    getParentRoute: () => OwnerRoute,
-  } as any)
-const OwnerOwnerX9k2m7SecurityRoute =
-  OwnerOwnerX9k2m7SecurityRouteImport.update({
-    id: '/owner-x9k2m7/security',
-    path: '/owner-x9k2m7/security',
-    getParentRoute: () => OwnerRoute,
-  } as any)
-const OwnerOwnerX9k2m7MarketplaceRoute =
-  OwnerOwnerX9k2m7MarketplaceRouteImport.update({
-    id: '/owner-x9k2m7/marketplace',
-    path: '/owner-x9k2m7/marketplace',
-    getParentRoute: () => OwnerRoute,
-  } as any)
-const OwnerOwnerX9k2m7GroupsRoute = OwnerOwnerX9k2m7GroupsRouteImport.update({
-  id: '/owner-x9k2m7/groups',
-  path: '/owner-x9k2m7/groups',
+const OwnerOwnerSettingsRoute = OwnerOwnerSettingsRouteImport.update({
+  id: '/owner/settings',
+  path: '/owner/settings',
   getParentRoute: () => OwnerRoute,
 } as any)
-const OwnerOwnerX9k2m7GeographyRoute =
-  OwnerOwnerX9k2m7GeographyRouteImport.update({
-    id: '/owner-x9k2m7/geography',
-    path: '/owner-x9k2m7/geography',
-    getParentRoute: () => OwnerRoute,
-  } as any)
-const OwnerOwnerX9k2m7FinanceRoute = OwnerOwnerX9k2m7FinanceRouteImport.update({
-  id: '/owner-x9k2m7/finance',
-  path: '/owner-x9k2m7/finance',
+const OwnerOwnerSecurityRoute = OwnerOwnerSecurityRouteImport.update({
+  id: '/owner/security',
+  path: '/owner/security',
   getParentRoute: () => OwnerRoute,
 } as any)
-const OwnerOwnerX9k2m7FeaturesRoute =
-  OwnerOwnerX9k2m7FeaturesRouteImport.update({
-    id: '/owner-x9k2m7/features',
-    path: '/owner-x9k2m7/features',
-    getParentRoute: () => OwnerRoute,
-  } as any)
-const OwnerOwnerX9k2m7ContentRoute = OwnerOwnerX9k2m7ContentRouteImport.update({
-  id: '/owner-x9k2m7/content',
-  path: '/owner-x9k2m7/content',
+const OwnerOwnerMarketplaceRoute = OwnerOwnerMarketplaceRouteImport.update({
+  id: '/owner/marketplace',
+  path: '/owner/marketplace',
   getParentRoute: () => OwnerRoute,
 } as any)
-const OwnerOwnerX9k2m7AuditRoute = OwnerOwnerX9k2m7AuditRouteImport.update({
-  id: '/owner-x9k2m7/audit',
-  path: '/owner-x9k2m7/audit',
+const OwnerOwnerGroupsRoute = OwnerOwnerGroupsRouteImport.update({
+  id: '/owner/groups',
+  path: '/owner/groups',
   getParentRoute: () => OwnerRoute,
 } as any)
-const OwnerOwnerX9k2m7ApiUsageRoute =
-  OwnerOwnerX9k2m7ApiUsageRouteImport.update({
-    id: '/owner-x9k2m7/api-usage',
-    path: '/owner-x9k2m7/api-usage',
-    getParentRoute: () => OwnerRoute,
-  } as any)
+const OwnerOwnerGeographyRoute = OwnerOwnerGeographyRouteImport.update({
+  id: '/owner/geography',
+  path: '/owner/geography',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerOwnerFinanceRoute = OwnerOwnerFinanceRouteImport.update({
+  id: '/owner/finance',
+  path: '/owner/finance',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerOwnerFeaturesRoute = OwnerOwnerFeaturesRouteImport.update({
+  id: '/owner/features',
+  path: '/owner/features',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerOwnerContentRoute = OwnerOwnerContentRouteImport.update({
+  id: '/owner/content',
+  path: '/owner/content',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerOwnerAuditRoute = OwnerOwnerAuditRouteImport.update({
+  id: '/owner/audit',
+  path: '/owner/audit',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerOwnerApiUsageRoute = OwnerOwnerApiUsageRouteImport.update({
+  id: '/owner/api-usage',
+  path: '/owner/api-usage',
+  getParentRoute: () => OwnerRoute,
+} as any)
 const AuthenticatedWatchIdRoute = AuthenticatedWatchIdRouteImport.update({
   id: '/watch/$id',
   path: '/watch/$id',
@@ -634,21 +628,21 @@ export interface FileRoutesByFullPath {
   '/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
-  '/owner-x9k2m7/api-usage': typeof OwnerOwnerX9k2m7ApiUsageRoute
-  '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
-  '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
-  '/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
-  '/owner-x9k2m7/finance': typeof OwnerOwnerX9k2m7FinanceRoute
-  '/owner-x9k2m7/geography': typeof OwnerOwnerX9k2m7GeographyRoute
-  '/owner-x9k2m7/groups': typeof OwnerOwnerX9k2m7GroupsRoute
-  '/owner-x9k2m7/marketplace': typeof OwnerOwnerX9k2m7MarketplaceRoute
-  '/owner-x9k2m7/security': typeof OwnerOwnerX9k2m7SecurityRoute
-  '/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
-  '/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
-  '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/owner/api-usage': typeof OwnerOwnerApiUsageRoute
+  '/owner/audit': typeof OwnerOwnerAuditRoute
+  '/owner/content': typeof OwnerOwnerContentRoute
+  '/owner/features': typeof OwnerOwnerFeaturesRoute
+  '/owner/finance': typeof OwnerOwnerFinanceRoute
+  '/owner/geography': typeof OwnerOwnerGeographyRoute
+  '/owner/groups': typeof OwnerOwnerGroupsRoute
+  '/owner/marketplace': typeof OwnerOwnerMarketplaceRoute
+  '/owner/security': typeof OwnerOwnerSecurityRoute
+  '/owner/settings': typeof OwnerOwnerSettingsRoute
+  '/owner/tickets': typeof OwnerOwnerTicketsRoute
+  '/owner/users': typeof OwnerOwnerUsersRoute
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin/': typeof AdminAdminIndexRoute
-  '/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
+  '/owner/': typeof OwnerOwnerIndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -720,21 +714,21 @@ export interface FileRoutesByTo {
   '/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/watch/$id': typeof AuthenticatedWatchIdRoute
-  '/owner-x9k2m7/api-usage': typeof OwnerOwnerX9k2m7ApiUsageRoute
-  '/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
-  '/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
-  '/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
-  '/owner-x9k2m7/finance': typeof OwnerOwnerX9k2m7FinanceRoute
-  '/owner-x9k2m7/geography': typeof OwnerOwnerX9k2m7GeographyRoute
-  '/owner-x9k2m7/groups': typeof OwnerOwnerX9k2m7GroupsRoute
-  '/owner-x9k2m7/marketplace': typeof OwnerOwnerX9k2m7MarketplaceRoute
-  '/owner-x9k2m7/security': typeof OwnerOwnerX9k2m7SecurityRoute
-  '/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
-  '/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
-  '/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/owner/api-usage': typeof OwnerOwnerApiUsageRoute
+  '/owner/audit': typeof OwnerOwnerAuditRoute
+  '/owner/content': typeof OwnerOwnerContentRoute
+  '/owner/features': typeof OwnerOwnerFeaturesRoute
+  '/owner/finance': typeof OwnerOwnerFinanceRoute
+  '/owner/geography': typeof OwnerOwnerGeographyRoute
+  '/owner/groups': typeof OwnerOwnerGroupsRoute
+  '/owner/marketplace': typeof OwnerOwnerMarketplaceRoute
+  '/owner/security': typeof OwnerOwnerSecurityRoute
+  '/owner/settings': typeof OwnerOwnerSettingsRoute
+  '/owner/tickets': typeof OwnerOwnerTicketsRoute
+  '/owner/users': typeof OwnerOwnerUsersRoute
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin': typeof AdminAdminIndexRoute
-  '/owner-x9k2m7': typeof OwnerOwnerX9k2m7IndexRoute
+  '/owner': typeof OwnerOwnerIndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -812,21 +806,21 @@ export interface FileRoutesById {
   '/_authenticated/user/$userId': typeof AuthenticatedUserUserIdRoute
   '/_authenticated/watch-yt/$videoId': typeof AuthenticatedWatchYtVideoIdRoute
   '/_authenticated/watch/$id': typeof AuthenticatedWatchIdRoute
-  '/_owner/owner-x9k2m7/api-usage': typeof OwnerOwnerX9k2m7ApiUsageRoute
-  '/_owner/owner-x9k2m7/audit': typeof OwnerOwnerX9k2m7AuditRoute
-  '/_owner/owner-x9k2m7/content': typeof OwnerOwnerX9k2m7ContentRoute
-  '/_owner/owner-x9k2m7/features': typeof OwnerOwnerX9k2m7FeaturesRoute
-  '/_owner/owner-x9k2m7/finance': typeof OwnerOwnerX9k2m7FinanceRoute
-  '/_owner/owner-x9k2m7/geography': typeof OwnerOwnerX9k2m7GeographyRoute
-  '/_owner/owner-x9k2m7/groups': typeof OwnerOwnerX9k2m7GroupsRoute
-  '/_owner/owner-x9k2m7/marketplace': typeof OwnerOwnerX9k2m7MarketplaceRoute
-  '/_owner/owner-x9k2m7/security': typeof OwnerOwnerX9k2m7SecurityRoute
-  '/_owner/owner-x9k2m7/settings': typeof OwnerOwnerX9k2m7SettingsRoute
-  '/_owner/owner-x9k2m7/tickets': typeof OwnerOwnerX9k2m7TicketsRoute
-  '/_owner/owner-x9k2m7/users': typeof OwnerOwnerX9k2m7UsersRoute
+  '/_owner/owner/api-usage': typeof OwnerOwnerApiUsageRoute
+  '/_owner/owner/audit': typeof OwnerOwnerAuditRoute
+  '/_owner/owner/content': typeof OwnerOwnerContentRoute
+  '/_owner/owner/features': typeof OwnerOwnerFeaturesRoute
+  '/_owner/owner/finance': typeof OwnerOwnerFinanceRoute
+  '/_owner/owner/geography': typeof OwnerOwnerGeographyRoute
+  '/_owner/owner/groups': typeof OwnerOwnerGroupsRoute
+  '/_owner/owner/marketplace': typeof OwnerOwnerMarketplaceRoute
+  '/_owner/owner/security': typeof OwnerOwnerSecurityRoute
+  '/_owner/owner/settings': typeof OwnerOwnerSettingsRoute
+  '/_owner/owner/tickets': typeof OwnerOwnerTicketsRoute
+  '/_owner/owner/users': typeof OwnerOwnerUsersRoute
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
-  '/_owner/owner-x9k2m7/': typeof OwnerOwnerX9k2m7IndexRoute
+  '/_owner/owner/': typeof OwnerOwnerIndexRoute
   '/_authenticated/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -902,21 +896,21 @@ export interface FileRouteTypes {
     | '/user/$userId'
     | '/watch-yt/$videoId'
     | '/watch/$id'
-    | '/owner-x9k2m7/api-usage'
-    | '/owner-x9k2m7/audit'
-    | '/owner-x9k2m7/content'
-    | '/owner-x9k2m7/features'
-    | '/owner-x9k2m7/finance'
-    | '/owner-x9k2m7/geography'
-    | '/owner-x9k2m7/groups'
-    | '/owner-x9k2m7/marketplace'
-    | '/owner-x9k2m7/security'
-    | '/owner-x9k2m7/settings'
-    | '/owner-x9k2m7/tickets'
-    | '/owner-x9k2m7/users'
+    | '/owner/api-usage'
+    | '/owner/audit'
+    | '/owner/content'
+    | '/owner/features'
+    | '/owner/finance'
+    | '/owner/geography'
+    | '/owner/groups'
+    | '/owner/marketplace'
+    | '/owner/security'
+    | '/owner/settings'
+    | '/owner/tickets'
+    | '/owner/users'
     | '/blog/author/$username'
     | '/admin/'
-    | '/owner-x9k2m7/'
+    | '/owner/'
     | '/groups/$groupId/manage'
     | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
@@ -988,21 +982,21 @@ export interface FileRouteTypes {
     | '/user/$userId'
     | '/watch-yt/$videoId'
     | '/watch/$id'
-    | '/owner-x9k2m7/api-usage'
-    | '/owner-x9k2m7/audit'
-    | '/owner-x9k2m7/content'
-    | '/owner-x9k2m7/features'
-    | '/owner-x9k2m7/finance'
-    | '/owner-x9k2m7/geography'
-    | '/owner-x9k2m7/groups'
-    | '/owner-x9k2m7/marketplace'
-    | '/owner-x9k2m7/security'
-    | '/owner-x9k2m7/settings'
-    | '/owner-x9k2m7/tickets'
-    | '/owner-x9k2m7/users'
+    | '/owner/api-usage'
+    | '/owner/audit'
+    | '/owner/content'
+    | '/owner/features'
+    | '/owner/finance'
+    | '/owner/geography'
+    | '/owner/groups'
+    | '/owner/marketplace'
+    | '/owner/security'
+    | '/owner/settings'
+    | '/owner/tickets'
+    | '/owner/users'
     | '/blog/author/$username'
     | '/admin'
-    | '/owner-x9k2m7'
+    | '/owner'
     | '/groups/$groupId/manage'
     | '/lovable/email/queue/process'
   id:
@@ -1079,21 +1073,21 @@ export interface FileRouteTypes {
     | '/_authenticated/user/$userId'
     | '/_authenticated/watch-yt/$videoId'
     | '/_authenticated/watch/$id'
-    | '/_owner/owner-x9k2m7/api-usage'
-    | '/_owner/owner-x9k2m7/audit'
-    | '/_owner/owner-x9k2m7/content'
-    | '/_owner/owner-x9k2m7/features'
-    | '/_owner/owner-x9k2m7/finance'
-    | '/_owner/owner-x9k2m7/geography'
-    | '/_owner/owner-x9k2m7/groups'
-    | '/_owner/owner-x9k2m7/marketplace'
-    | '/_owner/owner-x9k2m7/security'
-    | '/_owner/owner-x9k2m7/settings'
-    | '/_owner/owner-x9k2m7/tickets'
-    | '/_owner/owner-x9k2m7/users'
+    | '/_owner/owner/api-usage'
+    | '/_owner/owner/audit'
+    | '/_owner/owner/content'
+    | '/_owner/owner/features'
+    | '/_owner/owner/finance'
+    | '/_owner/owner/geography'
+    | '/_owner/owner/groups'
+    | '/_owner/owner/marketplace'
+    | '/_owner/owner/security'
+    | '/_owner/owner/settings'
+    | '/_owner/owner/tickets'
+    | '/_owner/owner/users'
     | '/blog/author/$username'
     | '/_admin/admin/'
-    | '/_owner/owner-x9k2m7/'
+    | '/_owner/owner/'
     | '/_authenticated/groups/$groupId/manage'
     | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
@@ -1556,11 +1550,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdsManagerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_owner/owner-x9k2m7/': {
-      id: '/_owner/owner-x9k2m7/'
-      path: '/owner-x9k2m7'
-      fullPath: '/owner-x9k2m7/'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7IndexRouteImport
+    '/_owner/owner/': {
+      id: '/_owner/owner/'
+      path: '/owner'
+      fullPath: '/owner/'
+      preLoaderRoute: typeof OwnerOwnerIndexRouteImport
       parentRoute: typeof OwnerRoute
     }
     '/_admin/admin/': {
@@ -1577,88 +1571,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogAuthorUsernameRouteImport
       parentRoute: typeof BlogRoute
     }
-    '/_owner/owner-x9k2m7/users': {
-      id: '/_owner/owner-x9k2m7/users'
-      path: '/owner-x9k2m7/users'
-      fullPath: '/owner-x9k2m7/users'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7UsersRouteImport
+    '/_owner/owner/users': {
+      id: '/_owner/owner/users'
+      path: '/owner/users'
+      fullPath: '/owner/users'
+      preLoaderRoute: typeof OwnerOwnerUsersRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/tickets': {
-      id: '/_owner/owner-x9k2m7/tickets'
-      path: '/owner-x9k2m7/tickets'
-      fullPath: '/owner-x9k2m7/tickets'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7TicketsRouteImport
+    '/_owner/owner/tickets': {
+      id: '/_owner/owner/tickets'
+      path: '/owner/tickets'
+      fullPath: '/owner/tickets'
+      preLoaderRoute: typeof OwnerOwnerTicketsRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/settings': {
-      id: '/_owner/owner-x9k2m7/settings'
-      path: '/owner-x9k2m7/settings'
-      fullPath: '/owner-x9k2m7/settings'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7SettingsRouteImport
+    '/_owner/owner/settings': {
+      id: '/_owner/owner/settings'
+      path: '/owner/settings'
+      fullPath: '/owner/settings'
+      preLoaderRoute: typeof OwnerOwnerSettingsRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/security': {
-      id: '/_owner/owner-x9k2m7/security'
-      path: '/owner-x9k2m7/security'
-      fullPath: '/owner-x9k2m7/security'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7SecurityRouteImport
+    '/_owner/owner/security': {
+      id: '/_owner/owner/security'
+      path: '/owner/security'
+      fullPath: '/owner/security'
+      preLoaderRoute: typeof OwnerOwnerSecurityRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/marketplace': {
-      id: '/_owner/owner-x9k2m7/marketplace'
-      path: '/owner-x9k2m7/marketplace'
-      fullPath: '/owner-x9k2m7/marketplace'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7MarketplaceRouteImport
+    '/_owner/owner/marketplace': {
+      id: '/_owner/owner/marketplace'
+      path: '/owner/marketplace'
+      fullPath: '/owner/marketplace'
+      preLoaderRoute: typeof OwnerOwnerMarketplaceRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/groups': {
-      id: '/_owner/owner-x9k2m7/groups'
-      path: '/owner-x9k2m7/groups'
-      fullPath: '/owner-x9k2m7/groups'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7GroupsRouteImport
+    '/_owner/owner/groups': {
+      id: '/_owner/owner/groups'
+      path: '/owner/groups'
+      fullPath: '/owner/groups'
+      preLoaderRoute: typeof OwnerOwnerGroupsRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/geography': {
-      id: '/_owner/owner-x9k2m7/geography'
-      path: '/owner-x9k2m7/geography'
-      fullPath: '/owner-x9k2m7/geography'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7GeographyRouteImport
+    '/_owner/owner/geography': {
+      id: '/_owner/owner/geography'
+      path: '/owner/geography'
+      fullPath: '/owner/geography'
+      preLoaderRoute: typeof OwnerOwnerGeographyRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/finance': {
-      id: '/_owner/owner-x9k2m7/finance'
-      path: '/owner-x9k2m7/finance'
-      fullPath: '/owner-x9k2m7/finance'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7FinanceRouteImport
+    '/_owner/owner/finance': {
+      id: '/_owner/owner/finance'
+      path: '/owner/finance'
+      fullPath: '/owner/finance'
+      preLoaderRoute: typeof OwnerOwnerFinanceRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/features': {
-      id: '/_owner/owner-x9k2m7/features'
-      path: '/owner-x9k2m7/features'
-      fullPath: '/owner-x9k2m7/features'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7FeaturesRouteImport
+    '/_owner/owner/features': {
+      id: '/_owner/owner/features'
+      path: '/owner/features'
+      fullPath: '/owner/features'
+      preLoaderRoute: typeof OwnerOwnerFeaturesRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/content': {
-      id: '/_owner/owner-x9k2m7/content'
-      path: '/owner-x9k2m7/content'
-      fullPath: '/owner-x9k2m7/content'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7ContentRouteImport
+    '/_owner/owner/content': {
+      id: '/_owner/owner/content'
+      path: '/owner/content'
+      fullPath: '/owner/content'
+      preLoaderRoute: typeof OwnerOwnerContentRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/audit': {
-      id: '/_owner/owner-x9k2m7/audit'
-      path: '/owner-x9k2m7/audit'
-      fullPath: '/owner-x9k2m7/audit'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7AuditRouteImport
+    '/_owner/owner/audit': {
+      id: '/_owner/owner/audit'
+      path: '/owner/audit'
+      fullPath: '/owner/audit'
+      preLoaderRoute: typeof OwnerOwnerAuditRouteImport
       parentRoute: typeof OwnerRoute
     }
-    '/_owner/owner-x9k2m7/api-usage': {
-      id: '/_owner/owner-x9k2m7/api-usage'
-      path: '/owner-x9k2m7/api-usage'
-      fullPath: '/owner-x9k2m7/api-usage'
-      preLoaderRoute: typeof OwnerOwnerX9k2m7ApiUsageRouteImport
+    '/_owner/owner/api-usage': {
+      id: '/_owner/owner/api-usage'
+      path: '/owner/api-usage'
+      fullPath: '/owner/api-usage'
+      preLoaderRoute: typeof OwnerOwnerApiUsageRouteImport
       parentRoute: typeof OwnerRoute
     }
     '/_authenticated/watch/$id': {
@@ -1912,35 +1906,35 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface OwnerRouteChildren {
-  OwnerOwnerX9k2m7ApiUsageRoute: typeof OwnerOwnerX9k2m7ApiUsageRoute
-  OwnerOwnerX9k2m7AuditRoute: typeof OwnerOwnerX9k2m7AuditRoute
-  OwnerOwnerX9k2m7ContentRoute: typeof OwnerOwnerX9k2m7ContentRoute
-  OwnerOwnerX9k2m7FeaturesRoute: typeof OwnerOwnerX9k2m7FeaturesRoute
-  OwnerOwnerX9k2m7FinanceRoute: typeof OwnerOwnerX9k2m7FinanceRoute
-  OwnerOwnerX9k2m7GeographyRoute: typeof OwnerOwnerX9k2m7GeographyRoute
-  OwnerOwnerX9k2m7GroupsRoute: typeof OwnerOwnerX9k2m7GroupsRoute
-  OwnerOwnerX9k2m7MarketplaceRoute: typeof OwnerOwnerX9k2m7MarketplaceRoute
-  OwnerOwnerX9k2m7SecurityRoute: typeof OwnerOwnerX9k2m7SecurityRoute
-  OwnerOwnerX9k2m7SettingsRoute: typeof OwnerOwnerX9k2m7SettingsRoute
-  OwnerOwnerX9k2m7TicketsRoute: typeof OwnerOwnerX9k2m7TicketsRoute
-  OwnerOwnerX9k2m7UsersRoute: typeof OwnerOwnerX9k2m7UsersRoute
-  OwnerOwnerX9k2m7IndexRoute: typeof OwnerOwnerX9k2m7IndexRoute
+  OwnerOwnerApiUsageRoute: typeof OwnerOwnerApiUsageRoute
+  OwnerOwnerAuditRoute: typeof OwnerOwnerAuditRoute
+  OwnerOwnerContentRoute: typeof OwnerOwnerContentRoute
+  OwnerOwnerFeaturesRoute: typeof OwnerOwnerFeaturesRoute
+  OwnerOwnerFinanceRoute: typeof OwnerOwnerFinanceRoute
+  OwnerOwnerGeographyRoute: typeof OwnerOwnerGeographyRoute
+  OwnerOwnerGroupsRoute: typeof OwnerOwnerGroupsRoute
+  OwnerOwnerMarketplaceRoute: typeof OwnerOwnerMarketplaceRoute
+  OwnerOwnerSecurityRoute: typeof OwnerOwnerSecurityRoute
+  OwnerOwnerSettingsRoute: typeof OwnerOwnerSettingsRoute
+  OwnerOwnerTicketsRoute: typeof OwnerOwnerTicketsRoute
+  OwnerOwnerUsersRoute: typeof OwnerOwnerUsersRoute
+  OwnerOwnerIndexRoute: typeof OwnerOwnerIndexRoute
 }
 
 const OwnerRouteChildren: OwnerRouteChildren = {
-  OwnerOwnerX9k2m7ApiUsageRoute: OwnerOwnerX9k2m7ApiUsageRoute,
-  OwnerOwnerX9k2m7AuditRoute: OwnerOwnerX9k2m7AuditRoute,
-  OwnerOwnerX9k2m7ContentRoute: OwnerOwnerX9k2m7ContentRoute,
-  OwnerOwnerX9k2m7FeaturesRoute: OwnerOwnerX9k2m7FeaturesRoute,
-  OwnerOwnerX9k2m7FinanceRoute: OwnerOwnerX9k2m7FinanceRoute,
-  OwnerOwnerX9k2m7GeographyRoute: OwnerOwnerX9k2m7GeographyRoute,
-  OwnerOwnerX9k2m7GroupsRoute: OwnerOwnerX9k2m7GroupsRoute,
-  OwnerOwnerX9k2m7MarketplaceRoute: OwnerOwnerX9k2m7MarketplaceRoute,
-  OwnerOwnerX9k2m7SecurityRoute: OwnerOwnerX9k2m7SecurityRoute,
-  OwnerOwnerX9k2m7SettingsRoute: OwnerOwnerX9k2m7SettingsRoute,
-  OwnerOwnerX9k2m7TicketsRoute: OwnerOwnerX9k2m7TicketsRoute,
-  OwnerOwnerX9k2m7UsersRoute: OwnerOwnerX9k2m7UsersRoute,
-  OwnerOwnerX9k2m7IndexRoute: OwnerOwnerX9k2m7IndexRoute,
+  OwnerOwnerApiUsageRoute: OwnerOwnerApiUsageRoute,
+  OwnerOwnerAuditRoute: OwnerOwnerAuditRoute,
+  OwnerOwnerContentRoute: OwnerOwnerContentRoute,
+  OwnerOwnerFeaturesRoute: OwnerOwnerFeaturesRoute,
+  OwnerOwnerFinanceRoute: OwnerOwnerFinanceRoute,
+  OwnerOwnerGeographyRoute: OwnerOwnerGeographyRoute,
+  OwnerOwnerGroupsRoute: OwnerOwnerGroupsRoute,
+  OwnerOwnerMarketplaceRoute: OwnerOwnerMarketplaceRoute,
+  OwnerOwnerSecurityRoute: OwnerOwnerSecurityRoute,
+  OwnerOwnerSettingsRoute: OwnerOwnerSettingsRoute,
+  OwnerOwnerTicketsRoute: OwnerOwnerTicketsRoute,
+  OwnerOwnerUsersRoute: OwnerOwnerUsersRoute,
+  OwnerOwnerIndexRoute: OwnerOwnerIndexRoute,
 }
 
 const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
@@ -2007,3 +2001,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

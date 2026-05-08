@@ -7,7 +7,7 @@ import { Cpu, TrendingUp, Zap, Users, Loader2 } from "lucide-react";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/api-usage")({
+export const Route = createFileRoute("/_owner/owner/api-usage")({
   component: ApiUsagePage,
 });
 

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Flag, Users, FileText, Loader2, Trash2, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/groups")({
+export const Route = createFileRoute("/_owner/owner/groups")({
   component: GroupsPage,
 });
 

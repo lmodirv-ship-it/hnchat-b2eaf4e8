@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import { Power } from "lucide-react";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/features")({
+export const Route = createFileRoute("/_owner/owner/features")({
   component: FeaturesPage,
 });
 

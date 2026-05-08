@@ -58,7 +58,7 @@ function AuthPage() {
   useEffect(() => {
     if (!isLoading && isAuthenticated && rolesLoaded) {
       if (isOwner) {
-        navigate({ to: "/owner-x9k2m7" });
+        navigate({ to: "/owner" });
       } else if (isAdmin) {
         navigate({ to: "/admin" });
       } else {

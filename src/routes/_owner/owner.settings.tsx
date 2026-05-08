@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Settings, Globe, Database, Server, Shield, ExternalLink, Save, Loader2, AlertTriangle, Zap } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_owner/owner-x9k2m7/settings")({
+export const Route = createFileRoute("/_owner/owner/settings")({
   component: GlobalConfigPage,
 });
 
