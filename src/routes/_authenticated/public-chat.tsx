@@ -377,7 +377,7 @@ function PublicChatPage() {
         </div>
 
         {/* Input */}
-        <div className="shrink-0 px-4 py-3 border-t border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)]">
+        <div className="shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-[oklch(1_0_0/0.07)] bg-[oklch(0.11_0.02_258/0.95)] backdrop-blur-md pb-[max(0.625rem,env(safe-area-inset-bottom))]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -390,14 +390,14 @@ function PublicChatPage() {
               value={newMsg}
               onChange={(e) => setNewMsg(e.target.value)}
               placeholder="اكتب رسالة للجميع..."
-              className="flex-1 bg-[oklch(0.14_0.02_258)] border-[oklch(1_0_0/0.08)] text-white placeholder:text-[oklch(0.40_0.02_250)] text-[13px]"
+              className="flex-1 bg-[oklch(0.14_0.02_258)] border-[oklch(1_0_0/0.08)] text-white placeholder:text-[oklch(0.40_0.02_250)] text-[13px] rounded-full h-10 px-4"
               maxLength={500}
             />
             <Button
               type="submit"
-              size="sm"
+              size="icon"
               disabled={!newMsg.trim() || sending}
-              className="bg-[oklch(0.40_0.15_220)] hover:bg-[oklch(0.45_0.15_220)] text-white rounded-lg px-3"
+              className="bg-gradient-to-br from-[oklch(0.42_0.16_220)] to-[oklch(0.36_0.14_230)] hover:opacity-90 text-white rounded-full h-10 w-10 shrink-0 shadow-lg shadow-[oklch(0.40_0.15_220/0.3)]"
             >
               <Send className="h-4 w-4" />
             </Button>
