@@ -27,8 +27,10 @@ function getDeviceType(): string {
  */
 export function useVisitorTracking(path?: string) {
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const currentPath = path || window.location.pathname;
     const sessionId = getSessionId();
+    if (!sessionId) return;
 
     const track = async () => {
       try {
