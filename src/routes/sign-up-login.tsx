@@ -81,7 +81,8 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("Check your email to confirm your account");
+        toast.success("مرحباً بك! جاري تحويلك...");
+        navigate({ to: "/feed" });
       } else {
         const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
