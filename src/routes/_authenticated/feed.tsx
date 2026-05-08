@@ -246,7 +246,7 @@ function FeedPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+    <div className="w-full px-3 sm:px-6 py-4 sm:py-6">
       {/* Page header */}
       <div className="mb-5">
         <h1 className="text-xl sm:text-2xl font-bold text-[oklch(0.92_0.03_250)]">التغذية</h1>
@@ -271,7 +271,7 @@ function FeedPage() {
               عرض الكل <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {articles.map((article: any) => (
               <FeedArticleCard key={article.id} article={article} />
             ))}
