@@ -146,7 +146,7 @@ export function ArticleEditor({ article }: Props) {
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   const renderPreview = (text: string) => {
-    return text
+    const raw = text
       .replace(/^### (.+)$/gm, '<h3 class="text-xl font-bold mt-6 mb-3 text-foreground">$1</h3>')
       .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-8 mb-4 text-foreground">$1</h2>')
       .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-bold mt-10 mb-5 text-foreground">$1</h1>')
@@ -154,11 +154,26 @@ export function ArticleEditor({ article }: Props) {
       .replace(/\*(.+?)\*/g, '<em>$1</em>')
       .replace(/`(.+?)`/g, '<code class="px-2 py-1 rounded-lg bg-[oklch(0.2_0.02_250)] text-cyan-glow text-sm font-mono border border-ice-border/10">$1</code>')
       .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-cyan-glow/30 pl-5 italic text-muted-foreground/70 my-5 text-lg">$1</blockquote>')
-      .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-cyan-glow underline underline-offset-4 hover:text-cyan-glow/80 transition" target="_blank" rel="noopener">$1</a>')
+      .replace(/\[(.+?)\]\((.+?)\)/g, (_, label, url) => {
+        if (/^https?:\/\//i.test(url)) {
+          return `<a href="${url}" class="text-cyan-glow underline underline-offset-4 hover:text-cyan-glow/80 transition" target="_blank" rel="noopener">${label}</a>`;
+        }
+        return label;
+      })
       .replace(/^- (.+)$/gm, '<li class="ml-5 list-disc mb-1">$1</li>')
       .replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal mb-1">$1</li>')
       .replace(/\n\n/g, '</p><p class="mb-5 leading-relaxed">')
       .replace(/\n/g, '<br/>');
+    return raw;
+  };
+
+  const sanitizeHtml = async (html: string) => {
+    const DOMPurify = (await import('dompurify')).default;
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'a', 'code', 'pre', 'blockquote', 'li', 'ul', 'ol', 'span'],
+      ALLOWED_ATTR: ['class', 'style', 'href', 'target', 'rel'],
+      ALLOWED_URI_REGEXP: /^https?:\/\//i,
+    });
   };
 
   return (
