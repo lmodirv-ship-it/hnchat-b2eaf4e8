@@ -75,8 +75,28 @@ function ArticlePage() {
 
   const isRTL = article.language !== "en";
 
+  const headerButtons = (
+    <>
+      <Link
+        to="/feed"
+        hash="articles-section"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-cyan-glow/10 text-cyan-glow border border-cyan-glow/20 hover:bg-cyan-glow/20 transition"
+      >
+        <ArrowLeft className={`h-3.5 w-3.5 ${isRTL ? "rotate-180" : ""}`} />
+        {isRTL ? "المقالات" : "Feed"}
+      </Link>
+      <Link
+        to="/blog"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-muted/50 text-foreground/70 border border-ice-border/10 hover:bg-muted transition"
+      >
+        <ArrowLeft className={`h-3.5 w-3.5 ${isRTL ? "rotate-180" : ""}`} />
+        {isRTL ? "المدونة" : "Blog"}
+      </Link>
+    </>
+  );
+
   return (
-    <PublicPageShell dir={isRTL ? "rtl" : "ltr"}>
+    <PublicPageShell dir={isRTL ? "rtl" : "ltr"} headerActions={headerButtons}>
       {/* Hero Cover — full width, uncropped */}
       {article.featured_image && (
         <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-8 mt-8">
@@ -93,24 +113,6 @@ function ArticlePage() {
       {/* Article Body — wide magazine layout */}
       <div className="max-w-[820px] mx-auto px-5 sm:px-8">
         <article className="mt-10 relative z-10">
-          {/* Back buttons */}
-          <div className="flex items-center gap-4 mb-8">
-            <Link
-              to="/feed"
-              hash="articles-section"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-cyan-glow/10 text-cyan-glow border border-cyan-glow/20 hover:bg-cyan-glow/20 transition"
-            >
-              <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} />
-              {isRTL ? "العودة للمقالات" : "Back to Feed"}
-            </Link>
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-muted/50 text-foreground/70 border border-ice-border/10 hover:bg-muted transition"
-            >
-              <ArrowLeft className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`} />
-              {isRTL ? "العودة للمدونة" : "Back to Blog"}
-            </Link>
-          </div>
 
           {/* Category */}
           {(article.article_categories as any) && (

@@ -6,9 +6,11 @@ import { FloatingParticles } from "@/components/landing/FloatingParticles";
 export function PublicPageShell({
   children,
   dir = "rtl",
+  headerActions,
 }: {
   children: ReactNode;
   dir?: "rtl" | "ltr";
+  headerActions?: ReactNode;
 }) {
   return (
     <div className="min-h-screen relative overflow-hidden text-foreground" dir={dir}>
@@ -87,12 +89,15 @@ export function PublicPageShell({
       {/* ═══ Header ═══ */}
       <header className="sticky top-0 z-50 backdrop-blur-2xl border-b border-violet-glow/10" style={{ background: "oklch(0.10 0.05 280 / 0.7)" }}>
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <HnLogo className="h-6 w-6" />
-            <span className="text-sm font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
-              hnChat
-            </span>
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-2 group">
+              <HnLogo className="h-6 w-6" />
+              <span className="text-sm font-bold bg-gradient-to-r from-cyan-glow to-violet-glow bg-clip-text text-transparent">
+                hnChat
+              </span>
+            </Link>
+            {headerActions}
+          </div>
 
           <div className="flex items-center gap-3">
             <Link to="/about" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">حول</Link>
