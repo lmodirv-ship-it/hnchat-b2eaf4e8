@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/blog/$slug")({
+export const Route = createFileRoute("/blog/$articleId")({
   head: () => ({
     meta: [{ title: "hnChat Blog" }, { name: "robots", content: "index, follow" }],
   }),
