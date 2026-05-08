@@ -236,6 +236,12 @@ function UsersPage() {
                     const isOwnerUser = userRoles.includes("owner");
                     return (
                       <tr key={u.id} className="hover:bg-[oklch(0.08_0.02_30)] transition cursor-pointer" onClick={() => setSelectedUser(u)}>
+                        <td className="p-3" onClick={(e) => { e.stopPropagation(); if (u.member_id) { navigator.clipboard.writeText(u.member_id); toast.success("تم نسخ المعرّف"); } }}>
+                          <span className="inline-flex items-center gap-1 font-mono text-xs px-2 py-1 rounded border border-[oklch(0.75_0.18_50)/0.4] text-[oklch(0.85_0.15_50)] bg-[oklch(0.75_0.18_50)/0.06] hover:bg-[oklch(0.75_0.18_50)/0.12]">
+                            <Hash className="h-3 w-3 opacity-60" />
+                            {u.member_id ?? "—"}
+                          </span>
+                        </td>
                         <td className="p-3">
                           <div className="flex items-center gap-2">
                             <Avatar className="h-8 w-8">
