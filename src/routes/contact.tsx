@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { Mail, Handshake, ShieldAlert, MessageCircle, Clock } from "lucide-react";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 const SITE_URL = "https://www.hn-chat.com";
 
@@ -116,6 +117,11 @@ function ContactPage() {
           url: `${SITE_URL}/contact`,
           publisher: { "@type": "Organization", name: "hnChat", url: SITE_URL },
         })}} />
+
+        {/* Ad Unit */}
+        <div className="max-w-4xl mx-auto px-6 py-6">
+          <AdSenseUnit className="rounded-xl overflow-hidden" />
+        </div>
       </div>
     </PublicPageShell>
   );

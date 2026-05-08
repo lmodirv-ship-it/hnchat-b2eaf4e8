@@ -6,6 +6,7 @@ import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { Badge } from "@/components/ui/badge";
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup";
 import { useFeaturedTools } from "@/hooks/useAiTools";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const Route = createFileRoute("/trending")({
   head: () => ({
@@ -177,6 +178,11 @@ function TrendingPage() {
         )}
 
         <NewsletterSignup source="trending-page" />
+
+        {/* Ad Unit */}
+        <div className="mt-8">
+          <AdSenseUnit className="rounded-xl overflow-hidden" />
+        </div>
       </div>
     </PublicPageShell>
   );
