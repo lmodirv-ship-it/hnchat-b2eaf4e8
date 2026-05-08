@@ -6,6 +6,7 @@ import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({

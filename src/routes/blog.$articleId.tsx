@@ -29,6 +29,7 @@ import {
   Bookmark,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const Route = createFileRoute("/blog/$articleId")({
   head: () => ({
