@@ -1,0 +1,4 @@
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS bg_color text DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS text_color text DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS btn_color text DEFAULT NULL;

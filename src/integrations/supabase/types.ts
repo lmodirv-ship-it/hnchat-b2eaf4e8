@@ -2006,7 +2006,9 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bg_color: string | null
           bio: string | null
+          btn_color: string | null
           country_code: string | null
           cover_url: string | null
           created_at: string
@@ -2022,12 +2024,15 @@ export type Database = {
           posts_count: number
           referral_code: string | null
           status: string
+          text_color: string | null
           updated_at: string
           username: string
         }
         Insert: {
           avatar_url?: string | null
+          bg_color?: string | null
           bio?: string | null
+          btn_color?: string | null
           country_code?: string | null
           cover_url?: string | null
           created_at?: string
@@ -2043,12 +2048,15 @@ export type Database = {
           posts_count?: number
           referral_code?: string | null
           status?: string
+          text_color?: string | null
           updated_at?: string
           username: string
         }
         Update: {
           avatar_url?: string | null
+          bg_color?: string | null
           bio?: string | null
+          btn_color?: string | null
           country_code?: string | null
           cover_url?: string | null
           created_at?: string
@@ -2064,6 +2072,7 @@ export type Database = {
           posts_count?: number
           referral_code?: string | null
           status?: string
+          text_color?: string | null
           updated_at?: string
           username?: string
         }
