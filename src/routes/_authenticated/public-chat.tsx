@@ -52,8 +52,11 @@ function PublicChatPage() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [newMsg, setNewMsg] = useState("");
   const [sending, setSending] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   /* ── load messages ── */
   const loadMessages = useCallback(async () => {
