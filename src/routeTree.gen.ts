@@ -31,7 +31,7 @@ import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as BlogArticleIdRouteImport } from './routes/blog.$articleId'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
@@ -206,9 +206,9 @@ const CategorySlugRoute = CategorySlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CategoryRoute,
 } as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
+const BlogArticleIdRoute = BlogArticleIdRouteImport.update({
+  id: '/$articleId',
+  path: '/$articleId',
   getParentRoute: () => BlogRoute,
 } as any)
 const AuthenticatedYoutubeRoute = AuthenticatedYoutubeRouteImport.update({
@@ -610,7 +610,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
-  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/$articleId': typeof BlogArticleIdRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -696,7 +696,7 @@ export interface FileRoutesByTo {
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
-  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/$articleId': typeof BlogArticleIdRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -788,7 +788,7 @@ export interface FileRoutesById {
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
-  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/$articleId': typeof BlogArticleIdRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -878,7 +878,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
-    | '/blog/$slug'
+    | '/blog/$articleId'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -964,7 +964,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/voice'
     | '/youtube'
-    | '/blog/$slug'
+    | '/blog/$articleId'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1055,7 +1055,7 @@ export interface FileRouteTypes {
     | '/_authenticated/videos'
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
-    | '/blog/$slug'
+    | '/blog/$articleId'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1270,11 +1270,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategorySlugRouteImport
       parentRoute: typeof CategoryRoute
     }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
+    '/blog/$articleId': {
+      id: '/blog/$articleId'
+      path: '/$articleId'
+      fullPath: '/blog/$articleId'
+      preLoaderRoute: typeof BlogArticleIdRouteImport
       parentRoute: typeof BlogRoute
     }
     '/_authenticated/youtube': {
@@ -1940,13 +1940,13 @@ const OwnerRouteChildren: OwnerRouteChildren = {
 const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
 interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
+  BlogArticleIdRoute: typeof BlogArticleIdRoute
   BlogIndexRoute: typeof BlogIndexRoute
   BlogAuthorUsernameRoute: typeof BlogAuthorUsernameRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
+  BlogArticleIdRoute: BlogArticleIdRoute,
   BlogIndexRoute: BlogIndexRoute,
   BlogAuthorUsernameRoute: BlogAuthorUsernameRoute,
 }

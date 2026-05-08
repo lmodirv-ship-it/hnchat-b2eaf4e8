@@ -83,8 +83,8 @@ function TrendingPage() {
               {trendingArticles.map((article, i) => (
                 <Link
                   key={article.id}
-                  to="/blog/$slug"
-                  params={{ slug: article.slug }}
+                  to="/blog/$articleId"
+                  params={{ articleId: article.id }}
                   className="group rounded-2xl border border-border/20 bg-card/40 p-5 hover:border-primary/30 transition-all"
                 >
                   <div className="flex items-center gap-3 mb-3">
@@ -124,8 +124,8 @@ function TrendingPage() {
               {likedArticles.map((article) => (
                 <Link
                   key={article.id}
-                  to="/blog/$slug"
-                  params={{ slug: article.slug }}
+                  to="/blog/$articleId"
+                  params={{ articleId: article.id }}
                   className="flex items-center gap-4 rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   <div className="flex items-center gap-1 text-red-400">

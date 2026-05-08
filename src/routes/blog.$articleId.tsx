@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
-  useArticleBySlug,
+  useArticleByIdFull,
   useArticleComments,
   useAddArticleComment,
   useDeleteArticleComment,
@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/blog/$slug")({
+export const Route = createFileRoute("/blog/$articleId")({
   head: () => ({
     meta: [{ title: "hnChat Blog" }, { name: "robots", content: "index, follow" }],
   }),
@@ -38,8 +38,8 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function ArticlePage() {
-  const { slug } = Route.useParams();
-  const { data: article, isLoading, error } = useArticleBySlug(slug);
+  const { articleId } = Route.useParams();
+  const { data: article, isLoading, error } = useArticleByIdFull(articleId);
 
   if (isLoading) {
     return (
@@ -272,7 +272,7 @@ function ArticlePage() {
           <CommentsSection articleId={article.id} isRTL={isRTL} />
 
           {/* Related */}
-          <RelatedArticles currentSlug={slug} />
+          <RelatedArticles currentSlug={article?.slug || ""} />
         </article>
       </div>
     </PublicPageShell>
@@ -532,7 +532,7 @@ function RelatedArticles({ currentSlug }: { currentSlug: string }) {
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         {related.map((a) => (
-          <Link key={a.id} to="/blog/$slug" params={{ slug: a.slug }} className="group block">
+          <Link key={a.id} to="/blog/$articleId" params={{ articleId: a.id }} className="group block">
             <article className="rounded-2xl overflow-hidden border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/20 transition-all duration-500">
               <div className="relative h-40 overflow-hidden">
                 {a.featured_image ? (

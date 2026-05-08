@@ -150,8 +150,8 @@ function CategoryPage() {
               {articles.map((article: any) => (
                 <Link
                   key={article.id}
-                  to="/blog/$slug"
-                  params={{ slug: article.slug }}
+                  to="/blog/$articleId"
+                  params={{ articleId: article.id }}
                   className="group flex gap-4 rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   {article.featured_image && (

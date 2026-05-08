@@ -65,7 +65,7 @@ function AuthorPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {articles.map((article) => (
-              <Link key={article.id} to={`/blog/${article.slug}` as any} className="group block">
+              <Link key={article.id} to="/blog/$articleId" params={{ articleId: article.id }} className="group block">
                 <article className="rounded-2xl overflow-hidden border border-ice-border/15 bg-ice-card/5 hover:border-cyan-glow/30 transition-all duration-500">
                   {article.featured_image ? (
                     <img src={article.featured_image} alt={article.title} className="w-full h-40 object-cover transition-transform duration-700 group-hover:scale-105" />
