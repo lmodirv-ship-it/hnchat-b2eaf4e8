@@ -2917,6 +2917,7 @@ export type Database = {
         | "mention"
         | "message"
         | "system"
+        | "new_post"
       order_status:
         | "pending"
         | "paid"
@@ -3089,6 +3090,7 @@ export const Constants = {
         "mention",
         "message",
         "system",
+        "new_post",
       ],
       order_status: [
         "pending",
