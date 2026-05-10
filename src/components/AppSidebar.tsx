@@ -134,12 +134,9 @@ function SidebarLink({
 }) {
   const Icon = item.icon;
   const displayBadge = badge ?? item.badge;
-  const themeBtnStyle: Record<string, string> | undefined =
-    active
-      ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
-      : (typeof document !== "undefined" && document.documentElement.style.getPropertyValue("--theme-btn"))
-        ? { backgroundColor: "color-mix(in oklch, var(--theme-btn) 18%, transparent)" }
-        : undefined;
+  const themeBtnStyle: Record<string, string> = active
+    ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
+    : { backgroundColor: "color-mix(in oklch, var(--theme-btn, transparent) 18%, transparent)" };
 
   return (
     <Link
