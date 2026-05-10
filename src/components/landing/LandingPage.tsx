@@ -935,6 +935,9 @@ export function LandingPage() {
         </motion.div>
       </section>
 
+      {/* ═══ CHANNEL VIDEOS (imported) ═══ */}
+      <ChannelVideosSection lang={lang} />
+
       {/* ═══ BLOG SECTION (existing) ═══ */}
       <BlogSection lang={lang} />
 
