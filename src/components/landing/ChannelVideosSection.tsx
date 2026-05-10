@@ -116,7 +116,7 @@ export function ChannelVideosSection({ lang = "ar" }: { lang?: string }) {
             <Link
               key={v.id}
               to="/watch-yt/$videoId"
-              params={{ videoId: v.video_id }}
+              params={{ videoId: v.short_id ?? v.video_id }}
               className="group relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02] flex flex-col"
             >
               <div className="relative aspect-video bg-black">
