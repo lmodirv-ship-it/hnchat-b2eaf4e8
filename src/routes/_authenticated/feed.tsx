@@ -11,9 +11,9 @@ import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 import { useEnergy } from "@/hooks/useEnergySystem";
 import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
-import { usePublishedArticles } from "@/hooks/useBlog";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { MyChannelsCard } from "@/components/feed/MyChannelsCard";
+import { UnifiedActivityFeed } from "@/components/landing/UnifiedActivityFeed";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
