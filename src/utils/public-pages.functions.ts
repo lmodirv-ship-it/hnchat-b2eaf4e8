@@ -4,10 +4,12 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 export const fetchPublicPost = createServerFn({ method: "GET" })
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data }) => {
+    const isShortId = /^[a-z]\d{6}$/.test(data.id);
+    const column = isShortId ? "short_id" : "id";
     const { data: post, error } = await supabaseAdmin
       .from("posts")
-      .select("id, content, media_urls, type, likes_count, comments_count, views_count, created_at, user_id")
-      .eq("id", data.id)
+      .select("id, short_id, content, media_urls, type, likes_count, comments_count, views_count, created_at, user_id")
+      .eq(column, data.id)
       .maybeSingle();
 
     if (error || !post) return null;
@@ -19,7 +21,7 @@ export const fetchPublicPost = createServerFn({ method: "GET" })
       .maybeSingle();
 
     return {
-      id: post.id,
+      id: post.short_id ?? post.id,
       content: post.content,
       media_urls: post.media_urls ?? [],
       type: post.type,
