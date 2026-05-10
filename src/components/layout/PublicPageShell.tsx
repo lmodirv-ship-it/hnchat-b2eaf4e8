@@ -1,9 +1,11 @@
-import { type ReactNode, useRef } from "react";
-import { Link } from "@tanstack/react-router";
+import { type ReactNode, useRef, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { HnLogo } from "@/components/HnLogo";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { Palette, Type, MousePointerClick } from "lucide-react";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export function PublicPageShell({
   children,
@@ -18,6 +20,25 @@ export function PublicPageShell({
   const bgRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLInputElement>(null);
   const btnRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const [guestBusy, setGuestBusy] = useState(false);
+
+  async function handleGuestEntry() {
+    if (guestBusy) return;
+    setGuestBusy(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) { navigate({ to: "/feed" }); return; }
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      toast.success("مرحباً بك! تم منحك معرفاً مؤقتاً");
+      navigate({ to: "/feed" });
+    } catch (e: any) {
+      toast.error(e?.message || "تعذر الدخول كزائر");
+    } finally {
+      setGuestBusy(false);
+    }
+  }
 
   return (
     <div
@@ -138,13 +159,14 @@ export function PublicPageShell({
             <Link to="/about" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">حول</Link>
             <Link to="/blog" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">Blog</Link>
             <Link to="/contact" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">تواصل</Link>
-            <Link
-              to="/sign-up-login"
-              className="px-5 py-2 text-xs font-semibold rounded-full text-white transition-all hover:shadow-[0_0_20px_oklch(0.65_0.25_295/0.4)] hover:scale-105"
+            <button
+              onClick={handleGuestEntry}
+              disabled={guestBusy}
+              className="px-5 py-2 text-xs font-semibold rounded-full text-white transition-all hover:shadow-[0_0_20px_oklch(0.65_0.25_295/0.4)] hover:scale-105 disabled:opacity-60"
               style={{ background: "linear-gradient(135deg, oklch(0.65 0.25 295) 0%, oklch(0.55 0.20 270) 50%, oklch(0.78 0.18 220) 100%)" }}
             >
-              ابدأ مجاناً
-            </Link>
+              {guestBusy ? "..." : "ابدأ مجاناً"}
+            </button>
           </div>
         </div>
       </header>
