@@ -167,6 +167,7 @@ function AddChannelPage() {
       if (!channelRowId) {
         throw new Error("تعذّر تحديد القناة لحفظ الفيديوهات");
       }
+      const confirmedChannelRowId = channelRowId;
 
       // 3. Filter new videos
       const selectedVideos = preview.videos.filter((v) => selected.has(v.videoId));
@@ -207,7 +208,7 @@ function AddChannelPage() {
         const { error: videosErr } = await supabase.from("channel_videos").insert(
           fresh.map((v, i) => ({
             user_id: user.id,
-            channel_id: channelRowId,
+            channel_id: confirmedChannelRowId,
             platform: "youtube",
             video_id: v.videoId,
             video_url: `https://www.youtube.com/watch?v=${v.videoId}`,
