@@ -269,6 +269,9 @@ function FeedPage() {
       {/* Stories */}
       <StoriesRail />
 
+      {/* My Channels - YouTube/TikTok/Instagram */}
+      <MyChannelsCard onSynced={refetch} />
+
       {/* Feed Insights */}
       <FeedInsights postsCount={posts?.length ?? 0} />
 
