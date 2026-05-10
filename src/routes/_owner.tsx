@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useLocation, useNavigate, redirect } fro
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Crown, Users, FileText, ShoppingBag, ShieldAlert, Settings, Activity, DollarSign, Globe, Flag, Power, LogOut, Bell, Cpu, LifeBuoy, Zap } from "lucide-react";
+import { Loader2, Crown, Users, FileText, ShoppingBag, ShieldAlert, Settings, Activity, DollarSign, Globe, Flag, Power, LogOut, Bell, Cpu, LifeBuoy, Zap, Database } from "lucide-react";
 import { OwnerCommandPalette } from "@/components/owner/OwnerCommandPalette";
 
 // Secret obscured path. Keep in sync with internal docs only.
@@ -36,6 +36,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { to: "/owner/users", label: "User Operations", icon: Users },
       { to: "/owner/content", label: "Content & Moderation", icon: FileText },
+      { to: "/owner/registry", label: "Content Registry", icon: Database },
       { to: "/owner/groups", label: "Groups Network", icon: Flag },
     ],
   },
