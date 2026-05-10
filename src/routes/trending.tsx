@@ -26,7 +26,7 @@ function useTrendingArticles() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("articles")
-        .select("id, title, slug, short_description, featured_image, views_count, likes_count, reading_time, published_at, profiles(username, full_name, avatar_url)")
+        .select("id, short_id, title, slug, short_description, featured_image, views_count, likes_count, reading_time, published_at, profiles(username, full_name, avatar_url)")
         .eq("status", "published")
         .order("views_count", { ascending: false })
         .limit(12);
@@ -42,7 +42,7 @@ function useMostLikedArticles() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("articles")
-        .select("id, title, slug, short_description, views_count, likes_count, published_at, profiles(username, full_name)")
+        .select("id, short_id, title, slug, short_description, views_count, likes_count, published_at, profiles(username, full_name)")
         .eq("status", "published")
         .order("likes_count", { ascending: false })
         .limit(8);
