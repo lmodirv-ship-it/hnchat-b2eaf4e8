@@ -4,6 +4,26 @@ import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { Calendar, Eye, Clock, User, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/blog/author/$username")({
+  head: ({ params }) => {
+    const url = `https://www.hn-chat.com/blog/author/${params.username}`;
+    const title = `مقالات ${params.username} — مدونة hnChat`;
+    const description = `اكتشف جميع مقالات الكاتب @${params.username} على مدونة hnChat حول الذكاء الاصطناعي والتقنية.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: "index, follow, max-image-preview:large" },
+        { property: "og:type", content: "profile" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: AuthorPage,
 });
 
