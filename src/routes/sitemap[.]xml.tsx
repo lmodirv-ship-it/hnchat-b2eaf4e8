@@ -11,6 +11,15 @@ const truncate = (s: string, n = 100) => {
   return t.length > n ? t.slice(0, n - 1) + "…" : t;
 };
 
+const absoluteUrl = (u: string) => {
+  if (!u) return "";
+  const trimmed = u.trim();
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith("//")) return `https:${trimmed}`;
+  if (trimmed.startsWith("/")) return `${SITE_URL}${trimmed}`;
+  return `${SITE_URL}/${trimmed}`;
+};
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
