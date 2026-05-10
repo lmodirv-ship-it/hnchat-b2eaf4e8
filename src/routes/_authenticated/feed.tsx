@@ -274,25 +274,7 @@ function FeedPage() {
       {/* Feed Insights */}
       <FeedInsights postsCount={posts?.length ?? 0} />
 
-      {/* Articles Section */}
-      {articles.length > 0 && (
-        <div id="articles-section" className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-[oklch(0.78_0.18_220)]" />
-              <h2 className="text-sm font-bold text-[oklch(0.88_0.03_250)]">أحدث المقالات</h2>
-            </div>
-            <Link to="/blog" className="flex items-center gap-1 text-[10px] text-[oklch(0.78_0.18_220)] hover:underline">
-              عرض الكل <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-3">
-            {articles.map((article: any) => (
-              <FeedArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Articles section removed — now merged into UnifiedActivityFeed below */}
 
       {/* Ad Unit */}
       <div className="mb-5">
