@@ -85,7 +85,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
         title: a.title,
         excerpt: a.short_description,
         image: a.featured_image,
-        url: `/blog/${a.id}`,
+        url: `/blog/${a.short_id ?? a.id}`,
         publishedAt: a.published_at ?? new Date().toISOString(),
       });
     });
