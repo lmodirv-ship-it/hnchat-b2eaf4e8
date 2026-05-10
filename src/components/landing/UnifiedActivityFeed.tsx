@@ -41,8 +41,9 @@ function formatCount(n?: number) {
   return String(v);
 }
 
-export function UnifiedActivityFeed({ lang = "ar" }: { lang?: string }) {
+export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang?: string; variant?: "section" | "embedded" }) {
   const isAr = lang === "ar";
+  const embedded = variant === "embedded";
   const [items, setItems] = useState<FeedItem[]>([]);
   const [loading, setLoading] = useState(true);
 
