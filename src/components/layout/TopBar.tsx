@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { Bell, Search, Moon, Command, Menu, ChevronDown, Palette, Type, MousePointerClick, PaintBucket } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Bell, Search, Moon, Command, Menu, ChevronDown, Palette, Type, MousePointerClick, PaintBucket, RefreshCw } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -17,6 +17,7 @@ export function TopBar() {
   const { user } = useAuth();
   const { notifUnread } = useRealtime();
   const { setMobileSidebarOpen } = useLayout();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -99,6 +100,16 @@ export function TopBar() {
         )}
 
         <div className={`flex items-center gap-0.5 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+          {/* Refresh */}
+          <button
+            onClick={() => queryClient.invalidateQueries()}
+            className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition"
+            aria-label="تحديث"
+            title="تحديث"
+          >
+            <RefreshCw className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
+          </button>
+
           {/* Composer background color picker */}
           <Popover>
             <PopoverTrigger asChild>
