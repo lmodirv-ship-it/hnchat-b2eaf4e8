@@ -37,7 +37,7 @@ const AI_PROMPTS = [
 function AiComposer({ onPost }: { onPost: () => void }) {
   const { user } = useAuth();
   const { mode, activityPulse } = useEnergy();
-  const { color: composerBg, setColor: setComposerBg } = useComposerColor();
+  const { color: composerBg } = useComposerColor();
   const [content, setContent] = useState("");
   const [posting, setPosting] = useState(false);
   const [promptIdx] = useState(() => Math.floor(Math.random() * AI_PROMPTS.length));
