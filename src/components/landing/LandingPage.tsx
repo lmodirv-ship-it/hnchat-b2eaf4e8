@@ -10,6 +10,7 @@ import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { PartnerStrip } from "@/components/landing/PartnerStrip";
 import { PhoneMockup } from "@/components/landing/PhoneMockup";
 import { BlogSection } from "@/components/landing/BlogSection";
+import { ChannelVideosSection } from "@/components/landing/ChannelVideosSection";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 
