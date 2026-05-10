@@ -11,7 +11,7 @@ import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 import { useEnergy } from "@/hooks/useEnergySystem";
 import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
-import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
+
 import { MyChannelsCard } from "@/components/feed/MyChannelsCard";
 import { UnifiedActivityFeed } from "@/components/landing/UnifiedActivityFeed";
 
@@ -275,12 +275,6 @@ function FeedPage() {
       <FeedInsights postsCount={posts?.length ?? 0} />
 
       {/* Articles section removed — now merged into UnifiedActivityFeed below */}
-
-      {/* Ad Unit */}
-      <div className="mb-5">
-        <AdSenseUnit className="rounded-xl overflow-hidden" />
-      </div>
-
 
       {/* AI Composer */}
       <div className="mb-6">
