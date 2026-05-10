@@ -125,38 +125,109 @@ function AddChannelPage() {
       return;
     }
     setPublishing(true);
+
+    // 1. Create import session (pending)
+    const { data: session } = await supabase
+      .from("channel_import_sessions")
+      .insert({
+        user_id: user.id,
+        source_url: url.trim(),
+        platform: "youtube",
+        status: "pending",
+        videos_found: preview.videos.length,
+      })
+      .select("id")
+      .single();
+
     try {
-      // Save channel if new
-      if (!channelAlreadyAdded) {
-        const { error: chErr } = await supabase.from("user_channels").insert({
-          user_id: user.id,
-          platform: "youtube",
-          channel_url: url.trim(),
-          channel_id: preview.channel.channelId,
-          channel_name: preview.channel.title,
-          channel_avatar: preview.channel.avatar,
-        });
+      // 2. Upsert channel
+      let channelRowId: string | null = null;
+      const existingCh = myChannels.find(
+        (c) => c.channel_id === preview.channel.channelId || c.channel_url === url.trim(),
+      ) as any;
+      if (existingCh?.id) {
+        channelRowId = existingCh.id;
+      } else {
+        const { data: chRow, error: chErr } = await supabase
+          .from("user_channels")
+          .insert({
+            user_id: user.id,
+            platform: "youtube",
+            channel_url: url.trim(),
+            channel_id: preview.channel.channelId,
+            channel_name: preview.channel.title,
+            channel_avatar: preview.channel.avatar,
+          })
+          .select("id")
+          .single();
         if (chErr) throw chErr;
+        channelRowId = chRow!.id;
       }
 
-      // Insert posts (skip duplicates)
-      const toInsert = preview.videos
-        .filter((v) => selected.has(v.videoId) && !existingVideoIds.has(v.videoId))
-        .map((v) => ({
-          user_id: user.id,
-          type: "video" as any,
-          content: v.title,
-          media_urls: [`https://www.youtube.com/watch?v=${v.videoId}`],
-        }));
+      // 3. Filter new videos
+      const fresh = preview.videos.filter(
+        (v) => selected.has(v.videoId) && !existingVideoIds.has(v.videoId),
+      );
+      const skipped = selected.size - fresh.length;
 
-      if (toInsert.length > 0) {
-        const { error: pErr } = await supabase.from("posts").insert(toInsert);
+      // 4. Create posts (feed + reels source)
+      let postIds: string[] = [];
+      if (fresh.length > 0) {
+        const { data: postsData, error: pErr } = await supabase
+          .from("posts")
+          .insert(
+            fresh.map((v) => ({
+              user_id: user.id,
+              type: "video" as any,
+              content: v.title,
+              media_urls: [`https://www.youtube.com/watch?v=${v.videoId}`],
+            })),
+          )
+          .select("id");
         if (pErr) throw pErr;
+        postIds = (postsData ?? []).map((p) => p.id);
+      }
+
+      // 5. Track each video in channel_videos
+      if (fresh.length > 0 && channelRowId) {
+        await supabase.from("channel_videos").insert(
+          fresh.map((v, i) => ({
+            user_id: user.id,
+            channel_id: channelRowId!,
+            platform: "youtube",
+            video_id: v.videoId,
+            video_url: `https://www.youtube.com/watch?v=${v.videoId}`,
+            title: v.title,
+            description: v.description,
+            thumbnail: v.thumbnail,
+            author: v.author,
+            published_at: v.publishedAt || null,
+            show_in_feed: true,
+            show_in_reels: true,
+            is_published: true,
+            post_id: postIds[i] ?? null,
+            published_at_app: new Date().toISOString(),
+          })),
+        );
+      }
+
+      // 6. Mark session complete
+      if (session?.id) {
+        await supabase
+          .from("channel_import_sessions")
+          .update({
+            status: "completed",
+            channel_id: channelRowId,
+            videos_imported: fresh.length,
+            videos_skipped: skipped,
+            completed_at: new Date().toISOString(),
+          })
+          .eq("id", session.id);
       }
 
       toast.success(
-        toInsert.length > 0
-          ? `تم نشر ${toInsert.length} فيديو في الخلاصة و Reels`
+        fresh.length > 0
+          ? `تم نشر ${fresh.length} فيديو في الخلاصة و Reels`
           : "كل الفيديوهات منشورة مسبقاً",
       );
       await Promise.all([refetchChannels(), refetchPosts()]);
