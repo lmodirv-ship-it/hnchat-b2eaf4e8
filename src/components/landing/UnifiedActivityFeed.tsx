@@ -149,7 +149,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
           kind: "post",
           title: text || (isAr ? "منشور جديد" : "New post"),
           image: firstMedia,
-          url: `/post/${p.id}`,
+          url: `/post/${p.short_id ?? p.id}`,
           publishedAt: p.created_at,
           postId: p.id,
           likes: p.likes_count ?? 0,
