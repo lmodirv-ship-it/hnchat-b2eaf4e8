@@ -9,16 +9,53 @@ import { Input } from "@/components/ui/input";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 export const Route = createFileRoute("/blog/")({
-  head: () => ({
-    meta: [
-      { title: "مدونة hnChat — أحدث أخبار الذكاء الاصطناعي والتقنية" },
-      { name: "description", content: "تابع أحدث المقالات عن الذكاء الاصطناعي، الكريبتو، الخصوصية، وتقنيات التطبيقات الشاملة من فريق hnChat." },
-      { property: "og:title", content: "مدونة hnChat — أحدث الأخبار" },
-      { property: "og:description", content: "مقالات عن الذكاء الاصطناعي والكريبتو والخصوصية وتقنيات التطبيقات الشاملة." },
-      { name: "robots", content: "index, follow" },
-    ],
-    links: [{ rel: "canonical", href: "https://hn-chat.com/blog" }],
-  }),
+  head: () => {
+    const url = "https://www.hn-chat.com/blog";
+    const title = "مدونة hnChat — أحدث أخبار الذكاء الاصطناعي والتقنية";
+    const description = "تابع أحدث المقالات عن الذكاء الاصطناعي، الكريبتو، الخصوصية، وتقنيات التطبيقات الشاملة من فريق hnChat. مقالات يومية بجودة عالية.";
+    const blogLd = {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      name: "مدونة hnChat",
+      url,
+      description,
+      publisher: {
+        "@type": "Organization",
+        name: "hnChat",
+        logo: { "@type": "ImageObject", url: "https://www.hn-chat.com/icon-512.png" },
+      },
+      inLanguage: ["ar", "en", "fr", "es"],
+    };
+    const breadcrumbLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "الرئيسية", item: "https://www.hn-chat.com" },
+        { "@type": "ListItem", position: 2, name: "المدونة", item: url },
+      ],
+    };
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { property: "og:site_name", content: "hnChat" },
+        { property: "og:locale", content: "ar_AR" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(blogLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+      ],
+    };
+  },
   component: BlogPage,
 });
 
