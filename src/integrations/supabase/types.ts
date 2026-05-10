@@ -721,6 +721,142 @@ export type Database = {
           },
         ]
       }
+      channel_import_sessions: {
+        Row: {
+          channel_id: string | null
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          platform: string
+          source_url: string
+          status: string
+          user_id: string
+          videos_found: number
+          videos_imported: number
+          videos_skipped: number
+        }
+        Insert: {
+          channel_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          platform?: string
+          source_url: string
+          status?: string
+          user_id: string
+          videos_found?: number
+          videos_imported?: number
+          videos_skipped?: number
+        }
+        Update: {
+          channel_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          platform?: string
+          source_url?: string
+          status?: string
+          user_id?: string
+          videos_found?: number
+          videos_imported?: number
+          videos_skipped?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_import_sessions_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "user_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_videos: {
+        Row: {
+          author: string | null
+          channel_id: string
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          id: string
+          imported_at: string
+          is_published: boolean
+          likes_count: number
+          platform: string
+          post_id: string | null
+          published_at: string | null
+          published_at_app: string | null
+          show_in_feed: boolean
+          show_in_reels: boolean
+          thumbnail: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          video_id: string
+          video_url: string
+          views_count: number
+        }
+        Insert: {
+          author?: string | null
+          channel_id: string
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          imported_at?: string
+          is_published?: boolean
+          likes_count?: number
+          platform?: string
+          post_id?: string | null
+          published_at?: string | null
+          published_at_app?: string | null
+          show_in_feed?: boolean
+          show_in_reels?: boolean
+          thumbnail?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          video_id: string
+          video_url: string
+          views_count?: number
+        }
+        Update: {
+          author?: string | null
+          channel_id?: string
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          imported_at?: string
+          is_published?: boolean
+          likes_count?: number
+          platform?: string
+          post_id?: string | null
+          published_at?: string | null
+          published_at_app?: string | null
+          show_in_feed?: boolean
+          show_in_reels?: boolean
+          thumbnail?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          video_id?: string
+          video_url?: string
+          views_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_videos_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "user_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_invitations: {
         Row: {
           created_at: string
