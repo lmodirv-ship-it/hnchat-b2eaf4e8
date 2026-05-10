@@ -64,42 +64,48 @@ function WatchYtPage() {
   const [bookmarking, setBookmarking] = useState(false);
   const [publishing, setPublishing] = useState(false);
 
-  // Resolve short_id → YouTube video_id (and pre-existing post if linked)
+  // Resolve short_id → YouTube video_id (and pre-existing post if linked).
+  // Falls back to treating the param as a raw YouTube ID for legacy links
+  // and for videos previewed before being added (e.g. from /youtube search).
   useEffect(() => {
     let cancelled = false;
     setResolvedYtId(null);
     setResolveError(null);
     (async () => {
-      // 1) Try channel_videos by short_id
-      const { data: cv } = await supabase
-        .from("channel_videos")
-        .select("video_id, post_id")
-        .eq("short_id", shortId)
-        .maybeSingle();
-      if (cancelled) return;
-      if (cv?.video_id) {
-        setResolvedYtId(cv.video_id);
-        if (cv.post_id) setPostId(cv.post_id);
-        return;
-      }
-      // 2) Try posts by short_id (extract YT id from media_urls)
-      const { data: p } = await supabase
-        .from("posts")
-        .select("id, media_urls")
-        .eq("short_id", shortId)
-        .maybeSingle();
-      if (cancelled) return;
-      if (p?.media_urls?.length) {
-        for (const url of p.media_urls) {
-          const yt = extractYtId(String(url));
-          if (yt) {
-            setResolvedYtId(yt);
-            setPostId(p.id);
-            return;
+      const isShortIdShape = /^[a-z]\d{6}$/.test(shortId);
+      if (isShortIdShape) {
+        const { data: cv } = await supabase
+          .from("channel_videos")
+          .select("video_id, post_id")
+          .eq("short_id", shortId)
+          .maybeSingle();
+        if (cancelled) return;
+        if (cv?.video_id) {
+          setResolvedYtId(cv.video_id);
+          if (cv.post_id) setPostId(cv.post_id);
+          return;
+        }
+        const { data: p } = await supabase
+          .from("posts")
+          .select("id, media_urls")
+          .eq("short_id", shortId)
+          .maybeSingle();
+        if (cancelled) return;
+        if (p?.media_urls?.length) {
+          for (const url of p.media_urls) {
+            const yt = extractYtId(String(url));
+            if (yt) {
+              setResolvedYtId(yt);
+              setPostId(p.id);
+              return;
+            }
           }
         }
+        setResolveError("الفيديو غير موجود");
+        return;
       }
-      setResolveError("الفيديو غير موجود");
+      // Fallback: param looks like a raw YouTube ID
+      setResolvedYtId(shortId);
     })();
     return () => {
       cancelled = true;
