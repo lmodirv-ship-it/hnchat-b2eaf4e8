@@ -206,7 +206,6 @@ function FeedPage() {
   const { user } = useAuth();
   const { activityPulse } = useEnergy();
   const { newPostsCount, clearNewPosts } = useRealtimeFeed();
-  const { data: articles = [] } = usePublishedArticles({ limit: 6 });
 
   const { data: posts, refetch, isLoading } = useQuery({
     queryKey: ["feed-posts", user?.id],
