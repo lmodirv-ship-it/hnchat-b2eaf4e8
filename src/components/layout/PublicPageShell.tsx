@@ -1,9 +1,11 @@
-import { type ReactNode, useRef } from "react";
-import { Link } from "@tanstack/react-router";
+import { type ReactNode, useRef, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { HnLogo } from "@/components/HnLogo";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { Palette, Type, MousePointerClick } from "lucide-react";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export function PublicPageShell({
   children,
