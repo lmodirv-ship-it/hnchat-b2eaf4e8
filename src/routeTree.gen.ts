@@ -81,6 +81,7 @@ import { Route as OwnerOwnerUsersRouteImport } from './routes/_owner/owner.users
 import { Route as OwnerOwnerTicketsRouteImport } from './routes/_owner/owner.tickets'
 import { Route as OwnerOwnerSettingsRouteImport } from './routes/_owner/owner.settings'
 import { Route as OwnerOwnerSecurityRouteImport } from './routes/_owner/owner.security'
+import { Route as OwnerOwnerRegistryRouteImport } from './routes/_owner/owner.registry'
 import { Route as OwnerOwnerMarketplaceRouteImport } from './routes/_owner/owner.marketplace'
 import { Route as OwnerOwnerGroupsRouteImport } from './routes/_owner/owner.groups'
 import { Route as OwnerOwnerGeographyRouteImport } from './routes/_owner/owner.geography'
@@ -470,6 +471,11 @@ const OwnerOwnerSecurityRoute = OwnerOwnerSecurityRouteImport.update({
   path: '/owner/security',
   getParentRoute: () => OwnerRoute,
 } as any)
+const OwnerOwnerRegistryRoute = OwnerOwnerRegistryRouteImport.update({
+  id: '/owner/registry',
+  path: '/owner/registry',
+  getParentRoute: () => OwnerRoute,
+} as any)
 const OwnerOwnerMarketplaceRoute = OwnerOwnerMarketplaceRouteImport.update({
   id: '/owner/marketplace',
   path: '/owner/marketplace',
@@ -662,6 +668,7 @@ export interface FileRoutesByFullPath {
   '/owner/geography': typeof OwnerOwnerGeographyRoute
   '/owner/groups': typeof OwnerOwnerGroupsRoute
   '/owner/marketplace': typeof OwnerOwnerMarketplaceRoute
+  '/owner/registry': typeof OwnerOwnerRegistryRoute
   '/owner/security': typeof OwnerOwnerSecurityRoute
   '/owner/settings': typeof OwnerOwnerSettingsRoute
   '/owner/tickets': typeof OwnerOwnerTicketsRoute
@@ -752,6 +759,7 @@ export interface FileRoutesByTo {
   '/owner/geography': typeof OwnerOwnerGeographyRoute
   '/owner/groups': typeof OwnerOwnerGroupsRoute
   '/owner/marketplace': typeof OwnerOwnerMarketplaceRoute
+  '/owner/registry': typeof OwnerOwnerRegistryRoute
   '/owner/security': typeof OwnerOwnerSecurityRoute
   '/owner/settings': typeof OwnerOwnerSettingsRoute
   '/owner/tickets': typeof OwnerOwnerTicketsRoute
@@ -848,6 +856,7 @@ export interface FileRoutesById {
   '/_owner/owner/geography': typeof OwnerOwnerGeographyRoute
   '/_owner/owner/groups': typeof OwnerOwnerGroupsRoute
   '/_owner/owner/marketplace': typeof OwnerOwnerMarketplaceRoute
+  '/_owner/owner/registry': typeof OwnerOwnerRegistryRoute
   '/_owner/owner/security': typeof OwnerOwnerSecurityRoute
   '/_owner/owner/settings': typeof OwnerOwnerSettingsRoute
   '/_owner/owner/tickets': typeof OwnerOwnerTicketsRoute
@@ -942,6 +951,7 @@ export interface FileRouteTypes {
     | '/owner/geography'
     | '/owner/groups'
     | '/owner/marketplace'
+    | '/owner/registry'
     | '/owner/security'
     | '/owner/settings'
     | '/owner/tickets'
@@ -1032,6 +1042,7 @@ export interface FileRouteTypes {
     | '/owner/geography'
     | '/owner/groups'
     | '/owner/marketplace'
+    | '/owner/registry'
     | '/owner/security'
     | '/owner/settings'
     | '/owner/tickets'
@@ -1127,6 +1138,7 @@ export interface FileRouteTypes {
     | '/_owner/owner/geography'
     | '/_owner/owner/groups'
     | '/_owner/owner/marketplace'
+    | '/_owner/owner/registry'
     | '/_owner/owner/security'
     | '/_owner/owner/settings'
     | '/_owner/owner/tickets'
@@ -1669,6 +1681,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerOwnerSecurityRouteImport
       parentRoute: typeof OwnerRoute
     }
+    '/_owner/owner/registry': {
+      id: '/_owner/owner/registry'
+      path: '/owner/registry'
+      fullPath: '/owner/registry'
+      preLoaderRoute: typeof OwnerOwnerRegistryRouteImport
+      parentRoute: typeof OwnerRoute
+    }
     '/_owner/owner/marketplace': {
       id: '/_owner/owner/marketplace'
       path: '/owner/marketplace'
@@ -1995,6 +2014,7 @@ interface OwnerRouteChildren {
   OwnerOwnerGeographyRoute: typeof OwnerOwnerGeographyRoute
   OwnerOwnerGroupsRoute: typeof OwnerOwnerGroupsRoute
   OwnerOwnerMarketplaceRoute: typeof OwnerOwnerMarketplaceRoute
+  OwnerOwnerRegistryRoute: typeof OwnerOwnerRegistryRoute
   OwnerOwnerSecurityRoute: typeof OwnerOwnerSecurityRoute
   OwnerOwnerSettingsRoute: typeof OwnerOwnerSettingsRoute
   OwnerOwnerTicketsRoute: typeof OwnerOwnerTicketsRoute
@@ -2011,6 +2031,7 @@ const OwnerRouteChildren: OwnerRouteChildren = {
   OwnerOwnerGeographyRoute: OwnerOwnerGeographyRoute,
   OwnerOwnerGroupsRoute: OwnerOwnerGroupsRoute,
   OwnerOwnerMarketplaceRoute: OwnerOwnerMarketplaceRoute,
+  OwnerOwnerRegistryRoute: OwnerOwnerRegistryRoute,
   OwnerOwnerSecurityRoute: OwnerOwnerSecurityRoute,
   OwnerOwnerSettingsRoute: OwnerOwnerSettingsRoute,
   OwnerOwnerTicketsRoute: OwnerOwnerTicketsRoute,
