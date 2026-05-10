@@ -298,27 +298,8 @@ function FeedPage() {
         </button>
       )}
 
-      {/* Posts */}
-      <div className="space-y-4 sm:space-y-5">
-        {isLoading && (
-          <div className="text-center py-16">
-            <div className="relative inline-block">
-              <Loader2 className="h-10 w-10 animate-spin text-[oklch(0.78_0.18_220)]" />
-              <div className="absolute inset-0 h-10 w-10 rounded-full bg-[oklch(0.78_0.18_220/0.15)] blur-xl animate-breathe" />
-            </div>
-            <p className="text-xs text-[oklch(0.45_0.03_250)] mt-4">جاري تحميل التغذية...</p>
-          </div>
-        )}
-        {!isLoading && posts?.length === 0 && (
-          <div className="p-16 text-center rounded-2xl bg-[oklch(0.06_0.015_260/0.5)] border border-[oklch(1_0_0/0.05)]">
-            <Sparkles className="h-12 w-12 mx-auto text-[oklch(0.78_0.18_220)] mb-4 opacity-40" />
-            <p className="text-[oklch(0.5_0.03_250)] text-sm">لا توجد منشورات بعد. كن أول من ينشر!</p>
-          </div>
-        )}
-        {posts?.map((p) => (
-          <PostCard key={p.id} post={p} onChange={refetch} />
-        ))}
-      </div>
+      {/* Unified feed: articles + channel videos + posts + live, sorted by date */}
+      <UnifiedActivityFeed lang="ar" variant="embedded" />
 
       {/* Bottom spacer for mobile nav */}
       <div className="h-8" />
