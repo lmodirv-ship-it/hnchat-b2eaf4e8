@@ -532,6 +532,7 @@ export type Database = {
           seo_description: string | null
           seo_title: string | null
           short_description: string | null
+          short_id: string
           slug: string
           source_project: string | null
           source_url: string | null
@@ -558,6 +559,7 @@ export type Database = {
           seo_description?: string | null
           seo_title?: string | null
           short_description?: string | null
+          short_id: string
           slug: string
           source_project?: string | null
           source_url?: string | null
@@ -584,6 +586,7 @@ export type Database = {
           seo_description?: string | null
           seo_title?: string | null
           short_description?: string | null
+          short_id?: string
           slug?: string
           source_project?: string | null
           source_url?: string | null
@@ -789,6 +792,7 @@ export type Database = {
           post_id: string | null
           published_at: string | null
           published_at_app: string | null
+          short_id: string
           show_in_feed: boolean
           show_in_reels: boolean
           thumbnail: string | null
@@ -813,6 +817,7 @@ export type Database = {
           post_id?: string | null
           published_at?: string | null
           published_at_app?: string | null
+          short_id: string
           show_in_feed?: boolean
           show_in_reels?: boolean
           thumbnail?: string | null
@@ -837,6 +842,7 @@ export type Database = {
           post_id?: string | null
           published_at?: string | null
           published_at_app?: string | null
+          short_id?: string
           show_in_feed?: boolean
           show_in_reels?: boolean
           thumbnail?: string | null
@@ -2054,6 +2060,7 @@ export type Database = {
           id: string
           likes_count: number
           media_urls: string[] | null
+          short_id: string
           type: Database["public"]["Enums"]["post_type"]
           updated_at: string
           user_id: string
@@ -2066,6 +2073,7 @@ export type Database = {
           id?: string
           likes_count?: number
           media_urls?: string[] | null
+          short_id: string
           type?: Database["public"]["Enums"]["post_type"]
           updated_at?: string
           user_id: string
@@ -2078,6 +2086,7 @@ export type Database = {
           id?: string
           likes_count?: number
           media_urls?: string[] | null
+          short_id?: string
           type?: Database["public"]["Enums"]["post_type"]
           updated_at?: string
           user_id?: string
@@ -3016,6 +3025,10 @@ export type Database = {
         Returns: number
       }
       generate_member_id: { Args: never; Returns: string }
+      generate_short_id: {
+        Args: { _column?: string; _table: string }
+        Returns: string
+      }
       get_stream_ingest_url: { Args: { _stream_id: string }; Returns: string }
       get_visitor_stats: {
         Args: never
