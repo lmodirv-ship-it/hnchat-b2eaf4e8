@@ -159,13 +159,14 @@ export function PublicPageShell({
             <Link to="/about" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">حول</Link>
             <Link to="/blog" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">Blog</Link>
             <Link to="/contact" className="hidden sm:inline text-xs text-muted-foreground/60 hover:text-foreground transition-colors">تواصل</Link>
-            <Link
-              to="/sign-up-login"
-              className="px-5 py-2 text-xs font-semibold rounded-full text-white transition-all hover:shadow-[0_0_20px_oklch(0.65_0.25_295/0.4)] hover:scale-105"
+            <button
+              onClick={handleGuestEntry}
+              disabled={guestBusy}
+              className="px-5 py-2 text-xs font-semibold rounded-full text-white transition-all hover:shadow-[0_0_20px_oklch(0.65_0.25_295/0.4)] hover:scale-105 disabled:opacity-60"
               style={{ background: "linear-gradient(135deg, oklch(0.65 0.25 295) 0%, oklch(0.55 0.20 270) 50%, oklch(0.78 0.18 220) 100%)" }}
             >
-              ابدأ مجاناً
-            </Link>
+              {guestBusy ? "..." : "ابدأ مجاناً"}
+            </button>
           </div>
         </div>
       </header>
