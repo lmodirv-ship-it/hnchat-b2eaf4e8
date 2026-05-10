@@ -339,6 +339,14 @@ function AddChannelPage() {
             {loading ? "جاري الجلب..." : "استيراد ومعاينة"}
           </Button>
         </div>
+        <Button
+          onClick={handlePublish}
+          disabled={publishing || !preview || selected.size === 0}
+          className="mt-2 w-full gap-2"
+        >
+          {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+          {publishing ? "جاري النشر..." : preview && selected.size > 0 ? `تأكيد النشر (${selected.size})` : "تأكيد النشر"}
+        </Button>
         {error && (
           <div className="mt-3 flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg p-2">
             <AlertCircle className="h-4 w-4" />
