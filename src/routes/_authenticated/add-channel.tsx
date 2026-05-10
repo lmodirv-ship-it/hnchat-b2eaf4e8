@@ -12,7 +12,7 @@ import {
   AlertCircle,
   Play,
   Calendar,
-  ExternalLink,
+  
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -339,6 +339,14 @@ function AddChannelPage() {
             {loading ? "جاري الجلب..." : "استيراد ومعاينة"}
           </Button>
         </div>
+        <Button
+          onClick={handlePublish}
+          disabled={publishing || !preview || selected.size === 0}
+          className="mt-2 w-full gap-2"
+        >
+          {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+          {publishing ? "جاري النشر..." : preview && selected.size > 0 ? `تأكيد النشر (${selected.size})` : "تأكيد النشر"}
+        </Button>
         {error && (
           <div className="mt-3 flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg p-2">
             <AlertCircle className="h-4 w-4" />
@@ -361,29 +369,9 @@ function AddChannelPage() {
             <h2 className="font-semibold">تأكيد النشر</h2>
           </div>
 
-          {/* Channel info */}
-          <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-[oklch(0.08_0.015_260/0.6)]">
-            {preview.channel.avatar ? (
-              <img src={preview.channel.avatar} alt="" className="h-12 w-12 rounded-full object-cover" />
-            ) : (
-              <div className="h-12 w-12 rounded-full bg-red-600 flex items-center justify-center">
-                <Youtube className="h-6 w-6 text-white" />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold truncate">{preview.channel.title}</h3>
-              <p className="text-xs text-muted-foreground">
-                {preview.videos.length} فيديو متاح • {selected.size} محدد للنشر
-              </p>
-            </div>
-            <a
-              href={`https://www.youtube.com/channel/${preview.channel.channelId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs text-primary flex items-center gap-1 hover:underline"
-            >
-              <ExternalLink className="h-3 w-3" /> YouTube
-            </a>
+          {/* Compact summary (no channel name / no external links) */}
+          <div className="mb-4 p-3 rounded-xl bg-[oklch(0.08_0.015_260/0.6)] text-sm text-muted-foreground">
+            {preview.videos.length} فيديو متاح • {selected.size} محدد للنشر
           </div>
 
           {/* Videos grid */}
