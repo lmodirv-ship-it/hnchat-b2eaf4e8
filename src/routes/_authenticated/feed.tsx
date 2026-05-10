@@ -156,7 +156,8 @@ function AiComposer({ onPost }: { onPost: () => void }) {
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               maxLength={2000}
-              className="bg-transparent border-0 resize-none focus-visible:ring-0 min-h-[60px] sm:min-h-[80px] p-0 text-sm placeholder:text-[oklch(0.35_0.03_250)]"
+              style={composerBg ? { backgroundColor: composerBg } : undefined}
+              className={`border-0 resize-none focus-visible:ring-0 min-h-[60px] sm:min-h-[80px] p-2 rounded-lg text-sm placeholder:text-[oklch(0.35_0.03_250)] ${composerBg ? "" : "bg-transparent"}`}
             />
             <div className="flex justify-between items-center mt-3 pt-3 border-t border-[oklch(1_0_0/0.04)]">
               <div className="flex items-center gap-2">
