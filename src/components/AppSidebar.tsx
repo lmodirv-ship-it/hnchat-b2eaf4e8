@@ -137,7 +137,9 @@ function SidebarLink({
   const themeBtnStyle: Record<string, string> | undefined =
     active
       ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
-      : undefined;
+      : (typeof document !== "undefined" && document.documentElement.style.getPropertyValue("--theme-btn"))
+        ? { backgroundColor: "color-mix(in oklch, var(--theme-btn) 18%, transparent)" }
+        : undefined;
 
   return (
     <Link
