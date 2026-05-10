@@ -139,7 +139,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-C06R5JEZ3G" />
         <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C06R5JEZ3G');` }} />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3443455318197857" crossOrigin="anonymous" />
+        {/* AdSense deferred to after first paint to reduce TBT */}
+        <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('load',function(){setTimeout(function(){var s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3443455318197857';document.head.appendChild(s);},2500);});` }} />
       </head>
       <body className="dark">
         {children}
