@@ -278,7 +278,7 @@ function AddChannelPage() {
           ? `تم حفظ ونشر ${Math.max(videosNeedingTracking.length, videosNeedingPosts.length)} فيديو في الخلاصة و Reels`
           : "كل الفيديوهات منشورة مسبقاً",
       );
-      await Promise.all([refetchChannels(), refetchPosts()]);
+      await Promise.all([refetchChannels(), refetchPosts(), refetchTrackedVideos()]);
       setPreview(null);
       setUrl("");
       setSelected(new Set());
@@ -392,7 +392,7 @@ function AddChannelPage() {
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-4">
               {preview.videos.map((v) => {
-                const isExisting = existingVideoIds.has(v.videoId);
+                const isExisting = existingTrackedVideoIds.has(v.videoId);
                 const isSelected = selected.has(v.videoId);
                 return (
                   <button
@@ -447,7 +447,7 @@ function AddChannelPage() {
                 className="text-primary hover:underline"
                 onClick={() => {
                   const all = new Set<string>();
-                  for (const v of preview.videos) if (!existingVideoIds.has(v.videoId)) all.add(v.videoId);
+                  for (const v of preview.videos) if (!existingTrackedVideoIds.has(v.videoId)) all.add(v.videoId);
                   setSelected(all);
                 }}
               >
