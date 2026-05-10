@@ -203,11 +203,11 @@ function AddChannelPage() {
       }
 
       // 5. Track each video in channel_videos
-      if (fresh.length > 0 && channelRowId) {
-        await supabase.from("channel_videos").insert(
+      if (fresh.length > 0) {
+        const { error: videosErr } = await supabase.from("channel_videos").insert(
           fresh.map((v, i) => ({
             user_id: user.id,
-            channel_id: channelRowId!,
+            channel_id: channelRowId,
             platform: "youtube",
             video_id: v.videoId,
             video_url: `https://www.youtube.com/watch?v=${v.videoId}`,
@@ -223,6 +223,7 @@ function AddChannelPage() {
             published_at_app: new Date().toISOString(),
           })),
         );
+        if (videosErr) throw videosErr;
       }
 
       // 6. Mark session complete
