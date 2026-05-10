@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Newspaper, MessageSquare, Radio, Play, Activity, RefreshCw, Eye, Heart, MessageCircle, Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { optimizedImage } from "@/lib/image";
 
 type FeedItem = {
   id: string;
@@ -258,7 +259,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
                 >
                   {it.image && (
                     <div className="relative aspect-video bg-black overflow-hidden">
-                      <img src={it.image} alt={it.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={optimizedImage(it.image, { width: 600, format: "webp" })} alt={it.title} loading="lazy" decoding="async" width={600} height={338} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       {it.kind === "video" && (
                         <div className="absolute inset-0 flex items-center justify-center">
