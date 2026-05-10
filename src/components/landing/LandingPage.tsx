@@ -936,6 +936,9 @@ export function LandingPage() {
         </motion.div>
       </section>
 
+      {/* ═══ UNIFIED ACTIVITY FEED (everything by publish time) ═══ */}
+      <UnifiedActivityFeed lang={lang} />
+
       {/* ═══ CHANNEL VIDEOS (imported) ═══ */}
       <ChannelVideosSection lang={lang} />
 
