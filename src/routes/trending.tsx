@@ -85,7 +85,7 @@ function TrendingPage() {
                 <Link
                   key={article.id}
                   to="/blog/$articleId"
-                  params={{ articleId: article.id }}
+                  params={{ articleId: article.short_id ?? article.id }}
                   className="group rounded-2xl border border-border/20 bg-card/40 p-5 hover:border-primary/30 transition-all"
                 >
                   <div className="flex items-center gap-3 mb-3">
@@ -126,7 +126,7 @@ function TrendingPage() {
                 <Link
                   key={article.id}
                   to="/blog/$articleId"
-                  params={{ articleId: article.id }}
+                  params={{ articleId: article.short_id ?? article.id }}
                   className="flex items-center gap-4 rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   <div className="flex items-center gap-1 text-red-400">

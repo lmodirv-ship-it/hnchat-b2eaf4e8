@@ -151,7 +151,7 @@ function CategoryPage() {
                 <Link
                   key={article.id}
                   to="/blog/$articleId"
-                  params={{ articleId: article.id }}
+                  params={{ articleId: article.short_id ?? article.id }}
                   className="group flex gap-4 rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   {article.featured_image && (
