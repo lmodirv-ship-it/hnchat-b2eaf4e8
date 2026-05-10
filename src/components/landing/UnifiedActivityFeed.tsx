@@ -301,6 +301,6 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
           </div>
         )}
       </div>
-    </section>
+    </Wrapper>
   );
 }
