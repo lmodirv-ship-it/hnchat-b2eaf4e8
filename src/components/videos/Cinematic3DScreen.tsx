@@ -53,7 +53,7 @@ export function Cinematic3DScreen({
   return (
     <div
       ref={stageRef}
-      className="cinematic-stage relative w-full mb-6 select-none"
+      className="cinematic-stage relative w-full mb-2 select-none"
       style={{ perspective: "1600px", perspectiveOrigin: "50% 30%" }}
     >
       {/* Ambient room glow */}
