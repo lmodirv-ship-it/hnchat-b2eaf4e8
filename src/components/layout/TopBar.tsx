@@ -21,6 +21,7 @@ export function TopBar() {
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const { bgColor, textColor, btnColor, setBg, setText, setBtn } = useThemeColors();
+  const { color: composerBg, setColor: setComposerBg } = useComposerColor();
   const bgRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLInputElement>(null);
   const btnRef = useRef<HTMLInputElement>(null);
