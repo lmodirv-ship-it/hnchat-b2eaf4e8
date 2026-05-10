@@ -46,7 +46,14 @@ export const Route = createFileRoute("/post/$id")({
     const title = rawContent
       ? `${rawContent.slice(0, 60)}${rawContent.length > 60 ? "…" : ""} — ${authorName}`
       : `منشور ${authorName} — HN Chat`;
-    const image = loaderData.media_urls?.[0];
+    // Only accept real image URLs for og:image (skip youtube/video/non-image links)
+    const isImageUrl = (u?: string) =>
+      !!u &&
+      /^https?:\/\//i.test(u) &&
+      /\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(u) &&
+      !/youtube\.com|youtu\.be|vimeo\.com/i.test(u);
+    const firstImage = (loaderData.media_urls || []).find(isImageUrl);
+    const image = firstImage || loaderData.author?.avatar_url || undefined;
     const url = `${SITE_URL}/post/${loaderData.id}`;
 
     const meta = [
