@@ -89,15 +89,30 @@ export function UnifiedActivityFeed({ lang = "ar" }: { lang?: string }) {
     });
     (postsRes.data ?? []).forEach((p: any) => {
       const text = (p.content ?? "").toString().slice(0, 180);
-      merged.push({
-        id: `p-${p.id}`,
-        kind: "post",
-        title: text || (isAr ? "منشور جديد" : "New post"),
-        author: p.profiles?.full_name || p.profiles?.username,
-        image: Array.isArray(p.media_urls) && p.media_urls[0] ? p.media_urls[0] : null,
-        url: `/post/${p.id}`,
-        publishedAt: p.created_at,
-      });
+      const firstMedia = Array.isArray(p.media_urls) && p.media_urls[0] ? p.media_urls[0] : null;
+      const ytMatch = firstMedia?.match(/[?&]v=([\w-]{11})|youtu\.be\/([\w-]{11})/);
+      const ytId = ytMatch?.[1] || ytMatch?.[2];
+      if (ytId) {
+        merged.push({
+          id: `p-${p.id}`,
+          kind: "video",
+          title: text || (isAr ? "فيديو" : "Video"),
+          author: p.profiles?.full_name || p.profiles?.username,
+          image: `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg`,
+          url: `/watch-yt/${ytId}`,
+          publishedAt: p.created_at,
+        });
+      } else {
+        merged.push({
+          id: `p-${p.id}`,
+          kind: "post",
+          title: text || (isAr ? "منشور جديد" : "New post"),
+          author: p.profiles?.full_name || p.profiles?.username,
+          image: firstMedia,
+          url: `/post/${p.id}`,
+          publishedAt: p.created_at,
+        });
+      }
     });
     (livesRes.data ?? []).forEach((l: any) => {
       merged.push({
