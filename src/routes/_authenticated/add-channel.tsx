@@ -253,7 +253,7 @@ function AddChannelPage() {
           .update({
             status: "completed",
             channel_id: channelRowId,
-            videos_imported: fresh.length,
+            videos_imported: videosNeedingTracking.length,
             videos_skipped: skipped,
             completed_at: new Date().toISOString(),
           })
@@ -261,8 +261,8 @@ function AddChannelPage() {
       }
 
       toast.success(
-        fresh.length > 0
-          ? `تم نشر ${fresh.length} فيديو في الخلاصة و Reels`
+        videosNeedingTracking.length > 0 || videosNeedingPosts.length > 0
+          ? `تم حفظ ونشر ${Math.max(videosNeedingTracking.length, videosNeedingPosts.length)} فيديو في الخلاصة و Reels`
           : "كل الفيديوهات منشورة مسبقاً",
       );
       await Promise.all([refetchChannels(), refetchPosts()]);
