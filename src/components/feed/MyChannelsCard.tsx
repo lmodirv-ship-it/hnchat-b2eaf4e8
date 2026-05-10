@@ -203,9 +203,7 @@ export function MyChannelsCard({ onSynced }: { onSynced?: () => void }) {
         </Dialog>
       </div>
 
-      {channels.length === 0 ? (
-        <p className="text-xs text-muted-foreground py-2">لا توجد قنوات بعد. أضف قناة YouTube لتظهر فيديوهاتها هنا.</p>
-      ) : (
+      {channels.length === 0 ? null : (
         <div className="space-y-2">
           {channels.map((c) => (
             <div key={c.id} className="flex items-center gap-2 p-2 rounded-lg bg-[oklch(0.08_0.015_260/0.6)]">
