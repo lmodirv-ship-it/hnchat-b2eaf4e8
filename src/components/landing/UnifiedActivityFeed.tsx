@@ -207,31 +207,34 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
     }
   };
 
+  const Wrapper: any = embedded ? "div" : "section";
   return (
-    <section className="relative py-16 px-4 overflow-hidden" dir={isAr ? "rtl" : "ltr"}>
-      <div className="container mx-auto max-w-7xl relative">
-        <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border border-violet-500/30 text-violet-300 text-xs font-semibold mb-3">
-              <Activity className="h-3.5 w-3.5" />
-              {isAr ? "كل النشاط" : "All Activity"}
+    <Wrapper className={embedded ? "relative" : "relative py-16 px-4 overflow-hidden"} dir={isAr ? "rtl" : "ltr"}>
+      <div className={embedded ? "relative" : "container mx-auto max-w-7xl relative"}>
+        {!embedded && (
+          <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-violet-500/15 to-fuchsia-500/15 border border-violet-500/30 text-violet-300 text-xs font-semibold mb-3">
+                <Activity className="h-3.5 w-3.5" />
+                {isAr ? "كل النشاط" : "All Activity"}
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
+                {isAr ? "آخر ما يحدث في الموقع" : "Latest across the platform"}
+              </h2>
+              <p className="text-sm text-white/60 mt-1">
+                {isAr ? "مقالات، فيديوهات، منشورات وبث مباشر — مرتبة حسب وقت النشر" : "Articles, videos, posts and live streams — sorted by publish time"}
+              </p>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              {isAr ? "آخر ما يحدث في الموقع" : "Latest across the platform"}
-            </h2>
-            <p className="text-sm text-white/60 mt-1">
-              {isAr ? "مقالات، فيديوهات، منشورات وبث مباشر — مرتبة حسب وقت النشر" : "Articles, videos, posts and live streams — sorted by publish time"}
-            </p>
+            <button
+              onClick={load}
+              disabled={loading}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/80 hover:bg-white/10 transition disabled:opacity-50"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+              {isAr ? "تحديث" : "Refresh"}
+            </button>
           </div>
-          <button
-            onClick={load}
-            disabled={loading}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/80 hover:bg-white/10 transition disabled:opacity-50"
-          >
-            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-            {isAr ? "تحديث" : "Refresh"}
-          </button>
-        </div>
+        )}
 
         {loading && items.length === 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
