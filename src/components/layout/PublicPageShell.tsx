@@ -20,6 +20,25 @@ export function PublicPageShell({
   const bgRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLInputElement>(null);
   const btnRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const [guestBusy, setGuestBusy] = useState(false);
+
+  async function handleGuestEntry() {
+    if (guestBusy) return;
+    setGuestBusy(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) { navigate({ to: "/feed" }); return; }
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      toast.success("مرحباً بك! تم منحك معرفاً مؤقتاً");
+      navigate({ to: "/feed" });
+    } catch (e: any) {
+      toast.error(e?.message || "تعذر الدخول كزائر");
+    } finally {
+      setGuestBusy(false);
+    }
+  }
 
   return (
     <div
