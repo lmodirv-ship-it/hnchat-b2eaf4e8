@@ -73,7 +73,7 @@ export function ChannelVideosSection({ lang = "ar" }: { lang?: string }) {
   const handleShare = async (e: React.MouseEvent, v: ChannelVideo) => {
     e.preventDefault();
     e.stopPropagation();
-    const shareUrl = `${window.location.origin}/watch-yt/${v.video_id}`;
+    const shareUrl = `${window.location.origin}/watch-yt/${v.short_id ?? v.video_id}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: v.title || "Video", url: shareUrl });
