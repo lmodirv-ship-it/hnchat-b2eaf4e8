@@ -13,6 +13,7 @@ import { useEnergy } from "@/hooks/useEnergySystem";
 import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
 import { usePublishedArticles } from "@/hooks/useBlog";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
+import { MyChannelsCard } from "@/components/feed/MyChannelsCard";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
@@ -295,6 +296,9 @@ function FeedPage() {
       <div className="mb-5">
         <AdSenseUnit className="rounded-xl overflow-hidden" />
       </div>
+
+      {/* My Channels */}
+      <MyChannelsCard onSynced={refetch} />
 
       {/* AI Composer */}
       <div className="mb-6">
