@@ -496,7 +496,7 @@ function AddChannelPage() {
       </div>
 
       {/* Existing channels */}
-      <MyChannelsCard onSynced={() => { refetchChannels(); refetchPosts(); }} />
+      <MyChannelsCard onSynced={() => { refetchChannels(); refetchPosts(); refetchTrackedVideos(); }} />
     </div>
   );
 }
