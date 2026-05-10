@@ -135,7 +135,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
           kind: "video",
           title: text || (isAr ? "فيديو" : "Video"),
           image: `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg`,
-          url: `/watch-yt/${ytId}`,
+          url: `/watch-yt/${p.short_id ?? ytId}`,
           publishedAt: p.created_at,
           postId: p.id,
           videoId: ytId,
