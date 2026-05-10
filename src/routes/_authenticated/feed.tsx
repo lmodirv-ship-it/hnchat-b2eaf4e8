@@ -11,9 +11,9 @@ import { PostCard, type FeedPost } from "@/components/feed/PostCard";
 import { StoriesRail } from "@/components/stories/StoriesRail";
 import { useEnergy } from "@/hooks/useEnergySystem";
 import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
-import { usePublishedArticles } from "@/hooks/useBlog";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { MyChannelsCard } from "@/components/feed/MyChannelsCard";
+import { UnifiedActivityFeed } from "@/components/landing/UnifiedActivityFeed";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
@@ -206,7 +206,6 @@ function FeedPage() {
   const { user } = useAuth();
   const { activityPulse } = useEnergy();
   const { newPostsCount, clearNewPosts } = useRealtimeFeed();
-  const { data: articles = [] } = usePublishedArticles({ limit: 6 });
 
   const { data: posts, refetch, isLoading } = useQuery({
     queryKey: ["feed-posts", user?.id],
@@ -275,25 +274,7 @@ function FeedPage() {
       {/* Feed Insights */}
       <FeedInsights postsCount={posts?.length ?? 0} />
 
-      {/* Articles Section */}
-      {articles.length > 0 && (
-        <div id="articles-section" className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-[oklch(0.78_0.18_220)]" />
-              <h2 className="text-sm font-bold text-[oklch(0.88_0.03_250)]">أحدث المقالات</h2>
-            </div>
-            <Link to="/blog" className="flex items-center gap-1 text-[10px] text-[oklch(0.78_0.18_220)] hover:underline">
-              عرض الكل <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-3">
-            {articles.map((article: any) => (
-              <FeedArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Articles section removed — now merged into UnifiedActivityFeed below */}
 
       {/* Ad Unit */}
       <div className="mb-5">
@@ -317,27 +298,8 @@ function FeedPage() {
         </button>
       )}
 
-      {/* Posts */}
-      <div className="space-y-4 sm:space-y-5">
-        {isLoading && (
-          <div className="text-center py-16">
-            <div className="relative inline-block">
-              <Loader2 className="h-10 w-10 animate-spin text-[oklch(0.78_0.18_220)]" />
-              <div className="absolute inset-0 h-10 w-10 rounded-full bg-[oklch(0.78_0.18_220/0.15)] blur-xl animate-breathe" />
-            </div>
-            <p className="text-xs text-[oklch(0.45_0.03_250)] mt-4">جاري تحميل التغذية...</p>
-          </div>
-        )}
-        {!isLoading && posts?.length === 0 && (
-          <div className="p-16 text-center rounded-2xl bg-[oklch(0.06_0.015_260/0.5)] border border-[oklch(1_0_0/0.05)]">
-            <Sparkles className="h-12 w-12 mx-auto text-[oklch(0.78_0.18_220)] mb-4 opacity-40" />
-            <p className="text-[oklch(0.5_0.03_250)] text-sm">لا توجد منشورات بعد. كن أول من ينشر!</p>
-          </div>
-        )}
-        {posts?.map((p) => (
-          <PostCard key={p.id} post={p} onChange={refetch} />
-        ))}
-      </div>
+      {/* Unified feed: articles + channel videos + posts + live, sorted by date */}
+      <UnifiedActivityFeed lang="ar" variant="embedded" />
 
       {/* Bottom spacer for mobile nav */}
       <div className="h-8" />
