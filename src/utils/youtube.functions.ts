@@ -78,9 +78,11 @@ async function resolveChannelIdFromUrl(input: string): Promise<{ channelId: stri
     if (!res.ok) return null;
     const html = await res.text();
     const idMatch =
-      html.match(/"channelId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+      html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})"/) ||
       html.match(/<meta itemprop="identifier" content="(UC[A-Za-z0-9_-]{20,})"/) ||
-      html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})"/);
+      html.match(/"externalId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+      html.match(/"browseId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+      html.match(/"channelId":"(UC[A-Za-z0-9_-]{20,})"/);
     if (!idMatch) return null;
     return { channelId: idMatch[1], html };
   } catch {

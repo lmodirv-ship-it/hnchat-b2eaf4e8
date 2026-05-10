@@ -44,17 +44,18 @@ export function MyChannelsCard({ onSynced }: { onSynced?: () => void }) {
       if (!user) throw new Error("يجب تسجيل الدخول");
       const res = await importYoutubeChannel({ data: { url: u } });
       if ("error" in res) throw new Error(res.error);
-      const { error } = await supabase.from("user_channels").insert({
+      const { data: channelRow, error } = await supabase.from("user_channels").insert({
         user_id: user.id,
         platform: "youtube",
         channel_url: u,
         channel_id: res.channel.channelId,
         channel_name: res.channel.title,
         channel_avatar: res.channel.avatar,
-      });
+      }).select("id").single();
       if (error) throw error;
+      if (!channelRow?.id) throw new Error("تعذّر حفظ القناة");
       // Auto-sync videos to feed
-      await syncChannelVideos(res.channel.channelId, res.videos);
+      await syncChannelVideos(channelRow.id, res.videos);
       return res;
     },
     onSuccess: () => {
@@ -67,32 +68,73 @@ export function MyChannelsCard({ onSynced }: { onSynced?: () => void }) {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  async function syncChannelVideos(_channelId: string | null, videos: { videoId: string; title: string }[]) {
+  async function syncChannelVideos(channelRowId: string, videos: { videoId: string; title: string; description?: string; thumbnail?: string; author?: string; publishedAt?: string }[]) {
     if (!user || videos.length === 0) return 0;
     const urls = videos.map((v) => `https://www.youtube.com/watch?v=${v.videoId}`);
     const { data: existing } = await supabase
       .from("posts")
-      .select("media_urls")
+      .select("id, media_urls")
+      .eq("user_id", user.id)
       .overlaps("media_urls", urls);
     const already = new Set<string>();
+    const postByVideoId = new Map<string, string>();
     for (const row of existing ?? []) {
       for (const x of row.media_urls ?? []) {
         const m = x.match(/[?&]v=([\w-]{11})|youtu\.be\/([\w-]{11})/);
         const id = m?.[1] || m?.[2];
-        if (id) already.add(id);
+        if (id) {
+          already.add(id);
+          postByVideoId.set(id, row.id);
+        }
       }
     }
     const toAdd = videos.filter((v) => !already.has(v.videoId));
-    if (toAdd.length === 0) return 0;
-    const rows = toAdd.map((v) => ({
-      user_id: user.id,
-      type: "video" as any,
-      content: v.title,
-      media_urls: [`https://www.youtube.com/watch?v=${v.videoId}`],
-    }));
-    const { error } = await supabase.from("posts").insert(rows);
-    if (error) throw error;
-    return toAdd.length;
+    if (toAdd.length > 0) {
+      const rows = toAdd.map((v) => ({
+        user_id: user.id,
+        type: "video" as any,
+        content: v.title,
+        media_urls: [`https://www.youtube.com/watch?v=${v.videoId}`],
+      }));
+      const { data: postsData, error } = await supabase.from("posts").insert(rows).select("id");
+      if (error) throw error;
+      toAdd.forEach((v, i) => {
+        if (postsData?.[i]?.id) postByVideoId.set(v.videoId, postsData[i].id);
+      });
+    }
+
+    const { data: tracked, error: trackedErr } = await supabase
+      .from("channel_videos")
+      .select("video_id")
+      .eq("user_id", user.id)
+      .eq("platform", "youtube")
+      .in("video_id", videos.map((v) => v.videoId));
+    if (trackedErr) throw trackedErr;
+    const trackedIds = new Set((tracked ?? []).map((v) => v.video_id));
+    const toTrack = videos.filter((v) => !trackedIds.has(v.videoId));
+    if (toTrack.length > 0) {
+      const { error: trackErr } = await supabase.from("channel_videos").insert(
+        toTrack.map((v) => ({
+          user_id: user.id,
+          channel_id: channelRowId,
+          platform: "youtube",
+          video_id: v.videoId,
+          video_url: `https://www.youtube.com/watch?v=${v.videoId}`,
+          title: v.title,
+          description: v.description ?? null,
+          thumbnail: v.thumbnail ?? `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`,
+          author: v.author ?? null,
+          published_at: v.publishedAt ?? null,
+          show_in_feed: true,
+          show_in_reels: true,
+          is_published: true,
+          post_id: postByVideoId.get(v.videoId) ?? null,
+          published_at_app: new Date().toISOString(),
+        })),
+      );
+      if (trackErr) throw trackErr;
+    }
+    return Math.max(toAdd.length, toTrack.length);
   }
 
   async function syncOne(c: UserChannel) {
@@ -100,7 +142,7 @@ export function MyChannelsCard({ onSynced }: { onSynced?: () => void }) {
     try {
       const res = await importYoutubeChannel({ data: { url: c.channel_url } });
       if ("error" in res) throw new Error(res.error);
-      const added = await syncChannelVideos(c.channel_id, res.videos);
+      const added = await syncChannelVideos(c.id, res.videos);
       await supabase.from("user_channels").update({ last_synced_at: new Date().toISOString() }).eq("id", c.id);
       toast.success(added > 0 ? `تمت إضافة ${added} فيديو جديد` : "لا فيديوهات جديدة");
       onSynced?.();

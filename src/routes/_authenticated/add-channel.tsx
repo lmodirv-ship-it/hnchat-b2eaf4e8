@@ -52,7 +52,7 @@ function AddChannelPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("user_channels")
-        .select("channel_id, channel_url")
+        .select("id, channel_id, channel_url")
         .eq("user_id", user!.id);
       return data ?? [];
     },
@@ -79,6 +79,19 @@ function AddChannelPage() {
     },
   });
 
+  const { data: existingTrackedVideoIds = new Set<string>(), refetch: refetchTrackedVideos } = useQuery({
+    queryKey: ["my-channel-videos", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("channel_videos")
+        .select("video_id")
+        .eq("user_id", user!.id)
+        .eq("platform", "youtube");
+      return new Set((data ?? []).map((row) => row.video_id));
+    },
+  });
+
   const channelAlreadyAdded = preview
     ? myChannels.some(
         (c) =>
@@ -100,7 +113,7 @@ function AddChannelPage() {
         setPreview(res);
         // Pre-select only new videos
         const fresh = new Set<string>();
-        for (const v of res.videos) if (!existingVideoIds.has(v.videoId)) fresh.add(v.videoId);
+        for (const v of res.videos) if (!existingTrackedVideoIds.has(v.videoId)) fresh.add(v.videoId);
         setSelected(fresh);
       }
     } catch (e: any) {
@@ -164,19 +177,50 @@ function AddChannelPage() {
         channelRowId = chRow!.id;
       }
 
+      if (!channelRowId) {
+        throw new Error("تعذّر تحديد القناة لحفظ الفيديوهات");
+      }
+      const confirmedChannelRowId = channelRowId;
+
       // 3. Filter new videos
-      const fresh = preview.videos.filter(
-        (v) => selected.has(v.videoId) && !existingVideoIds.has(v.videoId),
-      );
-      const skipped = selected.size - fresh.length;
+      const selectedVideos = preview.videos.filter((v) => selected.has(v.videoId));
+      const selectedUrls = selectedVideos.map((v) => `https://www.youtube.com/watch?v=${v.videoId}`);
+      const { data: existingPosts, error: existingPostsErr } = await supabase
+        .from("posts")
+        .select("id, media_urls")
+        .eq("user_id", user.id)
+        .overlaps("media_urls", selectedUrls);
+      if (existingPostsErr) throw existingPostsErr;
+
+      const existingPostByVideoId = new Map<string, string>();
+      for (const row of existingPosts ?? []) {
+        for (const mediaUrl of row.media_urls ?? []) {
+          const m = mediaUrl.match(/[?&]v=([\w-]{11})|youtu\.be\/([\w-]{11})/);
+          const id = m?.[1] || m?.[2];
+          if (id) existingPostByVideoId.set(id, row.id);
+        }
+      }
+
+      const { data: existingChannelVideos, error: existingVideosErr } = await supabase
+        .from("channel_videos")
+        .select("video_id")
+        .eq("user_id", user.id)
+        .eq("platform", "youtube")
+        .in("video_id", selectedVideos.map((v) => v.videoId));
+      if (existingVideosErr) throw existingVideosErr;
+
+      const savedVideoIds = new Set((existingChannelVideos ?? []).map((v) => v.video_id));
+      const videosNeedingPosts = selectedVideos.filter((v) => !existingPostByVideoId.has(v.videoId));
+      const videosNeedingTracking = selectedVideos.filter((v) => !savedVideoIds.has(v.videoId));
+      const skipped = selected.size - videosNeedingTracking.length;
 
       // 4. Create posts (feed + reels source)
       let postIds: string[] = [];
-      if (fresh.length > 0) {
+      if (videosNeedingPosts.length > 0) {
         const { data: postsData, error: pErr } = await supabase
           .from("posts")
           .insert(
-            fresh.map((v) => ({
+            videosNeedingPosts.map((v) => ({
               user_id: user.id,
               type: "video" as any,
               content: v.title,
@@ -186,14 +230,17 @@ function AddChannelPage() {
           .select("id");
         if (pErr) throw pErr;
         postIds = (postsData ?? []).map((p) => p.id);
+        videosNeedingPosts.forEach((v, i) => {
+          if (postIds[i]) existingPostByVideoId.set(v.videoId, postIds[i]);
+        });
       }
 
       // 5. Track each video in channel_videos
-      if (fresh.length > 0 && channelRowId) {
-        await supabase.from("channel_videos").insert(
-          fresh.map((v, i) => ({
+      if (videosNeedingTracking.length > 0) {
+        const { error: videosErr } = await supabase.from("channel_videos").insert(
+          videosNeedingTracking.map((v) => ({
             user_id: user.id,
-            channel_id: channelRowId!,
+            channel_id: confirmedChannelRowId,
             platform: "youtube",
             video_id: v.videoId,
             video_url: `https://www.youtube.com/watch?v=${v.videoId}`,
@@ -205,10 +252,11 @@ function AddChannelPage() {
             show_in_feed: true,
             show_in_reels: true,
             is_published: true,
-            post_id: postIds[i] ?? null,
+            post_id: existingPostByVideoId.get(v.videoId) ?? null,
             published_at_app: new Date().toISOString(),
           })),
         );
+        if (videosErr) throw videosErr;
       }
 
       // 6. Mark session complete
@@ -218,7 +266,7 @@ function AddChannelPage() {
           .update({
             status: "completed",
             channel_id: channelRowId,
-            videos_imported: fresh.length,
+            videos_imported: videosNeedingTracking.length,
             videos_skipped: skipped,
             completed_at: new Date().toISOString(),
           })
@@ -226,11 +274,11 @@ function AddChannelPage() {
       }
 
       toast.success(
-        fresh.length > 0
-          ? `تم نشر ${fresh.length} فيديو في الخلاصة و Reels`
+        videosNeedingTracking.length > 0 || videosNeedingPosts.length > 0
+          ? `تم حفظ ونشر ${Math.max(videosNeedingTracking.length, videosNeedingPosts.length)} فيديو في الخلاصة و Reels`
           : "كل الفيديوهات منشورة مسبقاً",
       );
-      await Promise.all([refetchChannels(), refetchPosts()]);
+      await Promise.all([refetchChannels(), refetchPosts(), refetchTrackedVideos()]);
       setPreview(null);
       setUrl("");
       setSelected(new Set());
@@ -344,7 +392,7 @@ function AddChannelPage() {
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-4">
               {preview.videos.map((v) => {
-                const isExisting = existingVideoIds.has(v.videoId);
+                const isExisting = existingTrackedVideoIds.has(v.videoId);
                 const isSelected = selected.has(v.videoId);
                 return (
                   <button
@@ -399,7 +447,7 @@ function AddChannelPage() {
                 className="text-primary hover:underline"
                 onClick={() => {
                   const all = new Set<string>();
-                  for (const v of preview.videos) if (!existingVideoIds.has(v.videoId)) all.add(v.videoId);
+                  for (const v of preview.videos) if (!existingTrackedVideoIds.has(v.videoId)) all.add(v.videoId);
                   setSelected(all);
                 }}
               >
@@ -448,7 +496,7 @@ function AddChannelPage() {
       </div>
 
       {/* Existing channels */}
-      <MyChannelsCard onSynced={() => { refetchChannels(); refetchPosts(); }} />
+      <MyChannelsCard onSynced={() => { refetchChannels(); refetchPosts(); refetchTrackedVideos(); }} />
     </div>
   );
 }
