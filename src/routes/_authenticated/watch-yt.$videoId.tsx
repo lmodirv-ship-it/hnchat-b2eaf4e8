@@ -315,7 +315,17 @@ function WatchYtPage() {
     }
   };
 
-  if (isLoading) {
+  if (resolveError) {
+    return (
+      <div className="container mx-auto p-8 max-w-5xl text-center">
+        <p className="text-destructive mb-4">{resolveError}</p>
+        <Button variant="outline" onClick={() => router.history.back()}>
+          <ArrowLeft className="h-4 w-4 ml-1" /> رجوع
+        </Button>
+      </div>
+    );
+  }
+  if (isLoading || metaLoading || !resolvedYtId) {
     return (
       <div className="container mx-auto p-4 max-w-5xl space-y-4">
         <Skeleton className="aspect-video w-full" />
