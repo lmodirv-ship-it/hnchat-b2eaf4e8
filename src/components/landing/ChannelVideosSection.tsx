@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 type ChannelVideo = {
   id: string;
+  short_id: string | null;
   video_id: string;
   video_url: string;
   title: string | null;
