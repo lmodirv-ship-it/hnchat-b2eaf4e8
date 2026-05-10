@@ -36,6 +36,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { to: "/owner/users", label: "User Operations", icon: Users },
       { to: "/owner/content", label: "Content & Moderation", icon: FileText },
+      { to: "/owner/registry", label: "Content Registry", icon: Database },
       { to: "/owner/groups", label: "Groups Network", icon: Flag },
     ],
   },
