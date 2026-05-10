@@ -52,7 +52,7 @@ function AddChannelPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("user_channels")
-        .select("channel_id, channel_url")
+        .select("id, channel_id, channel_url")
         .eq("user_id", user!.id);
       return data ?? [];
     },
@@ -164,9 +164,23 @@ function AddChannelPage() {
         channelRowId = chRow!.id;
       }
 
+      if (!channelRowId) {
+        throw new Error("تعذّر تحديد القناة لحفظ الفيديوهات");
+      }
+
       // 3. Filter new videos
-      const fresh = preview.videos.filter(
-        (v) => selected.has(v.videoId) && !existingVideoIds.has(v.videoId),
+      const selectedVideos = preview.videos.filter((v) => selected.has(v.videoId));
+      const { data: existingChannelVideos, error: existingVideosErr } = await supabase
+        .from("channel_videos")
+        .select("video_id")
+        .eq("user_id", user.id)
+        .eq("platform", "youtube")
+        .in("video_id", selectedVideos.map((v) => v.videoId));
+      if (existingVideosErr) throw existingVideosErr;
+
+      const savedVideoIds = new Set((existingChannelVideos ?? []).map((v) => v.video_id));
+      const fresh = selectedVideos.filter(
+        (v) => !existingVideoIds.has(v.videoId) && !savedVideoIds.has(v.videoId),
       );
       const skipped = selected.size - fresh.length;
 
