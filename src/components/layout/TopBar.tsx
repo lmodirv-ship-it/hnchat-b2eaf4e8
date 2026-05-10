@@ -100,6 +100,16 @@ export function TopBar() {
         )}
 
         <div className={`flex items-center gap-0.5 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+          {/* Refresh */}
+          <button
+            onClick={() => queryClient.invalidateQueries()}
+            className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition"
+            aria-label="تحديث"
+            title="تحديث"
+          >
+            <RefreshCw className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
+          </button>
+
           {/* Composer background color picker */}
           <Popover>
             <PopoverTrigger asChild>
