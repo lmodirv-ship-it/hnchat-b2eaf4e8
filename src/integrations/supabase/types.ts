@@ -522,6 +522,7 @@ export type Database = {
           category_slug: string | null
           content: string | null
           created_at: string
+          external_id: string | null
           featured_image: string | null
           id: string
           language: string
@@ -532,6 +533,8 @@ export type Database = {
           seo_title: string | null
           short_description: string | null
           slug: string
+          source_project: string | null
+          source_url: string | null
           status: string
           tags: string[] | null
           title: string
@@ -545,6 +548,7 @@ export type Database = {
           category_slug?: string | null
           content?: string | null
           created_at?: string
+          external_id?: string | null
           featured_image?: string | null
           id?: string
           language?: string
@@ -555,6 +559,8 @@ export type Database = {
           seo_title?: string | null
           short_description?: string | null
           slug: string
+          source_project?: string | null
+          source_url?: string | null
           status?: string
           tags?: string[] | null
           title: string
@@ -568,6 +574,7 @@ export type Database = {
           category_slug?: string | null
           content?: string | null
           created_at?: string
+          external_id?: string | null
           featured_image?: string | null
           id?: string
           language?: string
@@ -578,6 +585,8 @@ export type Database = {
           seo_title?: string | null
           short_description?: string | null
           slug?: string
+          source_project?: string | null
+          source_url?: string | null
           status?: string
           tags?: string[] | null
           title?: string

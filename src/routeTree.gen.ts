@@ -75,6 +75,7 @@ import { Route as AuthenticatedAdsManagerRouteImport } from './routes/_authentic
 import { Route as OwnerOwnerIndexRouteImport } from './routes/_owner/owner.index'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as BlogAuthorUsernameRouteImport } from './routes/blog.author.$username'
+import { Route as ApiPublicArticlesRouteImport } from './routes/api/public/articles'
 import { Route as OwnerOwnerUsersRouteImport } from './routes/_owner/owner.users'
 import { Route as OwnerOwnerTicketsRouteImport } from './routes/_owner/owner.tickets'
 import { Route as OwnerOwnerSettingsRouteImport } from './routes/_owner/owner.settings'
@@ -98,6 +99,7 @@ import { Route as AdminAdminMarketplaceRouteImport } from './routes/_admin/admin
 import { Route as AdminAdminContentRouteImport } from './routes/_admin/admin.content'
 import { Route as AdminAdminAnalyticsRouteImport } from './routes/_admin/admin.analytics'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as ApiPublicArticlesIdRouteImport } from './routes/api/public/articles.$id'
 import { Route as AuthenticatedGroupsGroupIdManageRouteImport } from './routes/_authenticated/groups.$groupId.manage'
 
 const TrendingRoute = TrendingRouteImport.update({
@@ -437,6 +439,11 @@ const BlogAuthorUsernameRoute = BlogAuthorUsernameRouteImport.update({
   path: '/author/$username',
   getParentRoute: () => BlogRoute,
 } as any)
+const ApiPublicArticlesRoute = ApiPublicArticlesRouteImport.update({
+  id: '/api/public/articles',
+  path: '/api/public/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerOwnerUsersRoute = OwnerOwnerUsersRouteImport.update({
   id: '/owner/users',
   path: '/owner/users',
@@ -557,6 +564,11 @@ const LovableEmailQueueProcessRoute =
     path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicArticlesIdRoute = ApiPublicArticlesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiPublicArticlesRoute,
+} as any)
 const AuthenticatedGroupsGroupIdManageRoute =
   AuthenticatedGroupsGroupIdManageRouteImport.update({
     id: '/manage',
@@ -647,10 +659,12 @@ export interface FileRoutesByFullPath {
   '/owner/settings': typeof OwnerOwnerSettingsRoute
   '/owner/tickets': typeof OwnerOwnerTicketsRoute
   '/owner/users': typeof OwnerOwnerUsersRoute
+  '/api/public/articles': typeof ApiPublicArticlesRouteWithChildren
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin/': typeof AdminAdminIndexRoute
   '/owner/': typeof OwnerOwnerIndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
+  '/api/public/articles/$id': typeof ApiPublicArticlesIdRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
@@ -734,10 +748,12 @@ export interface FileRoutesByTo {
   '/owner/settings': typeof OwnerOwnerSettingsRoute
   '/owner/tickets': typeof OwnerOwnerTicketsRoute
   '/owner/users': typeof OwnerOwnerUsersRoute
+  '/api/public/articles': typeof ApiPublicArticlesRouteWithChildren
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin': typeof AdminAdminIndexRoute
   '/owner': typeof OwnerOwnerIndexRoute
   '/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
+  '/api/public/articles/$id': typeof ApiPublicArticlesIdRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
@@ -827,10 +843,12 @@ export interface FileRoutesById {
   '/_owner/owner/settings': typeof OwnerOwnerSettingsRoute
   '/_owner/owner/tickets': typeof OwnerOwnerTicketsRoute
   '/_owner/owner/users': typeof OwnerOwnerUsersRoute
+  '/api/public/articles': typeof ApiPublicArticlesRouteWithChildren
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_owner/owner/': typeof OwnerOwnerIndexRoute
   '/_authenticated/groups/$groupId/manage': typeof AuthenticatedGroupsGroupIdManageRoute
+  '/api/public/articles/$id': typeof ApiPublicArticlesIdRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
@@ -918,10 +936,12 @@ export interface FileRouteTypes {
     | '/owner/settings'
     | '/owner/tickets'
     | '/owner/users'
+    | '/api/public/articles'
     | '/blog/author/$username'
     | '/admin/'
     | '/owner/'
     | '/groups/$groupId/manage'
+    | '/api/public/articles/$id'
     | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -1005,10 +1025,12 @@ export interface FileRouteTypes {
     | '/owner/settings'
     | '/owner/tickets'
     | '/owner/users'
+    | '/api/public/articles'
     | '/blog/author/$username'
     | '/admin'
     | '/owner'
     | '/groups/$groupId/manage'
+    | '/api/public/articles/$id'
     | '/lovable/email/queue/process'
   id:
     | '__root__'
@@ -1097,10 +1119,12 @@ export interface FileRouteTypes {
     | '/_owner/owner/settings'
     | '/_owner/owner/tickets'
     | '/_owner/owner/users'
+    | '/api/public/articles'
     | '/blog/author/$username'
     | '/_admin/admin/'
     | '/_owner/owner/'
     | '/_authenticated/groups/$groupId/manage'
+    | '/api/public/articles/$id'
     | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
@@ -1123,6 +1147,7 @@ export interface RootRouteChildren {
   LiveIdRoute: typeof LiveIdRoute
   PostIdRoute: typeof PostIdRoute
   ShareShareIdRoute: typeof ShareShareIdRoute
+  ApiPublicArticlesRoute: typeof ApiPublicArticlesRouteWithChildren
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
@@ -1590,6 +1615,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogAuthorUsernameRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/api/public/articles': {
+      id: '/api/public/articles'
+      path: '/api/public/articles'
+      fullPath: '/api/public/articles'
+      preLoaderRoute: typeof ApiPublicArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_owner/owner/users': {
       id: '/_owner/owner/users'
       path: '/owner/users'
@@ -1750,6 +1782,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/lovable/email/queue/process'
       preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/public/articles/$id': {
+      id: '/api/public/articles/$id'
+      path: '/$id'
+      fullPath: '/api/public/articles/$id'
+      preLoaderRoute: typeof ApiPublicArticlesIdRouteImport
+      parentRoute: typeof ApiPublicArticlesRoute
     }
     '/_authenticated/groups/$groupId/manage': {
       id: '/_authenticated/groups/$groupId/manage'
@@ -1998,6 +2037,17 @@ const ToolsRouteChildren: ToolsRouteChildren = {
 
 const ToolsRouteWithChildren = ToolsRoute._addFileChildren(ToolsRouteChildren)
 
+interface ApiPublicArticlesRouteChildren {
+  ApiPublicArticlesIdRoute: typeof ApiPublicArticlesIdRoute
+}
+
+const ApiPublicArticlesRouteChildren: ApiPublicArticlesRouteChildren = {
+  ApiPublicArticlesIdRoute: ApiPublicArticlesIdRoute,
+}
+
+const ApiPublicArticlesRouteWithChildren =
+  ApiPublicArticlesRoute._addFileChildren(ApiPublicArticlesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
@@ -2017,6 +2067,7 @@ const rootRouteChildren: RootRouteChildren = {
   LiveIdRoute: LiveIdRoute,
   PostIdRoute: PostIdRoute,
   ShareShareIdRoute: ShareShareIdRoute,
+  ApiPublicArticlesRoute: ApiPublicArticlesRouteWithChildren,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
