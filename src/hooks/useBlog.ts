@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 export type Article = {
   id: string;
+  short_id?: string | null;
   author_id: string;
   title: string;
   slug: string;
@@ -117,15 +118,17 @@ export function useArticleBySlug(slug: string) {
   });
 }
 
-export function useArticleByIdFull(id: string) {
+export function useArticleByIdFull(idOrShortId: string) {
   return useQuery({
-    queryKey: ["article-full", id],
-    enabled: !!id,
+    queryKey: ["article-full", idOrShortId],
+    enabled: !!idOrShortId,
     queryFn: async () => {
+      const isShortId = /^[a-z]\d{6}$/.test(idOrShortId);
+      const column = isShortId ? "short_id" : "id";
       const { data, error } = await supabase
         .from("articles")
         .select("*, profiles(username, full_name, avatar_url, bio), article_categories(*)")
-        .eq("id", id)
+        .eq(column, idOrShortId)
         .single();
       if (error) throw error;
       if (data?.id) {

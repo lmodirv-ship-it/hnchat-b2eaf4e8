@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 type ChannelVideo = {
   id: string;
+  short_id: string | null;
   video_id: string;
   video_url: string;
   title: string | null;
@@ -34,7 +35,7 @@ export function ChannelVideosSection({ lang = "ar" }: { lang?: string }) {
     (async () => {
       const { data } = await supabase
         .from("channel_videos")
-        .select("id, video_id, video_url, title, thumbnail, published_at, post_id")
+        .select("id, short_id, video_id, video_url, title, thumbnail, published_at, post_id")
         .eq("is_published", true)
         .eq("show_in_feed", true)
         .order("published_at_app", { ascending: false })
@@ -72,7 +73,7 @@ export function ChannelVideosSection({ lang = "ar" }: { lang?: string }) {
   const handleShare = async (e: React.MouseEvent, v: ChannelVideo) => {
     e.preventDefault();
     e.stopPropagation();
-    const shareUrl = `${window.location.origin}/watch-yt/${v.video_id}`;
+    const shareUrl = `${window.location.origin}/watch-yt/${v.short_id ?? v.video_id}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: v.title || "Video", url: shareUrl });
@@ -115,7 +116,7 @@ export function ChannelVideosSection({ lang = "ar" }: { lang?: string }) {
             <Link
               key={v.id}
               to="/watch-yt/$videoId"
-              params={{ videoId: v.video_id }}
+              params={{ videoId: v.short_id ?? v.video_id }}
               className="group relative rounded-2xl overflow-hidden bg-white/5 border border-white/10 hover:border-white/30 transition-all hover:scale-[1.02] flex flex-col"
             >
               <div className="relative aspect-video bg-black">

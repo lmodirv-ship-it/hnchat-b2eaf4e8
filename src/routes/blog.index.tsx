@@ -118,7 +118,7 @@ function BlogPage() {
       {/* Featured Article */}
       {featured && !searchQuery && (
         <section className="max-w-7xl mx-auto px-6 mb-14">
-          <Link to="/blog/$articleId" params={{ articleId: featured.id }} className="group block">
+          <Link to="/blog/$articleId" params={{ articleId: featured.short_id ?? featured.id }} className="group block">
             <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
               className="relative rounded-3xl overflow-hidden border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/20 transition-all duration-700">
               <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[380px]">
@@ -173,7 +173,7 @@ function BlogPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {trending.map((article, i) => (
               <motion.div key={article.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-                <Link to="/blog/$articleId" params={{ articleId: article.id }} className="group block">
+                <Link to="/blog/$articleId" params={{ articleId: article.short_id ?? article.id }} className="group block">
                   <article className="rounded-2xl overflow-hidden border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/20 hover:shadow-[0_12px_50px_oklch(0.78_0.18_220/0.06)] transition-all duration-700">
                     <div className="relative h-44 overflow-hidden">
                       {article.featured_image ? (
@@ -254,7 +254,7 @@ function BlogPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {filtered.map((article, i) => (
               <motion.div key={article.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-                <Link to="/blog/$articleId" params={{ articleId: article.id }} className="group block h-full">
+                <Link to="/blog/$articleId" params={{ articleId: article.short_id ?? article.id }} className="group block h-full">
                   <article className="h-full rounded-2xl overflow-hidden border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/20 hover:shadow-[0_16px_60px_oklch(0.78_0.18_220/0.06)] transition-all duration-700 flex flex-col">
                     {/* Image */}
                     <div className="relative h-60 overflow-hidden">

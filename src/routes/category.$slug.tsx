@@ -40,7 +40,7 @@ function useCategoryArticles(slug: string) {
       // Try matching by article_categories.slug or category_slug
       const { data, error } = await supabase
         .from("articles")
-        .select("id, title, slug, short_description, featured_image, views_count, likes_count, reading_time, published_at, profiles(username, full_name, avatar_url), article_categories(name, slug)")
+        .select("id, short_id, title, slug, short_description, featured_image, views_count, likes_count, reading_time, published_at, profiles(username, full_name, avatar_url), article_categories(name, slug)")
         .eq("status", "published")
         .order("published_at", { ascending: false })
         .limit(20);
@@ -151,7 +151,7 @@ function CategoryPage() {
                 <Link
                   key={article.id}
                   to="/blog/$articleId"
-                  params={{ articleId: article.id }}
+                  params={{ articleId: article.short_id ?? article.id }}
                   className="group flex gap-4 rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   {article.featured_image && (

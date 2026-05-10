@@ -52,20 +52,20 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
     const [articlesRes, videosRes, postsRes, livesRes] = await Promise.all([
       supabase
         .from("articles")
-        .select("id, title, short_description, featured_image, published_at, slug")
+        .select("id, short_id, title, short_description, featured_image, published_at, slug")
         .eq("status", "published")
         .order("published_at", { ascending: false })
         .limit(25),
       supabase
         .from("channel_videos")
-        .select("id, video_id, title, thumbnail, published_at_app, published_at, post_id")
+        .select("id, short_id, video_id, title, thumbnail, published_at_app, published_at, post_id")
         .eq("is_published", true)
         .eq("show_in_feed", true)
         .order("published_at_app", { ascending: false })
         .limit(25),
       supabase
         .from("posts")
-        .select("id, content, media_urls, type, created_at, likes_count, comments_count, views_count")
+        .select("id, short_id, content, media_urls, type, created_at, likes_count, comments_count, views_count")
         .order("created_at", { ascending: false })
         .limit(15),
       supabase
@@ -85,7 +85,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
         title: a.title,
         excerpt: a.short_description,
         image: a.featured_image,
-        url: `/blog/${a.id}`,
+        url: `/blog/${a.short_id ?? a.id}`,
         publishedAt: a.published_at ?? new Date().toISOString(),
       });
     });
@@ -114,7 +114,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
         kind: "video",
         title: v.title ?? "Video",
         image: v.thumbnail,
-        url: `/watch-yt/${v.video_id}`,
+        url: `/watch-yt/${v.short_id ?? v.video_id}`,
         publishedAt: v.published_at_app ?? v.published_at ?? new Date().toISOString(),
         postId: v.post_id,
         videoId: v.video_id,
@@ -135,7 +135,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
           kind: "video",
           title: text || (isAr ? "فيديو" : "Video"),
           image: `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg`,
-          url: `/watch-yt/${ytId}`,
+          url: `/watch-yt/${p.short_id ?? ytId}`,
           publishedAt: p.created_at,
           postId: p.id,
           videoId: ytId,
@@ -149,7 +149,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
           kind: "post",
           title: text || (isAr ? "منشور جديد" : "New post"),
           image: firstMedia,
-          url: `/post/${p.id}`,
+          url: `/post/${p.short_id ?? p.id}`,
           publishedAt: p.created_at,
           postId: p.id,
           likes: p.likes_count ?? 0,

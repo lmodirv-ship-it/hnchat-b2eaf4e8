@@ -26,7 +26,7 @@ function useTrendingArticles() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("articles")
-        .select("id, title, slug, short_description, featured_image, views_count, likes_count, reading_time, published_at, profiles(username, full_name, avatar_url)")
+        .select("id, short_id, title, slug, short_description, featured_image, views_count, likes_count, reading_time, published_at, profiles(username, full_name, avatar_url)")
         .eq("status", "published")
         .order("views_count", { ascending: false })
         .limit(12);
@@ -42,7 +42,7 @@ function useMostLikedArticles() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("articles")
-        .select("id, title, slug, short_description, views_count, likes_count, published_at, profiles(username, full_name)")
+        .select("id, short_id, title, slug, short_description, views_count, likes_count, published_at, profiles(username, full_name)")
         .eq("status", "published")
         .order("likes_count", { ascending: false })
         .limit(8);
@@ -85,7 +85,7 @@ function TrendingPage() {
                 <Link
                   key={article.id}
                   to="/blog/$articleId"
-                  params={{ articleId: article.id }}
+                  params={{ articleId: article.short_id ?? article.id }}
                   className="group rounded-2xl border border-border/20 bg-card/40 p-5 hover:border-primary/30 transition-all"
                 >
                   <div className="flex items-center gap-3 mb-3">
@@ -126,7 +126,7 @@ function TrendingPage() {
                 <Link
                   key={article.id}
                   to="/blog/$articleId"
-                  params={{ articleId: article.id }}
+                  params={{ articleId: article.short_id ?? article.id }}
                   className="flex items-center gap-4 rounded-xl border border-border/20 bg-card/40 p-4 hover:border-primary/30 transition-all"
                 >
                   <div className="flex items-center gap-1 text-red-400">

@@ -40,10 +40,17 @@ type Stats = {
   bookmarked: boolean;
 };
 
+function extractYtId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+  return m ? m[1] : null;
+}
+
 function WatchYtPage() {
-  const { videoId } = Route.useParams();
+  const { videoId: shortId } = Route.useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const [resolvedYtId, setResolvedYtId] = useState<string | null>(null);
+  const [resolveError, setResolveError] = useState<string | null>(null);
   const [postId, setPostId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [stats, setStats] = useState<Stats>({
@@ -57,23 +64,72 @@ function WatchYtPage() {
   const [bookmarking, setBookmarking] = useState(false);
   const [publishing, setPublishing] = useState(false);
 
-  const { data: meta, isLoading } = useQuery({
-    queryKey: ["yt-meta", videoId],
-    queryFn: () => getYoutubeVideoMeta({ data: { videoId } }),
-  });
-
-  // Find the post for this video (if added)
+  // Resolve short_id → YouTube video_id (and pre-existing post if linked).
+  // Falls back to treating the param as a raw YouTube ID for legacy links
+  // and for videos previewed before being added (e.g. from /youtube search).
   useEffect(() => {
     let cancelled = false;
+    setResolvedYtId(null);
+    setResolveError(null);
     (async () => {
-      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const isShortIdShape = /^[a-z]\d{6}$/.test(shortId);
+      if (isShortIdShape) {
+        const { data: cv } = await supabase
+          .from("channel_videos")
+          .select("video_id, post_id")
+          .eq("short_id", shortId)
+          .maybeSingle();
+        if (cancelled) return;
+        if (cv?.video_id) {
+          setResolvedYtId(cv.video_id);
+          if (cv.post_id) setPostId(cv.post_id);
+          return;
+        }
+        const { data: p } = await supabase
+          .from("posts")
+          .select("id, media_urls")
+          .eq("short_id", shortId)
+          .maybeSingle();
+        if (cancelled) return;
+        if (p?.media_urls?.length) {
+          for (const url of p.media_urls) {
+            const yt = extractYtId(String(url));
+            if (yt) {
+              setResolvedYtId(yt);
+              setPostId(p.id);
+              return;
+            }
+          }
+        }
+        setResolveError("الفيديو غير موجود");
+        return;
+      }
+      // Fallback: param looks like a raw YouTube ID
+      setResolvedYtId(shortId);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [shortId]);
+
+  const { data: meta, isLoading: metaLoading } = useQuery({
+    queryKey: ["yt-meta", resolvedYtId],
+    queryFn: () => getYoutubeVideoMeta({ data: { videoId: resolvedYtId! } }),
+    enabled: !!resolvedYtId,
+  });
+  const isLoading = !resolvedYtId && !resolveError;
+
+  // Load stats for the linked post (if any)
+  useEffect(() => {
+    let cancelled = false;
+    if (!postId) return;
+    (async () => {
       const { data: existing } = await supabase
         .from("posts")
         .select("id, likes_count, comments_count, views_count")
-        .contains("media_urls", [ytUrl])
+        .eq("id", postId)
         .maybeSingle();
       if (cancelled || !existing) return;
-      setPostId(existing.id);
       setStats((s) => ({
         ...s,
         likes_count: existing.likes_count ?? 0,
@@ -81,7 +137,7 @@ function WatchYtPage() {
         views_count: (existing.views_count ?? 0) + 1,
       }));
 
-      // Increment view count (best-effort, ignore errors)
+      // Increment view count (best-effort)
       supabase
         .from("posts")
         .update({ views_count: (existing.views_count ?? 0) + 1 })
@@ -115,13 +171,13 @@ function WatchYtPage() {
     return () => {
       cancelled = true;
     };
-  }, [user?.id, videoId]);
+  }, [user?.id, postId]);
 
   const addToSite = async () => {
     if (!user || !meta) return;
     setAdding(true);
     try {
-      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const ytUrl = `https://www.youtube.com/watch?v=${resolvedYtId}`;
       const { data: created, error } = await supabase
         .from("posts")
         .insert({
@@ -146,7 +202,7 @@ function WatchYtPage() {
     if (!user || !meta || publishing) return;
     setPublishing(true);
     try {
-      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const ytUrl = `https://www.youtube.com/watch?v=${resolvedYtId}`;
       let id = postId;
       if (id) {
         // Re-publish: bump updated_at so it surfaces in the feed again
@@ -247,7 +303,7 @@ function WatchYtPage() {
   };
 
   const share = async () => {
-    const shareUrl = `${window.location.origin}/watch-yt/${videoId}`;
+    const shareUrl = `${window.location.origin}/watch-yt/${shortId}`;
     const shareData = {
       title: meta?.title || "Video",
       text: meta?.title || "",
@@ -265,7 +321,17 @@ function WatchYtPage() {
     }
   };
 
-  if (isLoading) {
+  if (resolveError) {
+    return (
+      <div className="container mx-auto p-8 max-w-5xl text-center">
+        <p className="text-destructive mb-4">{resolveError}</p>
+        <Button variant="outline" onClick={() => router.history.back()}>
+          <ArrowLeft className="h-4 w-4 ml-1" /> رجوع
+        </Button>
+      </div>
+    );
+  }
+  if (isLoading || metaLoading || !resolvedYtId) {
     return (
       <div className="container mx-auto p-4 max-w-5xl space-y-4">
         <Skeleton className="aspect-video w-full" />
@@ -288,7 +354,7 @@ function WatchYtPage() {
 
       <Cinematic3DScreen aspect="16/9">
         <iframe
-          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&fs=1&playsinline=1`}
+          src={`https://www.youtube-nocookie.com/embed/${resolvedYtId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&fs=1&playsinline=1`}
           title={meta?.title || "Video"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
