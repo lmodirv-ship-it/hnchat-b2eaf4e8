@@ -134,9 +134,12 @@ function SidebarLink({
 }) {
   const Icon = item.icon;
   const displayBadge = badge ?? item.badge;
-  const themeBtnStyle: Record<string, string> = active
-    ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.9))", color: "white" }
-    : {};
+  // Unified theme color for ALL buttons. Active gets full opacity, inactive a softer shade.
+  const themeBtnStyle: Record<string, string> = item.highlight
+    ? {}
+    : active
+      ? { backgroundColor: "var(--theme-btn, oklch(0.28 0.08 230 / 0.95))", color: "white" }
+      : { backgroundColor: "color-mix(in oklch, var(--theme-btn, oklch(0.28 0.08 230)) 55%, transparent)", color: "oklch(0.92 0.02 250)" };
 
   return (
     <Link
@@ -150,8 +153,8 @@ function SidebarLink({
         item.highlight
           ? "bg-gradient-to-l from-[oklch(0.42_0.14_220)] to-[oklch(0.30_0.12_230)] text-white border-[oklch(0.50_0.15_220/0.6)] shadow-[0_4px_14px_oklch(0.35_0.12_220/0.35)] hover:shadow-[0_6px_20px_oklch(0.40_0.14_220/0.45)] hover:-translate-y-px"
           : active
-            ? "bg-[oklch(0.28_0.08_230/0.95)] text-white border-[oklch(0.45_0.12_220/0.55)] shadow-[0_2px_10px_oklch(0.30_0.10_230/0.35)] ring-1 ring-[oklch(0.55_0.15_220/0.25)]"
-            : "bg-[oklch(0.13_0.025_255/0.7)] text-[oklch(0.72_0.02_250)] border-[oklch(1_0_0/0.06)] hover:bg-[oklch(0.18_0.04_250/0.85)] hover:text-white hover:border-[oklch(0.45_0.10_220/0.4)] hover:shadow-md hover:-translate-y-px",
+            ? "border-[oklch(1_0_0/0.18)] shadow-[0_2px_10px_oklch(0_0_0/0.25)] ring-1 ring-[oklch(1_0_0/0.12)]"
+            : "border-[oklch(1_0_0/0.06)] hover:brightness-125 hover:border-[oklch(1_0_0/0.15)] hover:shadow-md hover:-translate-y-px",
       )}
     >
       <Icon className={cn("shrink-0", collapsed ? "h-5 w-5" : "h-[17px] w-[17px]")} />
