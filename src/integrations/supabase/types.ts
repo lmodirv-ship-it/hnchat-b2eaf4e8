@@ -2680,6 +2680,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_channels: {
+        Row: {
+          channel_avatar: string | null
+          channel_id: string | null
+          channel_name: string | null
+          channel_url: string
+          created_at: string
+          id: string
+          last_synced_at: string | null
+          last_video_id: string | null
+          platform: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          channel_avatar?: string | null
+          channel_id?: string | null
+          channel_name?: string | null
+          channel_url: string
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          last_video_id?: string | null
+          platform?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          channel_avatar?: string | null
+          channel_id?: string | null
+          channel_name?: string | null
+          channel_url?: string
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          last_video_id?: string | null
+          platform?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_metrics: {
         Row: {
           dimension: string | null
