@@ -79,6 +79,19 @@ function AddChannelPage() {
     },
   });
 
+  const { data: existingTrackedVideoIds = new Set<string>(), refetch: refetchTrackedVideos } = useQuery({
+    queryKey: ["my-channel-videos", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("channel_videos")
+        .select("video_id")
+        .eq("user_id", user!.id)
+        .eq("platform", "youtube");
+      return new Set((data ?? []).map((row) => row.video_id));
+    },
+  });
+
   const channelAlreadyAdded = preview
     ? myChannels.some(
         (c) =>
@@ -100,7 +113,7 @@ function AddChannelPage() {
         setPreview(res);
         // Pre-select only new videos
         const fresh = new Set<string>();
-        for (const v of res.videos) if (!existingVideoIds.has(v.videoId)) fresh.add(v.videoId);
+        for (const v of res.videos) if (!existingTrackedVideoIds.has(v.videoId)) fresh.add(v.videoId);
         setSelected(fresh);
       }
     } catch (e: any) {
