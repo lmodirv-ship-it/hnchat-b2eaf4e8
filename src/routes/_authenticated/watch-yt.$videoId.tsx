@@ -64,23 +64,66 @@ function WatchYtPage() {
   const [bookmarking, setBookmarking] = useState(false);
   const [publishing, setPublishing] = useState(false);
 
-  const { data: meta, isLoading } = useQuery({
-    queryKey: ["yt-meta", videoId],
-    queryFn: () => getYoutubeVideoMeta({ data: { videoId } }),
-  });
-
-  // Find the post for this video (if added)
+  // Resolve short_id → YouTube video_id (and pre-existing post if linked)
   useEffect(() => {
     let cancelled = false;
+    setResolvedYtId(null);
+    setResolveError(null);
     (async () => {
-      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      // 1) Try channel_videos by short_id
+      const { data: cv } = await supabase
+        .from("channel_videos")
+        .select("video_id, post_id")
+        .eq("short_id", shortId)
+        .maybeSingle();
+      if (cancelled) return;
+      if (cv?.video_id) {
+        setResolvedYtId(cv.video_id);
+        if (cv.post_id) setPostId(cv.post_id);
+        return;
+      }
+      // 2) Try posts by short_id (extract YT id from media_urls)
+      const { data: p } = await supabase
+        .from("posts")
+        .select("id, media_urls")
+        .eq("short_id", shortId)
+        .maybeSingle();
+      if (cancelled) return;
+      if (p?.media_urls?.length) {
+        for (const url of p.media_urls) {
+          const yt = extractYtId(String(url));
+          if (yt) {
+            setResolvedYtId(yt);
+            setPostId(p.id);
+            return;
+          }
+        }
+      }
+      setResolveError("الفيديو غير موجود");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [shortId]);
+
+  const { data: meta, isLoading: metaLoading } = useQuery({
+    queryKey: ["yt-meta", resolvedYtId],
+    queryFn: () => getYoutubeVideoMeta({ data: { videoId: resolvedYtId! } }),
+    enabled: !!resolvedYtId,
+  });
+  const isLoading = !resolvedYtId && !resolveError;
+
+  // Load stats for the linked post (if any)
+  useEffect(() => {
+    let cancelled = false;
+    if (!postId) return;
+    (async () => {
       const { data: existing } = await supabase
         .from("posts")
         .select("id, likes_count, comments_count, views_count")
-        .contains("media_urls", [ytUrl])
+        .eq("id", postId)
         .maybeSingle();
       if (cancelled || !existing) return;
-      setPostId(existing.id);
       setStats((s) => ({
         ...s,
         likes_count: existing.likes_count ?? 0,
@@ -88,7 +131,7 @@ function WatchYtPage() {
         views_count: (existing.views_count ?? 0) + 1,
       }));
 
-      // Increment view count (best-effort, ignore errors)
+      // Increment view count (best-effort)
       supabase
         .from("posts")
         .update({ views_count: (existing.views_count ?? 0) + 1 })
@@ -122,7 +165,7 @@ function WatchYtPage() {
     return () => {
       cancelled = true;
     };
-  }, [user?.id, videoId]);
+  }, [user?.id, postId]);
 
   const addToSite = async () => {
     if (!user || !meta) return;
