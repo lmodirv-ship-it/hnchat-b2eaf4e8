@@ -300,8 +300,6 @@ function FeedPage() {
         <AdSenseUnit className="rounded-xl overflow-hidden" />
       </div>
 
-      {/* My Channels */}
-      <MyChannelsCard onSynced={refetch} />
 
       {/* AI Composer */}
       <div className="mb-6">
