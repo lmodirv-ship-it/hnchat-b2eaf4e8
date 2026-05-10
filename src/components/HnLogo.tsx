@@ -1,4 +1,4 @@
-import hnLogoImage from "@/assets/hn-logo.png";
+import hnLogoImage from "@/assets/hn-logo.webp";
 
 interface HnLogoProps {
   size?: number;
@@ -17,8 +17,12 @@ export function HnLogo({ size = 40, showText = false, subtitle, className }: HnL
         <img
           src={hnLogoImage}
           alt="HN-Groupe"
+          width={size}
+          height={size}
           className="h-full w-full object-cover"
           loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
         {/* Glow overlay */}
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-400/10 via-transparent to-yellow-500/10 pointer-events-none" />

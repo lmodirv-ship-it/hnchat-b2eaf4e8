@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { FileText, ArrowRight, Calendar, Clock, Eye, User } from "lucide-react";
 import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
+import { optimizedImage } from "@/lib/image";
 
 import aiBrainImg from "@/assets/blog/ai-brain.jpg";
 import chatgptImg from "@/assets/blog/chatgpt-tips.jpg";
@@ -105,7 +106,7 @@ export function BlogSection({ lang = "fr" }: { lang?: string }) {
               <Link to="/blog/$articleId" params={{ articleId: article.short_id ?? article.id }} className="block h-full">
                 <div className="relative h-48 sm:h-44 lg:h-48 overflow-hidden rounded-t-2xl">
                   {article.featured_image ? (
-                    <img src={article.featured_image} alt={article.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <img src={optimizedImage(article.featured_image, { width: 500, format: "webp" })} alt={article.title} loading="lazy" decoding="async" width={500} height={300} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center">
                       <FileText className="h-8 w-8 text-muted-foreground/20" />
