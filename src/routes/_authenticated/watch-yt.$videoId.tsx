@@ -171,7 +171,7 @@ function WatchYtPage() {
     if (!user || !meta) return;
     setAdding(true);
     try {
-      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const ytUrl = `https://www.youtube.com/watch?v=${resolvedYtId}`;
       const { data: created, error } = await supabase
         .from("posts")
         .insert({
@@ -196,7 +196,7 @@ function WatchYtPage() {
     if (!user || !meta || publishing) return;
     setPublishing(true);
     try {
-      const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const ytUrl = `https://www.youtube.com/watch?v=${resolvedYtId}`;
       let id = postId;
       if (id) {
         // Re-publish: bump updated_at so it surfaces in the feed again
@@ -297,7 +297,7 @@ function WatchYtPage() {
   };
 
   const share = async () => {
-    const shareUrl = `${window.location.origin}/watch-yt/${videoId}`;
+    const shareUrl = `${window.location.origin}/watch-yt/${shortId}`;
     const shareData = {
       title: meta?.title || "Video",
       text: meta?.title || "",
@@ -338,7 +338,7 @@ function WatchYtPage() {
 
       <Cinematic3DScreen aspect="16/9">
         <iframe
-          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&fs=1&playsinline=1`}
+          src={`https://www.youtube-nocookie.com/embed/${resolvedYtId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&fs=1&playsinline=1`}
           title={meta?.title || "Video"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
