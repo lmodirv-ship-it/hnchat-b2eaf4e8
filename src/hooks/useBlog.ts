@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 export type Article = {
   id: string;
+  short_id?: string | null;
   author_id: string;
   title: string;
   slug: string;
