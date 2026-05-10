@@ -11,6 +11,7 @@ import { PartnerStrip } from "@/components/landing/PartnerStrip";
 import { PhoneMockup } from "@/components/landing/PhoneMockup";
 import { BlogSection } from "@/components/landing/BlogSection";
 import { ChannelVideosSection } from "@/components/landing/ChannelVideosSection";
+import { UnifiedActivityFeed } from "@/components/landing/UnifiedActivityFeed";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
 
