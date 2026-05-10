@@ -54,14 +54,14 @@ export function UnifiedActivityFeed({ lang = "ar" }: { lang?: string }) {
         .select("id, title, short_description, featured_image, published_at, slug")
         .eq("status", "published")
         .order("published_at", { ascending: false })
-        .limit(15),
+        .limit(25),
       supabase
         .from("channel_videos")
         .select("id, video_id, title, thumbnail, published_at_app, published_at, post_id")
         .eq("is_published", true)
         .eq("show_in_feed", true)
         .order("published_at_app", { ascending: false })
-        .limit(15),
+        .limit(25),
       supabase
         .from("posts")
         .select("id, content, media_urls, type, created_at, likes_count, comments_count, views_count")
@@ -181,7 +181,7 @@ export function UnifiedActivityFeed({ lang = "ar" }: { lang?: string }) {
     }
 
     deduped.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-    setItems(deduped.slice(0, 24));
+    setItems(deduped.slice(0, 36));
     setLoading(false);
   };
 

@@ -9,8 +9,6 @@ import { SocialProofToast } from "@/components/landing/SocialProofToast";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { PartnerStrip } from "@/components/landing/PartnerStrip";
 import { PhoneMockup } from "@/components/landing/PhoneMockup";
-import { BlogSection } from "@/components/landing/BlogSection";
-import { ChannelVideosSection } from "@/components/landing/ChannelVideosSection";
 import { UnifiedActivityFeed } from "@/components/landing/UnifiedActivityFeed";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 
@@ -936,14 +934,8 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ═══ UNIFIED ACTIVITY FEED (everything by publish time) ═══ */}
+      {/* ═══ UNIFIED ACTIVITY FEED (articles + videos + posts + lives by publish time) ═══ */}
       <UnifiedActivityFeed lang={lang} />
-
-      {/* ═══ CHANNEL VIDEOS (imported) ═══ */}
-      <ChannelVideosSection lang={lang} />
-
-      {/* ═══ BLOG SECTION (existing) ═══ */}
-      <BlogSection lang={lang} />
 
       {/* ═══ AD UNIT ═══ */}
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-10">
