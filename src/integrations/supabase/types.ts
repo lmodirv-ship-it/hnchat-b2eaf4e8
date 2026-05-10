@@ -532,7 +532,7 @@ export type Database = {
           seo_description: string | null
           seo_title: string | null
           short_description: string | null
-          short_id: string
+          short_id: string | null
           slug: string
           source_project: string | null
           source_url: string | null
@@ -559,7 +559,7 @@ export type Database = {
           seo_description?: string | null
           seo_title?: string | null
           short_description?: string | null
-          short_id: string
+          short_id?: string | null
           slug: string
           source_project?: string | null
           source_url?: string | null
@@ -586,7 +586,7 @@ export type Database = {
           seo_description?: string | null
           seo_title?: string | null
           short_description?: string | null
-          short_id?: string
+          short_id?: string | null
           slug?: string
           source_project?: string | null
           source_url?: string | null
@@ -792,7 +792,7 @@ export type Database = {
           post_id: string | null
           published_at: string | null
           published_at_app: string | null
-          short_id: string
+          short_id: string | null
           show_in_feed: boolean
           show_in_reels: boolean
           thumbnail: string | null
@@ -817,7 +817,7 @@ export type Database = {
           post_id?: string | null
           published_at?: string | null
           published_at_app?: string | null
-          short_id: string
+          short_id?: string | null
           show_in_feed?: boolean
           show_in_reels?: boolean
           thumbnail?: string | null
@@ -842,7 +842,7 @@ export type Database = {
           post_id?: string | null
           published_at?: string | null
           published_at_app?: string | null
-          short_id?: string
+          short_id?: string | null
           show_in_feed?: boolean
           show_in_reels?: boolean
           thumbnail?: string | null
@@ -2060,7 +2060,7 @@ export type Database = {
           id: string
           likes_count: number
           media_urls: string[] | null
-          short_id: string
+          short_id: string | null
           type: Database["public"]["Enums"]["post_type"]
           updated_at: string
           user_id: string
@@ -2073,7 +2073,7 @@ export type Database = {
           id?: string
           likes_count?: number
           media_urls?: string[] | null
-          short_id: string
+          short_id?: string | null
           type?: Database["public"]["Enums"]["post_type"]
           updated_at?: string
           user_id: string
@@ -2086,7 +2086,7 @@ export type Database = {
           id?: string
           likes_count?: number
           media_urls?: string[] | null
-          short_id?: string
+          short_id?: string | null
           type?: Database["public"]["Enums"]["post_type"]
           updated_at?: string
           user_id?: string
