@@ -222,7 +222,7 @@ function PublicPostPage() {
               datePublished: post.created_at,
               author: { "@type": "Person", name: authorName },
               url: `${SITE_URL}/post/${post.id}`,
-              image: (post.media_urls || []).find((u) => /\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(u) && !/youtube|youtu\.be|vimeo/i.test(u)) || post.author?.avatar_url || undefined,
+              image: (post.media_urls || []).find((u: string) => /\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(u) && !/youtube|youtu\.be|vimeo/i.test(u)) || post.author?.avatar_url || undefined,
               interactionStatistic: [
                 {
                   "@type": "InteractionCounter",
