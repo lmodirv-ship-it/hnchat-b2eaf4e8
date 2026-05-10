@@ -238,6 +238,23 @@ function ArticlePage() {
       <div className="max-w-[820px] mx-auto px-5 sm:px-8">
         <article className="mt-10 relative z-10">
 
+          {/* Breadcrumbs (visible) */}
+          <nav aria-label="breadcrumb" className="mb-5 text-xs text-muted-foreground/55 flex items-center gap-1.5 flex-wrap">
+            <Link to="/" className="hover:text-cyan-glow transition">{isRTL ? "الرئيسية" : "Home"}</Link>
+            <ChevronLeft className="h-3 w-3 opacity-40" />
+            <Link to="/blog" className="hover:text-cyan-glow transition">{isRTL ? "المدونة" : "Blog"}</Link>
+            {(article.article_categories as any) && (
+              <>
+                <ChevronLeft className="h-3 w-3 opacity-40" />
+                <span className="text-muted-foreground/70">
+                  {isRTL ? (article.article_categories as any).name_ar : (article.article_categories as any).name}
+                </span>
+              </>
+            )}
+            <ChevronLeft className="h-3 w-3 opacity-40" />
+            <span className="text-foreground/80 line-clamp-1">{article.title}</span>
+          </nav>
+
           {/* Category */}
           {(article.article_categories as any) && (
             <span className="inline-block px-4 py-1.5 text-[11px] font-bold rounded-full bg-gradient-to-r from-cyan-glow to-violet-glow text-white mb-6 tracking-wider uppercase">
