@@ -612,6 +612,17 @@ html, body {
   background-color: var(--theme-btn) !important;
 }
 
+/* Background color override — applies user theme bg across all app surfaces */
+html[style*="--theme-bg"] body,
+html[style*="--theme-bg"] [class*="bg-[oklch(0.0"],
+html[style*="--theme-bg"] [class*="bg-[oklch(0.1"],
+html[style*="--theme-bg"] [class*="bg-gradient-to-b from-[oklch(0.0"],
+html[style*="--theme-bg"] [class*="bg-gradient-to-br from-[oklch(0.0"],
+html[style*="--theme-bg"] [class*="bg-gradient-to-t from-[oklch(0.0"] {
+  background-color: var(--theme-bg) !important;
+  background-image: none !important;
+}
+
 /* Chat thread custom scrollbar */
 .chat-scroll::-webkit-scrollbar { width: 6px; }
 .chat-scroll::-webkit-scrollbar-track { background: transparent; }
