@@ -2935,7 +2935,7 @@ export type Database = {
         | "delivered"
         | "cancelled"
         | "refunded"
-      post_type: "post" | "video" | "short" | "story"
+      post_type: "post" | "video" | "short" | "story" | "article"
       trade_status:
         | "pending"
         | "accepted"
@@ -3110,7 +3110,7 @@ export const Constants = {
         "cancelled",
         "refunded",
       ],
-      post_type: ["post", "video", "short", "story"],
+      post_type: ["post", "video", "short", "story", "article"],
       trade_status: [
         "pending",
         "accepted",
