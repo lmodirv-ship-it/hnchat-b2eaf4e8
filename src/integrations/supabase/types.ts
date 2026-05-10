@@ -2217,6 +2217,7 @@ export type Database = {
           bg_color: string | null
           bio: string | null
           btn_color: string | null
+          composer_bg_color: string | null
           country_code: string | null
           cover_url: string | null
           created_at: string
@@ -2242,6 +2243,7 @@ export type Database = {
           bg_color?: string | null
           bio?: string | null
           btn_color?: string | null
+          composer_bg_color?: string | null
           country_code?: string | null
           cover_url?: string | null
           created_at?: string
@@ -2267,6 +2269,7 @@ export type Database = {
           bg_color?: string | null
           bio?: string | null
           btn_color?: string | null
+          composer_bg_color?: string | null
           country_code?: string | null
           cover_url?: string | null
           created_at?: string
