@@ -269,6 +269,9 @@ function FeedPage() {
       {/* Stories */}
       <StoriesRail />
 
+      {/* My Channels - YouTube/TikTok/Instagram */}
+      <MyChannelsCard onSynced={refetch} />
+
       {/* Feed Insights */}
       <FeedInsights postsCount={posts?.length ?? 0} />
 
@@ -297,8 +300,6 @@ function FeedPage() {
         <AdSenseUnit className="rounded-xl overflow-hidden" />
       </div>
 
-      {/* My Channels */}
-      <MyChannelsCard onSynced={refetch} />
 
       {/* AI Composer */}
       <div className="mb-6">
