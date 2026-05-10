@@ -171,6 +171,23 @@ function AddChannelPage() {
 
       // 3. Filter new videos
       const selectedVideos = preview.videos.filter((v) => selected.has(v.videoId));
+      const selectedUrls = selectedVideos.map((v) => `https://www.youtube.com/watch?v=${v.videoId}`);
+      const { data: existingPosts, error: existingPostsErr } = await supabase
+        .from("posts")
+        .select("id, media_urls")
+        .eq("user_id", user.id)
+        .overlaps("media_urls", selectedUrls);
+      if (existingPostsErr) throw existingPostsErr;
+
+      const existingPostByVideoId = new Map<string, string>();
+      for (const row of existingPosts ?? []) {
+        for (const mediaUrl of row.media_urls ?? []) {
+          const m = mediaUrl.match(/[?&]v=([\w-]{11})|youtu\.be\/([\w-]{11})/);
+          const id = m?.[1] || m?.[2];
+          if (id) existingPostByVideoId.set(id, row.id);
+        }
+      }
+
       const { data: existingChannelVideos, error: existingVideosErr } = await supabase
         .from("channel_videos")
         .select("video_id")
@@ -180,18 +197,17 @@ function AddChannelPage() {
       if (existingVideosErr) throw existingVideosErr;
 
       const savedVideoIds = new Set((existingChannelVideos ?? []).map((v) => v.video_id));
-      const fresh = selectedVideos.filter(
-        (v) => !existingVideoIds.has(v.videoId) && !savedVideoIds.has(v.videoId),
-      );
-      const skipped = selected.size - fresh.length;
+      const videosNeedingPosts = selectedVideos.filter((v) => !existingPostByVideoId.has(v.videoId));
+      const videosNeedingTracking = selectedVideos.filter((v) => !savedVideoIds.has(v.videoId));
+      const skipped = selected.size - videosNeedingTracking.length;
 
       // 4. Create posts (feed + reels source)
       let postIds: string[] = [];
-      if (fresh.length > 0) {
+      if (videosNeedingPosts.length > 0) {
         const { data: postsData, error: pErr } = await supabase
           .from("posts")
           .insert(
-            fresh.map((v) => ({
+            videosNeedingPosts.map((v) => ({
               user_id: user.id,
               type: "video" as any,
               content: v.title,
@@ -201,12 +217,15 @@ function AddChannelPage() {
           .select("id");
         if (pErr) throw pErr;
         postIds = (postsData ?? []).map((p) => p.id);
+        videosNeedingPosts.forEach((v, i) => {
+          if (postIds[i]) existingPostByVideoId.set(v.videoId, postIds[i]);
+        });
       }
 
       // 5. Track each video in channel_videos
-      if (fresh.length > 0) {
+      if (videosNeedingTracking.length > 0) {
         const { error: videosErr } = await supabase.from("channel_videos").insert(
-          fresh.map((v, i) => ({
+          videosNeedingTracking.map((v) => ({
             user_id: user.id,
             channel_id: confirmedChannelRowId,
             platform: "youtube",
@@ -220,7 +239,7 @@ function AddChannelPage() {
             show_in_feed: true,
             show_in_reels: true,
             is_published: true,
-            post_id: postIds[i] ?? null,
+            post_id: existingPostByVideoId.get(v.videoId) ?? null,
             published_at_app: new Date().toISOString(),
           })),
         );
