@@ -17,6 +17,7 @@ export function TopBar() {
   const { user } = useAuth();
   const { notifUnread } = useRealtime();
   const { setMobileSidebarOpen } = useLayout();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
