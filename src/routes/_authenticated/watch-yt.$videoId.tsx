@@ -296,6 +296,8 @@ function WatchYtPage() {
         />
         {/* Cover the "Watch on YouTube" button + logo (top-right area of player) */}
         <div className="absolute top-0 right-0 h-12 w-32 bg-black pointer-events-none z-10" aria-hidden />
+        {/* Cover the end-screen "Plus de vidéos" + YouTube button (bottom area) */}
+        <div className="absolute bottom-0 left-0 right-0 h-14 bg-black pointer-events-none z-10" aria-hidden />
       </Cinematic3DScreen>
 
       <div className="flex items-start justify-between gap-4 mb-3 flex-wrap">
