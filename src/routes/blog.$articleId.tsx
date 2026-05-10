@@ -27,14 +27,143 @@ import {
   Copy,
   FileText,
   Bookmark,
+  ChevronLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
+import { fetchPublicArticle } from "@/utils/public-pages.functions";
+
+const SITE_URL = "https://www.hn-chat.com";
+const ORG_NAME = "hnChat";
+const ORG_LOGO = `${SITE_URL}/icon-512.png`;
+
+const truncate = (s: string, n: number) =>
+  !s ? "" : s.length <= n ? s : s.slice(0, n - 1).trimEnd() + "…";
+
+const stripMd = (s: string) =>
+  (s || "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[#>*_~\-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 export const Route = createFileRoute("/blog/$articleId")({
-  head: () => ({
-    meta: [{ title: "hnChat Blog" }, { name: "robots", content: "index, follow" }],
-  }),
+  loader: async ({ params }) => {
+    const article = await fetchPublicArticle({ data: { id: params.articleId } });
+    return { article };
+  },
+  head: ({ loaderData, params }) => {
+    const a: any = (loaderData as any)?.article;
+    if (!a) {
+      return {
+        meta: [
+          { title: "مقال — مدونة hnChat" },
+          { name: "description", content: "تابع أحدث المقالات على مدونة hnChat حول الذكاء الاصطناعي والتقنية." },
+          { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+        ],
+      };
+    }
+
+    const id = a.short_id ?? params.articleId;
+    const url = `${SITE_URL}/blog/${id}`;
+    const title = truncate(a.seo_title || a.title, 65);
+    const description = truncate(
+      a.seo_description || a.short_description || stripMd(a.content || ""),
+      158,
+    );
+    const image = a.featured_image || `${SITE_URL}/og-default.png`;
+    const isAr = a.language !== "en";
+    const author = a.author?.full_name || a.author?.username || "hnChat";
+    const tags: string[] = Array.isArray(a.tags) ? a.tags : [];
+    const keywords = tags.join(", ");
+    const published = a.published_at || a.updated_at;
+    const modified = a.updated_at || a.published_at;
+
+    const blogPosting = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      headline: title,
+      description,
+      image: [image],
+      author: {
+        "@type": "Person",
+        name: author,
+        url: a.author?.username ? `${SITE_URL}/blog/author/${a.author.username}` : undefined,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: ORG_NAME,
+        logo: { "@type": "ImageObject", url: ORG_LOGO },
+      },
+      datePublished: published,
+      dateModified: modified,
+      inLanguage: a.language || "ar",
+      keywords,
+      articleSection: a.category?.name_ar || a.category?.name || undefined,
+      wordCount: stripMd(a.content || "").split(/\s+/).filter(Boolean).length,
+    };
+
+    const breadcrumbs = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: isAr ? "الرئيسية" : "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: isAr ? "المدونة" : "Blog", item: `${SITE_URL}/blog` },
+        ...(a.category
+          ? [{ "@type": "ListItem", position: 3, name: isAr ? a.category.name_ar : a.category.name, item: `${SITE_URL}/blog?cat=${a.category.slug}` }]
+          : []),
+        { "@type": "ListItem", position: a.category ? 4 : 3, name: title, item: url },
+      ],
+    };
+
+    const organization = {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: ORG_NAME,
+      url: SITE_URL,
+      logo: ORG_LOGO,
+      sameAs: ["https://twitter.com/hnchat"],
+    };
+
+    return {
+      meta: [
+        { title: `${title} — ${ORG_NAME}` },
+        { name: "description", content: description },
+        { name: "keywords", content: keywords },
+        { name: "author", content: author },
+        { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+        { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+        { property: "og:type", content: "article" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:site_name", content: ORG_NAME },
+        { property: "og:locale", content: isAr ? "ar_AR" : "en_US" },
+        { property: "article:published_time", content: published },
+        { property: "article:modified_time", content: modified },
+        { property: "article:author", content: author },
+        ...(a.category ? [{ property: "article:section", content: a.category.name_ar || a.category.name }] : []),
+        ...tags.map((t) => ({ property: "article:tag", content: t })),
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: image },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(blogPosting) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbs) },
+        { type: "application/ld+json", children: JSON.stringify(organization) },
+      ],
+    };
+  },
   component: ArticlePage,
 });
 
@@ -108,6 +237,23 @@ function ArticlePage() {
       {/* Article Body — wide magazine layout */}
       <div className="max-w-[820px] mx-auto px-5 sm:px-8">
         <article className="mt-10 relative z-10">
+
+          {/* Breadcrumbs (visible) */}
+          <nav aria-label="breadcrumb" className="mb-5 text-xs text-muted-foreground/55 flex items-center gap-1.5 flex-wrap">
+            <Link to="/" className="hover:text-cyan-glow transition">{isRTL ? "الرئيسية" : "Home"}</Link>
+            <ChevronLeft className="h-3 w-3 opacity-40" />
+            <Link to="/blog" className="hover:text-cyan-glow transition">{isRTL ? "المدونة" : "Blog"}</Link>
+            {(article.article_categories as any) && (
+              <>
+                <ChevronLeft className="h-3 w-3 opacity-40" />
+                <span className="text-muted-foreground/70">
+                  {isRTL ? (article.article_categories as any).name_ar : (article.article_categories as any).name}
+                </span>
+              </>
+            )}
+            <ChevronLeft className="h-3 w-3 opacity-40" />
+            <span className="text-foreground/80 line-clamp-1">{article.title}</span>
+          </nav>
 
           {/* Category */}
           {(article.article_categories as any) && (

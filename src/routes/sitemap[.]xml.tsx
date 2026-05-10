@@ -3,12 +3,16 @@ import { fetchSitemapData } from "@/utils/public-pages.functions";
 
 const SITE_URL = "https://www.hn-chat.com";
 
+const escapeXml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
         const staticRoutes = [
           { loc: "/", priority: "1.0", changefreq: "daily" },
+          { loc: "/blog", priority: "0.9", changefreq: "daily" },
           { loc: "/about", priority: "0.8", changefreq: "monthly" },
           { loc: "/contact", priority: "0.7", changefreq: "monthly" },
           { loc: "/privacy", priority: "0.5", changefreq: "yearly" },
@@ -16,7 +20,16 @@ export const Route = createFileRoute("/sitemap.xml")({
           { loc: "/sign-up-login", priority: "0.7", changefreq: "monthly" },
         ];
 
-        const { posts, streams } = await fetchSitemapData();
+        const { posts, streams, articles } = await fetchSitemapData();
+
+        const articleUrls = (articles ?? []).map((a) => {
+          const id = a.short_id ?? a.id;
+          const lastmod = new Date(a.updated_at || a.published_at || Date.now()).toISOString();
+          const img = a.featured_image
+            ? `<image:image><image:loc>${escapeXml(a.featured_image)}</image:loc><image:title>${escapeXml(a.title || "")}</image:title></image:image>`
+            : "";
+          return `<url><loc>${SITE_URL}/blog/${id}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority>${img}</url>`;
+        });
 
         const postUrls = posts.map(
           (p) =>
@@ -34,8 +47,9 @@ export const Route = createFileRoute("/sitemap.xml")({
         );
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${staticUrls.join("\n")}
+${articleUrls.join("\n")}
 ${postUrls.join("\n")}
 ${liveUrls.join("\n")}
 </urlset>`;
