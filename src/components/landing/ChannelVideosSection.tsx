@@ -35,7 +35,7 @@ export function ChannelVideosSection({ lang = "ar" }: { lang?: string }) {
     (async () => {
       const { data } = await supabase
         .from("channel_videos")
-        .select("id, video_id, video_url, title, thumbnail, published_at, post_id")
+        .select("id, short_id, video_id, video_url, title, thumbnail, published_at, post_id")
         .eq("is_published", true)
         .eq("show_in_feed", true)
         .order("published_at_app", { ascending: false })
