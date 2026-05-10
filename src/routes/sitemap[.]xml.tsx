@@ -41,8 +41,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           const id = a.short_id ?? a.id;
           const lastmod = new Date(a.updated_at || a.published_at || Date.now()).toISOString();
           const title = truncate(a.title || "", 120);
-          const img = a.featured_image
-            ? `<image:image><image:loc>${escapeXml(a.featured_image)}</image:loc><image:title>${escapeXml(title)}</image:title></image:image>`
+          const featured = absoluteUrl(a.featured_image || "");
+          const img = featured && /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif|avif)(\?.*)?$/i.test(featured)
+            ? `<image:image><image:loc>${escapeXml(featured)}</image:loc><image:title>${escapeXml(title)}</image:title></image:image>`
             : "";
           return `<url><loc>${SITE_URL}/blog/${id}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority>${img}</url>`;
         });
