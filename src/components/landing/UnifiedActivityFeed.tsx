@@ -114,7 +114,7 @@ export function UnifiedActivityFeed({ lang = "ar", variant = "section" }: { lang
         kind: "video",
         title: v.title ?? "Video",
         image: v.thumbnail,
-        url: `/watch-yt/${v.video_id}`,
+        url: `/watch-yt/${v.short_id ?? v.video_id}`,
         publishedAt: v.published_at_app ?? v.published_at ?? new Date().toISOString(),
         postId: v.post_id,
         videoId: v.video_id,
