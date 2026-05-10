@@ -1,15 +1,17 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Search, Moon, Command, Menu, ChevronDown, Palette, Type, MousePointerClick } from "lucide-react";
+import { Bell, Search, Moon, Command, Menu, ChevronDown, Palette, Type, MousePointerClick, PaintBucket } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useAuth } from "@/lib/auth";
 import { useRealtime } from "@/components/providers/RealtimeProvider";
 import { useLayout } from "@/hooks/useLayoutStore";
 import { supabase } from "@/integrations/supabase/client";
 import { HnLogo } from "@/components/HnLogo";
 import { useThemeColors } from "@/hooks/useThemeColors";
+import { useComposerColor } from "@/hooks/useComposerColor";
 
 export function TopBar() {
   const { user } = useAuth();
@@ -19,6 +21,7 @@ export function TopBar() {
   const [q, setQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const { bgColor, textColor, btnColor, setBg, setText, setBtn } = useThemeColors();
+  const { color: composerBg, setColor: setComposerBg } = useComposerColor();
   const bgRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLInputElement>(null);
   const btnRef = useRef<HTMLInputElement>(null);
@@ -96,6 +99,51 @@ export function TopBar() {
         )}
 
         <div className={`flex items-center gap-0.5 shrink-0 ${searchOpen ? 'hidden sm:flex' : 'flex'}`}>
+          {/* Composer background color picker */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className="p-2 rounded-lg hover:bg-[oklch(1_0_0/0.06)] transition relative"
+                aria-label="لون خلفية مربع كتابة المنشور"
+                title="لون خلفية مربع كتابة المنشور"
+              >
+                <PaintBucket className="h-[18px] w-[18px] text-[oklch(0.65_0.02_250)]" />
+                {composerBg && <div className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: composerBg }} />}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-auto p-3 bg-[oklch(0.08_0.015_260)] border-[oklch(1_0_0/0.08)]">
+              <div className="text-[10px] text-[oklch(0.55_0.02_250)] mb-2">لون خلفية مربع المنشور</div>
+              <div className="grid grid-cols-4 gap-2 mb-2">
+                {[
+                  "oklch(0.06 0.015 260)",
+                  "oklch(0.12 0.04 260)",
+                  "oklch(0.15 0.06 295)",
+                  "oklch(0.14 0.05 160)",
+                  "oklch(0.16 0.06 340)",
+                  "oklch(0.18 0.04 60)",
+                  "oklch(0.1 0.02 220)",
+                  "oklch(0.02 0 0)",
+                ].map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setComposerBg(c)}
+                    className="h-7 w-7 rounded-full border border-[oklch(1_0_0/0.15)] hover:scale-110 transition-transform"
+                    style={{ background: c }}
+                    aria-label={c}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setComposerBg("")}
+                className="w-full text-[10px] text-[oklch(0.65_0.02_250)] hover:text-[oklch(0.92_0.03_250)] py-1 rounded-md hover:bg-[oklch(1_0_0/0.04)]"
+              >
+                إعادة تعيين
+              </button>
+            </PopoverContent>
+          </Popover>
+
           {/* Notifications */}
           <Link
             to="/notifications"

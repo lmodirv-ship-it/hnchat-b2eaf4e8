@@ -56,9 +56,9 @@ function SidebarSection({
         {group.items.map((item) => {
           const ItemIcon = item.icon;
           const active = pathname === item.to || pathname.startsWith(item.to + "/");
-          const activeBtnStyle: Record<string, string> | undefined = active
+          const activeBtnStyle: Record<string, string> = active
             ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
-            : undefined;
+            : { backgroundColor: "color-mix(in oklch, var(--theme-btn, transparent) 18%, transparent)" };
           return (
             <Link
               key={item.to}
@@ -134,10 +134,9 @@ function SidebarLink({
 }) {
   const Icon = item.icon;
   const displayBadge = badge ?? item.badge;
-  const themeBtnStyle: Record<string, string> | undefined =
-    active
-      ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
-      : undefined;
+  const themeBtnStyle: Record<string, string> = active
+    ? { backgroundColor: "var(--theme-btn, oklch(0.25 0.06 230 / 0.6))", color: "white" }
+    : { backgroundColor: "color-mix(in oklch, var(--theme-btn, transparent) 18%, transparent)" };
 
   return (
     <Link

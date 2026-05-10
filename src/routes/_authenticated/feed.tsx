@@ -5,8 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Send, Loader2, Sparkles, RefreshCw, Brain, Zap, TrendingUp, BookOpen, Clock, Eye, ArrowRight, Palette } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Send, Loader2, Sparkles, RefreshCw, Brain, Zap, TrendingUp, BookOpen, Clock, Eye, ArrowRight } from "lucide-react";
 import { useComposerColor } from "@/hooks/useComposerColor";
 import { toast } from "sonner";
 import { PostCard, type FeedPost } from "@/components/feed/PostCard";
@@ -38,7 +37,7 @@ const AI_PROMPTS = [
 function AiComposer({ onPost }: { onPost: () => void }) {
   const { user } = useAuth();
   const { mode, activityPulse } = useEnergy();
-  const { color: composerBg, setColor: setComposerBg } = useComposerColor();
+  const { color: composerBg } = useComposerColor();
   const [content, setContent] = useState("");
   const [posting, setPosting] = useState(false);
   const [promptIdx] = useState(() => Math.floor(Math.random() * AI_PROMPTS.length));
@@ -96,48 +95,6 @@ function AiComposer({ onPost }: { onPost: () => void }) {
             <Brain className="h-3 w-3 animate-breathe" style={{ color: activeColor }} />
             <span className="text-[9px] font-medium" style={{ color: activeColor }}>AI Composer</span>
           </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                title="لون خلفية مربع الكتابة"
-                className="h-6 w-6 rounded-full border border-[oklch(1_0_0/0.1)] flex items-center justify-center hover:bg-[oklch(1_0_0/0.05)] transition-colors"
-                style={{ background: composerBg || "oklch(1 0 0 / 0.03)" }}
-              >
-                <Palette className="h-3 w-3" style={{ color: activeColor }} />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-auto p-3 bg-[oklch(0.08_0.015_260)] border-[oklch(1_0_0/0.08)]">
-              <div className="grid grid-cols-4 gap-2 mb-2">
-                {[
-                  "oklch(0.06 0.015 260)",
-                  "oklch(0.12 0.04 260)",
-                  "oklch(0.15 0.06 295)",
-                  "oklch(0.14 0.05 160)",
-                  "oklch(0.16 0.06 340)",
-                  "oklch(0.18 0.04 60)",
-                  "oklch(0.1 0.02 220)",
-                  "oklch(0.02 0 0)",
-                ].map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setComposerBg(c)}
-                    className="h-7 w-7 rounded-full border border-[oklch(1_0_0/0.15)] hover:scale-110 transition-transform"
-                    style={{ background: c }}
-                    aria-label={c}
-                  />
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => setComposerBg("")}
-                className="w-full text-[10px] text-[oklch(0.65_0.02_250)] hover:text-[oklch(0.92_0.03_250)] py-1 rounded-md hover:bg-[oklch(1_0_0/0.04)]"
-              >
-                إعادة تعيين
-              </button>
-            </PopoverContent>
-          </Popover>
           <div className="flex-1" />
           <span className="text-[9px] text-[oklch(0.4_0.03_250)] tabular-nums">{content.length}/2000</span>
         </div>
