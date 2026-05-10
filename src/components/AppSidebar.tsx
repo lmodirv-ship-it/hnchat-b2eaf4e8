@@ -199,7 +199,9 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "الفيديو والبث",
     icon: Video,
+    defaultOpen: true,
     items: [
+      { to: "/add-channel", label: "إضافة قناة", icon: FilePlus, highlight: true },
       { to: "/reels", label: "Reels", icon: Film },
       { to: "/videos", label: "الفيديوهات", icon: Video },
       { to: "/short-videos", label: "فيديوهات قصيرة", icon: Zap },

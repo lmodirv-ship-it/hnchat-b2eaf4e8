@@ -72,6 +72,7 @@ import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAiAssistantRouteImport } from './routes/_authenticated/ai-assistant'
 import { Route as AuthenticatedAdsPromoRouteImport } from './routes/_authenticated/ads-promo'
 import { Route as AuthenticatedAdsManagerRouteImport } from './routes/_authenticated/ads-manager'
+import { Route as AuthenticatedAddChannelRouteImport } from './routes/_authenticated/add-channel'
 import { Route as OwnerOwnerIndexRouteImport } from './routes/_owner/owner.index'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as BlogAuthorUsernameRouteImport } from './routes/blog.author.$username'
@@ -424,6 +425,11 @@ const AuthenticatedAdsManagerRoute = AuthenticatedAdsManagerRouteImport.update({
   path: '/ads-manager',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAddChannelRoute = AuthenticatedAddChannelRouteImport.update({
+  id: '/add-channel',
+  path: '/add-channel',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const OwnerOwnerIndexRoute = OwnerOwnerIndexRouteImport.update({
   id: '/owner/',
   path: '/owner/',
@@ -589,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRouteWithChildren
   '/trending': typeof TrendingRoute
+  '/add-channel': typeof AuthenticatedAddChannelRoute
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -678,6 +685,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/trending': typeof TrendingRoute
+  '/add-channel': typeof AuthenticatedAddChannelRoute
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -773,6 +781,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRouteWithChildren
   '/trending': typeof TrendingRoute
+  '/_authenticated/add-channel': typeof AuthenticatedAddChannelRoute
   '/_authenticated/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/_authenticated/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/_authenticated/ai-assistant': typeof AuthenticatedAiAssistantRoute
@@ -866,6 +875,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/trending'
+    | '/add-channel'
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
@@ -955,6 +965,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/trending'
+    | '/add-channel'
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
@@ -1049,6 +1060,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/trending'
+    | '/_authenticated/add-channel'
     | '/_authenticated/ads-manager'
     | '/_authenticated/ads-promo'
     | '/_authenticated/ai-assistant'
@@ -1594,6 +1606,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdsManagerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/add-channel': {
+      id: '/_authenticated/add-channel'
+      path: '/add-channel'
+      fullPath: '/add-channel'
+      preLoaderRoute: typeof AuthenticatedAddChannelRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_owner/owner/': {
       id: '/_owner/owner/'
       path: '/owner'
@@ -1870,6 +1889,7 @@ const AuthenticatedProfileRouteWithChildren =
   AuthenticatedProfileRoute._addFileChildren(AuthenticatedProfileRouteChildren)
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAddChannelRoute: typeof AuthenticatedAddChannelRoute
   AuthenticatedAdsManagerRoute: typeof AuthenticatedAdsManagerRoute
   AuthenticatedAdsPromoRoute: typeof AuthenticatedAdsPromoRoute
   AuthenticatedAiAssistantRoute: typeof AuthenticatedAiAssistantRoute
@@ -1916,6 +1936,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAddChannelRoute: AuthenticatedAddChannelRoute,
   AuthenticatedAdsManagerRoute: AuthenticatedAdsManagerRoute,
   AuthenticatedAdsPromoRoute: AuthenticatedAdsPromoRoute,
   AuthenticatedAiAssistantRoute: AuthenticatedAiAssistantRoute,
