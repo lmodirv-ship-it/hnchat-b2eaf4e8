@@ -163,19 +163,16 @@ export function Cinematic3DScreen({
         <div className="pointer-events-none absolute -bottom-1 left-6 right-6 h-px bg-gradient-to-r from-transparent via-cyan-glow/80 to-transparent" />
       </div>
 
-      {/* Floor reflection */}
+      {/* Floor reflection (slim) */}
       <div
         className="cinematic-floor relative mx-auto -mt-2 w-full overflow-hidden"
         style={{
-          aspectRatio: aspect,
+          height: "60px",
           maxWidth: "min(100%, 1100px)",
-          height: "auto",
           maskImage:
-            "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 35%, transparent 70%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 50%, transparent 100%)",
           WebkitMaskImage:
-            "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 35%, transparent 70%)",
-          transform: "scaleY(-1) perspective(1200px) rotateX(35deg)",
-          transformOrigin: "top center",
+            "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 50%, transparent 100%)",
           filter: "blur(2px) saturate(1.2)",
           opacity: 0.5,
         }}
@@ -191,7 +188,7 @@ export function Cinematic3DScreen({
 
       {/* Floor grid */}
       <div
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[-40px] w-[120%] h-32 -z-10 opacity-30"
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[-10px] w-[120%] h-12 -z-10 opacity-30"
         style={{
           background:
             "linear-gradient(transparent, oklch(0.78 0.18 220 / 0.4)), repeating-linear-gradient(90deg, transparent 0 39px, oklch(0.78 0.18 220 / 0.5) 39px 40px), repeating-linear-gradient(0deg, transparent 0 39px, oklch(0.78 0.18 220 / 0.5) 39px 40px)",
