@@ -40,10 +40,17 @@ type Stats = {
   bookmarked: boolean;
 };
 
+function extractYtId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+  return m ? m[1] : null;
+}
+
 function WatchYtPage() {
-  const { videoId } = Route.useParams();
+  const { videoId: shortId } = Route.useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const [resolvedYtId, setResolvedYtId] = useState<string | null>(null);
+  const [resolveError, setResolveError] = useState<string | null>(null);
   const [postId, setPostId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [stats, setStats] = useState<Stats>({
