@@ -53,6 +53,7 @@ export function MyChannelsCard({ onSynced }: { onSynced?: () => void }) {
         channel_avatar: res.channel.avatar,
       }).select("id").single();
       if (error) throw error;
+      if (!channelRow?.id) throw new Error("تعذّر حفظ القناة");
       // Auto-sync videos to feed
       await syncChannelVideos(channelRow.id, res.videos);
       return res;
