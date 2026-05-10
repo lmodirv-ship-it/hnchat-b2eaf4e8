@@ -235,6 +235,12 @@ function AddChannelPage() {
       setUrl("");
       setSelected(new Set());
     } catch (e: any) {
+      if (session?.id) {
+        await supabase
+          .from("channel_import_sessions")
+          .update({ status: "failed", error_message: e.message, completed_at: new Date().toISOString() })
+          .eq("id", session.id);
+      }
       toast.error(e.message || "فشل النشر");
     } finally {
       setPublishing(false);
