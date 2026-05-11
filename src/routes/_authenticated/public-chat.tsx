@@ -382,16 +382,7 @@ function PublicChatPage() {
                   )}
                 </div>
                 <div className="min-w-0 flex flex-col">
-                  {!grouped && (
-                    <div className={cn("flex items-center gap-2 mb-0.5 px-0.5", isMe && "flex-row-reverse")}>
-                      <span className="text-[11px] font-semibold text-[oklch(0.78_0.13_220)] truncate max-w-[140px]">
-                        {friendlyName(msg.profile?.full_name, msg.profile?.username, msg.user_id)}
-                      </span>
-                      <span className="text-[9.5px] text-[oklch(0.42_0.02_250)] shrink-0">
-                        {formatTime(msg.created_at)}
-                      </span>
-                    </div>
-                  )}
+                  {/* Name + time row removed — show only avatar + message bubble */}
                   <div
                     className={cn(
                       "text-[13px] leading-snug break-words overflow-hidden",
