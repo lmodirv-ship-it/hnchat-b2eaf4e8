@@ -502,7 +502,7 @@ function PublicChatPage() {
       </div>
 
       {/* ── Online users sidebar ── */}
-      <div className="flex flex-col w-[112px] sm:w-[160px] lg:w-[260px] shrink-0 border-r border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
+      <div className="flex flex-col w-[68px] lg:w-[80px] shrink-0 border-r border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
         <div className="px-2.5 lg:px-4 py-2.5 lg:py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2">
           <Users className="h-4 w-4 text-[oklch(0.60_0.15_150)] shrink-0" />
           <h2 className="text-[12px] lg:text-sm font-semibold text-white truncate">
@@ -514,7 +514,7 @@ function PublicChatPage() {
             <div
               key={u.id}
               onClick={() => setProfileUserId(u.id)}
-              className="flex items-center gap-2 px-2 lg:px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
+              className="flex items-center justify-center px-2 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
             >
               <div className="relative shrink-0">
                 <Avatar className="h-8 w-8">
@@ -525,14 +525,7 @@ function PublicChatPage() {
                 </Avatar>
                 <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 lg:h-3 lg:w-3 fill-green-500 text-green-500" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] lg:text-[12px] font-medium text-white truncate">
-                  {friendlyName(u.full_name, u.username, u.id)}
-                </p>
-                <p className="text-[9px] lg:text-[10px] text-[oklch(0.45_0.02_250)] truncate">
-                  متصل
-                </p>
-              </div>
+              {/* Names hidden — avatar only */}
               {user && u.id !== user.id && (
                 <button
                   onClick={(e) => { e.stopPropagation(); sendInvite(u.id); }}
