@@ -279,7 +279,7 @@ function PublicChatPage() {
   };
 
   return (
-    <div className="flex h-full overflow-hidden" dir="rtl">
+    <div className="flex flex-col h-full overflow-hidden" dir="rtl">
       {/* ── Chat area ── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
