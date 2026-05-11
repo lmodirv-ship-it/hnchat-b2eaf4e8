@@ -89,6 +89,22 @@ function BlogPage() {
 
   const isRtl = activeLang === "ar" || activeLang === "all";
 
+  // Only show categories that actually have articles in the currently selected language.
+  const visibleCategories = useMemo(() => {
+    if (activeLang === "all") return categories;
+    const slugs = new Set(
+      articles
+        .map((a) => (a.article_categories as any)?.slug)
+        .filter(Boolean) as string[]
+    );
+    return categories.filter((c) => slugs.has(c.slug));
+  }, [categories, articles, activeLang]);
+
+  // Reset category if it disappears after a language change.
+  if (activeCategory !== "all" && !visibleCategories.some((c) => c.slug === activeCategory)) {
+    setActiveCategory("all");
+  }
+
   const featured = articles[0];
   const trending = articles.slice(0, 4);
 
