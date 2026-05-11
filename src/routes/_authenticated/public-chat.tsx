@@ -313,7 +313,7 @@ function PublicChatPage() {
                   className="flex items-center gap-2 bg-[oklch(0.18_0.03_255/0.8)] rounded-lg px-3 py-1.5 border border-[oklch(1_0_0/0.08)]"
                 >
                   <Avatar className="h-5 w-5">
-                    <AvatarImage src={inv.sender?.avatar_url || undefined} />
+                    <AvatarImage src={inv.sender?.avatar_url || getDefaultAvatar(inv.sender_id)} />
                     <AvatarFallback className="text-[8px] bg-[oklch(0.25_0.06_230)]">
                       {inv.sender?.username?.[0]?.toUpperCase() || "?"}
                     </AvatarFallback>
@@ -372,7 +372,7 @@ function PublicChatPage() {
                   {!grouped && (
                     <button type="button" onClick={() => setProfileUserId(msg.user_id)}>
                       <Avatar className="h-7 w-7 sm:h-8 sm:w-8 mt-0.5 ring-1 ring-[oklch(1_0_0/0.06)] hover:ring-[oklch(0.50_0.15_220)] transition">
-                        <AvatarImage src={msg.profile?.avatar_url || undefined} />
+                        <AvatarImage src={msg.profile?.avatar_url || getDefaultAvatar(msg.user_id)} />
                         <AvatarFallback className="text-[10px] bg-gradient-to-br from-[oklch(0.28_0.08_230)] to-[oklch(0.22_0.06_245)] text-white">
                           {msg.profile?.username?.[0]?.toUpperCase() || "?"}
                         </AvatarFallback>
@@ -526,7 +526,7 @@ function PublicChatPage() {
             >
               <div className="relative shrink-0">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={u.avatar_url || undefined} />
+                  <AvatarImage src={u.avatar_url || getDefaultAvatar(u.id)} />
                   <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
                     {u.username?.[0]?.toUpperCase() || "?"}
                   </AvatarFallback>
