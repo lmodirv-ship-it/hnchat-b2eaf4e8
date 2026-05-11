@@ -523,49 +523,6 @@ function PublicChatPage() {
         </div>
       </div>
 
-      {/* ── Online users sidebar ── */}
-      <div className="flex flex-col w-[68px] lg:w-[80px] shrink-0 border-r border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
-        <div className="px-2.5 lg:px-4 py-2.5 lg:py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2">
-          <Users className="h-4 w-4 text-[oklch(0.60_0.15_150)] shrink-0" />
-          <h2 className="text-[12px] lg:text-sm font-semibold text-white truncate">
-            <span className="hidden sm:inline">المتصلون </span>({onlineUsers.length})
-          </h2>
-        </div>
-        <div className="flex-1 overflow-y-auto py-2 scrollbar-thin">
-          {onlineUsers.map((u) => (
-            <div
-              key={u.id}
-              onClick={() => setProfileUserId(u.id)}
-              className="flex items-center justify-center px-2 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
-            >
-              <div className="relative shrink-0">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={u.avatar_url || getDefaultAvatar(u.id)} />
-                  <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
-                    {u.username?.[0]?.toUpperCase() || "?"}
-                  </AvatarFallback>
-                </Avatar>
-                <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 lg:h-3 lg:w-3 fill-green-500 text-green-500" />
-              </div>
-              {/* Names hidden — avatar only */}
-              {user && u.id !== user.id && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); sendInvite(u.id); }}
-                  className="hidden lg:block opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-[oklch(0.25_0.08_220/0.4)] text-[oklch(0.65_0.12_220)] transition"
-                  title="إرسال دعوة"
-                >
-                  <UserPlus className="h-3.5 w-3.5" />
-                </button>
-              )}
-            </div>
-          ))}
-          {onlineUsers.length === 0 && (
-            <p className="text-center text-xs text-[oklch(0.40_0.02_250)] py-8">
-              لا يوجد متصلون حالياً
-            </p>
-          )}
-        </div>
-      </div>
       <UserProfileDialog
         userId={profileUserId}
         open={!!profileUserId}
