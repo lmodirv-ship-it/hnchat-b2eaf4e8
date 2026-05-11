@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getDefaultAvatar } from "@/lib/default-avatar";
+import { friendlyName } from "@/lib/display-name";
 import {
   Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2,
 } from "lucide-react";
@@ -384,7 +385,7 @@ function PublicChatPage() {
                   {!grouped && (
                     <div className={cn("flex items-center gap-2 mb-0.5 px-0.5", isMe && "flex-row-reverse")}>
                       <span className="text-[11px] font-semibold text-[oklch(0.78_0.13_220)] truncate max-w-[140px]">
-                        {msg.profile?.full_name || msg.profile?.username || "مجهول"}
+                        {friendlyName(msg.profile?.full_name, msg.profile?.username, msg.user_id)}
                       </span>
                       <span className="text-[9.5px] text-[oklch(0.42_0.02_250)] shrink-0">
                         {formatTime(msg.created_at)}
@@ -535,7 +536,7 @@ function PublicChatPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[11px] lg:text-[12px] font-medium text-white truncate">
-                  {u.full_name || u.username}
+                  {friendlyName(u.full_name, u.username, u.id)}
                 </p>
                 <p className="text-[9px] lg:text-[10px] text-[oklch(0.45_0.02_250)] truncate">
                   متصل
