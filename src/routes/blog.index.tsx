@@ -137,9 +137,9 @@ function BlogPage() {
             مقالات متخصصة في الذكاء الاصطناعي، العملات الرقمية، الخصوصية، والجيل القادم من التقنية الاجتماعية.
           </p>
 
-          {/* Language Selector */}
+          {/* Language Selector — once a language is chosen, hide all other languages */}
           <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
-            {LANGUAGES.map((lang) => (
+            {(activeLang === "all" ? LANGUAGES : LANGUAGES.filter((l) => l.code === activeLang)).map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => setActiveLang(lang.code)}
@@ -153,6 +153,14 @@ function BlogPage() {
                 <span>{lang.label}</span>
               </button>
             ))}
+            {activeLang !== "all" && (
+              <button
+                onClick={() => setActiveLang("all")}
+                className="px-3 py-2 rounded-full text-xs font-semibold border border-ice-border/15 bg-[oklch(0.14_0.02_250)] text-muted-foreground hover:text-foreground hover:border-cyan-glow/25 transition"
+              >
+                تغيير اللغة
+              </button>
+            )}
           </div>
 
           {/* Search */}
