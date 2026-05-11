@@ -525,14 +525,7 @@ function PublicChatPage() {
                 </Avatar>
                 <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 lg:h-3 lg:w-3 fill-green-500 text-green-500" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] lg:text-[12px] font-medium text-white truncate">
-                  {friendlyName(u.full_name, u.username, u.id)}
-                </p>
-                <p className="text-[9px] lg:text-[10px] text-[oklch(0.45_0.02_250)] truncate">
-                  متصل
-                </p>
-              </div>
+              {/* Names hidden — avatar only */}
               {user && u.id !== user.id && (
                 <button
                   onClick={(e) => { e.stopPropagation(); sendInvite(u.id); }}
