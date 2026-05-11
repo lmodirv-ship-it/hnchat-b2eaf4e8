@@ -509,11 +509,11 @@ function PublicChatPage() {
       </div>
 
       {/* ── Online users sidebar ── */}
-      <div className="hidden lg:flex flex-col w-[260px] border-r border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
-        <div className="px-4 py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2">
-          <Users className="h-4 w-4 text-[oklch(0.60_0.15_150)]" />
-          <h2 className="text-sm font-semibold text-white">
-            المتصلون ({onlineUsers.length})
+      <div className="flex flex-col w-[112px] sm:w-[160px] lg:w-[260px] shrink-0 border-r border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
+        <div className="px-2.5 lg:px-4 py-2.5 lg:py-3 border-b border-[oklch(1_0_0/0.07)] flex items-center gap-2">
+          <Users className="h-4 w-4 text-[oklch(0.60_0.15_150)] shrink-0" />
+          <h2 className="text-[12px] lg:text-sm font-semibold text-white truncate">
+            <span className="hidden sm:inline">المتصلون </span>({onlineUsers.length})
           </h2>
         </div>
         <div className="flex-1 overflow-y-auto py-2 scrollbar-thin">
