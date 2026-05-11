@@ -3024,6 +3024,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      generate_friendly_username: { Args: never; Returns: string }
       generate_member_id: { Args: never; Returns: string }
       generate_short_id: {
         Args: { _column?: string; _table: string }
