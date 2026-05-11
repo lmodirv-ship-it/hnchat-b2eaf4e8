@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { getDefaultAvatar } from "@/lib/default-avatar";
 import {
   Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2,
 } from "lucide-react";
