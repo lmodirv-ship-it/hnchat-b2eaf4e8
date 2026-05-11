@@ -277,7 +277,7 @@ function BlogPage() {
             }`}>
             جميع المقالات
           </button>
-          {categories.map((c) => (
+          {visibleCategories.map((c) => (
             <button key={c.id} onClick={() => setActiveCategory(c.slug)}
               className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 border ${
                 activeCategory === c.slug
