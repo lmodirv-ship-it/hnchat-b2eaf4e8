@@ -89,6 +89,22 @@ function BlogPage() {
 
   const isRtl = activeLang === "ar" || activeLang === "all";
 
+  // Only show categories that actually have articles in the currently selected language.
+  const visibleCategories = useMemo(() => {
+    if (activeLang === "all") return categories;
+    const slugs = new Set(
+      articles
+        .map((a) => (a.article_categories as any)?.slug)
+        .filter(Boolean) as string[]
+    );
+    return categories.filter((c) => slugs.has(c.slug));
+  }, [categories, articles, activeLang]);
+
+  // Reset category if it disappears after a language change.
+  if (activeCategory !== "all" && !visibleCategories.some((c) => c.slug === activeCategory)) {
+    setActiveCategory("all");
+  }
+
   const featured = articles[0];
   const trending = articles.slice(0, 4);
 
@@ -121,9 +137,9 @@ function BlogPage() {
             مقالات متخصصة في الذكاء الاصطناعي، العملات الرقمية، الخصوصية، والجيل القادم من التقنية الاجتماعية.
           </p>
 
-          {/* Language Selector */}
+          {/* Language Selector — once a language is chosen, hide all other languages */}
           <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
-            {LANGUAGES.map((lang) => (
+            {(activeLang === "all" ? LANGUAGES : LANGUAGES.filter((l) => l.code === activeLang)).map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => setActiveLang(lang.code)}
@@ -137,6 +153,14 @@ function BlogPage() {
                 <span>{lang.label}</span>
               </button>
             ))}
+            {activeLang !== "all" && (
+              <button
+                onClick={() => setActiveLang("all")}
+                className="px-3 py-2 rounded-full text-xs font-semibold border border-ice-border/15 bg-[oklch(0.14_0.02_250)] text-muted-foreground hover:text-foreground hover:border-cyan-glow/25 transition"
+              >
+                تغيير اللغة
+              </button>
+            )}
           </div>
 
           {/* Search */}
@@ -253,7 +277,7 @@ function BlogPage() {
             }`}>
             جميع المقالات
           </button>
-          {categories.map((c) => (
+          {visibleCategories.map((c) => (
             <button key={c.id} onClick={() => setActiveCategory(c.slug)}
               className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 border ${
                 activeCategory === c.slug
