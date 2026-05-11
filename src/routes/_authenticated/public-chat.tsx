@@ -521,29 +521,29 @@ function PublicChatPage() {
             <div
               key={u.id}
               onClick={() => setProfileUserId(u.id)}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
+              className="flex items-center gap-2 px-2 lg:px-3 py-2 hover:bg-[oklch(0.14_0.02_258/0.6)] transition group cursor-pointer"
             >
-              <div className="relative">
+              <div className="relative shrink-0">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={u.avatar_url || undefined} />
                   <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
                     {u.username?.[0]?.toUpperCase() || "?"}
                   </AvatarFallback>
                 </Avatar>
-                <Circle className="absolute -bottom-0.5 -left-0.5 h-3 w-3 fill-green-500 text-green-500" />
+                <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 lg:h-3 lg:w-3 fill-green-500 text-green-500" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-medium text-white truncate">
+                <p className="text-[11px] lg:text-[12px] font-medium text-white truncate">
                   {u.full_name || u.username}
                 </p>
-                <p className="text-[10px] text-[oklch(0.45_0.02_250)]">
-                  @{u.username}
+                <p className="text-[9px] lg:text-[10px] text-[oklch(0.45_0.02_250)] truncate">
+                  متصل
                 </p>
               </div>
               {user && u.id !== user.id && (
                 <button
-                  onClick={() => sendInvite(u.id)}
-                  className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-[oklch(0.25_0.08_220/0.4)] text-[oklch(0.65_0.12_220)] transition"
+                  onClick={(e) => { e.stopPropagation(); sendInvite(u.id); }}
+                  className="hidden lg:block opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-[oklch(0.25_0.08_220/0.4)] text-[oklch(0.65_0.12_220)] transition"
                   title="إرسال دعوة"
                 >
                   <UserPlus className="h-3.5 w-3.5" />
