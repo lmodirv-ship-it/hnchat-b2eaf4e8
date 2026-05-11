@@ -279,49 +279,9 @@ function PublicChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden" dir="rtl">
+    <div className="flex h-full overflow-hidden" dir="rtl">
       {/* ── Chat area ── */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
-        <div className="shrink-0 px-3 sm:px-4 py-2 sm:py-2.5 border-b border-[oklch(1_0_0/0.06)] flex items-center gap-2.5 sm:gap-3 bg-[oklch(0.09_0.02_258/0.92)] backdrop-blur-xl">
-          <div className="p-1.5 rounded-xl bg-gradient-to-br from-[oklch(0.32_0.14_220/0.4)] to-[oklch(0.22_0.10_240/0.3)] ring-1 ring-[oklch(0.50_0.15_220/0.25)] shrink-0">
-            <Globe className="h-4 w-4 sm:h-[18px] sm:w-[18px] text-[oklch(0.78_0.14_220)]" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-[13px] sm:text-[15px] font-semibold tracking-tight text-white truncate">HN chat</h1>
-            <p className="text-[10px] sm:text-[11px] text-[oklch(0.55_0.02_250)] flex items-center gap-1 mt-0.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
-              </span>
-              {onlineUsers.length} متصل الآن
-            </p>
-          </div>
-        </div>
-
-        {/* Online users — single horizontal row */}
-        {onlineUsers.length > 0 && (
-          <div className="shrink-0 border-b border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
-            <div className="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-thin">
-              {onlineUsers.map((u) => (
-                <button
-                  key={u.id}
-                  onClick={() => setProfileUserId(u.id)}
-                  className="relative shrink-0"
-                  title={friendlyName(u.full_name, u.username, u.id)}
-                >
-                  <Avatar className="h-10 w-10 ring-2 ring-[oklch(0.30_0.12_220/0.4)] hover:ring-[oklch(0.50_0.15_220)] transition">
-                    <AvatarImage src={u.avatar_url || getDefaultAvatar(u.id)} />
-                    <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
-                      {u.username?.[0]?.toUpperCase() || "?"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 fill-green-500 text-green-500" />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Invitations bar */}
         {invitations.length > 0 && (
@@ -521,6 +481,26 @@ function PublicChatPage() {
             </Button>
           </form>
         </div>
+      </div>
+
+      {/* ── Online users — left column (avatars only) ── */}
+      <div className="flex flex-col w-[64px] shrink-0 border-l border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)] overflow-y-auto py-2 gap-2 items-center scrollbar-thin">
+        {onlineUsers.map((u) => (
+          <button
+            key={u.id}
+            onClick={() => setProfileUserId(u.id)}
+            className="relative shrink-0"
+            title={friendlyName(u.full_name, u.username, u.id)}
+          >
+            <Avatar className="h-10 w-10 ring-2 ring-[oklch(0.30_0.12_220/0.4)] hover:ring-[oklch(0.50_0.15_220)] transition">
+              <AvatarImage src={u.avatar_url || getDefaultAvatar(u.id)} />
+              <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
+                {u.username?.[0]?.toUpperCase() || "?"}
+              </AvatarFallback>
+            </Avatar>
+            <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 fill-green-500 text-green-500" />
+          </button>
+        ))}
       </div>
 
       <UserProfileDialog
