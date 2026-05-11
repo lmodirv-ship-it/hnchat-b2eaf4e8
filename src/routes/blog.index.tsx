@@ -288,55 +288,98 @@ function BlogPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-            {filtered.map((article, i) => (
-              <motion.div key={article.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-                <Link to="/blog/$articleId" params={{ articleId: article.short_id ?? article.id }} className="group block h-full">
-                  <article className="h-full rounded-2xl overflow-hidden border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/20 hover:shadow-[0_16px_60px_oklch(0.78_0.18_220/0.06)] transition-all duration-700 flex flex-col">
-                    {/* Image */}
-                    <div className="relative h-60 overflow-hidden">
+          <div className="flex flex-col gap-3">
+            {filtered.map((article, i) => {
+              const articleId = article.short_id ?? article.id;
+              const cat = article.article_categories as any;
+              const author = article.profiles as any;
+              return (
+                <motion.div
+                  key={article.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(i * 0.03, 0.3) }}
+                >
+                  <article className="group relative flex items-stretch gap-3 sm:gap-4 p-2.5 sm:p-3 rounded-2xl border border-ice-border/10 bg-[oklch(0.14_0.02_250)] hover:border-cyan-glow/25 hover:bg-[oklch(0.16_0.03_255)] transition-all duration-300">
+                    {/* Thumbnail */}
+                    <Link
+                      to="/blog/$articleId"
+                      params={{ articleId }}
+                      className="relative shrink-0 w-32 h-20 sm:w-44 sm:h-28 rounded-xl overflow-hidden bg-[oklch(0.18_0.03_255)]"
+                    >
                       {article.featured_image ? (
-                        <img src={article.featured_image} alt={article.title} loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <img
+                          src={article.featured_image}
+                          alt={article.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-cyan-glow/8 to-violet-glow/8 flex items-center justify-center">
-                          <FileText className="h-12 w-12 text-muted-foreground/10" />
+                        <div className="w-full h-full bg-gradient-to-br from-cyan-glow/10 to-violet-glow/10 flex items-center justify-center">
+                          <FileText className="h-7 w-7 text-muted-foreground/20" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.14_0.02_250)] via-[oklch(0.14_0.02_250/0.2)] to-transparent" />
-                      {(article.article_categories as any) && (
-                        <span className="absolute bottom-4 left-4 px-3 py-1 text-[10px] font-bold rounded-full bg-gradient-to-r from-cyan-glow/80 to-violet-glow/80 text-white backdrop-blur-sm tracking-wide">
-                          {(article.article_categories as any).name}
+                      {article.reading_time && (
+                        <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-black/75 text-white tabular-nums">
+                          {article.reading_time}:00
                         </span>
                       )}
-                    </div>
+                    </Link>
 
                     {/* Content */}
-                    <div className="p-6 flex-1 flex flex-col">
-                      <h3 className="font-bold text-lg leading-snug mb-3 line-clamp-2 group-hover:text-cyan-glow transition-colors duration-300">
+                    <Link
+                      to="/blog/$articleId"
+                      params={{ articleId }}
+                      className="flex-1 min-w-0 flex flex-col justify-center py-1"
+                    >
+                      <div className="flex items-center gap-2 mb-1 text-[11px] text-muted-foreground/50">
+                        {author?.username && (
+                          <span className="truncate max-w-[140px]">@{author.username}</span>
+                        )}
+                        {cat?.name && (
+                          <>
+                            <span className="text-muted-foreground/25">•</span>
+                            <span className="text-cyan-glow/70 truncate">{cat.name}</span>
+                          </>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-cyan-glow transition-colors">
                         {article.title}
                       </h3>
-                      {article.short_description && (
-                        <p className="text-sm text-muted-foreground/40 line-clamp-2 mb-5 flex-1 leading-relaxed">{article.short_description}</p>
-                      )}
-                      <div className="flex items-center justify-between text-xs text-muted-foreground/35 mt-auto pt-4 border-t border-ice-border/8">
-                        <div className="flex items-center gap-2.5">
-                          {(article.profiles as any)?.avatar_url ? (
-                            <img src={(article.profiles as any).avatar_url} alt="" className="h-7 w-7 rounded-full ring-1 ring-ice-border/10" />
-                          ) : <User className="h-4 w-4" />}
-                          <span className="font-medium">{(article.profiles as any)?.full_name ?? (article.profiles as any)?.username}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="flex items-center gap-1"><Heart className="h-3 w-3" />{article.likes_count}</span>
-                          <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{article.views_count}</span>
-                          <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{article.reading_time}m</span>
-                        </div>
+                      <div className="hidden sm:flex items-center gap-3 mt-2 text-[11px] text-muted-foreground/45">
+                        <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{article.views_count}</span>
+                        <span className="flex items-center gap-1"><Heart className="h-3 w-3" />{article.likes_count}</span>
+                        {article.published_at && (
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {new Date(article.published_at).toLocaleDateString("ar")}
+                          </span>
+                        )}
                       </div>
+                    </Link>
+
+                    {/* Actions */}
+                    <div className="hidden sm:flex flex-col items-stretch justify-center gap-2 shrink-0">
+                      <Link
+                        to="/blog/$articleId"
+                        params={{ articleId }}
+                        className="px-4 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground hover:opacity-90 transition text-center"
+                      >
+                        قراءة
+                      </Link>
+                      <button
+                        type="button"
+                        className="px-4 py-1.5 rounded-lg text-xs font-semibold border border-ice-border/15 text-muted-foreground/70 hover:text-foreground hover:border-cyan-glow/25 transition flex items-center justify-center gap-1.5"
+                      >
+                        <Heart className="h-3.5 w-3.5" />
+                        <span className="tabular-nums">{article.likes_count}</span>
+                      </button>
                     </div>
                   </article>
-                </Link>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </section>
