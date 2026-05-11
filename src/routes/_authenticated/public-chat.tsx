@@ -299,7 +299,29 @@ function PublicChatPage() {
           </div>
         </div>
 
-        {/* Mobile online users strip removed — sidebar is always visible */}
+        {/* Online users — single horizontal row */}
+        {onlineUsers.length > 0 && (
+          <div className="shrink-0 border-b border-[oklch(1_0_0/0.07)] bg-[oklch(0.09_0.02_258)]">
+            <div className="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-thin">
+              {onlineUsers.map((u) => (
+                <button
+                  key={u.id}
+                  onClick={() => setProfileUserId(u.id)}
+                  className="relative shrink-0"
+                  title={friendlyName(u.full_name, u.username, u.id)}
+                >
+                  <Avatar className="h-10 w-10 ring-2 ring-[oklch(0.30_0.12_220/0.4)] hover:ring-[oklch(0.50_0.15_220)] transition">
+                    <AvatarImage src={u.avatar_url || getDefaultAvatar(u.id)} />
+                    <AvatarFallback className="text-[10px] bg-[oklch(0.25_0.06_230)] text-white">
+                      {u.username?.[0]?.toUpperCase() || "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <Circle className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 fill-green-500 text-green-500" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Invitations bar */}
         {invitations.length > 0 && (
