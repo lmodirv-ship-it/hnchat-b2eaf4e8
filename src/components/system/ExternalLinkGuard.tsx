@@ -11,6 +11,38 @@ import { toast } from "sonner";
  */
 const ALLOWED_HOST_SUFFIXES = ["lovable.app", "lovable.dev", "hnchat.net"];
 
+// Social share popups are allowed to open in a small window
+const SHARE_HOST_SUFFIXES = [
+  "twitter.com",
+  "x.com",
+  "facebook.com",
+  "linkedin.com",
+  "wa.me",
+  "whatsapp.com",
+  "t.me",
+  "telegram.me",
+  "reddit.com",
+  "pinterest.com",
+  "tumblr.com",
+  "vk.com",
+  "ok.ru",
+  "line.me",
+  "messenger.com",
+];
+
+function matchesSuffix(host: string, suffixes: string[]) {
+  return suffixes.some((s) => host === s || host.endsWith("." + s));
+}
+
+function isShareUrl(href: string): boolean {
+  try {
+    const url = new URL(href, window.location.href);
+    return matchesSuffix(url.hostname, SHARE_HOST_SUFFIXES);
+  } catch {
+    return false;
+  }
+}
+
 function isAllowedUrl(href: string): boolean {
   if (!href) return true;
   const trimmed = href.trim();
@@ -31,14 +63,14 @@ function isAllowedUrl(href: string): boolean {
   try {
     const url = new URL(trimmed, window.location.href);
     if (url.origin === window.location.origin) return true;
-    const host = url.hostname;
-    return ALLOWED_HOST_SUFFIXES.some(
-      (suffix) => host === suffix || host.endsWith("." + suffix),
-    );
+    if (matchesSuffix(url.hostname, ALLOWED_HOST_SUFFIXES)) return true;
+    if (matchesSuffix(url.hostname, SHARE_HOST_SUFFIXES)) return true;
+    return false;
   } catch {
     return true;
   }
 }
+
 
 export function ExternalLinkGuard() {
   useEffect(() => {
