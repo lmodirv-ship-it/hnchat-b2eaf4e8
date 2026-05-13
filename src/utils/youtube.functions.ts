@@ -60,34 +60,61 @@ async function resolveChannelIdFromUrl(input: string): Promise<{ channelId: stri
   // Block non-YouTube URLs to prevent SSRF
   if (!isAllowedYoutubeUrl(url)) return null;
 
-  // Direct channel id
-  const m = url.match(/youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})/);
-  if (m) {
-    return { channelId: m[1], html: "" };
+  // Direct channel id in URL
+  const direct = url.match(/youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})/);
+  if (direct) {
+    return { channelId: direct[1], html: "" };
   }
 
-  // Fetch the page and try to extract channelId
+  const browserHeaders = {
+    "User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept":
+      "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    // Skip the YouTube EU consent gate
+    "Cookie": "CONSENT=YES+; SOCS=CAI; PREF=hl=en",
+  };
+
+  // 1) Fetch the page and try to extract channelId from HTML
   try {
-    const res = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.net)",
-        "Accept-Language": "en-US,en;q=0.9",
-      },
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-    const idMatch =
-      html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})"/) ||
-      html.match(/<meta itemprop="identifier" content="(UC[A-Za-z0-9_-]{20,})"/) ||
-      html.match(/"externalId":"(UC[A-Za-z0-9_-]{20,})"/) ||
-      html.match(/"browseId":"(UC[A-Za-z0-9_-]{20,})"/) ||
-      html.match(/"channelId":"(UC[A-Za-z0-9_-]{20,})"/);
-    if (!idMatch) return null;
-    return { channelId: idMatch[1], html };
-  } catch {
-    return null;
+    const res = await fetch(url, { headers: browserHeaders });
+    if (res.ok) {
+      const html = await res.text();
+      const idMatch =
+        html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/<meta itemprop="identifier" content="(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/"externalId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/"browseId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/"channelId":"(UC[A-Za-z0-9_-]{20,})"/);
+      if (idMatch) return { channelId: idMatch[1], html };
+    }
+  } catch {}
+
+  // 2) Fallback: try the @handle endpoint and the /about page
+  const handleMatch = url.match(/youtube\.com\/(@[\w.\-]+)/i);
+  const fallbackUrls: string[] = [];
+  if (handleMatch) {
+    fallbackUrls.push(`https://www.youtube.com/${handleMatch[1]}/about`);
+    fallbackUrls.push(`https://www.youtube.com/${handleMatch[1]}/videos`);
   }
+  fallbackUrls.push(url.replace(/\/?$/, "/about"));
+
+  for (const u of fallbackUrls) {
+    try {
+      const r = await fetch(u, { headers: browserHeaders });
+      if (!r.ok) continue;
+      const html = await r.text();
+      const m =
+        html.match(/"externalId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/"browseId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/"channelId":"(UC[A-Za-z0-9_-]{20,})"/) ||
+        html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})"/);
+      if (m) return { channelId: m[1], html };
+    } catch {}
+  }
+
+  return null;
 }
 
 function extractChannelMeta(html: string): { title: string; avatar: string | null; description: string | null } {
