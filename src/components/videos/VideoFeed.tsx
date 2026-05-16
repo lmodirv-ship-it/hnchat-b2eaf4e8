@@ -240,6 +240,7 @@ function VideoCard({
   video,
   isActive,
   muted,
+  onToggleMuted,
   preload,
   shouldRenderSrc,
   registerRef,
@@ -250,6 +251,7 @@ function VideoCard({
   video: VideoPost;
   isActive: boolean;
   muted: boolean;
+  onToggleMuted: () => void;
   preload: "auto" | "metadata" | "none";
   shouldRenderSrc: boolean;
   registerRef: (el: HTMLDivElement | null) => void;
