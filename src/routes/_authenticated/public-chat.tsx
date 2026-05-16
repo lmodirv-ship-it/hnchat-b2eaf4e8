@@ -458,10 +458,59 @@ function PublicChatPage() {
                         <span className="truncate">{msg.content || "ملف"}</span>
                       </a>
                     )}
-                    {msg.attachment_type !== "file" && msg.content && (
-                      <div className={cn(msg.attachment_url && "mt-1.5 px-1")}>{msg.content}</div>
-                    )}
+                    {msg.attachment_type !== "file" && msg.content && (() => {
+                      const video = detectVideo(msg.content);
+                      if (video) {
+                        const textWithoutUrl = msg.content.replace(video.url, "").trim();
+                        return (
+                          <div className="space-y-2">
+                            {textWithoutUrl && <div className="px-1">{textWithoutUrl}</div>}
+                            <div className="rounded-xl overflow-hidden bg-black w-[280px] sm:w-[340px] max-w-full aspect-video">
+                              {video.kind === "youtube" ? (
+                                <iframe
+                                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
+                                  className="w-full h-full"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                  title="video"
+                                />
+                              ) : (
+                                <video
+                                  src={video.url}
+                                  controls
+                                  playsInline
+                                  className="w-full h-full object-contain"
+                                />
+                              )}
+                            </div>
+                            <a
+                              href={video.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block text-[11px] opacity-70 truncate px-1 underline-offset-2 hover:underline"
+                            >
+                              {video.url}
+                            </a>
+                          </div>
+                        );
+                      }
+                      return <div className={cn(msg.attachment_url && "mt-1.5 px-1")}>{msg.content}</div>;
+                    })()}
                   </div>
+                  {(isAdmin || msg.user_id === user?.id) && (
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(msg.id)}
+                      className={cn(
+                        "self-start mt-1 text-[10px] flex items-center gap-1 opacity-60 hover:opacity-100 text-red-400 transition",
+                        isMe ? "mr-1" : "ml-1",
+                      )}
+                      title="حذف"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      حذف
+                    </button>
+                  )}
                 </div>
               </div>
             );
