@@ -163,15 +163,6 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
           Reels
         </h2>
         <div className="flex gap-2 pointer-events-auto">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMuted((m) => !m)}
-            className="action-glass text-white hover:text-cyan-glow rounded-full h-10 w-10"
-            aria-label={muted ? "تشغيل الصوت" : "كتم الصوت"}
-          >
-            {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-          </Button>
           <UploadVideoDialog onUploaded={load} />
         </div>
       </div>
