@@ -446,6 +446,8 @@ export function ArticleEditor({ article }: Props) {
             </div>
           </div>
         </div>
+      )}
+
       {/* Publish Success Dialog */}
       <PublishSuccessDialog
         open={!!publishedDialog}
