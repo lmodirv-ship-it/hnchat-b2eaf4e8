@@ -181,6 +181,14 @@ function PublicChatPage() {
       )
       .on(
         "postgres_changes",
+        { event: "DELETE", schema: "public", table: "public_chat_messages" },
+        (payload) => {
+          const old = payload.old as { id: string };
+          setMessages((prev) => prev.filter((m) => m.id !== old.id));
+        },
+      )
+      .on(
+        "postgres_changes",
         { event: "INSERT", schema: "public", table: "chat_invitations" },
         () => {
           loadInvitations();
