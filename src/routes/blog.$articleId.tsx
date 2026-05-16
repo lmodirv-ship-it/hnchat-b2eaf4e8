@@ -6,7 +6,7 @@ import {
   useAddArticleComment,
   useDeleteArticleComment,
   useArticleLike,
-  usePublishedArticles,
+  useRelatedArticles,
 } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
@@ -37,6 +37,9 @@ import { toast } from "sonner";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { fetchPublicArticle } from "@/utils/public-pages.functions";
 import { GuestRegisterReminder } from "@/components/system/GuestRegisterReminder";
+import { ReadingProgressBar } from "@/components/blog/ReadingProgressBar";
+import { TableOfContents, slugifyHeading } from "@/components/blog/TableOfContents";
+import { InlineNewsletterCTA } from "@/components/blog/InlineNewsletterCTA";
 
 const SITE_URL = "https://www.hn-chat.com";
 const ORG_NAME = "hnChat";
@@ -226,6 +229,7 @@ function ArticlePage() {
 
   return (
     <PublicPageShell dir={isRTL ? "rtl" : "ltr"} headerActions={headerButtons}>
+      <ReadingProgressBar />
       {/* Hero Cover — full width, uncropped */}
       {article.featured_image && (
         <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-8 mt-8">
@@ -239,10 +243,10 @@ function ArticlePage() {
         </div>
       )}
 
-      {/* Article Body — wide magazine layout with side reminder */}
-      <div className="max-w-[1180px] mx-auto px-5 sm:px-8 grid grid-cols-1 xl:grid-cols-[1fr_280px] xl:gap-10">
-        <div className="max-w-[820px] w-full mx-auto xl:mx-0">
-        <article className="mt-10 relative z-10">
+      {/* Article Body — magazine layout: content + TOC + (xl) reminder */}
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 grid grid-cols-1 lg:grid-cols-[1fr_240px] xl:grid-cols-[1fr_240px_240px] lg:gap-8 xl:gap-10">
+        <div className="max-w-[820px] w-full mx-auto lg:mx-0 min-w-0">
+        <article className="mt-10 relative z-10 article-body">
 
           {/* Breadcrumbs (visible) */}
           <nav aria-label="breadcrumb" className="mb-5 text-xs text-muted-foreground/55 flex items-center gap-1.5 flex-wrap">
