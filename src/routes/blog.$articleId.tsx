@@ -6,7 +6,7 @@ import {
   useAddArticleComment,
   useDeleteArticleComment,
   useArticleLike,
-  usePublishedArticles,
+  useRelatedArticles,
 } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
@@ -37,6 +37,9 @@ import { toast } from "sonner";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { fetchPublicArticle } from "@/utils/public-pages.functions";
 import { GuestRegisterReminder } from "@/components/system/GuestRegisterReminder";
+import { ReadingProgressBar } from "@/components/blog/ReadingProgressBar";
+import { TableOfContents, slugifyHeading } from "@/components/blog/TableOfContents";
+import { InlineNewsletterCTA } from "@/components/blog/InlineNewsletterCTA";
 
 const SITE_URL = "https://www.hn-chat.com";
 const ORG_NAME = "hnChat";
@@ -226,6 +229,7 @@ function ArticlePage() {
 
   return (
     <PublicPageShell dir={isRTL ? "rtl" : "ltr"} headerActions={headerButtons}>
+      <ReadingProgressBar />
       {/* Hero Cover — full width, uncropped */}
       {article.featured_image && (
         <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-8 mt-8">
@@ -239,10 +243,10 @@ function ArticlePage() {
         </div>
       )}
 
-      {/* Article Body — wide magazine layout with side reminder */}
-      <div className="max-w-[1180px] mx-auto px-5 sm:px-8 grid grid-cols-1 xl:grid-cols-[1fr_280px] xl:gap-10">
-        <div className="max-w-[820px] w-full mx-auto xl:mx-0">
-        <article className="mt-10 relative z-10">
+      {/* Article Body — magazine layout: content + TOC + (xl) reminder */}
+      <div className="max-w-[1280px] mx-auto px-5 sm:px-8 grid grid-cols-1 lg:grid-cols-[1fr_240px] xl:grid-cols-[1fr_240px_240px] lg:gap-8 xl:gap-10">
+        <div className="max-w-[820px] w-full mx-auto lg:mx-0 min-w-0">
+        <article className="mt-10 relative z-10 article-body">
 
           {/* Breadcrumbs (visible) */}
           <nav aria-label="breadcrumb" className="mb-5 text-xs text-muted-foreground/55 flex items-center gap-1.5 flex-wrap">
@@ -358,13 +362,16 @@ function ArticlePage() {
             <AdSenseUnit className="rounded-xl overflow-hidden" />
           </div>
 
-          {/* Content — magazine typography */}
+          {/* Content — magazine typography with auto-injected heading IDs & drop cap */}
           <div
-            className="mb-14"
+            className="mb-10"
             style={{ fontSize: "1.15rem", lineHeight: "1.9", letterSpacing: "0.005em" }}
           >
             <ArticleContent content={article.content ?? ""} />
           </div>
+
+          {/* Inline newsletter CTA */}
+          <InlineNewsletterCTA isRTL={isRTL} />
 
           {/* Ad after content */}
           <div className="mb-10">
@@ -435,18 +442,32 @@ function ArticlePage() {
           <CommentsSection articleId={article.id} isRTL={isRTL} />
 
           {/* Related */}
-          <RelatedArticles currentSlug={article?.slug || ""} />
+          <RelatedArticles
+            currentId={article.id}
+            categoryId={(article.article_categories as any)?.id ?? article.category_id ?? null}
+            tags={Array.isArray(article.tags) ? article.tags : []}
+          />
         </article>
         </div>
 
-        {/* Side reminder for unregistered visitors */}
+        {/* Table of Contents (lg+) */}
+        <aside className="hidden lg:block">
+          <TableOfContents content={article.content ?? ""} isRTL={isRTL} />
+        </aside>
+
+        {/* Side reminder for unregistered visitors (xl+) */}
         <aside className="hidden xl:block">
           <div className="sticky top-24">
             <GuestRegisterReminder variant="side" />
           </div>
         </aside>
 
-        {/* Mobile/tablet: show below content */}
+        {/* Mobile TOC */}
+        <div className="lg:hidden mt-6">
+          <TableOfContents content={article.content ?? ""} isRTL={isRTL} />
+        </div>
+
+        {/* Mobile/tablet reminder */}
         <div className="xl:hidden mt-8">
           <GuestRegisterReminder variant="bottom" />
         </div>
@@ -466,19 +487,39 @@ function ArticleContent({ content }: { content: string }) {
         .replace(/^\s*…+\s*$/gm, "")
         .replace(/\n{3,}/g, "\n\n");
 
+      // Track heading IDs so the TOC can scroll to them
+      let headingIdx = 0;
+      const seen = new Map<string, number>();
+      const makeId = (text: string) => {
+        const base = (text || "")
+          .trim()
+          .toLowerCase()
+          .replace(/[`*_~]/g, "")
+          .replace(/[^\p{L}\p{N}\s-]/gu, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        let id = base || `section-${headingIdx + 1}`;
+        const count = seen.get(id) ?? 0;
+        seen.set(id, count + 1);
+        if (count > 0) id = `${id}-${count + 1}`;
+        headingIdx += 1;
+        return id;
+      };
+
       const raw = cleaned
-        .replace(
-          /^### (.+)$/gm,
-          '<h3 class="text-xl font-bold mt-8 mb-3" style="color:oklch(0.82 0.08 70)">$1</h3>',
-        )
-        .replace(
-          /^## (.+)$/gm,
-          '<h2 class="text-2xl font-bold mt-9 mb-3" style="color:oklch(0.85 0.09 65)">$1</h2>',
-        )
-        .replace(
-          /^# (.+)$/gm,
-          '<h1 class="text-3xl font-extrabold mt-10 mb-4" style="color:oklch(0.88 0.10 65)">$1</h1>',
-        )
+        .replace(/^### (.+)$/gm, (_, t) => {
+          const id = makeId(t);
+          return `<h3 id="${id}" class="group text-xl font-bold mt-8 mb-3 scroll-mt-24" style="color:oklch(0.82 0.08 70)"><a href="#${id}" class="heading-anchor opacity-0 group-hover:opacity-60 hover:!opacity-100 transition mr-2 text-sm" style="color:oklch(0.70 0.08 220)">#</a>${t}</h3>`;
+        })
+        .replace(/^## (.+)$/gm, (_, t) => {
+          const id = makeId(t);
+          return `<h2 id="${id}" class="group text-2xl font-bold mt-10 mb-4 scroll-mt-24" style="color:oklch(0.85 0.09 65)"><a href="#${id}" class="heading-anchor opacity-0 group-hover:opacity-60 hover:!opacity-100 transition mr-2 text-base" style="color:oklch(0.70 0.08 220)">#</a>${t}</h2>`;
+        })
+        .replace(/^# (.+)$/gm, (_, t) => {
+          const id = makeId(t);
+          return `<h1 id="${id}" class="text-3xl font-extrabold mt-10 mb-4 scroll-mt-24" style="color:oklch(0.88 0.10 65)">${t}</h1>`;
+        })
         .replace(
           /\*\*(.+?)\*\*/g,
           '<strong style="color:oklch(0.93 0.005 250);font-weight:600">$1</strong>',
@@ -513,35 +554,43 @@ function ArticleContent({ content }: { content: string }) {
         .replace(/\n\n/g, '</p><p class="mb-4 leading-[1.85]" style="color:oklch(0.88 0.005 250)">')
         .replace(/\n/g, "<br/>");
 
-      const safe = DOMPurify.sanitize(`<p class="mb-4 leading-[1.85]">${raw}</p>`, {
+      const safe = DOMPurify.sanitize(`<p class="article-first mb-4 leading-[1.85]">${raw}</p>`, {
         ALLOWED_TAGS: [
-          "h1",
-          "h2",
-          "h3",
-          "h4",
-          "p",
-          "br",
-          "strong",
-          "em",
-          "a",
-          "code",
-          "pre",
-          "blockquote",
-          "li",
-          "ul",
-          "ol",
-          "span",
+          "h1", "h2", "h3", "h4", "p", "br", "strong", "em", "a",
+          "code", "pre", "blockquote", "li", "ul", "ol", "span",
         ],
-        ALLOWED_ATTR: ["class", "style", "href", "target", "rel"],
-        ALLOWED_URI_REGEXP: /^https?:\/\//i,
+        ALLOWED_ATTR: ["class", "style", "href", "target", "rel", "id"],
+        ALLOWED_URI_REGEXP: /^(https?:\/\/|#)/i,
       });
       setSanitizedHtml(safe);
     });
   }, [content]);
 
+  // Heading anchor click handler — copy link and smooth scroll
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target?.matches?.("a.heading-anchor")) return;
+      e.preventDefault();
+      const href = target.getAttribute("href") ?? "";
+      const id = href.replace(/^#/, "");
+      const el = document.getElementById(id);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: "smooth" });
+      try {
+        navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${id}`);
+        toast.success("تم نسخ رابط القسم");
+      } catch {}
+      history.replaceState(null, "", `#${id}`);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   return (
     <div
-      className="leading-[1.85]"
+      className="leading-[1.85] article-body-content"
       style={{ color: "oklch(0.88 0.005 250)" }}
       dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
     />
@@ -757,9 +806,16 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
   );
 }
 
-function RelatedArticles({ currentSlug }: { currentSlug: string }) {
-  const { data: articles = [] } = usePublishedArticles({ limit: 4 });
-  const related = articles.filter((a) => a.slug !== currentSlug).slice(0, 3);
+function RelatedArticles({
+  currentId,
+  categoryId,
+  tags,
+}: {
+  currentId: string;
+  categoryId: string | null;
+  tags: string[];
+}) {
+  const { data: related = [] } = useRelatedArticles({ currentId, categoryId, tags, limit: 3 });
   if (related.length === 0) return null;
 
   return (

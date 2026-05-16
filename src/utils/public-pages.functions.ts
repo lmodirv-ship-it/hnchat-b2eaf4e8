@@ -92,6 +92,39 @@ export const fetchPublicArticle = createServerFn({ method: "GET" })
     return { ...article, author, category };
   });
 
+export const fetchRssArticles = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { data } = await supabaseAdmin
+      .from("articles")
+      .select("id, short_id, slug, title, short_description, featured_image, published_at, updated_at, language, author_id, category_id")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(30);
+    const items = data ?? [];
+    if (items.length === 0) return [] as any[];
+
+    const authorIds = [...new Set(items.map((a) => a.author_id).filter(Boolean))] as string[];
+    const categoryIds = [...new Set(items.map((a) => a.category_id).filter(Boolean))] as string[];
+
+    const [{ data: authors }, { data: categories }] = await Promise.all([
+      authorIds.length > 0
+        ? supabaseAdmin.from("profiles").select("id, username, full_name").in("id", authorIds)
+        : Promise.resolve({ data: [] as any[] }),
+      categoryIds.length > 0
+        ? supabaseAdmin.from("article_categories").select("id, name, name_ar").in("id", categoryIds)
+        : Promise.resolve({ data: [] as any[] }),
+    ]);
+
+    const authorMap = new Map((authors ?? []).map((a: any) => [a.id, a]));
+    const catMap = new Map((categories ?? []).map((c: any) => [c.id, c]));
+
+    return items.map((a) => ({
+      ...a,
+      author: authorMap.get(a.author_id) ?? null,
+      category: catMap.get(a.category_id) ?? null,
+    }));
+  });
+
 export const fetchSitemapData = createServerFn({ method: "GET" })
   .handler(async () => {
     let posts: { id: string; updated_at: string }[] = [];

@@ -633,3 +633,21 @@ html[style*="--theme-bg"] [class*="bg-gradient-to-t from-[oklch(0.0"] {
 .chat-scroll::-webkit-scrollbar-thumb:hover {
   background: oklch(0.55 0.20 260 / 0.6);
 }
+
+/* Blog article — drop cap on the first paragraph of the article body */
+.article-body-content > p.article-first::first-letter {
+  float: right;
+  font-size: 3.6em;
+  line-height: 0.9;
+  font-weight: 800;
+  margin-left: 0.5rem;
+  margin-top: 0.35rem;
+  margin-bottom: -0.1rem;
+  color: oklch(0.85 0.09 65);
+  text-shadow: 0 2px 12px oklch(0.65 0.25 295 / 0.15);
+}
+[dir="ltr"] .article-body-content > p.article-first::first-letter {
+  float: left;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
