@@ -598,7 +598,16 @@ function ArticleContent({ content }: { content: string }) {
 }
 
 function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {
+  const { user } = useAuth();
   const { liked, toggle, isPending } = useArticleLike(article.id);
+  const handleLike = () => {
+    if (!user) {
+      toast.info(isRTL ? "سجّل الدخول للإعجاب بالمقال" : "Sign in to like this article");
+      window.location.href = `/auth?redirect=${encodeURIComponent(window.location.pathname)}`;
+      return;
+    }
+    toggle();
+  };
   // Canonical URL ensures the shared link works across all domains
   const canonicalUrl = `${SITE_URL}/blog/${article.id}`;
   const url = typeof window !== "undefined" ? window.location.href : canonicalUrl;
