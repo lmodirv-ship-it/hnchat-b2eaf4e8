@@ -8,6 +8,7 @@ import {
   useArticleLike,
   useRelatedArticles,
   useReportComment,
+  useArticleCommentLikes,
   type ArticleComment,
 } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
@@ -749,6 +750,7 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
   const { data: comments = [] } = useArticleComments(articleId);
   const addComment = useAddArticleComment();
   const deleteComment = useDeleteArticleComment();
+  const likes = useArticleCommentLikes(articleId);
   const [newComment, setNewComment] = useState("");
   const [reportTarget, setReportTarget] = useState<string | null>(null);
 
@@ -771,6 +773,32 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
     await addComment.mutateAsync({ articleId, content: newComment.trim() });
     setNewComment("");
     toast.success(isRTL ? "تم إضافة التعليق" : "Comment added");
+  };
+
+  const handleLikeComment = (commentId: string) => {
+    if (!user) {
+      toast.info(isRTL ? "سجّل الدخول للإعجاب" : "Sign in to like");
+      window.location.href = "/sign-up-login";
+      return;
+    }
+    likes.toggle(commentId);
+  };
+
+  const handleShareComment = async (commentId: string, content: string) => {
+    const url = `${window.location.origin}${window.location.pathname}#comment-${commentId}`;
+    const text = content.length > 80 ? content.slice(0, 80) + "…" : content;
+    if (typeof navigator !== "undefined" && (navigator as any).share) {
+      try {
+        await (navigator as any).share({ text, url });
+        return;
+      } catch {}
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(isRTL ? "تم نسخ رابط التعليق" : "Comment link copied");
+    } catch {
+      toast.error(isRTL ? "تعذّر النسخ" : "Could not copy");
+    }
   };
 
   return (
@@ -839,10 +867,14 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
           <CommentItem
             key={c.id}
             comment={c}
-            replies={repliesByParent[c.id] ?? []}
+            repliesByParent={repliesByParent}
             articleId={articleId}
             isRTL={isRTL}
             currentUserId={user?.id}
+            likeCounts={likes.counts}
+            likedSet={likes.mine}
+            onLike={handleLikeComment}
+            onShare={handleShareComment}
             onDelete={(id) => deleteComment.mutate({ id, articleId })}
             onReport={(id) => setReportTarget(id)}
           />
@@ -861,19 +893,27 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
 
 function CommentItem({
   comment,
-  replies,
+  repliesByParent,
   articleId,
   isRTL,
   currentUserId,
+  likeCounts,
+  likedSet,
+  onLike,
+  onShare,
   onDelete,
   onReport,
   depth = 0,
 }: {
   comment: ArticleComment;
-  replies: ArticleComment[];
+  repliesByParent: Record<string, ArticleComment[]>;
   articleId: string;
   isRTL: boolean;
   currentUserId: string | undefined;
+  likeCounts: Record<string, number>;
+  likedSet: Set<string>;
+  onLike: (id: string) => void;
+  onShare: (id: string, content: string) => void;
   onDelete: (id: string) => void;
   onReport: (id: string) => void;
   depth?: number;
@@ -881,12 +921,17 @@ function CommentItem({
   const [showReply, setShowReply] = useState(false);
   const [replyText, setReplyText] = useState("");
   const addComment = useAddArticleComment();
+  const replies = repliesByParent[comment.id] ?? [];
+  const liked = likedSet.has(comment.id);
+  const likeCount = likeCounts[comment.id] ?? 0;
+  const maxDepth = 4;
 
   const handleReplySubmit = async () => {
     if (!replyText.trim()) return;
     await addComment.mutateAsync({
       articleId,
       content: replyText.trim(),
+      // Keep thread flat after maxDepth so deep chains still attach to last visible parent
       parentId: comment.id,
     });
     setReplyText("");
@@ -896,7 +941,8 @@ function CommentItem({
 
   return (
     <div
-      className={`p-5 rounded-xl border border-ice-border/8 bg-[oklch(0.14_0.02_250)] ${
+      id={`comment-${comment.id}`}
+      className={`p-5 rounded-xl border border-ice-border/8 bg-[oklch(0.14_0.02_250)] scroll-mt-24 ${
         depth > 0 ? (isRTL ? "mr-6 sm:mr-10" : "ml-6 sm:ml-10") : ""
       }`}
     >
@@ -920,38 +966,63 @@ function CommentItem({
             {new Date(comment.created_at).toLocaleDateString()}
           </span>
         </div>
-        <div className="flex items-center gap-1 shrink-0">
-          {currentUserId && depth === 0 && (
-            <button
-              onClick={() => setShowReply((v) => !v)}
-              className="flex items-center gap-1 text-[11px] text-muted-foreground/40 hover:text-cyan-glow transition px-2 py-1 rounded-lg hover:bg-cyan-glow/10"
-            >
-              <Reply className="h-3 w-3" />
-              {isRTL ? "رد" : "Reply"}
-            </button>
-          )}
-          {currentUserId && currentUserId !== comment.user_id && (
-            <button
-              onClick={() => onReport(comment.id)}
-              className="flex items-center gap-1 text-[11px] text-muted-foreground/30 hover:text-amber-400 transition px-2 py-1 rounded-lg hover:bg-amber-500/10"
-              title={isRTL ? "إبلاغ" : "Report"}
-            >
-              <Flag className="h-3 w-3" />
-            </button>
-          )}
-          {currentUserId === comment.user_id && (
-            <button
-              onClick={() => onDelete(comment.id)}
-              className="text-[11px] text-muted-foreground/30 hover:text-destructive transition px-2 py-1 rounded-lg hover:bg-destructive/10"
-            >
-              {isRTL ? "حذف" : "Delete"}
-            </button>
-          )}
-        </div>
+        {currentUserId === comment.user_id && (
+          <button
+            onClick={() => onDelete(comment.id)}
+            className="text-[11px] text-muted-foreground/30 hover:text-destructive transition px-2 py-1 rounded-lg hover:bg-destructive/10 shrink-0"
+          >
+            {isRTL ? "حذف" : "Delete"}
+          </button>
+        )}
       </div>
-      <p className="text-sm text-muted-foreground/70 leading-relaxed pr-12 whitespace-pre-wrap break-words">
+      <p className="text-sm text-muted-foreground/75 leading-relaxed whitespace-pre-wrap break-words">
         {comment.content}
       </p>
+
+      {/* Action bar */}
+      <div className="flex items-center gap-1 mt-3 pt-3 border-t border-ice-border/8">
+        <button
+          onClick={() => onLike(comment.id)}
+          className={`flex items-center gap-1.5 text-xs transition px-2.5 py-1.5 rounded-lg ${
+            liked
+              ? "text-red-400 bg-red-500/10"
+              : "text-muted-foreground/50 hover:text-red-400 hover:bg-red-500/10"
+          }`}
+          aria-label={isRTL ? "إعجاب" : "Like"}
+        >
+          <Heart className={`h-3.5 w-3.5 ${liked ? "fill-current" : ""}`} />
+          {likeCount > 0 && <span>{likeCount}</span>}
+        </button>
+
+        {currentUserId && depth < maxDepth && (
+          <button
+            onClick={() => setShowReply((v) => !v)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground/50 hover:text-cyan-glow transition px-2.5 py-1.5 rounded-lg hover:bg-cyan-glow/10"
+          >
+            <Reply className="h-3.5 w-3.5" />
+            {isRTL ? "رد" : "Reply"}
+          </button>
+        )}
+
+        <button
+          onClick={() => onShare(comment.id, comment.content)}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground/50 hover:text-violet-glow transition px-2.5 py-1.5 rounded-lg hover:bg-violet-glow/10"
+          title={isRTL ? "مشاركة" : "Share"}
+        >
+          <Share2 className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">{isRTL ? "نشر" : "Share"}</span>
+        </button>
+
+        {currentUserId && currentUserId !== comment.user_id && (
+          <button
+            onClick={() => onReport(comment.id)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground/40 hover:text-amber-400 transition px-2.5 py-1.5 rounded-lg hover:bg-amber-500/10 ml-auto"
+            title={isRTL ? "إبلاغ" : "Report"}
+          >
+            <Flag className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
 
       {showReply && (
         <div className="mt-4 pt-4 border-t border-ice-border/10">
@@ -992,10 +1063,14 @@ function CommentItem({
             <CommentItem
               key={r.id}
               comment={r}
-              replies={[]}
+              repliesByParent={repliesByParent}
               articleId={articleId}
               isRTL={isRTL}
               currentUserId={currentUserId}
+              likeCounts={likeCounts}
+              likedSet={likedSet}
+              onLike={onLike}
+              onShare={onShare}
               onDelete={onDelete}
               onReport={onReport}
               depth={depth + 1}
