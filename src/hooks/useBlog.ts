@@ -323,6 +323,65 @@ export function useDeleteArticleComment() {
   });
 }
 
+// Comment Likes — list of liked comment ids + counts per article
+export function useArticleCommentLikes(articleId: string) {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+
+  const { data } = useQuery({
+    queryKey: ["article-comment-likes", articleId, user?.id ?? "guest"],
+    enabled: !!articleId,
+    queryFn: async () => {
+      const { data: allLikes } = await supabase
+        .from("article_comment_likes")
+        .select("comment_id, user_id")
+        .in(
+          "comment_id",
+          (
+            await supabase
+              .from("article_comments")
+              .select("id")
+              .eq("article_id", articleId)
+          ).data?.map((c: any) => c.id) ?? [],
+        );
+      const counts: Record<string, number> = {};
+      const mine = new Set<string>();
+      for (const row of (allLikes ?? []) as any[]) {
+        counts[row.comment_id] = (counts[row.comment_id] ?? 0) + 1;
+        if (user && row.user_id === user.id) mine.add(row.comment_id);
+      }
+      return { counts, mine };
+    },
+  });
+
+  const toggle = useMutation({
+    mutationFn: async (commentId: string) => {
+      if (!user) throw new Error("Login required");
+      const isLiked = data?.mine.has(commentId);
+      if (isLiked) {
+        await supabase
+          .from("article_comment_likes")
+          .delete()
+          .eq("comment_id", commentId)
+          .eq("user_id", user.id);
+      } else {
+        await supabase
+          .from("article_comment_likes")
+          .insert({ comment_id: commentId, user_id: user.id } as any);
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["article-comment-likes", articleId] });
+    },
+  });
+
+  return {
+    counts: data?.counts ?? {},
+    mine: data?.mine ?? new Set<string>(),
+    toggle: toggle.mutate,
+  };
+}
+
 // Article Likes
 export function useArticleLike(articleId: string) {
   const { user } = useAuth();
