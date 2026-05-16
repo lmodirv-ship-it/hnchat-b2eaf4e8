@@ -776,6 +776,29 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
         </div>
       )}
 
+      {!user && (
+        <div className="mb-8 p-6 rounded-2xl border border-cyan-glow/20 bg-gradient-to-br from-cyan-glow/5 to-violet-glow/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-center sm:text-right">
+            <div className="p-2.5 rounded-xl bg-cyan-glow/10 shrink-0">
+              <MessageCircle className="h-5 w-5 text-cyan-glow" />
+            </div>
+            <p className="text-sm text-muted-foreground/80">
+              {isRTL
+                ? "سجّل الدخول لكتابة تعليق والمشاركة في النقاش"
+                : "Sign in to write a comment and join the discussion"}
+            </p>
+          </div>
+          <Link to="/auth" search={{ redirect: typeof window !== "undefined" ? window.location.pathname : undefined } as any}>
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground px-5 shrink-0"
+            >
+              {isRTL ? "تسجيل الدخول" : "Sign in"}
+            </Button>
+          </Link>
+        </div>
+      )}
+
       <div className="space-y-4">
         {comments.map((c) => (
           <div
