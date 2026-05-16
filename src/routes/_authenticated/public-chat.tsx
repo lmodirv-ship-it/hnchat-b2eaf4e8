@@ -8,11 +8,35 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getDefaultAvatar } from "@/lib/default-avatar";
 import { friendlyName } from "@/lib/display-name";
 import {
-  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2,
+  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2, Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { UserProfileDialog } from "@/components/profile/UserProfileDialog";
+
+/* ── video URL detection ── */
+type VideoEmbed =
+  | { kind: "youtube"; id: string; url: string }
+  | { kind: "video"; url: string };
+
+function detectVideo(text: string | null | undefined): VideoEmbed | null {
+  if (!text) return null;
+  const urlMatch = text.match(/https?:\/\/[^\s]+/i);
+  if (!urlMatch) return null;
+  const url = urlMatch[0];
+  // YouTube
+  const yt = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/,
+  );
+  if (yt) return { kind: "youtube", id: yt[1], url };
+  // Direct video file
+  if (/\.(mp4|webm|mov|m4v)(\?|$)/i.test(url)) {
+    return { kind: "video", url };
+  }
+  return null;
+}
+
+const RETENTION_HOURS = 28;
 
 export const Route = createFileRoute("/_authenticated/public-chat")({
   component: PublicChatPage,
@@ -49,7 +73,7 @@ interface Invitation {
 
 /* ── main component ── */
 function PublicChatPage() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
@@ -64,9 +88,11 @@ function PublicChatPage() {
 
   /* ── load messages ── */
   const loadMessages = useCallback(async () => {
+    const since = new Date(Date.now() - RETENTION_HOURS * 60 * 60 * 1000).toISOString();
     const { data: rows } = await supabase
       .from("public_chat_messages")
       .select("*")
+      .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(200);
     if (rows) {
@@ -155,6 +181,14 @@ function PublicChatPage() {
       )
       .on(
         "postgres_changes",
+        { event: "DELETE", schema: "public", table: "public_chat_messages" },
+        (payload) => {
+          const old = payload.old as { id: string };
+          setMessages((prev) => prev.filter((m) => m.id !== old.id));
+        },
+      )
+      .on(
+        "postgres_changes",
         { event: "INSERT", schema: "public", table: "chat_invitations" },
         () => {
           loadInvitations();
@@ -200,6 +234,26 @@ function PublicChatPage() {
 
     return () => clearInterval(interval);
   }, [user]);
+
+  /* ── prune expired messages locally (28h) ── */
+  useEffect(() => {
+    const prune = () => {
+      const cutoff = Date.now() - RETENTION_HOURS * 60 * 60 * 1000;
+      setMessages((prev) => prev.filter((m) => new Date(m.created_at).getTime() >= cutoff));
+    };
+    const interval = setInterval(prune, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  /* ── delete message (author / admin / owner) ── */
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from("public_chat_messages").delete().eq("id", id);
+    if (error) {
+      toast.error("فشل الحذف");
+    } else {
+      setMessages((prev) => prev.filter((m) => m.id !== id));
+    }
+  };
 
   /* ── send message ── */
   const handleSend = async () => {
@@ -404,10 +458,59 @@ function PublicChatPage() {
                         <span className="truncate">{msg.content || "ملف"}</span>
                       </a>
                     )}
-                    {msg.attachment_type !== "file" && msg.content && (
-                      <div className={cn(msg.attachment_url && "mt-1.5 px-1")}>{msg.content}</div>
-                    )}
+                    {msg.attachment_type !== "file" && msg.content && (() => {
+                      const video = detectVideo(msg.content);
+                      if (video) {
+                        const textWithoutUrl = msg.content.replace(video.url, "").trim();
+                        return (
+                          <div className="space-y-2">
+                            {textWithoutUrl && <div className="px-1">{textWithoutUrl}</div>}
+                            <div className="rounded-xl overflow-hidden bg-black w-[280px] sm:w-[340px] max-w-full aspect-video">
+                              {video.kind === "youtube" ? (
+                                <iframe
+                                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
+                                  className="w-full h-full"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                  title="video"
+                                />
+                              ) : (
+                                <video
+                                  src={video.url}
+                                  controls
+                                  playsInline
+                                  className="w-full h-full object-contain"
+                                />
+                              )}
+                            </div>
+                            <a
+                              href={video.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block text-[11px] opacity-70 truncate px-1 underline-offset-2 hover:underline"
+                            >
+                              {video.url}
+                            </a>
+                          </div>
+                        );
+                      }
+                      return <div className={cn(msg.attachment_url && "mt-1.5 px-1")}>{msg.content}</div>;
+                    })()}
                   </div>
+                  {(isAdmin || msg.user_id === user?.id) && (
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(msg.id)}
+                      className={cn(
+                        "self-start mt-1 text-[10px] flex items-center gap-1 opacity-60 hover:opacity-100 text-red-400 transition",
+                        isMe ? "mr-1" : "ml-1",
+                      )}
+                      title="حذف"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      حذف
+                    </button>
+                  )}
                 </div>
               </div>
             );
