@@ -321,6 +321,74 @@ export function useArticleLike(articleId: string) {
   return { liked, toggle: toggle.mutate, isPending: toggle.isPending };
 }
 
+/**
+ * Smart related-articles fetch:
+ *   1. Same category (excluding current)
+ *   2. Fill with shared-tag articles
+ *   3. Fallback with recent articles
+ * Always returns up to `limit` distinct items.
+ */
+export function useRelatedArticles(opts: {
+  currentId: string;
+  categoryId?: string | null;
+  tags?: string[];
+  limit?: number;
+}) {
+  const { currentId, categoryId, tags = [], limit = 3 } = opts;
+  return useQuery({
+    queryKey: ["related-articles", currentId, categoryId, tags.join(","), limit],
+    enabled: !!currentId,
+    queryFn: async () => {
+      const collected = new Map<string, Article>();
+      const select = "*, profiles!articles_author_id_fkey(username, full_name, avatar_url), article_categories(*)";
+
+      // 1. Same category
+      if (categoryId) {
+        const { data } = await supabase
+          .from("articles")
+          .select(select)
+          .eq("status", "published")
+          .eq("category_id", categoryId)
+          .neq("id", currentId)
+          .order("published_at", { ascending: false })
+          .limit(limit + 3);
+        (data ?? []).forEach((a: any) => collected.set(a.id, a as Article));
+      }
+
+      // 2. Shared tags
+      if (collected.size < limit && tags.length > 0) {
+        const { data } = await supabase
+          .from("articles")
+          .select(select)
+          .eq("status", "published")
+          .neq("id", currentId)
+          .overlaps("tags", tags)
+          .order("published_at", { ascending: false })
+          .limit(limit + 3);
+        (data ?? []).forEach((a: any) => {
+          if (!collected.has(a.id)) collected.set(a.id, a as Article);
+        });
+      }
+
+      // 3. Recent fallback
+      if (collected.size < limit) {
+        const { data } = await supabase
+          .from("articles")
+          .select(select)
+          .eq("status", "published")
+          .neq("id", currentId)
+          .order("published_at", { ascending: false })
+          .limit(limit + 3);
+        (data ?? []).forEach((a: any) => {
+          if (!collected.has(a.id)) collected.set(a.id, a as Article);
+        });
+      }
+
+      return Array.from(collected.values()).slice(0, limit);
+    },
+  });
+}
+
 export async function uploadBlogImage(file: File, userId: string): Promise<string> {
   const ext = file.name.split(".").pop();
   const path = `${userId}/${Date.now()}.${ext}`;
