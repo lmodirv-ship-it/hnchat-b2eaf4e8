@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import { ExternalLinkGuard } from "@/components/system/ExternalLinkGuard";
-import { GuestRegisterReminder } from "@/components/system/GuestRegisterReminder";
 import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { NativeStatusBar } from "@/components/layout/NativeStatusBar";
 import { NetworkStatus } from "@/components/layout/NetworkStatus";
@@ -182,7 +181,6 @@ function RootComponent() {
         <NetworkStatus />
         <NavigationProgress />
         <ExternalLinkGuard />
-        <GuestRegisterReminder />
         <Outlet />
         <Toaster />
       </AuthProvider>
