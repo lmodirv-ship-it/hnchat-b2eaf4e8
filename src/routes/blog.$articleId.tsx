@@ -750,6 +750,7 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
   const { data: comments = [] } = useArticleComments(articleId);
   const addComment = useAddArticleComment();
   const deleteComment = useDeleteArticleComment();
+  const likes = useArticleCommentLikes(articleId);
   const [newComment, setNewComment] = useState("");
   const [reportTarget, setReportTarget] = useState<string | null>(null);
 
@@ -772,6 +773,32 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
     await addComment.mutateAsync({ articleId, content: newComment.trim() });
     setNewComment("");
     toast.success(isRTL ? "تم إضافة التعليق" : "Comment added");
+  };
+
+  const handleLikeComment = (commentId: string) => {
+    if (!user) {
+      toast.info(isRTL ? "سجّل الدخول للإعجاب" : "Sign in to like");
+      window.location.href = "/sign-up-login";
+      return;
+    }
+    likes.toggle(commentId);
+  };
+
+  const handleShareComment = async (commentId: string, content: string) => {
+    const url = `${window.location.origin}${window.location.pathname}#comment-${commentId}`;
+    const text = content.length > 80 ? content.slice(0, 80) + "…" : content;
+    if (typeof navigator !== "undefined" && (navigator as any).share) {
+      try {
+        await (navigator as any).share({ text, url });
+        return;
+      } catch {}
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(isRTL ? "تم نسخ رابط التعليق" : "Comment link copied");
+    } catch {
+      toast.error(isRTL ? "تعذّر النسخ" : "Could not copy");
+    }
   };
 
   return (
@@ -840,10 +867,14 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
           <CommentItem
             key={c.id}
             comment={c}
-            replies={repliesByParent[c.id] ?? []}
+            repliesByParent={repliesByParent}
             articleId={articleId}
             isRTL={isRTL}
             currentUserId={user?.id}
+            likeCounts={likes.counts}
+            likedSet={likes.mine}
+            onLike={handleLikeComment}
+            onShare={handleShareComment}
             onDelete={(id) => deleteComment.mutate({ id, articleId })}
             onReport={(id) => setReportTarget(id)}
           />
