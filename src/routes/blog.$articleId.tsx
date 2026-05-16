@@ -437,6 +437,19 @@ function ArticlePage() {
           {/* Related */}
           <RelatedArticles currentSlug={article?.slug || ""} />
         </article>
+        </div>
+
+        {/* Side reminder for unregistered visitors */}
+        <aside className="hidden xl:block">
+          <div className="sticky top-24">
+            <GuestRegisterReminder variant="side" />
+          </div>
+        </aside>
+
+        {/* Mobile/tablet: show below content */}
+        <div className="xl:hidden mt-8">
+          <GuestRegisterReminder variant="bottom" />
+        </div>
       </div>
     </PublicPageShell>
   );
