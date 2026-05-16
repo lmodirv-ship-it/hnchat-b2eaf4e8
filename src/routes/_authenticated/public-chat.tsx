@@ -235,6 +235,26 @@ function PublicChatPage() {
     return () => clearInterval(interval);
   }, [user]);
 
+  /* ── prune expired messages locally (28h) ── */
+  useEffect(() => {
+    const prune = () => {
+      const cutoff = Date.now() - RETENTION_HOURS * 60 * 60 * 1000;
+      setMessages((prev) => prev.filter((m) => new Date(m.created_at).getTime() >= cutoff));
+    };
+    const interval = setInterval(prune, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  /* ── delete message (author / admin / owner) ── */
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from("public_chat_messages").delete().eq("id", id);
+    if (error) {
+      toast.error("فشل الحذف");
+    } else {
+      setMessages((prev) => prev.filter((m) => m.id !== id));
+    }
+  };
+
   /* ── send message ── */
   const handleSend = async () => {
     if (!newMsg.trim() || !user || sending) return;
