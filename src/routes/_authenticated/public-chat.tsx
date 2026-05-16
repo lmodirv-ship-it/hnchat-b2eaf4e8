@@ -224,7 +224,7 @@ function PublicChatPage() {
     setUploading(true);
     try {
       const ext = file.name.split(".").pop() || "bin";
-      const path = `public-chat/${user.id}/${Date.now()}.${ext}`;
+      const path = `${user.id}/public-chat/${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage
         .from("chat-attachments")
         .upload(path, file, { contentType: file.type, upsert: false });
