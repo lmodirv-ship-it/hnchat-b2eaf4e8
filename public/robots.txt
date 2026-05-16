@@ -5,6 +5,13 @@ Allow: /
 Disallow: /sign-up-login
 Disallow: /admin/
 Disallow: /owner/
+Disallow: /add-channel
+Disallow: /ads-manager
+Disallow: /feed
+Disallow: /messages
+Disallow: /notifications
+Disallow: /settings
+Disallow: /profile
 
 # Allow all major search engines and social crawlers
 User-agent: Googlebot
