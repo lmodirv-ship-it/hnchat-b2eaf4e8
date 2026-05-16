@@ -64,12 +64,13 @@ function PublicChatPage() {
 
   /* ── load messages ── */
   const loadMessages = useCallback(async () => {
-    const { data } = await supabase
+    const { data: rows } = await supabase
       .from("public_chat_messages")
       .select("*")
-      .order("created_at", { ascending: true })
+      .order("created_at", { ascending: false })
       .limit(200);
-    if (data) {
+    if (rows) {
+      const data = [...rows].reverse();
       // load profiles for messages
       const userIds = [...new Set(data.map((m) => m.user_id))];
       const { data: profiles } = await supabase
