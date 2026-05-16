@@ -15,7 +15,9 @@ export const Route = createFileRoute("/trending")({
       { name: "description", content: "اكتشف أكثر المقالات قراءة وأفضل أدوات الذكاء الاصطناعي رواجًا هذا الأسبوع." },
       { property: "og:title", content: "المحتوى الرائج — hnChat" },
       { property: "og:description", content: "اكتشف أكثر المقالات قراءة وأفضل أدوات AI رواجًا." },
+      { property: "og:url", content: "https://www.hn-chat.com/trending" },
     ],
+    links: [{ rel: "canonical", href: "https://www.hn-chat.com/trending" }],
   }),
   component: TrendingPage,
 });

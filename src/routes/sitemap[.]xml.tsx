@@ -33,6 +33,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { loc: "/privacy", priority: "0.5", changefreq: "yearly" },
           { loc: "/terms", priority: "0.5", changefreq: "yearly" },
           { loc: "/sign-up-login", priority: "0.7", changefreq: "monthly" },
+          { loc: "/trending", priority: "0.8", changefreq: "daily" },
+          { loc: "/community-guidelines", priority: "0.5", changefreq: "yearly" },
         ];
 
         const { posts, streams, articles } = await fetchSitemapData();
