@@ -88,9 +88,11 @@ function PublicChatPage() {
 
   /* ── load messages ── */
   const loadMessages = useCallback(async () => {
+    const since = new Date(Date.now() - RETENTION_HOURS * 60 * 60 * 1000).toISOString();
     const { data: rows } = await supabase
       .from("public_chat_messages")
       .select("*")
+      .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(200);
     if (rows) {
