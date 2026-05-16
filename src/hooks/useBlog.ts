@@ -258,14 +258,53 @@ export function useAddArticleComment() {
   const qc = useQueryClient();
   const { user } = useAuth();
   return useMutation({
-    mutationFn: async ({ articleId, content }: { articleId: string; content: string }) => {
+    mutationFn: async ({
+      articleId,
+      content,
+      parentId,
+    }: {
+      articleId: string;
+      content: string;
+      parentId?: string | null;
+    }) => {
       const { error } = await supabase
         .from("article_comments")
-        .insert({ article_id: articleId, user_id: user!.id, content } as any);
+        .insert({
+          article_id: articleId,
+          user_id: user!.id,
+          content,
+          parent_id: parentId ?? null,
+        } as any);
       if (error) throw error;
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["article-comments", vars.articleId] });
+    },
+  });
+}
+
+export function useReportComment() {
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async ({
+      commentId,
+      reason,
+      details,
+    }: {
+      commentId: string;
+      reason: string;
+      details?: string;
+    }) => {
+      if (!user) throw new Error("Login required");
+      const { error } = await supabase
+        .from("comment_reports")
+        .insert({
+          comment_id: commentId,
+          reporter_id: user.id,
+          reason,
+          details: details ?? null,
+        } as any);
+      if (error) throw error;
     },
   });
 }
