@@ -8,11 +8,35 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getDefaultAvatar } from "@/lib/default-avatar";
 import { friendlyName } from "@/lib/display-name";
 import {
-  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2,
+  Send, Globe, Users, UserPlus, Check, X, Circle, MessageCircle, Paperclip, ImageIcon, Loader2, Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { UserProfileDialog } from "@/components/profile/UserProfileDialog";
+
+/* ── video URL detection ── */
+type VideoEmbed =
+  | { kind: "youtube"; id: string; url: string }
+  | { kind: "video"; url: string };
+
+function detectVideo(text: string | null | undefined): VideoEmbed | null {
+  if (!text) return null;
+  const urlMatch = text.match(/https?:\/\/[^\s]+/i);
+  if (!urlMatch) return null;
+  const url = urlMatch[0];
+  // YouTube
+  const yt = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/,
+  );
+  if (yt) return { kind: "youtube", id: yt[1], url };
+  // Direct video file
+  if (/\.(mp4|webm|mov|m4v)(\?|$)/i.test(url)) {
+    return { kind: "video", url };
+  }
+  return null;
+}
+
+const RETENTION_HOURS = 28;
 
 export const Route = createFileRoute("/_authenticated/public-chat")({
   component: PublicChatPage,
