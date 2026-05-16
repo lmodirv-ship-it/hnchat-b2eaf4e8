@@ -15,6 +15,7 @@ import { useRealtimeFeed } from "@/hooks/useRealtimeFeed";
 
 import { MyChannelsCard } from "@/components/feed/MyChannelsCard";
 import { UnifiedActivityFeed } from "@/components/landing/UnifiedActivityFeed";
+import { GuestRegisterReminder } from "@/components/system/GuestRegisterReminder";
 
 export const Route = createFileRoute("/_authenticated/feed")({
   head: () => ({
@@ -272,6 +273,11 @@ function FeedPage() {
 
       {/* Unified feed: articles + channel videos + posts + live, sorted by date */}
       <UnifiedActivityFeed lang="ar" variant="embedded" />
+
+      {/* Guest register reminder — bottom of feed, embedded */}
+      <div className="mt-8 mb-2">
+        <GuestRegisterReminder variant="bottom" />
+      </div>
 
       {/* Bottom spacer for mobile nav */}
       <div className="h-8" />

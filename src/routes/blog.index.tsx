@@ -7,6 +7,7 @@ import { usePublishedArticles, useCategories } from "@/hooks/useBlog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
+import { GuestRegisterReminder } from "@/components/system/GuestRegisterReminder";
 
 export const Route = createFileRoute("/blog/")({
   head: () => {
@@ -429,6 +430,11 @@ function BlogPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Guest register reminder — embedded, not popup */}
+      <section className="max-w-5xl mx-auto px-6 pb-10">
+        <GuestRegisterReminder variant="bottom" />
       </section>
 
       {/* Ad Unit */}
