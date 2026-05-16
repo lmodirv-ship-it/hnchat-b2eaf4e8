@@ -7,6 +7,8 @@ import {
   useDeleteArticleComment,
   useArticleLike,
   useRelatedArticles,
+  useReportComment,
+  type ArticleComment,
 } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
