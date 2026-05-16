@@ -8,7 +8,7 @@ const SITE_URL = "https://www.hn-chat.com";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "تواصل معنا — hnChat | Contact Us" },
+      { title: "تواصل معنا — hnChat" },
       { name: "description", content: "تواصل مع فريق hnChat للدعم الفني، الشراكات، الإعلانات، الاقتراحات، أو الاستفسارات. فريقنا هنا لمساعدتك." },
       { property: "og:title", content: "تواصل معنا — hnChat" },
       { property: "og:description", content: "تواصل مع فريق hnChat — دعم فني، شراكات، وإعلانات." },

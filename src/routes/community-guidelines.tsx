@@ -7,7 +7,7 @@ const LAST_UPDATED = "7 مايو 2026";
 export const Route = createFileRoute("/community-guidelines")({
   head: () => ({
     meta: [
-      { title: "إرشادات المجتمع — hnChat | Community Guidelines" },
+      { title: "إرشادات المجتمع — hnChat" },
       { name: "description", content: "إرشادات مجتمع hnChat — القواعد والمعايير التي تحكم التفاعل على المنصة لضمان بيئة آمنة ومحترمة للجميع." },
       { property: "og:title", content: "إرشادات المجتمع — hnChat" },
       { property: "og:description", content: "قواعد ومعايير مجتمع hnChat لبيئة آمنة ومحترمة." },
