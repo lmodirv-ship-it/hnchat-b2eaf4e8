@@ -362,13 +362,16 @@ function ArticlePage() {
             <AdSenseUnit className="rounded-xl overflow-hidden" />
           </div>
 
-          {/* Content — magazine typography */}
+          {/* Content — magazine typography with auto-injected heading IDs & drop cap */}
           <div
-            className="mb-14"
+            className="mb-10"
             style={{ fontSize: "1.15rem", lineHeight: "1.9", letterSpacing: "0.005em" }}
           >
             <ArticleContent content={article.content ?? ""} />
           </div>
+
+          {/* Inline newsletter CTA */}
+          <InlineNewsletterCTA isRTL={isRTL} />
 
           {/* Ad after content */}
           <div className="mb-10">
@@ -439,18 +442,32 @@ function ArticlePage() {
           <CommentsSection articleId={article.id} isRTL={isRTL} />
 
           {/* Related */}
-          <RelatedArticles currentSlug={article?.slug || ""} />
+          <RelatedArticles
+            currentId={article.id}
+            categoryId={(article.article_categories as any)?.id ?? article.category_id ?? null}
+            tags={Array.isArray(article.tags) ? article.tags : []}
+          />
         </article>
         </div>
 
-        {/* Side reminder for unregistered visitors */}
+        {/* Table of Contents (lg+) */}
+        <aside className="hidden lg:block">
+          <TableOfContents content={article.content ?? ""} isRTL={isRTL} />
+        </aside>
+
+        {/* Side reminder for unregistered visitors (xl+) */}
         <aside className="hidden xl:block">
           <div className="sticky top-24">
             <GuestRegisterReminder variant="side" />
           </div>
         </aside>
 
-        {/* Mobile/tablet: show below content */}
+        {/* Mobile TOC */}
+        <div className="lg:hidden mt-6">
+          <TableOfContents content={article.content ?? ""} isRTL={isRTL} />
+        </div>
+
+        {/* Mobile/tablet reminder */}
         <div className="xl:hidden mt-8">
           <GuestRegisterReminder variant="bottom" />
         </div>
@@ -761,9 +778,16 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
   );
 }
 
-function RelatedArticles({ currentSlug }: { currentSlug: string }) {
-  const { data: articles = [] } = usePublishedArticles({ limit: 4 });
-  const related = articles.filter((a) => a.slug !== currentSlug).slice(0, 3);
+function RelatedArticles({
+  currentId,
+  categoryId,
+  tags,
+}: {
+  currentId: string;
+  categoryId: string | null;
+  tags: string[];
+}) {
+  const { data: related = [] } = useRelatedArticles({ currentId, categoryId, tags, limit: 3 });
   if (related.length === 0) return null;
 
   return (
