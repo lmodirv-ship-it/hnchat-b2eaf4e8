@@ -750,6 +750,21 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
   const addComment = useAddArticleComment();
   const deleteComment = useDeleteArticleComment();
   const [newComment, setNewComment] = useState("");
+  const [reportTarget, setReportTarget] = useState<string | null>(null);
+
+  // Group into top-level + replies map
+  const { topLevel, repliesByParent } = (() => {
+    const top: ArticleComment[] = [];
+    const map: Record<string, ArticleComment[]> = {};
+    for (const c of comments) {
+      if (c.parent_id) {
+        (map[c.parent_id] ??= []).push(c);
+      } else {
+        top.push(c);
+      }
+    }
+    return { topLevel: top, repliesByParent: map };
+  })();
 
   const handleSubmit = async () => {
     if (!newComment.trim()) return;
@@ -779,6 +794,7 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
               onChange={(e) => setNewComment(e.target.value)}
               placeholder={isRTL ? "اكتب تعليقك..." : "Write a comment..."}
               rows={3}
+              maxLength={2000}
               className="bg-transparent border-ice-border/10 text-sm resize-none"
             />
           </div>
@@ -819,43 +835,277 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
       )}
 
       <div className="space-y-4">
-        {comments.map((c) => (
-          <div
+        {topLevel.map((c) => (
+          <CommentItem
             key={c.id}
-            className="p-5 rounded-xl border border-ice-border/8 bg-[oklch(0.14_0.02_250)]"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              {(c.profiles as any)?.avatar_url ? (
-                <img src={(c.profiles as any).avatar_url} alt="" className="h-9 w-9 rounded-full" />
-              ) : (
-                <div className="h-9 w-9 rounded-full bg-[oklch(0.18_0.02_250)] flex items-center justify-center">
-                  <User className="h-4 w-4" />
-                </div>
-              )}
-              <div className="flex-1">
-                <span className="text-sm font-semibold">
-                  {(c.profiles as any)?.full_name ?? (c.profiles as any)?.username}
-                </span>
-                <span className="text-[10px] text-muted-foreground/30 mr-3 ml-3">
-                  {new Date(c.created_at).toLocaleDateString()}
-                </span>
-              </div>
-              {user?.id === c.user_id && (
-                <button
-                  onClick={() => deleteComment.mutate({ id: c.id, articleId })}
-                  className="text-[11px] text-muted-foreground/30 hover:text-destructive transition px-2 py-1 rounded-lg hover:bg-destructive/10"
-                >
-                  {isRTL ? "حذف" : "Delete"}
-                </button>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground/60 leading-relaxed pr-12">{c.content}</p>
-          </div>
+            comment={c}
+            replies={repliesByParent[c.id] ?? []}
+            articleId={articleId}
+            isRTL={isRTL}
+            currentUserId={user?.id}
+            onDelete={(id) => deleteComment.mutate({ id, articleId })}
+            onReport={(id) => setReportTarget(id)}
+          />
         ))}
       </div>
+
+      <ReportCommentDialog
+        commentId={reportTarget}
+        open={!!reportTarget}
+        onOpenChange={(o) => !o && setReportTarget(null)}
+        isRTL={isRTL}
+      />
     </div>
   );
 }
+
+function CommentItem({
+  comment,
+  replies,
+  articleId,
+  isRTL,
+  currentUserId,
+  onDelete,
+  onReport,
+  depth = 0,
+}: {
+  comment: ArticleComment;
+  replies: ArticleComment[];
+  articleId: string;
+  isRTL: boolean;
+  currentUserId: string | undefined;
+  onDelete: (id: string) => void;
+  onReport: (id: string) => void;
+  depth?: number;
+}) {
+  const [showReply, setShowReply] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const addComment = useAddArticleComment();
+
+  const handleReplySubmit = async () => {
+    if (!replyText.trim()) return;
+    await addComment.mutateAsync({
+      articleId,
+      content: replyText.trim(),
+      parentId: comment.id,
+    });
+    setReplyText("");
+    setShowReply(false);
+    toast.success(isRTL ? "تم إضافة الرد" : "Reply added");
+  };
+
+  return (
+    <div
+      className={`p-5 rounded-xl border border-ice-border/8 bg-[oklch(0.14_0.02_250)] ${
+        depth > 0 ? (isRTL ? "mr-6 sm:mr-10" : "ml-6 sm:ml-10") : ""
+      }`}
+    >
+      <div className="flex items-center gap-3 mb-3">
+        {(comment.profiles as any)?.avatar_url ? (
+          <img
+            src={(comment.profiles as any).avatar_url}
+            alt=""
+            className="h-9 w-9 rounded-full"
+          />
+        ) : (
+          <div className="h-9 w-9 rounded-full bg-[oklch(0.18_0.02_250)] flex items-center justify-center">
+            <User className="h-4 w-4" />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <span className="text-sm font-semibold">
+            {(comment.profiles as any)?.full_name ?? (comment.profiles as any)?.username}
+          </span>
+          <span className="text-[10px] text-muted-foreground/30 mr-3 ml-3">
+            {new Date(comment.created_at).toLocaleDateString()}
+          </span>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          {currentUserId && depth === 0 && (
+            <button
+              onClick={() => setShowReply((v) => !v)}
+              className="flex items-center gap-1 text-[11px] text-muted-foreground/40 hover:text-cyan-glow transition px-2 py-1 rounded-lg hover:bg-cyan-glow/10"
+            >
+              <Reply className="h-3 w-3" />
+              {isRTL ? "رد" : "Reply"}
+            </button>
+          )}
+          {currentUserId && currentUserId !== comment.user_id && (
+            <button
+              onClick={() => onReport(comment.id)}
+              className="flex items-center gap-1 text-[11px] text-muted-foreground/30 hover:text-amber-400 transition px-2 py-1 rounded-lg hover:bg-amber-500/10"
+              title={isRTL ? "إبلاغ" : "Report"}
+            >
+              <Flag className="h-3 w-3" />
+            </button>
+          )}
+          {currentUserId === comment.user_id && (
+            <button
+              onClick={() => onDelete(comment.id)}
+              className="text-[11px] text-muted-foreground/30 hover:text-destructive transition px-2 py-1 rounded-lg hover:bg-destructive/10"
+            >
+              {isRTL ? "حذف" : "Delete"}
+            </button>
+          )}
+        </div>
+      </div>
+      <p className="text-sm text-muted-foreground/70 leading-relaxed pr-12 whitespace-pre-wrap break-words">
+        {comment.content}
+      </p>
+
+      {showReply && (
+        <div className="mt-4 pt-4 border-t border-ice-border/10">
+          <Textarea
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+            placeholder={isRTL ? "اكتب ردك..." : "Write your reply..."}
+            rows={2}
+            maxLength={2000}
+            className="bg-transparent border-ice-border/10 text-sm resize-none mb-2"
+          />
+          <div className="flex justify-end gap-2">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                setShowReply(false);
+                setReplyText("");
+              }}
+            >
+              {isRTL ? "إلغاء" : "Cancel"}
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleReplySubmit}
+              disabled={addComment.isPending || !replyText.trim()}
+              className="bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground"
+            >
+              {isRTL ? "إرسال الرد" : "Post reply"}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {replies.length > 0 && (
+        <div className="mt-4 space-y-3">
+          {replies.map((r) => (
+            <CommentItem
+              key={r.id}
+              comment={r}
+              replies={[]}
+              articleId={articleId}
+              isRTL={isRTL}
+              currentUserId={currentUserId}
+              onDelete={onDelete}
+              onReport={onReport}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReportCommentDialog({
+  commentId,
+  open,
+  onOpenChange,
+  isRTL,
+}: {
+  commentId: string | null;
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+  isRTL: boolean;
+}) {
+  const report = useReportComment();
+  const [reason, setReason] = useState("spam");
+  const [details, setDetails] = useState("");
+
+  const reasons = [
+    { value: "spam", label: isRTL ? "محتوى مزعج / سبام" : "Spam" },
+    { value: "harassment", label: isRTL ? "تحرش أو إساءة" : "Harassment" },
+    { value: "hate_speech", label: isRTL ? "خطاب كراهية" : "Hate speech" },
+    { value: "misinformation", label: isRTL ? "معلومات مضللة" : "Misinformation" },
+    { value: "off_topic", label: isRTL ? "خارج الموضوع" : "Off-topic" },
+    { value: "other", label: isRTL ? "سبب آخر" : "Other" },
+  ];
+
+  const submit = async () => {
+    if (!commentId) return;
+    try {
+      await report.mutateAsync({ commentId, reason, details: details.trim() || undefined });
+      toast.success(isRTL ? "تم إرسال البلاغ، شكراً لك" : "Report submitted. Thank you.");
+      setDetails("");
+      setReason("spam");
+      onOpenChange(false);
+    } catch (e: any) {
+      const msg = e?.message?.includes("duplicate")
+        ? isRTL
+          ? "لقد أبلغت عن هذا التعليق من قبل"
+          : "You already reported this comment"
+        : isRTL
+        ? "تعذّر إرسال البلاغ"
+        : "Could not submit report";
+      toast.error(msg);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Flag className="h-4 w-4 text-amber-400" />
+            {isRTL ? "الإبلاغ عن التعليق" : "Report comment"}
+          </DialogTitle>
+          <DialogDescription>
+            {isRTL
+              ? "ساعدنا في الحفاظ على نقاش محترم. اختر سبب البلاغ."
+              : "Help us keep the discussion respectful. Choose a reason."}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-3 py-2">
+          <Select value={reason} onValueChange={setReason}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {reasons.map((r) => (
+                <SelectItem key={r.value} value={r.value}>
+                  {r.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Textarea
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+            placeholder={isRTL ? "تفاصيل إضافية (اختياري)" : "Additional details (optional)"}
+            rows={3}
+            maxLength={500}
+            className="text-sm resize-none"
+          />
+        </div>
+
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            {isRTL ? "إلغاء" : "Cancel"}
+          </Button>
+          <Button
+            onClick={submit}
+            disabled={report.isPending}
+            className="bg-amber-500/90 hover:bg-amber-500 text-white"
+          >
+            {isRTL ? "إرسال البلاغ" : "Submit report"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 
 function RelatedArticles({
   currentId,
