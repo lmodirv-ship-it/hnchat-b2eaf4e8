@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { X, UserPlus } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
@@ -60,9 +59,8 @@ export function GuestRegisterReminder() {
         placeholder="البريد الإلكتروني"
         className="w-full rounded-lg bg-white/5 border border-white/10 px-2.5 py-1.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400/50 mb-2"
       />
-      <Link
-        to={"/auth" as any}
-        search={{ mode: "signup" } as any}
+      <a
+        href={signupHref}
         onClick={() => {
           try {
             if (name) sessionStorage.setItem("prefill_name", name);
@@ -72,7 +70,7 @@ export function GuestRegisterReminder() {
         className="block w-full text-center rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 px-3 py-1.5 text-xs font-bold text-white hover:opacity-90 transition"
       >
         تسجيل (اختياري)
-      </Link>
+      </a>
       <p className="mt-1.5 text-[10px] text-white/40 text-center">يمكنك المتابعة بدون تسجيل</p>
     </aside>
   );
