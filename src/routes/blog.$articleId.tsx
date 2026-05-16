@@ -8,6 +8,7 @@ import {
   useArticleLike,
   useRelatedArticles,
   useReportComment,
+  useArticleCommentLikes,
   type ArticleComment,
 } from "@/hooks/useBlog";
 import { useAuth } from "@/lib/auth";
