@@ -36,6 +36,7 @@ import {
 import { toast } from "sonner";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
 import { fetchPublicArticle } from "@/utils/public-pages.functions";
+import { GuestRegisterReminder } from "@/components/system/GuestRegisterReminder";
 
 const SITE_URL = "https://www.hn-chat.com";
 const ORG_NAME = "hnChat";
@@ -238,8 +239,9 @@ function ArticlePage() {
         </div>
       )}
 
-      {/* Article Body — wide magazine layout */}
-      <div className="max-w-[820px] mx-auto px-5 sm:px-8">
+      {/* Article Body — wide magazine layout with side reminder */}
+      <div className="max-w-[1180px] mx-auto px-5 sm:px-8 grid grid-cols-1 xl:grid-cols-[1fr_280px] xl:gap-10">
+        <div className="max-w-[820px] w-full mx-auto xl:mx-0">
         <article className="mt-10 relative z-10">
 
           {/* Breadcrumbs (visible) */}
@@ -435,6 +437,19 @@ function ArticlePage() {
           {/* Related */}
           <RelatedArticles currentSlug={article?.slug || ""} />
         </article>
+        </div>
+
+        {/* Side reminder for unregistered visitors */}
+        <aside className="hidden xl:block">
+          <div className="sticky top-24">
+            <GuestRegisterReminder variant="side" />
+          </div>
+        </aside>
+
+        {/* Mobile/tablet: show below content */}
+        <div className="xl:hidden mt-8">
+          <GuestRegisterReminder variant="bottom" />
+        </div>
       </div>
     </PublicPageShell>
   );
