@@ -788,7 +788,7 @@ function CommentsSection({ articleId, isRTL }: { articleId: string; isRTL: boole
                 : "Sign in to write a comment and join the discussion"}
             </p>
           </div>
-          <Link to="/auth" search={{ redirect: typeof window !== "undefined" ? window.location.pathname : undefined } as any}>
+          <Link to="/auth">
             <Button
               size="sm"
               className="bg-gradient-to-r from-cyan-glow to-violet-glow text-primary-foreground px-5 shrink-0"
