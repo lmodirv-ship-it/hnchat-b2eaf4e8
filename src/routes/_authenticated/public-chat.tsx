@@ -73,7 +73,7 @@ interface Invitation {
 
 /* ── main component ── */
 function PublicChatPage() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
