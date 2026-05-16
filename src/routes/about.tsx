@@ -8,7 +8,7 @@ const SITE_URL = "https://www.hn-chat.com";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "عن hnChat — منصة تواصل اجتماعي وذكاء اصطناعي عربية | About Us" },
+      { title: "عن hnChat — منصة سوبر آب عربية" },
       { name: "description", content: "تعرّف على hnChat — منصة سوبر آب عربية تجمع الدردشة الذكية، التواصل الاجتماعي، الفيديو، التسوق، والبث المباشر في تجربة واحدة متكاملة." },
       { property: "og:title", content: "عن hnChat — من نحن" },
       { property: "og:description", content: "hnChat منصة عربية شاملة تجمع بين الذكاء الاصطناعي والتواصل الاجتماعي والتجارة." },

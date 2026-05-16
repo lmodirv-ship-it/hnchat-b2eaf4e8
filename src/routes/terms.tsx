@@ -7,7 +7,7 @@ const LAST_UPDATED = "7 مايو 2026";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "شروط الاستخدام — hnChat | Terms of Service" },
+      { title: "شروط الاستخدام — hnChat" },
       { name: "description", content: "شروط وأحكام استخدام منصة hnChat. تعرّف على حقوقك ومسؤولياتك كمستخدم، وقواعد المنصة والسياسات المعمول بها." },
       { property: "og:title", content: "شروط الاستخدام — hnChat" },
       { property: "og:description", content: "الشروط والأحكام الكاملة لاستخدام منصة hnChat." },

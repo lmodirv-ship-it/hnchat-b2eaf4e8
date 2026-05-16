@@ -9,7 +9,7 @@ import { QuickSiteImportDialog } from "@/components/marketplace/QuickSiteImportD
 export const Route = createFileRoute("/_authenticated/marketplace")({
   head: () => ({
     meta: [
-      { title: "السوق — HN-Chat | تسوق داخل المجتمع" },
+      { title: "السوق — hnChat" },
       { name: "description", content: "اكتشف وبِع منتجات داخل مجتمع HN-Chat. سوق إلكتروني مدمج في منصة التواصل الاجتماعي." },
     ],
   }),

@@ -7,7 +7,7 @@ const LAST_UPDATED = "7 مايو 2026";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "سياسة الخصوصية — hnChat | Privacy Policy" },
+      { title: "سياسة الخصوصية — hnChat" },
       { name: "description", content: "سياسة خصوصية hnChat — كيف نجمع بياناتك ونستخدمها ونحميها. متوافقة مع GDPR والمعايير الدولية لحماية البيانات." },
       { property: "og:title", content: "سياسة الخصوصية — hnChat" },
       { property: "og:description", content: "تعرّف على كيفية حماية بياناتك على hnChat وحقوقك كمستخدم." },
