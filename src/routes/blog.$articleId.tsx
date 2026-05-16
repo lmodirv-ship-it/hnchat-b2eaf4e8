@@ -15,6 +15,21 @@ import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Calendar,
   Clock,
   Eye,
@@ -34,6 +49,8 @@ import {
   FileText,
   Bookmark,
   ChevronLeft,
+  Reply,
+  Flag,
 } from "lucide-react";
 import { toast } from "sonner";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
