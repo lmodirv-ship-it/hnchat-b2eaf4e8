@@ -31,6 +31,7 @@ import { Route as ShareShareIdRouteImport } from './routes/share.$shareId'
 import { Route as PostIdRouteImport } from './routes/post.$id'
 import { Route as LiveIdRouteImport } from './routes/live.$id'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
+import { Route as BlogRssDotxmlRouteImport } from './routes/blog.rss[.]xml'
 import { Route as BlogArticleIdRouteImport } from './routes/blog.$articleId'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
@@ -210,6 +211,11 @@ const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => CategoryRoute,
+} as any)
+const BlogRssDotxmlRoute = BlogRssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
+  getParentRoute: () => BlogRoute,
 } as any)
 const BlogArticleIdRoute = BlogArticleIdRouteImport.update({
   id: '/$articleId',
@@ -643,6 +649,7 @@ export interface FileRoutesByFullPath {
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$articleId': typeof BlogArticleIdRoute
+  '/blog/rss.xml': typeof BlogRssDotxmlRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -734,6 +741,7 @@ export interface FileRoutesByTo {
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$articleId': typeof BlogArticleIdRoute
+  '/blog/rss.xml': typeof BlogRssDotxmlRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -831,6 +839,7 @@ export interface FileRoutesById {
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
   '/blog/$articleId': typeof BlogArticleIdRoute
+  '/blog/rss.xml': typeof BlogRssDotxmlRoute
   '/category/$slug': typeof CategorySlugRoute
   '/live/$id': typeof LiveIdRoute
   '/post/$id': typeof PostIdRoute
@@ -926,6 +935,7 @@ export interface FileRouteTypes {
     | '/voice'
     | '/youtube'
     | '/blog/$articleId'
+    | '/blog/rss.xml'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1017,6 +1027,7 @@ export interface FileRouteTypes {
     | '/voice'
     | '/youtube'
     | '/blog/$articleId'
+    | '/blog/rss.xml'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1113,6 +1124,7 @@ export interface FileRouteTypes {
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
     | '/blog/$articleId'
+    | '/blog/rss.xml'
     | '/category/$slug'
     | '/live/$id'
     | '/post/$id'
@@ -1330,6 +1342,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/category/$slug'
       preLoaderRoute: typeof CategorySlugRouteImport
       parentRoute: typeof CategoryRoute
+    }
+    '/blog/rss.xml': {
+      id: '/blog/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/blog/rss.xml'
+      preLoaderRoute: typeof BlogRssDotxmlRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/blog/$articleId': {
       id: '/blog/$articleId'
@@ -2043,12 +2062,14 @@ const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
 
 interface BlogRouteChildren {
   BlogArticleIdRoute: typeof BlogArticleIdRoute
+  BlogRssDotxmlRoute: typeof BlogRssDotxmlRoute
   BlogIndexRoute: typeof BlogIndexRoute
   BlogAuthorUsernameRoute: typeof BlogAuthorUsernameRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
   BlogArticleIdRoute: BlogArticleIdRoute,
+  BlogRssDotxmlRoute: BlogRssDotxmlRoute,
   BlogIndexRoute: BlogIndexRoute,
   BlogAuthorUsernameRoute: BlogAuthorUsernameRoute,
 }

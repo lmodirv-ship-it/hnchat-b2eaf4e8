@@ -14,6 +14,7 @@ import {
   Quote, Code, List, ListOrdered, Eye, EyeOff, ArrowLeft,
   ChevronDown, ChevronUp, Settings2, Palette,
 } from "lucide-react";
+import { PublishSuccessDialog } from "@/components/blog/PublishSuccessDialog";
 
 const PUBLISHING_RULES = [
   "المحتوى أصلي وغير منسوخ",
@@ -53,6 +54,7 @@ export function ArticleEditor({ article }: Props) {
   const [showSeo, setShowSeo] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [isDirty, setIsDirty] = useState(false);
+  const [publishedDialog, setPublishedDialog] = useState<{ url: string; title: string } | null>(null);
 
   const generateSlug = useCallback((t: string) => {
     return t.toLowerCase().replace(/[^\w\s\u0600-\u06FF-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").substring(0, 80);
@@ -123,7 +125,7 @@ export function ArticleEditor({ article }: Props) {
 
   const doSave = async (publishStatus: string) => {
     try {
-      await saveArticle.mutateAsync({
+      const saved: any = await saveArticle.mutateAsync({
         ...(article?.id ? { id: article.id } : {}),
         title, slug, category_id: categoryId || null, language,
         featured_image: featuredImage || null, video_url: videoUrl || null,
@@ -133,8 +135,18 @@ export function ArticleEditor({ article }: Props) {
       });
       setLastSaved(new Date());
       setIsDirty(false);
-      toast.success(publishStatus === "published" ? "تم نشر المقال ✅" : "تم الحفظ كمسودة");
-      navigate({ to: "/blog-dashboard" as any });
+
+      if (publishStatus === "published") {
+        const articleKey = saved?.short_id ?? saved?.id ?? slug;
+        setPublishedDialog({
+          url: `https://www.hn-chat.com/blog/${articleKey}`,
+          title: saved?.title ?? title,
+        });
+        toast.success("تم نشر المقال ✅");
+      } else {
+        toast.success("تم الحفظ كمسودة");
+        navigate({ to: "/blog-dashboard" as any });
+      }
     } catch (err: any) {
       toast.error(err.message ?? "حدث خطأ");
     }
@@ -434,7 +446,16 @@ export function ArticleEditor({ article }: Props) {
             </div>
           </div>
         </div>
-      )}
+      {/* Publish Success Dialog */}
+      <PublishSuccessDialog
+        open={!!publishedDialog}
+        articleUrl={publishedDialog?.url ?? ""}
+        articleTitle={publishedDialog?.title ?? ""}
+        onClose={() => {
+          setPublishedDialog(null);
+          navigate({ to: "/blog-dashboard" as any });
+        }}
+      />
     </div>
   );
 }
