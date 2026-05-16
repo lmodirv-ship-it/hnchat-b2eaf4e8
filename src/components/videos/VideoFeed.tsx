@@ -591,6 +591,10 @@ function VideoCard({
             <Share2 className="h-6 w-6" />
           </ActionButton>
 
+          <ActionButton onClick={onToggleMuted} label={muted ? "تشغيل الصوت" : "كتم"}>
+            {muted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+          </ActionButton>
+
           <ActionButton label="مشاهدات" count={video.views_count || 0} dim>
             <Eye className="h-5 w-5" />
           </ActionButton>
