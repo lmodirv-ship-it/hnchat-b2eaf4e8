@@ -603,7 +603,7 @@ function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {
   const handleLike = () => {
     if (!user) {
       toast.info(isRTL ? "سجّل الدخول للإعجاب بالمقال" : "Sign in to like this article");
-      window.location.href = `/auth?redirect=${encodeURIComponent(window.location.pathname)}`;
+      window.location.href = `/sign-up-login`;
       return;
     }
     toggle();
