@@ -163,15 +163,6 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
           Reels
         </h2>
         <div className="flex gap-2 pointer-events-auto">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMuted((m) => !m)}
-            className="action-glass text-white hover:text-cyan-glow rounded-full h-10 w-10"
-            aria-label={muted ? "تشغيل الصوت" : "كتم الصوت"}
-          >
-            {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-          </Button>
           <UploadVideoDialog onUploaded={load} />
         </div>
       </div>
@@ -183,7 +174,7 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
       ) : (
         <div
           ref={scrollerRef}
-          className="h-[100dvh] md:h-[calc(100vh-3.5rem)] overflow-y-auto snap-y snap-mandatory bg-black scroll-smooth"
+          className="h-full md:h-[calc(100vh-3.5rem)] overflow-y-auto snap-y snap-mandatory bg-black scroll-smooth"
         >
           {videos.map((v, i) => {
             const distance = activeIdx >= 0 ? Math.abs(i - activeIdx) : i;
@@ -196,6 +187,7 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
                 video={v}
                 isActive={v.id === activeId}
                 muted={muted}
+                onToggleMuted={() => setMuted((m) => !m)}
                 preload={preload}
                 shouldRenderSrc={distance <= 2}
                 registerRef={(el) => {
@@ -248,6 +240,7 @@ function VideoCard({
   video,
   isActive,
   muted,
+  onToggleMuted,
   preload,
   shouldRenderSrc,
   registerRef,
@@ -258,6 +251,7 @@ function VideoCard({
   video: VideoPost;
   isActive: boolean;
   muted: boolean;
+  onToggleMuted: () => void;
   preload: "auto" | "metadata" | "none";
   shouldRenderSrc: boolean;
   registerRef: (el: HTMLDivElement | null) => void;
@@ -595,6 +589,10 @@ function VideoCard({
 
           <ActionButton onClick={share} label="مشاركة">
             <Share2 className="h-6 w-6" />
+          </ActionButton>
+
+          <ActionButton onClick={onToggleMuted} label={muted ? "تشغيل الصوت" : "كتم"}>
+            {muted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
           </ActionButton>
 
           <ActionButton label="مشاهدات" count={video.views_count || 0} dim>
