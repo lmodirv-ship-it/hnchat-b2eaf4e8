@@ -1,6 +1,10 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { useEffect, useState, useCallback } from "react";
 import { fetchPublicPost } from "@/utils/public-pages.functions";
 import { AdSenseUnit } from "@/components/ads/AdSenseUnit";
+import { supabase } from "@/integrations/supabase/client";
+import { Heart, MessageCircle, Send, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const SITE_URL = "https://www.hnchat.net";
 
@@ -195,20 +199,12 @@ function PublicPostPage() {
             </div>
           )}
 
-          <div className="flex items-center gap-6 pt-3 border-t border-border text-sm text-muted-foreground">
-            <span>❤️ {post.likes_count}</span>
-            <span>💬 {post.comments_count}</span>
-            <span>👁️ {post.views_count}</span>
-          </div>
-
-          <div className="pt-3 border-t border-border">
-            <Link
-              to="/sign-up-login"
-              className="block w-full text-center px-4 py-2 rounded-md bg-primary text-primary-foreground"
-            >
-              سجّل الدخول للتفاعل مع المنشور
-            </Link>
-          </div>
+          <InteractionPanel
+            postId={post.id}
+            initialLikes={post.likes_count}
+            initialComments={post.comments_count}
+            views={post.views_count}
+          />
         </article>
 
         <script
