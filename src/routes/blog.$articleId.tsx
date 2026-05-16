@@ -679,7 +679,7 @@ function StickyShareBar({ article, isRTL }: { article: any; isRTL: boolean }) {
   return (
     <div className="flex items-center gap-2 mb-10 flex-wrap">
       <button
-        onClick={() => toggle()}
+        onClick={handleLike}
         disabled={isPending}
         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-medium transition-all duration-300 ${
           liked
