@@ -487,19 +487,39 @@ function ArticleContent({ content }: { content: string }) {
         .replace(/^\s*…+\s*$/gm, "")
         .replace(/\n{3,}/g, "\n\n");
 
+      // Track heading IDs so the TOC can scroll to them
+      let headingIdx = 0;
+      const seen = new Map<string, number>();
+      const makeId = (text: string) => {
+        const base = (text || "")
+          .trim()
+          .toLowerCase()
+          .replace(/[`*_~]/g, "")
+          .replace(/[^\p{L}\p{N}\s-]/gu, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        let id = base || `section-${headingIdx + 1}`;
+        const count = seen.get(id) ?? 0;
+        seen.set(id, count + 1);
+        if (count > 0) id = `${id}-${count + 1}`;
+        headingIdx += 1;
+        return id;
+      };
+
       const raw = cleaned
-        .replace(
-          /^### (.+)$/gm,
-          '<h3 class="text-xl font-bold mt-8 mb-3" style="color:oklch(0.82 0.08 70)">$1</h3>',
-        )
-        .replace(
-          /^## (.+)$/gm,
-          '<h2 class="text-2xl font-bold mt-9 mb-3" style="color:oklch(0.85 0.09 65)">$1</h2>',
-        )
-        .replace(
-          /^# (.+)$/gm,
-          '<h1 class="text-3xl font-extrabold mt-10 mb-4" style="color:oklch(0.88 0.10 65)">$1</h1>',
-        )
+        .replace(/^### (.+)$/gm, (_, t) => {
+          const id = makeId(t);
+          return `<h3 id="${id}" class="group text-xl font-bold mt-8 mb-3 scroll-mt-24" style="color:oklch(0.82 0.08 70)"><a href="#${id}" class="heading-anchor opacity-0 group-hover:opacity-60 hover:!opacity-100 transition mr-2 text-sm" style="color:oklch(0.70 0.08 220)">#</a>${t}</h3>`;
+        })
+        .replace(/^## (.+)$/gm, (_, t) => {
+          const id = makeId(t);
+          return `<h2 id="${id}" class="group text-2xl font-bold mt-10 mb-4 scroll-mt-24" style="color:oklch(0.85 0.09 65)"><a href="#${id}" class="heading-anchor opacity-0 group-hover:opacity-60 hover:!opacity-100 transition mr-2 text-base" style="color:oklch(0.70 0.08 220)">#</a>${t}</h2>`;
+        })
+        .replace(/^# (.+)$/gm, (_, t) => {
+          const id = makeId(t);
+          return `<h1 id="${id}" class="text-3xl font-extrabold mt-10 mb-4 scroll-mt-24" style="color:oklch(0.88 0.10 65)">${t}</h1>`;
+        })
         .replace(
           /\*\*(.+?)\*\*/g,
           '<strong style="color:oklch(0.93 0.005 250);font-weight:600">$1</strong>',
@@ -534,35 +554,43 @@ function ArticleContent({ content }: { content: string }) {
         .replace(/\n\n/g, '</p><p class="mb-4 leading-[1.85]" style="color:oklch(0.88 0.005 250)">')
         .replace(/\n/g, "<br/>");
 
-      const safe = DOMPurify.sanitize(`<p class="mb-4 leading-[1.85]">${raw}</p>`, {
+      const safe = DOMPurify.sanitize(`<p class="article-first mb-4 leading-[1.85]">${raw}</p>`, {
         ALLOWED_TAGS: [
-          "h1",
-          "h2",
-          "h3",
-          "h4",
-          "p",
-          "br",
-          "strong",
-          "em",
-          "a",
-          "code",
-          "pre",
-          "blockquote",
-          "li",
-          "ul",
-          "ol",
-          "span",
+          "h1", "h2", "h3", "h4", "p", "br", "strong", "em", "a",
+          "code", "pre", "blockquote", "li", "ul", "ol", "span",
         ],
-        ALLOWED_ATTR: ["class", "style", "href", "target", "rel"],
-        ALLOWED_URI_REGEXP: /^https?:\/\//i,
+        ALLOWED_ATTR: ["class", "style", "href", "target", "rel", "id"],
+        ALLOWED_URI_REGEXP: /^(https?:\/\/|#)/i,
       });
       setSanitizedHtml(safe);
     });
   }, [content]);
 
+  // Heading anchor click handler — copy link and smooth scroll
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target?.matches?.("a.heading-anchor")) return;
+      e.preventDefault();
+      const href = target.getAttribute("href") ?? "";
+      const id = href.replace(/^#/, "");
+      const el = document.getElementById(id);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: "smooth" });
+      try {
+        navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${id}`);
+        toast.success("تم نسخ رابط القسم");
+      } catch {}
+      history.replaceState(null, "", `#${id}`);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   return (
     <div
-      className="leading-[1.85]"
+      className="leading-[1.85] article-body-content"
       style={{ color: "oklch(0.88 0.005 250)" }}
       dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
     />
