@@ -12,7 +12,9 @@ import {
   Video, Radio, ShoppingBag, Store, TrendingUp,
   Compass, MoreHorizontal, Bookmark, Sliders,
   FileEdit, FilePlus, Gamepad2, Globe, Mic,
-  Mail, Zap, Film,
+  Mail, Zap, Film, Scissors, Captions, Trophy,
+  Bot, Search, GraduationCap, Image as ImageIcon,
+  Sparkles, BarChart3, Flame,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
