@@ -156,7 +156,7 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
   }
 
   return (
-    <div className="relative">
+    <div className="relative h-full">
       {/* Floating header — overlays the video with glass + gradient title */}
       <div className="absolute top-3 inset-x-3 z-30 flex items-center justify-between pointer-events-none">
         <h2 className="text-2xl font-black tracking-tight bg-gradient-to-r from-cyan-glow via-violet-glow to-pink-glow bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
