@@ -12,7 +12,9 @@ import {
   Video, Radio, ShoppingBag, Store, TrendingUp,
   Compass, MoreHorizontal, Bookmark, Sliders,
   FileEdit, FilePlus, Gamepad2, Globe, Mic,
-  Mail, Zap, Film,
+  Mail, Zap, Film, Scissors, Captions, Trophy,
+  Bot, Search, GraduationCap, Image as ImageIcon,
+  Sparkles, BarChart3, Flame,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -209,6 +211,11 @@ const NAV_GROUPS: NavGroup[] = [
       { to: "/short-videos", label: "فيديوهات قصيرة", icon: Zap },
       { to: "/live", label: "البث المباشر", icon: Radio },
       { to: "/stories", label: "القصص", icon: Globe },
+      { to: "/ai-video-assistant", label: "AI Video Assistant", icon: Sparkles, highlight: true },
+      { to: "/shorts-maker", label: "Long → Shorts", icon: Scissors, highlight: true },
+      { to: "/auto-subtitle", label: "ترجمة تلقائية", icon: Captions },
+      { to: "/collab-reels", label: "Collab Reels", icon: Users },
+      { to: "/story-system", label: "Story System+", icon: Sparkles },
     ],
   },
   {
@@ -225,11 +232,28 @@ const NAV_GROUPS: NavGroup[] = [
     icon: Cpu,
     defaultOpen: true,
     items: [
-      { to: "/ai-assistant", label: "مساعد الذكاء الاصطناعي", icon: Cpu },
+      { to: "/ai-assistant", label: "مساعد AI", icon: Cpu },
+      { to: "/ai-image", label: "توليد صور AI", icon: ImageIcon, highlight: true },
+      { to: "/ai-comments", label: "AI Comments", icon: MessageCircle },
+      { to: "/ai-avatar", label: "AI Avatar", icon: Bot },
+      { to: "/ai-voice-rooms", label: "AI Voice Rooms", icon: Mic },
+      { to: "/smart-search", label: "Smart Search", icon: Search },
       { to: "/tools", label: "أدوات AI", icon: Cpu },
       { to: "/ai-hub", label: "تعلم AI", icon: BookOpen },
       { to: "/trending", label: "أخبار AI", icon: Newspaper },
       { to: "/explore", label: "المقارنات", icon: GitCompare },
+    ],
+  },
+  {
+    label: "Creator Hub",
+    icon: Trophy,
+    defaultOpen: true,
+    items: [
+      { to: "/creator-studio", label: "Creator Studio", icon: BarChart3 },
+      { to: "/trending-hub", label: "Trending", icon: Flame },
+      { to: "/challenges", label: "التحديات", icon: Trophy },
+      { to: "/rewards", label: "المكافآت والنقاط", icon: Star },
+      { to: "/mini-courses", label: "دورات قصيرة", icon: GraduationCap },
     ],
   },
 ];

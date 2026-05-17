@@ -36,12 +36,17 @@ import { Route as BlogArticleIdRouteImport } from './routes/blog.$articleId'
 import { Route as AuthenticatedYoutubeRouteImport } from './routes/_authenticated/youtube'
 import { Route as AuthenticatedVoiceRouteImport } from './routes/_authenticated/voice'
 import { Route as AuthenticatedVideosRouteImport } from './routes/_authenticated/videos'
+import { Route as AuthenticatedTrendingHubRouteImport } from './routes/_authenticated/trending-hub'
 import { Route as AuthenticatedTradeRouteImport } from './routes/_authenticated/trade'
 import { Route as AuthenticatedTermsOfServiceRouteImport } from './routes/_authenticated/terms-of-service'
+import { Route as AuthenticatedStorySystemRouteImport } from './routes/_authenticated/story-system'
 import { Route as AuthenticatedStoriesRouteImport } from './routes/_authenticated/stories'
+import { Route as AuthenticatedSmartSearchRouteImport } from './routes/_authenticated/smart-search'
+import { Route as AuthenticatedShortsMakerRouteImport } from './routes/_authenticated/shorts-maker'
 import { Route as AuthenticatedShortVideosRouteImport } from './routes/_authenticated/short-videos'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
+import { Route as AuthenticatedRewardsRouteImport } from './routes/_authenticated/rewards'
 import { Route as AuthenticatedReferralRouteImport } from './routes/_authenticated/referral'
 import { Route as AuthenticatedReelsRouteImport } from './routes/_authenticated/reels'
 import { Route as AuthenticatedPushRouteImport } from './routes/_authenticated/push'
@@ -52,6 +57,7 @@ import { Route as AuthenticatedPreferencesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPagesGroupsRouteImport } from './routes/_authenticated/pages-groups'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMonitoringRouteImport } from './routes/_authenticated/monitoring'
+import { Route as AuthenticatedMiniCoursesRouteImport } from './routes/_authenticated/mini-courses'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedMarketplaceRouteImport } from './routes/_authenticated/marketplace'
 import { Route as AuthenticatedMailRouteImport } from './routes/_authenticated/mail'
@@ -65,11 +71,20 @@ import { Route as AuthenticatedGamesRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
 import { Route as AuthenticatedExploreRouteImport } from './routes/_authenticated/explore'
 import { Route as AuthenticatedEmailDashboardRouteImport } from './routes/_authenticated/email-dashboard'
+import { Route as AuthenticatedCreatorStudioRouteImport } from './routes/_authenticated/creator-studio'
+import { Route as AuthenticatedCollabReelsRouteImport } from './routes/_authenticated/collab-reels'
+import { Route as AuthenticatedChallengesRouteImport } from './routes/_authenticated/challenges'
 import { Route as AuthenticatedBookmarksRouteImport } from './routes/_authenticated/bookmarks'
 import { Route as AuthenticatedBlogEditorRouteImport } from './routes/_authenticated/blog-editor'
 import { Route as AuthenticatedBlogDashboardRouteImport } from './routes/_authenticated/blog-dashboard'
+import { Route as AuthenticatedAutoSubtitleRouteImport } from './routes/_authenticated/auto-subtitle'
 import { Route as AuthenticatedAppStoreRouteImport } from './routes/_authenticated/app-store'
+import { Route as AuthenticatedAiVoiceRoomsRouteImport } from './routes/_authenticated/ai-voice-rooms'
+import { Route as AuthenticatedAiVideoAssistantRouteImport } from './routes/_authenticated/ai-video-assistant'
+import { Route as AuthenticatedAiImageRouteImport } from './routes/_authenticated/ai-image'
 import { Route as AuthenticatedAiHubRouteImport } from './routes/_authenticated/ai-hub'
+import { Route as AuthenticatedAiCommentsRouteImport } from './routes/_authenticated/ai-comments'
+import { Route as AuthenticatedAiAvatarRouteImport } from './routes/_authenticated/ai-avatar'
 import { Route as AuthenticatedAiAssistantRouteImport } from './routes/_authenticated/ai-assistant'
 import { Route as AuthenticatedAdsPromoRouteImport } from './routes/_authenticated/ads-promo'
 import { Route as AuthenticatedAdsManagerRouteImport } from './routes/_authenticated/ads-manager'
@@ -237,6 +252,12 @@ const AuthenticatedVideosRoute = AuthenticatedVideosRouteImport.update({
   path: '/videos',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTrendingHubRoute =
+  AuthenticatedTrendingHubRouteImport.update({
+    id: '/trending-hub',
+    path: '/trending-hub',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedTradeRoute = AuthenticatedTradeRouteImport.update({
   id: '/trade',
   path: '/trade',
@@ -248,11 +269,29 @@ const AuthenticatedTermsOfServiceRoute =
     path: '/terms-of-service',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedStorySystemRoute =
+  AuthenticatedStorySystemRouteImport.update({
+    id: '/story-system',
+    path: '/story-system',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedStoriesRoute = AuthenticatedStoriesRouteImport.update({
   id: '/stories',
   path: '/stories',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSmartSearchRoute =
+  AuthenticatedSmartSearchRouteImport.update({
+    id: '/smart-search',
+    path: '/smart-search',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedShortsMakerRoute =
+  AuthenticatedShortsMakerRouteImport.update({
+    id: '/shorts-maker',
+    path: '/shorts-maker',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedShortVideosRoute =
   AuthenticatedShortVideosRouteImport.update({
     id: '/short-videos',
@@ -267,6 +306,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
 const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedRewardsRoute = AuthenticatedRewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedReferralRoute = AuthenticatedReferralRouteImport.update({
@@ -323,6 +367,12 @@ const AuthenticatedMonitoringRoute = AuthenticatedMonitoringRouteImport.update({
   path: '/monitoring',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedMiniCoursesRoute =
+  AuthenticatedMiniCoursesRouteImport.update({
+    id: '/mini-courses',
+    path: '/mini-courses',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
@@ -390,6 +440,23 @@ const AuthenticatedEmailDashboardRoute =
     path: '/email-dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedCreatorStudioRoute =
+  AuthenticatedCreatorStudioRouteImport.update({
+    id: '/creator-studio',
+    path: '/creator-studio',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedCollabReelsRoute =
+  AuthenticatedCollabReelsRouteImport.update({
+    id: '/collab-reels',
+    path: '/collab-reels',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedChallengesRoute = AuthenticatedChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedBookmarksRoute = AuthenticatedBookmarksRouteImport.update({
   id: '/bookmarks',
   path: '/bookmarks',
@@ -406,14 +473,47 @@ const AuthenticatedBlogDashboardRoute =
     path: '/blog-dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAutoSubtitleRoute =
+  AuthenticatedAutoSubtitleRouteImport.update({
+    id: '/auto-subtitle',
+    path: '/auto-subtitle',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppStoreRoute = AuthenticatedAppStoreRouteImport.update({
   id: '/app-store',
   path: '/app-store',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAiVoiceRoomsRoute =
+  AuthenticatedAiVoiceRoomsRouteImport.update({
+    id: '/ai-voice-rooms',
+    path: '/ai-voice-rooms',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAiVideoAssistantRoute =
+  AuthenticatedAiVideoAssistantRouteImport.update({
+    id: '/ai-video-assistant',
+    path: '/ai-video-assistant',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAiImageRoute = AuthenticatedAiImageRouteImport.update({
+  id: '/ai-image',
+  path: '/ai-image',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAiHubRoute = AuthenticatedAiHubRouteImport.update({
   id: '/ai-hub',
   path: '/ai-hub',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAiCommentsRoute = AuthenticatedAiCommentsRouteImport.update({
+  id: '/ai-comments',
+  path: '/ai-comments',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAiAvatarRoute = AuthenticatedAiAvatarRouteImport.update({
+  id: '/ai-avatar',
+  path: '/ai-avatar',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedAiAssistantRoute =
@@ -611,11 +711,20 @@ export interface FileRoutesByFullPath {
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
+  '/ai-avatar': typeof AuthenticatedAiAvatarRoute
+  '/ai-comments': typeof AuthenticatedAiCommentsRoute
   '/ai-hub': typeof AuthenticatedAiHubRoute
+  '/ai-image': typeof AuthenticatedAiImageRoute
+  '/ai-video-assistant': typeof AuthenticatedAiVideoAssistantRoute
+  '/ai-voice-rooms': typeof AuthenticatedAiVoiceRoomsRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
+  '/auto-subtitle': typeof AuthenticatedAutoSubtitleRoute
   '/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
   '/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/bookmarks': typeof AuthenticatedBookmarksRoute
+  '/challenges': typeof AuthenticatedChallengesRoute
+  '/collab-reels': typeof AuthenticatedCollabReelsRoute
+  '/creator-studio': typeof AuthenticatedCreatorStudioRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
   '/feed': typeof AuthenticatedFeedRoute
@@ -629,6 +738,7 @@ export interface FileRoutesByFullPath {
   '/mail': typeof AuthenticatedMailRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
   '/messages': typeof AuthenticatedMessagesRouteWithChildren
+  '/mini-courses': typeof AuthenticatedMiniCoursesRoute
   '/monitoring': typeof AuthenticatedMonitoringRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/pages-groups': typeof AuthenticatedPagesGroupsRoute
@@ -639,12 +749,17 @@ export interface FileRoutesByFullPath {
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
   '/referral': typeof AuthenticatedReferralRoute
+  '/rewards': typeof AuthenticatedRewardsRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
+  '/shorts-maker': typeof AuthenticatedShortsMakerRoute
+  '/smart-search': typeof AuthenticatedSmartSearchRoute
   '/stories': typeof AuthenticatedStoriesRoute
+  '/story-system': typeof AuthenticatedStorySystemRoute
   '/terms-of-service': typeof AuthenticatedTermsOfServiceRoute
   '/trade': typeof AuthenticatedTradeRoute
+  '/trending-hub': typeof AuthenticatedTrendingHubRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
@@ -703,11 +818,20 @@ export interface FileRoutesByTo {
   '/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/ai-assistant': typeof AuthenticatedAiAssistantRoute
+  '/ai-avatar': typeof AuthenticatedAiAvatarRoute
+  '/ai-comments': typeof AuthenticatedAiCommentsRoute
   '/ai-hub': typeof AuthenticatedAiHubRoute
+  '/ai-image': typeof AuthenticatedAiImageRoute
+  '/ai-video-assistant': typeof AuthenticatedAiVideoAssistantRoute
+  '/ai-voice-rooms': typeof AuthenticatedAiVoiceRoomsRoute
   '/app-store': typeof AuthenticatedAppStoreRoute
+  '/auto-subtitle': typeof AuthenticatedAutoSubtitleRoute
   '/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
   '/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/bookmarks': typeof AuthenticatedBookmarksRoute
+  '/challenges': typeof AuthenticatedChallengesRoute
+  '/collab-reels': typeof AuthenticatedCollabReelsRoute
+  '/creator-studio': typeof AuthenticatedCreatorStudioRoute
   '/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/explore': typeof AuthenticatedExploreRoute
   '/feed': typeof AuthenticatedFeedRoute
@@ -721,6 +845,7 @@ export interface FileRoutesByTo {
   '/mail': typeof AuthenticatedMailRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
   '/messages': typeof AuthenticatedMessagesRouteWithChildren
+  '/mini-courses': typeof AuthenticatedMiniCoursesRoute
   '/monitoring': typeof AuthenticatedMonitoringRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/pages-groups': typeof AuthenticatedPagesGroupsRoute
@@ -731,12 +856,17 @@ export interface FileRoutesByTo {
   '/push': typeof AuthenticatedPushRoute
   '/reels': typeof AuthenticatedReelsRoute
   '/referral': typeof AuthenticatedReferralRoute
+  '/rewards': typeof AuthenticatedRewardsRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/short-videos': typeof AuthenticatedShortVideosRoute
+  '/shorts-maker': typeof AuthenticatedShortsMakerRoute
+  '/smart-search': typeof AuthenticatedSmartSearchRoute
   '/stories': typeof AuthenticatedStoriesRoute
+  '/story-system': typeof AuthenticatedStorySystemRoute
   '/terms-of-service': typeof AuthenticatedTermsOfServiceRoute
   '/trade': typeof AuthenticatedTradeRoute
+  '/trending-hub': typeof AuthenticatedTrendingHubRoute
   '/videos': typeof AuthenticatedVideosRoute
   '/voice': typeof AuthenticatedVoiceRoute
   '/youtube': typeof AuthenticatedYoutubeRoute
@@ -801,11 +931,20 @@ export interface FileRoutesById {
   '/_authenticated/ads-manager': typeof AuthenticatedAdsManagerRoute
   '/_authenticated/ads-promo': typeof AuthenticatedAdsPromoRoute
   '/_authenticated/ai-assistant': typeof AuthenticatedAiAssistantRoute
+  '/_authenticated/ai-avatar': typeof AuthenticatedAiAvatarRoute
+  '/_authenticated/ai-comments': typeof AuthenticatedAiCommentsRoute
   '/_authenticated/ai-hub': typeof AuthenticatedAiHubRoute
+  '/_authenticated/ai-image': typeof AuthenticatedAiImageRoute
+  '/_authenticated/ai-video-assistant': typeof AuthenticatedAiVideoAssistantRoute
+  '/_authenticated/ai-voice-rooms': typeof AuthenticatedAiVoiceRoomsRoute
   '/_authenticated/app-store': typeof AuthenticatedAppStoreRoute
+  '/_authenticated/auto-subtitle': typeof AuthenticatedAutoSubtitleRoute
   '/_authenticated/blog-dashboard': typeof AuthenticatedBlogDashboardRoute
   '/_authenticated/blog-editor': typeof AuthenticatedBlogEditorRoute
   '/_authenticated/bookmarks': typeof AuthenticatedBookmarksRoute
+  '/_authenticated/challenges': typeof AuthenticatedChallengesRoute
+  '/_authenticated/collab-reels': typeof AuthenticatedCollabReelsRoute
+  '/_authenticated/creator-studio': typeof AuthenticatedCreatorStudioRoute
   '/_authenticated/email-dashboard': typeof AuthenticatedEmailDashboardRoute
   '/_authenticated/explore': typeof AuthenticatedExploreRoute
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
@@ -819,6 +958,7 @@ export interface FileRoutesById {
   '/_authenticated/mail': typeof AuthenticatedMailRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRouteWithChildren
+  '/_authenticated/mini-courses': typeof AuthenticatedMiniCoursesRoute
   '/_authenticated/monitoring': typeof AuthenticatedMonitoringRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/pages-groups': typeof AuthenticatedPagesGroupsRoute
@@ -829,12 +969,17 @@ export interface FileRoutesById {
   '/_authenticated/push': typeof AuthenticatedPushRoute
   '/_authenticated/reels': typeof AuthenticatedReelsRoute
   '/_authenticated/referral': typeof AuthenticatedReferralRoute
+  '/_authenticated/rewards': typeof AuthenticatedRewardsRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/short-videos': typeof AuthenticatedShortVideosRoute
+  '/_authenticated/shorts-maker': typeof AuthenticatedShortsMakerRoute
+  '/_authenticated/smart-search': typeof AuthenticatedSmartSearchRoute
   '/_authenticated/stories': typeof AuthenticatedStoriesRoute
+  '/_authenticated/story-system': typeof AuthenticatedStorySystemRoute
   '/_authenticated/terms-of-service': typeof AuthenticatedTermsOfServiceRoute
   '/_authenticated/trade': typeof AuthenticatedTradeRoute
+  '/_authenticated/trending-hub': typeof AuthenticatedTrendingHubRoute
   '/_authenticated/videos': typeof AuthenticatedVideosRoute
   '/_authenticated/voice': typeof AuthenticatedVoiceRoute
   '/_authenticated/youtube': typeof AuthenticatedYoutubeRoute
@@ -897,11 +1042,20 @@ export interface FileRouteTypes {
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
+    | '/ai-avatar'
+    | '/ai-comments'
     | '/ai-hub'
+    | '/ai-image'
+    | '/ai-video-assistant'
+    | '/ai-voice-rooms'
     | '/app-store'
+    | '/auto-subtitle'
     | '/blog-dashboard'
     | '/blog-editor'
     | '/bookmarks'
+    | '/challenges'
+    | '/collab-reels'
+    | '/creator-studio'
     | '/email-dashboard'
     | '/explore'
     | '/feed'
@@ -915,6 +1069,7 @@ export interface FileRouteTypes {
     | '/mail'
     | '/marketplace'
     | '/messages'
+    | '/mini-courses'
     | '/monitoring'
     | '/notifications'
     | '/pages-groups'
@@ -925,12 +1080,17 @@ export interface FileRouteTypes {
     | '/push'
     | '/reels'
     | '/referral'
+    | '/rewards'
     | '/search'
     | '/settings'
     | '/short-videos'
+    | '/shorts-maker'
+    | '/smart-search'
     | '/stories'
+    | '/story-system'
     | '/terms-of-service'
     | '/trade'
+    | '/trending-hub'
     | '/videos'
     | '/voice'
     | '/youtube'
@@ -989,11 +1149,20 @@ export interface FileRouteTypes {
     | '/ads-manager'
     | '/ads-promo'
     | '/ai-assistant'
+    | '/ai-avatar'
+    | '/ai-comments'
     | '/ai-hub'
+    | '/ai-image'
+    | '/ai-video-assistant'
+    | '/ai-voice-rooms'
     | '/app-store'
+    | '/auto-subtitle'
     | '/blog-dashboard'
     | '/blog-editor'
     | '/bookmarks'
+    | '/challenges'
+    | '/collab-reels'
+    | '/creator-studio'
     | '/email-dashboard'
     | '/explore'
     | '/feed'
@@ -1007,6 +1176,7 @@ export interface FileRouteTypes {
     | '/mail'
     | '/marketplace'
     | '/messages'
+    | '/mini-courses'
     | '/monitoring'
     | '/notifications'
     | '/pages-groups'
@@ -1017,12 +1187,17 @@ export interface FileRouteTypes {
     | '/push'
     | '/reels'
     | '/referral'
+    | '/rewards'
     | '/search'
     | '/settings'
     | '/short-videos'
+    | '/shorts-maker'
+    | '/smart-search'
     | '/stories'
+    | '/story-system'
     | '/terms-of-service'
     | '/trade'
+    | '/trending-hub'
     | '/videos'
     | '/voice'
     | '/youtube'
@@ -1086,11 +1261,20 @@ export interface FileRouteTypes {
     | '/_authenticated/ads-manager'
     | '/_authenticated/ads-promo'
     | '/_authenticated/ai-assistant'
+    | '/_authenticated/ai-avatar'
+    | '/_authenticated/ai-comments'
     | '/_authenticated/ai-hub'
+    | '/_authenticated/ai-image'
+    | '/_authenticated/ai-video-assistant'
+    | '/_authenticated/ai-voice-rooms'
     | '/_authenticated/app-store'
+    | '/_authenticated/auto-subtitle'
     | '/_authenticated/blog-dashboard'
     | '/_authenticated/blog-editor'
     | '/_authenticated/bookmarks'
+    | '/_authenticated/challenges'
+    | '/_authenticated/collab-reels'
+    | '/_authenticated/creator-studio'
     | '/_authenticated/email-dashboard'
     | '/_authenticated/explore'
     | '/_authenticated/feed'
@@ -1104,6 +1288,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mail'
     | '/_authenticated/marketplace'
     | '/_authenticated/messages'
+    | '/_authenticated/mini-courses'
     | '/_authenticated/monitoring'
     | '/_authenticated/notifications'
     | '/_authenticated/pages-groups'
@@ -1114,12 +1299,17 @@ export interface FileRouteTypes {
     | '/_authenticated/push'
     | '/_authenticated/reels'
     | '/_authenticated/referral'
+    | '/_authenticated/rewards'
     | '/_authenticated/search'
     | '/_authenticated/settings'
     | '/_authenticated/short-videos'
+    | '/_authenticated/shorts-maker'
+    | '/_authenticated/smart-search'
     | '/_authenticated/stories'
+    | '/_authenticated/story-system'
     | '/_authenticated/terms-of-service'
     | '/_authenticated/trade'
+    | '/_authenticated/trending-hub'
     | '/_authenticated/videos'
     | '/_authenticated/voice'
     | '/_authenticated/youtube'
@@ -1378,6 +1568,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVideosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/trending-hub': {
+      id: '/_authenticated/trending-hub'
+      path: '/trending-hub'
+      fullPath: '/trending-hub'
+      preLoaderRoute: typeof AuthenticatedTrendingHubRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/trade': {
       id: '/_authenticated/trade'
       path: '/trade'
@@ -1392,11 +1589,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTermsOfServiceRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/story-system': {
+      id: '/_authenticated/story-system'
+      path: '/story-system'
+      fullPath: '/story-system'
+      preLoaderRoute: typeof AuthenticatedStorySystemRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/stories': {
       id: '/_authenticated/stories'
       path: '/stories'
       fullPath: '/stories'
       preLoaderRoute: typeof AuthenticatedStoriesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/smart-search': {
+      id: '/_authenticated/smart-search'
+      path: '/smart-search'
+      fullPath: '/smart-search'
+      preLoaderRoute: typeof AuthenticatedSmartSearchRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/shorts-maker': {
+      id: '/_authenticated/shorts-maker'
+      path: '/shorts-maker'
+      fullPath: '/shorts-maker'
+      preLoaderRoute: typeof AuthenticatedShortsMakerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/short-videos': {
@@ -1418,6 +1636,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/rewards': {
+      id: '/_authenticated/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof AuthenticatedRewardsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/referral': {
@@ -1488,6 +1713,13 @@ declare module '@tanstack/react-router' {
       path: '/monitoring'
       fullPath: '/monitoring'
       preLoaderRoute: typeof AuthenticatedMonitoringRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/mini-courses': {
+      id: '/_authenticated/mini-courses'
+      path: '/mini-courses'
+      fullPath: '/mini-courses'
+      preLoaderRoute: typeof AuthenticatedMiniCoursesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/messages': {
@@ -1581,6 +1813,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmailDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/creator-studio': {
+      id: '/_authenticated/creator-studio'
+      path: '/creator-studio'
+      fullPath: '/creator-studio'
+      preLoaderRoute: typeof AuthenticatedCreatorStudioRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/collab-reels': {
+      id: '/_authenticated/collab-reels'
+      path: '/collab-reels'
+      fullPath: '/collab-reels'
+      preLoaderRoute: typeof AuthenticatedCollabReelsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/challenges': {
+      id: '/_authenticated/challenges'
+      path: '/challenges'
+      fullPath: '/challenges'
+      preLoaderRoute: typeof AuthenticatedChallengesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/bookmarks': {
       id: '/_authenticated/bookmarks'
       path: '/bookmarks'
@@ -1602,6 +1855,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBlogDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/auto-subtitle': {
+      id: '/_authenticated/auto-subtitle'
+      path: '/auto-subtitle'
+      fullPath: '/auto-subtitle'
+      preLoaderRoute: typeof AuthenticatedAutoSubtitleRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/app-store': {
       id: '/_authenticated/app-store'
       path: '/app-store'
@@ -1609,11 +1869,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppStoreRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/ai-voice-rooms': {
+      id: '/_authenticated/ai-voice-rooms'
+      path: '/ai-voice-rooms'
+      fullPath: '/ai-voice-rooms'
+      preLoaderRoute: typeof AuthenticatedAiVoiceRoomsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ai-video-assistant': {
+      id: '/_authenticated/ai-video-assistant'
+      path: '/ai-video-assistant'
+      fullPath: '/ai-video-assistant'
+      preLoaderRoute: typeof AuthenticatedAiVideoAssistantRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ai-image': {
+      id: '/_authenticated/ai-image'
+      path: '/ai-image'
+      fullPath: '/ai-image'
+      preLoaderRoute: typeof AuthenticatedAiImageRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/ai-hub': {
       id: '/_authenticated/ai-hub'
       path: '/ai-hub'
       fullPath: '/ai-hub'
       preLoaderRoute: typeof AuthenticatedAiHubRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ai-comments': {
+      id: '/_authenticated/ai-comments'
+      path: '/ai-comments'
+      fullPath: '/ai-comments'
+      preLoaderRoute: typeof AuthenticatedAiCommentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ai-avatar': {
+      id: '/_authenticated/ai-avatar'
+      path: '/ai-avatar'
+      fullPath: '/ai-avatar'
+      preLoaderRoute: typeof AuthenticatedAiAvatarRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/ai-assistant': {
@@ -1931,11 +2226,20 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdsManagerRoute: typeof AuthenticatedAdsManagerRoute
   AuthenticatedAdsPromoRoute: typeof AuthenticatedAdsPromoRoute
   AuthenticatedAiAssistantRoute: typeof AuthenticatedAiAssistantRoute
+  AuthenticatedAiAvatarRoute: typeof AuthenticatedAiAvatarRoute
+  AuthenticatedAiCommentsRoute: typeof AuthenticatedAiCommentsRoute
   AuthenticatedAiHubRoute: typeof AuthenticatedAiHubRoute
+  AuthenticatedAiImageRoute: typeof AuthenticatedAiImageRoute
+  AuthenticatedAiVideoAssistantRoute: typeof AuthenticatedAiVideoAssistantRoute
+  AuthenticatedAiVoiceRoomsRoute: typeof AuthenticatedAiVoiceRoomsRoute
   AuthenticatedAppStoreRoute: typeof AuthenticatedAppStoreRoute
+  AuthenticatedAutoSubtitleRoute: typeof AuthenticatedAutoSubtitleRoute
   AuthenticatedBlogDashboardRoute: typeof AuthenticatedBlogDashboardRoute
   AuthenticatedBlogEditorRoute: typeof AuthenticatedBlogEditorRoute
   AuthenticatedBookmarksRoute: typeof AuthenticatedBookmarksRoute
+  AuthenticatedChallengesRoute: typeof AuthenticatedChallengesRoute
+  AuthenticatedCollabReelsRoute: typeof AuthenticatedCollabReelsRoute
+  AuthenticatedCreatorStudioRoute: typeof AuthenticatedCreatorStudioRoute
   AuthenticatedEmailDashboardRoute: typeof AuthenticatedEmailDashboardRoute
   AuthenticatedExploreRoute: typeof AuthenticatedExploreRoute
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
@@ -1949,6 +2253,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMailRoute: typeof AuthenticatedMailRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRouteWithChildren
+  AuthenticatedMiniCoursesRoute: typeof AuthenticatedMiniCoursesRoute
   AuthenticatedMonitoringRoute: typeof AuthenticatedMonitoringRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPagesGroupsRoute: typeof AuthenticatedPagesGroupsRoute
@@ -1959,12 +2264,17 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPushRoute: typeof AuthenticatedPushRoute
   AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
   AuthenticatedReferralRoute: typeof AuthenticatedReferralRoute
+  AuthenticatedRewardsRoute: typeof AuthenticatedRewardsRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedShortVideosRoute: typeof AuthenticatedShortVideosRoute
+  AuthenticatedShortsMakerRoute: typeof AuthenticatedShortsMakerRoute
+  AuthenticatedSmartSearchRoute: typeof AuthenticatedSmartSearchRoute
   AuthenticatedStoriesRoute: typeof AuthenticatedStoriesRoute
+  AuthenticatedStorySystemRoute: typeof AuthenticatedStorySystemRoute
   AuthenticatedTermsOfServiceRoute: typeof AuthenticatedTermsOfServiceRoute
   AuthenticatedTradeRoute: typeof AuthenticatedTradeRoute
+  AuthenticatedTrendingHubRoute: typeof AuthenticatedTrendingHubRoute
   AuthenticatedVideosRoute: typeof AuthenticatedVideosRoute
   AuthenticatedVoiceRoute: typeof AuthenticatedVoiceRoute
   AuthenticatedYoutubeRoute: typeof AuthenticatedYoutubeRoute
@@ -1978,11 +2288,20 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdsManagerRoute: AuthenticatedAdsManagerRoute,
   AuthenticatedAdsPromoRoute: AuthenticatedAdsPromoRoute,
   AuthenticatedAiAssistantRoute: AuthenticatedAiAssistantRoute,
+  AuthenticatedAiAvatarRoute: AuthenticatedAiAvatarRoute,
+  AuthenticatedAiCommentsRoute: AuthenticatedAiCommentsRoute,
   AuthenticatedAiHubRoute: AuthenticatedAiHubRoute,
+  AuthenticatedAiImageRoute: AuthenticatedAiImageRoute,
+  AuthenticatedAiVideoAssistantRoute: AuthenticatedAiVideoAssistantRoute,
+  AuthenticatedAiVoiceRoomsRoute: AuthenticatedAiVoiceRoomsRoute,
   AuthenticatedAppStoreRoute: AuthenticatedAppStoreRoute,
+  AuthenticatedAutoSubtitleRoute: AuthenticatedAutoSubtitleRoute,
   AuthenticatedBlogDashboardRoute: AuthenticatedBlogDashboardRoute,
   AuthenticatedBlogEditorRoute: AuthenticatedBlogEditorRoute,
   AuthenticatedBookmarksRoute: AuthenticatedBookmarksRoute,
+  AuthenticatedChallengesRoute: AuthenticatedChallengesRoute,
+  AuthenticatedCollabReelsRoute: AuthenticatedCollabReelsRoute,
+  AuthenticatedCreatorStudioRoute: AuthenticatedCreatorStudioRoute,
   AuthenticatedEmailDashboardRoute: AuthenticatedEmailDashboardRoute,
   AuthenticatedExploreRoute: AuthenticatedExploreRoute,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
@@ -1996,6 +2315,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMailRoute: AuthenticatedMailRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRouteWithChildren,
+  AuthenticatedMiniCoursesRoute: AuthenticatedMiniCoursesRoute,
   AuthenticatedMonitoringRoute: AuthenticatedMonitoringRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPagesGroupsRoute: AuthenticatedPagesGroupsRoute,
@@ -2006,12 +2326,17 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPushRoute: AuthenticatedPushRoute,
   AuthenticatedReelsRoute: AuthenticatedReelsRoute,
   AuthenticatedReferralRoute: AuthenticatedReferralRoute,
+  AuthenticatedRewardsRoute: AuthenticatedRewardsRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedShortVideosRoute: AuthenticatedShortVideosRoute,
+  AuthenticatedShortsMakerRoute: AuthenticatedShortsMakerRoute,
+  AuthenticatedSmartSearchRoute: AuthenticatedSmartSearchRoute,
   AuthenticatedStoriesRoute: AuthenticatedStoriesRoute,
+  AuthenticatedStorySystemRoute: AuthenticatedStorySystemRoute,
   AuthenticatedTermsOfServiceRoute: AuthenticatedTermsOfServiceRoute,
   AuthenticatedTradeRoute: AuthenticatedTradeRoute,
+  AuthenticatedTrendingHubRoute: AuthenticatedTrendingHubRoute,
   AuthenticatedVideosRoute: AuthenticatedVideosRoute,
   AuthenticatedVoiceRoute: AuthenticatedVoiceRoute,
   AuthenticatedYoutubeRoute: AuthenticatedYoutubeRoute,
