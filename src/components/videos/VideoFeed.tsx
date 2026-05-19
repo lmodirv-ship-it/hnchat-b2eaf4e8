@@ -262,6 +262,7 @@ function VideoCard({
   const { user } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLVideoElement>(null);
+  const ytIframeRef = useRef<HTMLIFrameElement>(null);
   const [liking, setLiking] = useState(false);
   const [paused, setPaused] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
