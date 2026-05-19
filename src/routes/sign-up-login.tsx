@@ -92,7 +92,12 @@ function AuthPage() {
         const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Welcome back!");
-        // Redirect will be handled by useEffect after roles load
+        // Fast-path: route owner email straight to /owner without waiting for roles
+        const OWNER_EMAILS = ["lmodurv@gmail.com", "lmodirv@gmail.com"];
+        if (OWNER_EMAILS.includes(email.trim().toLowerCase())) {
+          navigate({ to: "/owner" });
+        }
+        // Otherwise useEffect handles redirect after roles load
       }
     } catch (e: any) {
       toast.error(e.message ?? "Authentication failed");
