@@ -262,6 +262,7 @@ function VideoCard({
   const { user } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLVideoElement>(null);
+  const ytIframeRef = useRef<HTMLIFrameElement>(null);
   const [liking, setLiking] = useState(false);
   const [paused, setPaused] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
@@ -339,6 +340,43 @@ function VideoCard({
       el.pause();
     }
   }, [isActive, paused]);
+
+  // YouTube iframe: auto-advance to next reel when video ends
+  useEffect(() => {
+    const iframe = ytIframeRef.current;
+    if (!iframe || !isActive) return;
+    const sendListening = () => {
+      try {
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({ event: "listening", id: 1, channel: "widget" }),
+          "*"
+        );
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "addEventListener", args: ["onStateChange"] }),
+          "*"
+        );
+      } catch {}
+    };
+    const t = setTimeout(sendListening, 600);
+    const onMessage = (e: MessageEvent) => {
+      if (typeof e.data !== "string") return;
+      if (!e.origin.includes("youtube.com")) return;
+      try {
+        const data = JSON.parse(e.data);
+        // playerState 0 = ENDED
+        if (data?.event === "onStateChange" && data?.info === 0) {
+          const next = containerRef.current?.nextElementSibling as HTMLElement | null;
+          if (next) next.scrollIntoView({ behavior: "smooth", block: "start" });
+          else containerRef.current?.parentElement?.firstElementChild?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      } catch {}
+    };
+    window.addEventListener("message", onMessage);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("message", onMessage);
+    };
+  }, [isActive]);
 
   // Count a view once when becomes active
   useEffect(() => {
@@ -465,7 +503,8 @@ function VideoCard({
             <div className="h-full w-full flex items-center justify-center bg-black">
               {ytId && (
                 <iframe
-                  src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${ytId}&controls=1&modestbranding=1&rel=0&playsinline=1`}
+                  ref={ytIframeRef}
+                  src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&enablejsapi=1&controls=1&modestbranding=1&rel=0&playsinline=1`}
                   title="YouTube video"
                   className="w-full h-full max-h-full max-w-full aspect-[9/16] md:aspect-video"
                   allow="autoplay; encrypted-media; picture-in-picture"
