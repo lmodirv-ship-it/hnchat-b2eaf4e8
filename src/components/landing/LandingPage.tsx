@@ -4,6 +4,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { HnLogo } from "@/components/HnLogo";
+import hnLogoImage from "@/assets/hn-logo.webp";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { SocialProofToast } from "@/components/landing/SocialProofToast";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
