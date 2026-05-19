@@ -251,7 +251,10 @@ function FeedPage() {
   }
 
   return (
-    <div className="w-full px-3 sm:px-6 py-4 sm:py-6">
+    <div
+      className="w-full px-3 sm:px-6 py-4 sm:py-6 animate-fade-in"
+      style={{ paddingBottom: "calc(6rem + env(safe-area-inset-bottom))" }}
+    >
       {/* Stories */}
       <StoriesRail />
 
@@ -264,7 +267,7 @@ function FeedPage() {
       {newPostsCount > 0 && (
         <button
           onClick={loadNewPosts}
-          className="w-full mb-5 py-2.5 rounded-xl bg-[oklch(0.78_0.18_220/0.08)] border border-[oklch(0.78_0.18_220/0.2)] text-[oklch(0.78_0.18_220)] text-sm font-medium flex items-center justify-center gap-2 hover:bg-[oklch(0.78_0.18_220/0.12)] transition-all backdrop-blur-xl"
+          className="w-full mb-5 py-2.5 rounded-xl bg-[oklch(0.78_0.18_220/0.08)] border border-[oklch(0.78_0.18_220/0.2)] text-[oklch(0.78_0.18_220)] text-sm font-medium flex items-center justify-center gap-2 hover:bg-[oklch(0.78_0.18_220/0.12)] transition-all backdrop-blur-xl active:scale-[0.98]"
         >
           <RefreshCw className="h-4 w-4 animate-spin" style={{ animationDuration: "3s" }} />
           {newPostsCount} منشور جديد — اضغط للتحديث
@@ -278,9 +281,6 @@ function FeedPage() {
       <div className="mt-8 mb-2">
         <GuestRegisterReminder variant="bottom" />
       </div>
-
-      {/* Bottom spacer for mobile nav */}
-      <div className="h-8" />
     </div>
   );
 }
