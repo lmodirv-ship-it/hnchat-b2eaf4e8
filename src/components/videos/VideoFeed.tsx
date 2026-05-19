@@ -376,7 +376,7 @@ function VideoCard({
       clearTimeout(t);
       window.removeEventListener("message", onMessage);
     };
-  }, [isActive, ytId]);
+  }, [isActive]);
 
   // Count a view once when becomes active
   useEffect(() => {
