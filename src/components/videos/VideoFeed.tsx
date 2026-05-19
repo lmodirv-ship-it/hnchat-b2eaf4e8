@@ -341,6 +341,43 @@ function VideoCard({
     }
   }, [isActive, paused]);
 
+  // YouTube iframe: auto-advance to next reel when video ends
+  useEffect(() => {
+    const iframe = ytIframeRef.current;
+    if (!iframe || !isActive) return;
+    const sendListening = () => {
+      try {
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({ event: "listening", id: 1, channel: "widget" }),
+          "*"
+        );
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "addEventListener", args: ["onStateChange"] }),
+          "*"
+        );
+      } catch {}
+    };
+    const t = setTimeout(sendListening, 600);
+    const onMessage = (e: MessageEvent) => {
+      if (typeof e.data !== "string") return;
+      if (!e.origin.includes("youtube.com")) return;
+      try {
+        const data = JSON.parse(e.data);
+        // playerState 0 = ENDED
+        if (data?.event === "onStateChange" && data?.info === 0) {
+          const next = containerRef.current?.nextElementSibling as HTMLElement | null;
+          if (next) next.scrollIntoView({ behavior: "smooth", block: "start" });
+          else containerRef.current?.parentElement?.firstElementChild?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      } catch {}
+    };
+    window.addEventListener("message", onMessage);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("message", onMessage);
+    };
+  }, [isActive, ytId]);
+
   // Count a view once when becomes active
   useEffect(() => {
     if (!isActive || viewCounted) return;
