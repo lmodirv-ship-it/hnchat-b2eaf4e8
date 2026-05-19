@@ -465,7 +465,8 @@ function VideoCard({
             <div className="h-full w-full flex items-center justify-center bg-black">
               {ytId && (
                 <iframe
-                  src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&loop=1&playlist=${ytId}&controls=1&modestbranding=1&rel=0&playsinline=1`}
+                  ref={ytIframeRef}
+                  src={`https://www.youtube.com/embed/${ytId}?autoplay=${isActive && !paused ? 1 : 0}&mute=${muted ? 1 : 0}&enablejsapi=1&controls=1&modestbranding=1&rel=0&playsinline=1`}
                   title="YouTube video"
                   className="w-full h-full max-h-full max-w-full aspect-[9/16] md:aspect-video"
                   allow="autoplay; encrypted-media; picture-in-picture"
