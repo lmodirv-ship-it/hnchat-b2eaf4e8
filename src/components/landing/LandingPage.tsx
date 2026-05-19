@@ -4,6 +4,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { HnLogo } from "@/components/HnLogo";
+import hnLogoImage from "@/assets/hn-logo.webp";
 import { VisitorCounter } from "@/components/layout/VisitorCounter";
 import { SocialProofToast } from "@/components/landing/SocialProofToast";
 import { FloatingParticles } from "@/components/landing/FloatingParticles";
@@ -689,8 +690,8 @@ export function LandingPage() {
         <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
           <Link to="/feed" className="flex items-center gap-2.5 shrink-0">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_oklch(0.55_0.25_295/0.5)]">
-              <MessageCircle className="h-5 w-5 text-white" />
+            <div className="h-9 w-9 rounded-xl overflow-hidden ring-2 ring-amber-400/40 shadow-[0_0_20px_oklch(0.78_0.18_60/0.5)] flex items-center justify-center">
+              <img src={hnLogoImage} alt="hnChat" className="h-full w-full object-cover" />
             </div>
             <span className="text-xl font-extrabold bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-400 bg-clip-text text-transparent">HN-Chat</span>
           </Link>
