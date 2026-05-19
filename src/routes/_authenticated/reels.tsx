@@ -13,7 +13,13 @@ export const Route = createFileRoute("/_authenticated/reels")({
 
 function ReelsPage() {
   return (
-    <div className="fixed inset-x-0 top-0 bottom-16 md:relative md:bottom-0 md:h-[calc(100vh-3.5rem)] bg-black overflow-hidden">
+    <div
+      className="fixed inset-x-0 top-0 md:relative md:h-[calc(100vh-3.5rem)] bg-black overflow-hidden"
+      style={{
+        bottom: "calc(4rem + env(safe-area-inset-bottom))",
+        paddingTop: "env(safe-area-inset-top)",
+      }}
+    >
       <VideoFeed feedType={["short", "video"]} storageKey="reels-tiktok" />
     </div>
   );
