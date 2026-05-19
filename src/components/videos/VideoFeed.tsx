@@ -497,11 +497,15 @@ function VideoCard({
               ref={ref}
               src={url}
               muted={muted}
-              loop
               playsInline
               preload={preload}
               className="max-h-full max-w-full object-contain"
               onClick={handleTap}
+              onEnded={() => {
+                const next = containerRef.current?.nextElementSibling as HTMLElement | null;
+                if (next) next.scrollIntoView({ behavior: "smooth", block: "start" });
+                else containerRef.current?.parentElement?.firstElementChild?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
             />
           )
         ) : (
