@@ -230,9 +230,9 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
         >
           {videos.map((v, i) => {
             const distance = activeIdx >= 0 ? Math.abs(i - activeIdx) : i;
-            // active=auto, neighbors=metadata, far=none (lazy)
+            // active=auto, next 2 = metadata, rest = none
             const preload: "auto" | "metadata" | "none" =
-              distance === 0 ? "auto" : distance === 1 ? "metadata" : "none";
+              distance === 0 ? "auto" : distance <= 2 ? "metadata" : "none";
             return (
               <VideoCard
                 key={v.id}
@@ -241,7 +241,7 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
                 muted={muted}
                 onToggleMuted={() => setMuted((m) => !m)}
                 preload={preload}
-                shouldRenderSrc={distance <= 2}
+                shouldRenderSrc={distance <= 3}
                 registerRef={(el) => {
                   if (el) cardRefs.current.set(v.id, el);
                   else cardRefs.current.delete(v.id);
@@ -252,12 +252,20 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
               />
             );
           })}
+          {loadingMore && (
+            <div className="flex justify-center py-6">
+              <Loader2 className="h-6 w-6 animate-spin text-cyan-glow" />
+            </div>
+          )}
         </div>
       )}
 
-      {/* Prefetch the next video so it's instant when scrolled to */}
+      {/* Prefetch the next videos so they're instant when scrolled to */}
       {nextUrl && (
         <link rel="prefetch" as="video" href={nextUrl} key={nextUrl} />
+      )}
+      {nextUrl2 && (
+        <link rel="prefetch" as="video" href={nextUrl2} key={nextUrl2} />
       )}
 
       <Sheet open={!!commentsForId} onOpenChange={(o) => !o && setCommentsForId(null)}>
