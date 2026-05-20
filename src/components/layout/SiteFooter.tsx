@@ -169,7 +169,7 @@ export function SiteFooter() {
         {/* Bottom bar */}
         <div className="border-t border-border/30 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-[11px] text-muted-foreground">
-            © {year} hnChat — www.hn-chat.com — جميع الحقوق محفوظة
+            © {year} hnChat — www.hn-chat.com — جميع الحقوق محفوظة — الحسني مولاي إسماعيل
           </p>
           <a
             href="https://www.hn-chat.com"
