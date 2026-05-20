@@ -51,10 +51,14 @@ interface VideoPost {
   };
 }
 
+const PAGE_SIZE = 12;
+
 export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedType?: "video" | "short" | Array<"video" | "short">; storageKey?: string } = {}) {
   const { user } = useAuth();
   const [videos, setVideos] = useState<VideoPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [muted, setMuted] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(() => {
     if (typeof window === "undefined") return null;
@@ -67,31 +71,15 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
     if (activeId) sessionStorage.setItem(`${storageKey}:activeId`, activeId);
   }, [activeId]);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    const types = Array.isArray(feedType) ? feedType : [feedType];
-    const query = supabase
-      .from("posts")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(30);
-    const { data: posts } = types.length > 1
-      ? await query.in("type", types)
-      : await query.eq("type", types[0]);
-    if (!posts) {
-      setVideos([]);
-      setLoading(false);
-      return;
-    }
+  const enrich = useCallback(async (posts: any[]): Promise<VideoPost[]> => {
     const userIds = Array.from(new Set(posts.map((p) => p.user_id)));
     const { data: profs } = userIds.length
       ? await supabase
           .from("profiles")
           .select("id, username, full_name, avatar_url")
           .in("id", userIds)
-      : { data: [] };
-    const profMap = new Map((profs || []).map((p) => [p.id, p]));
-
+      : { data: [] as any[] };
+    const profMap = new Map((profs || []).map((p: any) => [p.id, p]));
     let likedSet = new Set<string>();
     if (user) {
       const { data: likes } = await supabase
@@ -99,21 +87,71 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
         .select("post_id")
         .eq("user_id", user.id)
         .in("post_id", posts.map((p) => p.id));
-      likedSet = new Set((likes || []).map((l) => l.post_id));
+      likedSet = new Set((likes || []).map((l: any) => l.post_id));
     }
-
-    const list = posts.map((p) => ({
+    return posts.map((p) => ({
       ...(p as any),
       profile: profMap.get(p.user_id) as any,
       liked_by_me: likedSet.has(p.id),
     })) as VideoPost[];
+  }, [user]);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const types = Array.isArray(feedType) ? feedType : [feedType];
+    const q = supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(PAGE_SIZE);
+    const { data: posts } = types.length > 1
+      ? await q.in("type", types)
+      : await q.eq("type", types[0]);
+    if (!posts) {
+      setVideos([]);
+      setHasMore(false);
+      setLoading(false);
+      return;
+    }
+    const list = await enrich(posts);
     setVideos(list);
+    setHasMore(posts.length === PAGE_SIZE);
     setActiveId((prev) => {
       if (prev && list.some((v) => v.id === prev)) return prev;
       return list[0]?.id ?? null;
     });
     setLoading(false);
-  }, [user, feedType]);
+  }, [feedType, enrich]);
+
+  const loadMoreRef = useRef(false);
+  const loadMore = useCallback(async () => {
+    if (loadMoreRef.current || !hasMore) return;
+    loadMoreRef.current = true;
+    setLoadingMore(true);
+    const types = Array.isArray(feedType) ? feedType : [feedType];
+    const oldest = videos[videos.length - 1]?.created_at;
+    let q = supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(PAGE_SIZE);
+    if (oldest) q = q.lt("created_at", oldest);
+    const { data: posts } = types.length > 1
+      ? await q.in("type", types)
+      : await q.eq("type", types[0]);
+    if (posts && posts.length) {
+      const more = await enrich(posts);
+      setVideos((prev) => {
+        const seen = new Set(prev.map((v) => v.id));
+        return [...prev, ...more.filter((m) => !seen.has(m.id))];
+      });
+      setHasMore(posts.length === PAGE_SIZE);
+    } else {
+      setHasMore(false);
+    }
+    setLoadingMore(false);
+    loadMoreRef.current = false;
+  }, [feedType, enrich, hasMore, videos]);
 
   useEffect(() => {
     load();
@@ -146,6 +184,17 @@ export function VideoFeed({ feedType = "video", storageKey = "videos" }: { feedT
     activeIdx >= 0 && activeIdx < videos.length - 1
       ? videos[activeIdx + 1]?.media_urls?.[0]
       : undefined;
+  const nextUrl2 =
+    activeIdx >= 0 && activeIdx < videos.length - 2
+      ? videos[activeIdx + 2]?.media_urls?.[0]
+      : undefined;
+
+  // Auto-load more as user approaches end
+  useEffect(() => {
+    if (!loading && hasMore && activeIdx >= 0 && activeIdx >= videos.length - 4) {
+      loadMore();
+    }
+  }, [activeIdx, hasMore, loading, videos.length, loadMore]);
 
   if (loading) {
     return (
