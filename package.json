@@ -8,6 +8,10 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "cap": "cap",
+    "cap:add:android": "cap add android",
+    "cap:sync:android": "cap sync android",
+    "android:debug": "cd android && gradlew.bat assembleDebug",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
