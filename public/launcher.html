@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>hnChat — منصة سوبر آب عربية</title>
+<meta name="description" content="hnChat — منصة سوبر آب عربية: دردشة، فيديوهات، تسوق، ذكاء اصطناعي." />
+<link rel="icon" href="/favicon.ico" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',Tahoma,sans-serif;
+    background:radial-gradient(circle at 20% 20%,#1a1a3e 0%,#0a0a1f 60%);
+    color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .card{
+    max-width:560px;width:100%;
+    background:rgba(20,20,50,.55);backdrop-filter:blur(20px);
+    border:1px solid rgba(120,120,255,.2);
+    border-radius:24px;padding:36px 28px;text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  h1{
+    font-size:32px;margin-bottom:8px;
+    background:linear-gradient(90deg,#22d3ee,#a78bfa,#f472b6);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  p.sub{color:#aab;margin-bottom:28px;font-size:14px}
+  .domains{display:grid;gap:10px;margin-bottom:24px}
+  .domains a{
+    display:block;padding:14px 18px;border-radius:12px;
+    background:rgba(120,120,255,.08);border:1px solid rgba(120,120,255,.18);
+    color:#22d3ee;text-decoration:none;font-weight:600;font-size:15px;
+    transition:all .2s;
+  }
+  .domains a:hover{background:rgba(120,120,255,.18);transform:translateY(-2px)}
+  .apps{display:flex;gap:10px;margin-bottom:20px}
+  .apps a{
+    flex:1;padding:12px;border-radius:12px;font-size:13px;
+    background:linear-gradient(135deg,#22d3ee,#a78bfa);
+    color:#0a0a1f;text-decoration:none;font-weight:700;
+  }
+  .footer{font-size:11px;color:#778;margin-top:20px;line-height:1.8}
+  .footer a{color:#22d3ee;text-decoration:none}
+</style>
+</head>
+<body>
+  <main class="card">
+    <h1>hnChat</h1>
+    <p class="sub">منصة سوبر آب عربية — اختر النطاق للدخول</p>
+
+    <nav class="domains" id="domains">
+      <a href="https://hn-chat.com">hn-chat.com</a>
+      <a href="https://www.hn-chat.com">www.hn-chat.com</a>
+      <a href="https://hnchat.net">hnchat.net</a>
+      <a href="https://www.hnchat.net">www.hnchat.net</a>
+    </nav>
+
+    <div class="apps">
+      <a href="/downloads/hnchat.apk">تحميل APK</a>
+      <a href="/downloads/hnchat-setup.exe">تحميل EXE</a>
+    </div>
+
+    <p class="footer">
+      © <span id="y"></span> hnChat — جميع الحقوق محفوظة — الحسني مولاي إسماعيل<br>
+      <a href="https://www.hn-chat.com">www.hn-chat.com</a>
+    </p>
+  </main>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+  // Auto-load domains from the live API (works even on static hosting)
+  fetch('https://www.hn-chat.com/api/public/domains')
+    .then(r => r.json())
+    .then(d => {
+      if (!d.domains) return;
+      var web = d.domains.filter(x => x.kind === 'web');
+      if (!web.length) return;
+      var nav = document.getElementById('domains');
+      nav.innerHTML = web.map(x =>
+        '<a href="https://' + x.domain + '">' + x.domain + '</a>'
+      ).join('');
+    })
+    .catch(()=>{});
+</script>
+</body>
+</html>
