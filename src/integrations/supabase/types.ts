@@ -2592,6 +2592,45 @@ export type Database = {
           },
         ]
       }
+      site_domains: {
+        Row: {
+          created_at: string
+          domain: string
+          download_url: string | null
+          id: string
+          is_active: boolean
+          is_primary: boolean
+          kind: string
+          label: string | null
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          domain: string
+          download_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          kind?: string
+          label?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string
+          download_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          kind?: string
+          label?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_visits: {
         Row: {
           country: string | null

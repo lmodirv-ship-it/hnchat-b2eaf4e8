@@ -92,6 +92,7 @@ import { Route as AuthenticatedAddChannelRouteImport } from './routes/_authentic
 import { Route as OwnerOwnerIndexRouteImport } from './routes/_owner/owner.index'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as BlogAuthorUsernameRouteImport } from './routes/blog.author.$username'
+import { Route as ApiPublicDomainsRouteImport } from './routes/api/public/domains'
 import { Route as ApiPublicArticlesRouteImport } from './routes/api/public/articles'
 import { Route as OwnerOwnerUsersRouteImport } from './routes/_owner/owner.users'
 import { Route as OwnerOwnerTicketsRouteImport } from './routes/_owner/owner.tickets'
@@ -552,6 +553,11 @@ const BlogAuthorUsernameRoute = BlogAuthorUsernameRouteImport.update({
   path: '/author/$username',
   getParentRoute: () => BlogRoute,
 } as any)
+const ApiPublicDomainsRoute = ApiPublicDomainsRouteImport.update({
+  id: '/api/public/domains',
+  path: '/api/public/domains',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicArticlesRoute = ApiPublicArticlesRouteImport.update({
   id: '/api/public/articles',
   path: '/api/public/articles',
@@ -796,6 +802,7 @@ export interface FileRoutesByFullPath {
   '/owner/tickets': typeof OwnerOwnerTicketsRoute
   '/owner/users': typeof OwnerOwnerUsersRoute
   '/api/public/articles': typeof ApiPublicArticlesRouteWithChildren
+  '/api/public/domains': typeof ApiPublicDomainsRoute
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin/': typeof AdminAdminIndexRoute
   '/owner/': typeof OwnerOwnerIndexRoute
@@ -903,6 +910,7 @@ export interface FileRoutesByTo {
   '/owner/tickets': typeof OwnerOwnerTicketsRoute
   '/owner/users': typeof OwnerOwnerUsersRoute
   '/api/public/articles': typeof ApiPublicArticlesRouteWithChildren
+  '/api/public/domains': typeof ApiPublicDomainsRoute
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/admin': typeof AdminAdminIndexRoute
   '/owner': typeof OwnerOwnerIndexRoute
@@ -1016,6 +1024,7 @@ export interface FileRoutesById {
   '/_owner/owner/tickets': typeof OwnerOwnerTicketsRoute
   '/_owner/owner/users': typeof OwnerOwnerUsersRoute
   '/api/public/articles': typeof ApiPublicArticlesRouteWithChildren
+  '/api/public/domains': typeof ApiPublicDomainsRoute
   '/blog/author/$username': typeof BlogAuthorUsernameRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_owner/owner/': typeof OwnerOwnerIndexRoute
@@ -1127,6 +1136,7 @@ export interface FileRouteTypes {
     | '/owner/tickets'
     | '/owner/users'
     | '/api/public/articles'
+    | '/api/public/domains'
     | '/blog/author/$username'
     | '/admin/'
     | '/owner/'
@@ -1234,6 +1244,7 @@ export interface FileRouteTypes {
     | '/owner/tickets'
     | '/owner/users'
     | '/api/public/articles'
+    | '/api/public/domains'
     | '/blog/author/$username'
     | '/admin'
     | '/owner'
@@ -1346,6 +1357,7 @@ export interface FileRouteTypes {
     | '/_owner/owner/tickets'
     | '/_owner/owner/users'
     | '/api/public/articles'
+    | '/api/public/domains'
     | '/blog/author/$username'
     | '/_admin/admin/'
     | '/_owner/owner/'
@@ -1374,6 +1386,7 @@ export interface RootRouteChildren {
   PostIdRoute: typeof PostIdRoute
   ShareShareIdRoute: typeof ShareShareIdRoute
   ApiPublicArticlesRoute: typeof ApiPublicArticlesRouteWithChildren
+  ApiPublicDomainsRoute: typeof ApiPublicDomainsRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
@@ -1960,6 +1973,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogAuthorUsernameRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/api/public/domains': {
+      id: '/api/public/domains'
+      path: '/api/public/domains'
+      fullPath: '/api/public/domains'
+      preLoaderRoute: typeof ApiPublicDomainsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/articles': {
       id: '/api/public/articles'
       path: '/api/public/articles'
@@ -2456,6 +2476,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostIdRoute: PostIdRoute,
   ShareShareIdRoute: ShareShareIdRoute,
   ApiPublicArticlesRoute: ApiPublicArticlesRouteWithChildren,
+  ApiPublicDomainsRoute: ApiPublicDomainsRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport

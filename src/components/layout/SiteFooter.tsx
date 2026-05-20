@@ -166,19 +166,32 @@ export function SiteFooter() {
           </div>
         </div>
 
+        {/* Official domains */}
+        <div className="border-t border-border/30 pt-4 pb-3">
+          <p className="text-[11px] text-muted-foreground mb-2">النطاقات الرسمية للموقع:</p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+            {["hn-chat.com", "www.hn-chat.com", "hnchat.net", "www.hnchat.net"].map((d) => (
+              <a
+                key={d}
+                href={`https://${d}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-cyan-glow/80 hover:text-cyan-glow transition"
+              >
+                {d}
+              </a>
+            ))}
+          </div>
+        </div>
+
         {/* Bottom bar */}
         <div className="border-t border-border/30 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-[11px] text-muted-foreground">
-            © {year} hnChat — www.hn-chat.com — جميع الحقوق محفوظة — الحسني مولاي إسماعيل
+            © {year} hnChat — جميع الحقوق محفوظة — الحسني مولاي إسماعيل
           </p>
-          <a
-            href="https://www.hn-chat.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] text-cyan-glow/70 hover:text-cyan-glow transition"
-          >
-            www.hn-chat.com
-          </a>
+          <span className="text-[11px] text-muted-foreground/70">
+            متاح كذلك: تطبيق Android (APK) وتطبيق Windows (EXE)
+          </span>
         </div>
       </div>
     </footer>
