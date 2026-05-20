@@ -193,7 +193,7 @@ export function PublicPageShell({
             <Link to="/community-guidelines" className="hover:text-violet-glow transition-colors">إرشادات المجتمع</Link>
           </div>
           <p className="text-[11px] text-muted-foreground/30 text-center tracking-wide">
-            جميع الحقوق محفوظة لمجموعة HN © 2024 - تصميم مولاي إسماعيل الحسني
+            © {new Date().getFullYear()} hnChat — جميع الحقوق محفوظة — الحسني مولاي إسماعيل
           </p>
         </div>
       </footer>

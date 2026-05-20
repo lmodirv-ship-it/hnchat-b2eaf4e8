@@ -58,7 +58,7 @@ const t: Record<Lang, {
     privacyTitle: "خصوصيتك أولاً",
     privacyDesc: "بياناتك مشفّرة ومحمية بأحدث تقنيات الأمان. لن نشارك معلوماتك مع أي طرف ثالث.",
     registerNow: "سجّل الآن",
-    copyright: "جميع الحقوق محفوظة لمجموعة HN © 2024 - تصميم مولاي إسماعيل الحسني",
+    copyright: `© ${new Date().getFullYear()} hnChat — جميع الحقوق محفوظة — الحسني مولاي إسماعيل`,
     about: "حول", contact: "تواصل", privacy: "الخصوصية", terms: "الشروط",
     liveChat: "الدردشة الحية", online: "متصل الآن",
     features: [
