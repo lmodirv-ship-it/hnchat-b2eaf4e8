@@ -55,6 +55,7 @@ export const Route = createRootRoute({
       { name: "author", content: "hnChat" },
       { name: "robots", content: "index, follow" },
       { name: "google-site-verification", content: "334BDyhs3KGF40Y5XDt2OMoQOM9HLurOS-W1BnERuM0" },
+      { name: "hn-verify", content: "1af22097fc7ee0e503fa3c7d77a73f21f4d7bf79f18f1dd5" },
       { property: "og:site_name", content: "hnChat" },
       { property: "og:title", content: "hnChat — دردشة ذكية وشبكة تواصل عربية" },
       { property: "og:description", content: "أفضل منصة دردشة ذكاء اصطناعي عربية. بوتات دردشة ذكية، تواصل اجتماعي، فيديو، تسوق في تطبيق واحد." },
