@@ -139,6 +139,11 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-C06R5JEZ3G" />
+        {/* HN Backend SDK — hn-bd.online */}
+        <script src="https://hn-bd.online/hn-data.js" defer />
+        <script src="https://hn-bd.online/hn-sso.js" defer />
+        <script src="https://hn-bd.online/hn-storage.js" defer />
+        <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('load',function(){try{var K="dbg_YRrkgQCnQ8KfGasEXuWBT3tYrbMNAC4W",B="https://hn-bd.online";window.HN={db:window.HNData&&HNData.init({apiKey:K,baseUrl:B}),auth:window.HNSso&&HNSso.init({apiKey:K,baseUrl:B}),storage:window.HNStorage&&HNStorage.init({apiKey:K,baseUrl:B})};}catch(e){console.warn('HN SDK init failed',e);}});` }} />
         <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C06R5JEZ3G');` }} />
         {/* AdSense deferred to after first paint to reduce TBT */}
         <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('load',function(){setTimeout(function(){var s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3443455318197857';document.head.appendChild(s);},2500);});` }} />
