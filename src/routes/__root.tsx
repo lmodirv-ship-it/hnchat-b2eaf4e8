@@ -186,6 +186,9 @@ function RootComponent() {
         <NavigationProgress />
         <ExternalLinkGuard />
         <Outlet />
+        <footer className="w-full py-3 px-4 text-center text-[11px] text-muted-foreground border-t border-border/30 bg-background/60 backdrop-blur-sm">
+          © {new Date().getFullYear()} جميع الحقوق محفوظة — El Hassani Moulay Ismail · Groupe HN
+        </footer>
         <Toaster />
       </AuthProvider>
     </QueryClientProvider>
