@@ -327,15 +327,16 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
 // ----- Quick import by site name only -----
 // User types "nike" or "nike.com" and we try common product/collection paths.
 
-function normalizeSiteToOrigin(input: string): string {
+async function normalizeSiteToOrigin(input: string): Promise<string> {
   let s = input.trim().toLowerCase();
   s = s.replace(/^https?:\/\//, "").replace(/\/$/, "");
   if (!s.includes(".")) s = `${s}.com`;
   s = s.split("/")[0];
   const origin = `https://${s}`;
-  blockPrivateNetworks(origin);
-  return origin;
+  await assertPublicUrl(origin);
+  return new URL(origin).origin;
 }
+
 
 const COMMON_PRODUCT_PATHS = [
   "/collections/all",
