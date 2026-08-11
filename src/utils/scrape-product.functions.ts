@@ -1,28 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertPublicUrl, isPublicUrl } from "@/utils/ssrf-guard";
 
-const PRIVATE_IP_PATTERNS = [
-  /^127\./, /^10\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./,
-  /^169\.254\./, /^0\./, /^::1$/, /^localhost$/i, /^fc00:/i, /^fe80:/i,
-];
-
-function blockPrivateNetworks(urlStr: string): void {
-  const u = new URL(urlStr);
-  const hostname = u.hostname.replace(/^\[|\]$/g, "");
-  if (PRIVATE_IP_PATTERNS.some((r) => r.test(hostname))) {
-    throw new Error("Private network addresses are not allowed");
-  }
-}
-
-function isPublicHttpUrl(urlStr: string): boolean {
-  try {
-    const u = new URL(urlStr);
-    if (!["http:", "https:"].includes(u.protocol)) return false;
-    blockPrivateNetworks(u.toString());
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 export type ScrapedProduct = {
   url: string;
@@ -107,10 +86,12 @@ function absolutize(url: string, base: string): string {
 }
 
 export const scrapeProductUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { url: string }) => {
     if (!input?.url || typeof input.url !== "string") {
       throw new Error("URL is required");
     }
+    if (input.url.length > 2000) throw new Error("URL is too long");
     let u: URL;
     try {
       u = new URL(input.url);
@@ -120,11 +101,12 @@ export const scrapeProductUrl = createServerFn({ method: "POST" })
     if (!["http:", "https:"].includes(u.protocol)) {
       throw new Error("Only http/https URLs are allowed");
     }
-    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<ScrapedProduct> => {
-    const res = await fetch(data.url, {
+    const safeUrl = await assertPublicUrl(data.url);
+    const res = await fetch(safeUrl, {
+
       headers: {
         "User-Agent":
           "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
@@ -285,16 +267,19 @@ function scrapeAnchorProducts(html: string, base: string): ScrapedListItem[] {
 }
 
 export const scrapeCategoryUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { url: string }) => {
     if (!input?.url || typeof input.url !== "string") throw new Error("URL is required");
+    if (input.url.length > 2000) throw new Error("URL is too long");
     let u: URL;
     try { u = new URL(input.url); } catch { throw new Error("Invalid URL"); }
     if (!["http:", "https:"].includes(u.protocol)) throw new Error("Only http/https URLs are allowed");
-    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<{ items: ScrapedListItem[]; siteName: string }> => {
-    const res = await fetch(data.url, {
+    const safeUrl = await assertPublicUrl(data.url);
+    const res = await fetch(safeUrl, {
+
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
         Accept: "text/html,application/xhtml+xml",
@@ -348,15 +333,16 @@ export const scrapeCategoryUrl = createServerFn({ method: "POST" })
 // ----- Quick import by site name only -----
 // User types "nike" or "nike.com" and we try common product/collection paths.
 
-function normalizeSiteToOrigin(input: string): string {
+async function normalizeSiteToOrigin(input: string): Promise<string> {
   let s = input.trim().toLowerCase();
   s = s.replace(/^https?:\/\//, "").replace(/\/$/, "");
   if (!s.includes(".")) s = `${s}.com`;
   s = s.split("/")[0];
   const origin = `https://${s}`;
-  blockPrivateNetworks(origin);
-  return origin;
+  await assertPublicUrl(origin);
+  return new URL(origin).origin;
 }
+
 
 const COMMON_PRODUCT_PATHS = [
   "/collections/all",
@@ -387,10 +373,12 @@ async function fetchHtml(url: string): Promise<string | null> {
 }
 
 export const scrapeBySiteName = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { site: string }) => {
     if (!input?.site || typeof input.site !== "string") {
       throw new Error("Site name is required");
     }
+    if (input.site.length > 300) throw new Error("Site name is too long");
     return { site: input.site };
   })
   .handler(
@@ -402,7 +390,8 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
       origin: string;
       sourceUrl: string;
     }> => {
-      const origin = normalizeSiteToOrigin(data.site);
+      const origin = await normalizeSiteToOrigin(data.site);
+
 
       // 1) Try Shopify products.json (works on most Shopify stores)
       try {
@@ -507,9 +496,10 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
         const targetUrl = data.site.startsWith("http")
           ? data.site
           : `${origin}${data.site.includes("/") ? "/" + data.site.split("/").slice(1).join("/") : ""}`;
-        if (!isPublicHttpUrl(targetUrl)) {
+        if (!(await isPublicUrl(targetUrl))) {
           throw new Error("Invalid scrape target");
         }
+
 
         try {
           const fcRes = await fetch("https://api.firecrawl.dev/v2/scrape", {
@@ -576,9 +566,14 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
               const links: string[] = Array.isArray(fcJson?.data?.links)
                 ? fcJson.data.links
                 : [];
-              const productLinks = links.filter((l) =>
-                isPublicHttpUrl(l) && /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
+              const candidateLinks = links.filter((l) =>
+                /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
               );
+              const productLinks: string[] = [];
+              for (const l of candidateLinks.slice(0, 40)) {
+                if (await isPublicUrl(l)) productLinks.push(l);
+              }
+
               for (const l of productLinks.slice(0, 24)) {
                 if (seen.has(l)) continue;
                 seen.add(l);
