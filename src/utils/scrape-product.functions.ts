@@ -555,9 +555,14 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
               const links: string[] = Array.isArray(fcJson?.data?.links)
                 ? fcJson.data.links
                 : [];
-              const productLinks = links.filter((l) =>
-                isPublicHttpUrl(l) && /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
+              const candidateLinks = links.filter((l) =>
+                /\/(product|products|p|item|dp|prod|shop)\//i.test(l)
               );
+              const productLinks: string[] = [];
+              for (const l of candidateLinks.slice(0, 40)) {
+                if (await isPublicUrl(l)) productLinks.push(l);
+              }
+
               for (const l of productLinks.slice(0, 24)) {
                 if (seen.has(l)) continue;
                 seen.add(l);
