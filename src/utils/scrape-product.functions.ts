@@ -486,9 +486,10 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
         const targetUrl = data.site.startsWith("http")
           ? data.site
           : `${origin}${data.site.includes("/") ? "/" + data.site.split("/").slice(1).join("/") : ""}`;
-        if (!isPublicHttpUrl(targetUrl)) {
+        if (!(await isPublicUrl(targetUrl))) {
           throw new Error("Invalid scrape target");
         }
+
 
         try {
           const fcRes = await fetch("https://api.firecrawl.dev/v2/scrape", {
