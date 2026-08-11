@@ -86,10 +86,12 @@ function absolutize(url: string, base: string): string {
 }
 
 export const scrapeProductUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { url: string }) => {
     if (!input?.url || typeof input.url !== "string") {
       throw new Error("URL is required");
     }
+    if (input.url.length > 2000) throw new Error("URL is too long");
     let u: URL;
     try {
       u = new URL(input.url);
@@ -99,11 +101,12 @@ export const scrapeProductUrl = createServerFn({ method: "POST" })
     if (!["http:", "https:"].includes(u.protocol)) {
       throw new Error("Only http/https URLs are allowed");
     }
-    blockPrivateNetworks(u.toString());
     return { url: u.toString() };
   })
   .handler(async ({ data }): Promise<ScrapedProduct> => {
-    const res = await fetch(data.url, {
+    const safeUrl = await assertPublicUrl(data.url);
+    const res = await fetch(safeUrl, {
+
       headers: {
         "User-Agent":
           "Mozilla/5.0 (compatible; HnBot/1.0; +https://hnchat.lovable.app)",
