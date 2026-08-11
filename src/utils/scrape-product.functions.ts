@@ -1,28 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { assertPublicUrl, isPublicUrl } from "@/utils/ssrf-guard";
 
-const PRIVATE_IP_PATTERNS = [
-  /^127\./, /^10\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./,
-  /^169\.254\./, /^0\./, /^::1$/, /^localhost$/i, /^fc00:/i, /^fe80:/i,
-];
-
-function blockPrivateNetworks(urlStr: string): void {
-  const u = new URL(urlStr);
-  const hostname = u.hostname.replace(/^\[|\]$/g, "");
-  if (PRIVATE_IP_PATTERNS.some((r) => r.test(hostname))) {
-    throw new Error("Private network addresses are not allowed");
-  }
-}
-
-function isPublicHttpUrl(urlStr: string): boolean {
-  try {
-    const u = new URL(urlStr);
-    if (!["http:", "https:"].includes(u.protocol)) return false;
-    blockPrivateNetworks(u.toString());
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 export type ScrapedProduct = {
   url: string;
