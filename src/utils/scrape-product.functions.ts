@@ -367,10 +367,12 @@ async function fetchHtml(url: string): Promise<string | null> {
 }
 
 export const scrapeBySiteName = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { site: string }) => {
     if (!input?.site || typeof input.site !== "string") {
       throw new Error("Site name is required");
     }
+    if (input.site.length > 300) throw new Error("Site name is too long");
     return { site: input.site };
   })
   .handler(
@@ -382,7 +384,8 @@ export const scrapeBySiteName = createServerFn({ method: "POST" })
       origin: string;
       sourceUrl: string;
     }> => {
-      const origin = normalizeSiteToOrigin(data.site);
+      const origin = await normalizeSiteToOrigin(data.site);
+
 
       // 1) Try Shopify products.json (works on most Shopify stores)
       try {
